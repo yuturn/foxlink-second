@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/foxlink-second/precache-manifest.17663b62eeff0e34517c9eec903f49cb.js"
+  "/foxlink-second/precache-manifest.3c7528156af0defee98faf4cedb7368d.js"
 );
 
 workbox.clientsClaim();
