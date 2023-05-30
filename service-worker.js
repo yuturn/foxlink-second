@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/yuturn.github.io/foxlink-second/precache-manifest.fe6de7d583483ca4541bd6f1106815cf.js"
+  "/yuturn.github.io/foxlink-second/precache-manifest.f1df57d455bd28604b4f311bfa8b6eaf.js"
 );
 
 workbox.clientsClaim();
