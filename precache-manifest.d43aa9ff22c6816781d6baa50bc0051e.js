@@ -1,11 +1,11 @@
 self.__precacheManifest = [
   {
-    "revision": "d4270ebfbdd7f3da8036",
+    "revision": "292ae92bb4314f2fb259",
     "url": "/yuturn.github.io/foxlink-second/static/css/main.42facaf8.chunk.css"
   },
   {
-    "revision": "d4270ebfbdd7f3da8036",
-    "url": "/yuturn.github.io/foxlink-second/static/js/main.e163da6c.chunk.js"
+    "revision": "292ae92bb4314f2fb259",
+    "url": "/yuturn.github.io/foxlink-second/static/js/main.880f4554.chunk.js"
   },
   {
     "revision": "ea18b92da68cad21f9ea",
@@ -28,7 +28,7 @@ self.__precacheManifest = [
     "url": "/yuturn.github.io/foxlink-second/static/media/foxlink_logo.7d1cd178.png"
   },
   {
-    "revision": "9aa0c1c6702f9d7727627ab9557edc70",
+    "revision": "2c950e2acbbf56414854514a57577664",
     "url": "/yuturn.github.io/foxlink-second/index.html"
   }
 ];

@@ -1,7 +1,7 @@
 {
   "main.css": "/yuturn.github.io/foxlink-second/static/css/main.42facaf8.chunk.css",
-  "main.js": "/yuturn.github.io/foxlink-second/static/js/main.e163da6c.chunk.js",
-  "main.js.map": "/yuturn.github.io/foxlink-second/static/js/main.e163da6c.chunk.js.map",
+  "main.js": "/yuturn.github.io/foxlink-second/static/js/main.880f4554.chunk.js",
+  "main.js.map": "/yuturn.github.io/foxlink-second/static/js/main.880f4554.chunk.js.map",
   "runtime~main.js": "/yuturn.github.io/foxlink-second/static/js/runtime~main.6e636d3a.js",
   "runtime~main.js.map": "/yuturn.github.io/foxlink-second/static/js/runtime~main.6e636d3a.js.map",
   "static/css/2.3bd0075a.chunk.css": "/yuturn.github.io/foxlink-second/static/css/2.3bd0075a.chunk.css",
@@ -10,7 +10,7 @@
   "static/js/3.83bf2ab8.chunk.js": "/yuturn.github.io/foxlink-second/static/js/3.83bf2ab8.chunk.js",
   "static/js/3.83bf2ab8.chunk.js.map": "/yuturn.github.io/foxlink-second/static/js/3.83bf2ab8.chunk.js.map",
   "index.html": "/yuturn.github.io/foxlink-second/index.html",
-  "precache-manifest.7b8153f47f040ee04bd853f0d72c2ffe.js": "/yuturn.github.io/foxlink-second/precache-manifest.7b8153f47f040ee04bd853f0d72c2ffe.js",
+  "precache-manifest.d43aa9ff22c6816781d6baa50bc0051e.js": "/yuturn.github.io/foxlink-second/precache-manifest.d43aa9ff22c6816781d6baa50bc0051e.js",
   "service-worker.js": "/yuturn.github.io/foxlink-second/service-worker.js",
   "static/css/2.3bd0075a.chunk.css.map": "/yuturn.github.io/foxlink-second/static/css/2.3bd0075a.chunk.css.map",
   "static/css/main.42facaf8.chunk.css.map": "/yuturn.github.io/foxlink-second/static/css/main.42facaf8.chunk.css.map",
