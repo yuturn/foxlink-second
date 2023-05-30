@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/yuturn.github.io/foxlink-second/precache-manifest.35a42644fce459ee4390be0db5d35723.js"
+  "/foxlink-second/precache-manifest.17663b62eeff0e34517c9eec903f49cb.js"
 );
 
 workbox.clientsClaim();
@@ -28,7 +28,7 @@ self.__precacheManifest = [].concat(self.__precacheManifest || []);
 workbox.precaching.suppressWarnings();
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 
-workbox.routing.registerNavigationRoute("/yuturn.github.io/foxlink-second/index.html", {
+workbox.routing.registerNavigationRoute("/foxlink-second/index.html", {
   
   blacklist: [/^\/_/,/\/[^/]+\.[^/]+$/],
 });
