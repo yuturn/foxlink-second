@@ -1,0 +1,7 @@
+version: '3'
+services:
+    foxlink_frontend:
+        build: .
+        ports:
+            - ${FRONTEND_PORT}:3000
+        command: ['npm', 'start']
