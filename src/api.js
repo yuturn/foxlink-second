@@ -46,6 +46,14 @@ export const apiStatisticsWithDate = (data) => auth_except(baseRequest.get(`/sta
   }
 }));
 
+export const apiGetPeddingList = (token) => auth_except(baseRequest.get(`/users/pending-approvals-list`, {
+  headers:
+  {
+    'accept': 'application/json',
+    'Authorization': `Bearer ${token}`
+  }
+}));
+
 // export const apiStatisticsWithDate = (data) => auth_except(baseRequest.get(`/stats/?workshop_name=${data['workshop']}&start_date=${data['start']}&end_date=${data['end']}`, {
 //   headers:
 //   {
@@ -246,6 +254,22 @@ export const apiGetSystemEnvSettingCount = (data) => auth_except(baseRequest.get
 }));
 
 export const apiPostSystemEnvSettingCount = (data) => auth_except(baseRequest.post(`/system/env-update-settings/${data['key']}?value=${data['value']}`, data, {
+  headers:
+  {
+    'accept': 'application/json',
+    'Authorization': `Bearer ${data['token']}`
+  }
+}));
+
+export const apiGetSystemEnvSettingInterval = (data) => auth_except(baseRequest.get(`/system/env-get-settings/${data['key']}`, {
+  headers:
+  {
+    'accept': 'application/json',
+    'Authorization': `Bearer ${data['token']}`
+  }
+}));
+
+export const apiPostSystemEnvSettingInterval = (data) => auth_except(baseRequest.post(`/system/env-update-settings/${data['key']}?value=${data['value']}`, data, {
   headers:
   {
     'accept': 'application/json',

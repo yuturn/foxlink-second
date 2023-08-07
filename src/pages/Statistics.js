@@ -124,7 +124,7 @@ export default function Statistics({ token, setAlert, ...rest }) {
 
   return (
     <ThemeProvider theme={darkTheme}>
-      <Grid
+      {/* <Grid
         container
         spacing={3}
         sx={{ pb: 5 }}
@@ -227,7 +227,7 @@ export default function Statistics({ token, setAlert, ...rest }) {
             }
           </Grid>
         </Grid>
-      }
+      } */}
     </ThemeProvider>
   );
 }

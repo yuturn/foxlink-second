@@ -1,3 +1,5 @@
+// 這個頁面是左邊SIDEBAR制控制頁面
+
 import React from "react";
 
 import { Box, Divider, Drawer } from '@mui/material';
@@ -13,59 +15,59 @@ import { DashboardNavbar } from './dashboard-navbar';
 import { NavItem } from './nav-item';
 import { Link } from "react-router-dom";
 
-export const DashboardSidebar = ({idx, setIdx}) => {
+export const DashboardSidebar = ({ idx, setIdx }) => {
   const items = [
-      {
-        url: '/statistics',
-        icon: (<StatusIcon fontSize="small" />),
-        title: '统计资料',
-        active: false
-      },
-      {
-        url : '/ENRMission',
-        icon: (<StatusIcon fontSize="small"/>),
-        title: '紧急和需维修任务',
-        active: false
-      },
-      {
-        url: '/qrcode-download',
-        icon: (<QRCodeIcon fontSize="small" />),
-        title: 'QR Code 下载',
-        active: false
-      },
-      {
-        url: '/map',
-        icon: (<MapIcon fontSize="small" />),
-        title: '车间地图',
-        active: false
-      },
-      {
-        url : '/white-list',
-        icon: (<SummarizeIcon fontSize="small"/>),
-        title: '白名單',
-        active: false
-      }
+    {
+      url: '/statistics',
+      icon: (<StatusIcon fontSize="small" />),
+      title: '统计资料',
+      active: false
+    },
+    {
+      url: '/Project',
+      icon: (<StatusIcon fontSize="small" />),
+      title: '專案頁面',
+      active: false
+    },
+    {
+      url: '/backup',
+      icon: (<MapIcon fontSize="small" />),
+      title: '備份頁面',
+      active: false
+    },
+    {
+      url: '/management',
+      icon: (<SummarizeIcon fontSize="small" />),
+      title: '人員控管',
+      active: false
+    },
+    {
+      url: '/LOG',
+      icon: (<QRCodeIcon fontSize="small" />),
+      title: 'LOG頁面',
+      active: false
+    },
   ];
 
   const upload_items = [
-    {
-      url: '/devices-upload',
-      icon: (<LayoutIcon fontSize="small" />),
-      title: 'Layout 座标表 上传',
-      active: false
-    },
-    {
-      url: '/worker-info-upload',
-      icon: (<InfoIcon fontSize="small" />),
-      title: '员工专职表 上传',
-      active: false
-    },
-    {
-      url : '/map-upload',
-      icon: (<MapIcon fontSize="small"/>),
-      title: '车间地图 上传',
-      active: false
-    }
+    // {
+    //   url: '/devices-upload',
+    //   icon: (<LayoutIcon fontSize="small" />),
+    //   title: 'Layout 座标表 上传',
+    //   active: false
+    // },
+    // {
+    //   url: '/worker-info-upload',
+    //   icon: (<InfoIcon fontSize="small" />),
+    //   title: '员工专职表 上传',
+    //   active: false
+    // },
+    // {
+    //   url: '/map-upload',
+    //   icon: (<MapIcon fontSize="small" />),
+    //   title: '车间地图 上传',
+    //   active: false
+    // }
   ];
   const content = (
     <Box
@@ -77,18 +79,18 @@ export const DashboardSidebar = ({idx, setIdx}) => {
     >
       <Box sx={{ p: 3 }}>
         <Link to={'/all-status'}>
-          <Logo sx={{height: 42, width: 42 }} />
+          <Logo sx={{ height: 42, width: 42 }} />
         </Link>
       </Box>
       <Divider
         sx={{
           borderColor: '#2D3748',
           my: 3,
-          height:1.5
+          height: 1.5
         }}
       />
       <Box sx={{ flexGrow: 1 }}>
-        
+
         {items.map((item) => (
           <NavItem
             key={item.title}
@@ -104,32 +106,35 @@ export const DashboardSidebar = ({idx, setIdx}) => {
         sx={{
           borderColor: '#2D3748',
           my: 3,
-          height:1.5
+          height: 1.5
         }}
       />
-        <Box sx={{ flexGrow: 1 }}>
-          {upload_items.map((item) => (
-            <NavItem
-              key={item.title}
-              icon={item.icon}
-              url={item.url}
-              title={item.title}
-              globalIdx={idx}
-              setIdx={setIdx}
-            />
-          ))}
+      <Box sx={{ flexGrow: 1 }}>
+        {upload_items.map((item) => (
+          <NavItem
+            key={item.title}
+            icon={item.icon}
+            url={item.url}
+            title={item.title}
+            globalIdx={idx}
+            setIdx={setIdx}
+          />
+        ))}
       </Box>
     </Box>
   );
 
   return (
     <>
-    <Drawer
+      <Drawer
         anchor="left"
         PaperProps={{
           sx: {
-            backgroundColor: '#111827',
-            color: '#FFFFFF',
+            backgroundColor: '#1976d2',
+            color: '#ffffff',
+            text: {
+              primary: '#ffffff',
+            },
             width: 280
           }
         }}
@@ -137,7 +142,7 @@ export const DashboardSidebar = ({idx, setIdx}) => {
       >
         {content}
       </Drawer>
-      <DashboardNavbar  />
+      <DashboardNavbar />
     </>
   );
 };

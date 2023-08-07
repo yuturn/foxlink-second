@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useReducer } from "react";
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import {
     Box,
@@ -61,24 +61,24 @@ const darkTheme = createTheme({
             light: '#DA6868',
             dark: '#922E2E',
             contrastText: '#FFFFFF'
-        },leave: {
-            main:'#292b2c',
+        }, leave: {
+            main: '#292b2c',
             contrastText: '#fff'
         },
-        working:{
-            main:'#d9534f',
+        working: {
+            main: '#d9534f',
             contrastText: '#fff'
         },
-        notice:{
-            main:'#f0ad4e',
+        notice: {
+            main: '#f0ad4e',
             contrastText: '#fff'
         },
-        moving:{
-            main:'#0275d8',
+        moving: {
+            main: '#0275d8',
             contrastText: '#fff'
         },
-        idle:{
-            main:'#5cb85c',
+        idle: {
+            main: '#5cb85c',
             contrastText: '#fff'
         }
     }
@@ -95,11 +95,11 @@ const CONTENT = {
     mission_duration: "任务时长",
     repair_duration: "维修时长",
     update: "更新资料",
-    Idle:"閒置中",
-    Working:"维修中",
-    Moving:"移动中",
-    Notice:"指派中",
-    Leave:"离线",
+    Idle: "閒置中",
+    Working: "维修中",
+    Moving: "移动中",
+    Notice: "指派中",
+    Leave: "离线",
 
 }
 export default function AllStatus({ token, setAlert, ...rest }) {
@@ -109,42 +109,42 @@ export default function AllStatus({ token, setAlert, ...rest }) {
     const [_, forceUpdate] = useReducer(x => x + 1, 0);
     const navigate = useNavigate();
 
-    const updataData = (sort=false) => {
+    const updataData = (sort = false) => {
         setLoading(true);
         apiWorkStatus(workshop).then(res => {
             let rawData = res.data;
             rawData.map(worker => {
                 worker.finish_event_date = parseTimeZone(worker.finish_event_date);
-                if(worker.mission_duration == null) worker.mission_duration = "无";
+                if (worker.mission_duration == null) worker.mission_duration = "无";
                 else worker.mission_duration = parseSeconds(worker.mission_duration);
-                if(worker.repair_duration == null) worker.repair_duration = "无";
+                if (worker.repair_duration == null) worker.repair_duration = "无";
                 else worker.repair_duration = parseSeconds(worker.repair_duration);
                 worker.sort = parseSortIndex(worker.status);
             });
-            if(sort){
-                rawData.sort(function(a, b){
+            if (sort) {
+                rawData.sort(function (a, b) {
                     return b.sort - a.sort;
                 })
             }
             setStatusData(rawData);
             setAlert({
-                'open':true,
+                'open': true,
                 'msg': "更新成功",
                 'type': 'success'
-              });
+            });
         }).catch(err => {
-            if(err.response){
+            if (err.response) {
                 setAlert({
-                    'open':true,
+                    'open': true,
                     'msg': err.response.statusText,
                     'type': 'error'
                 })
             }
-            else{
+            else {
                 alert('网路异常，请联系相关人员 (断线 或 Timeout)');
                 navigate('/login');
             }
-        }).finally(()=>{
+        }).finally(() => {
             setLoading(false);
         });
     }
@@ -179,15 +179,15 @@ export default function AllStatus({ token, setAlert, ...rest }) {
         return hours + ':' + minutes + ':' + seconds;
     }
     const parseSortIndex = (status_str) => {
-        if(status_str === "Working"){return 5;}
-        else if(status_str === "Notice"){return 4;}
-        else if(status_str === "Moving"){return 3;}
-        else if(status_str === "Idle"){return 2;}
-        else{return 1;}
+        if (status_str === "Working") { return 5; }
+        else if (status_str === "Notice") { return 4; }
+        else if (status_str === "Moving") { return 3; }
+        else if (status_str === "Idle") { return 2; }
+        else { return 1; }
     }
     return (
         <ThemeProvider theme={darkTheme}>
-            <Card >
+            {/* <Card >
                 <CardHeader title={CONTENT.title}
                     action={(
                     <FormControl >
@@ -293,7 +293,7 @@ export default function AllStatus({ token, setAlert, ...rest }) {
                     </Box>
                     }
                 </PerfectScrollbar>
-            </Card>
+            </Card> */}
         </ThemeProvider>
     );
 }

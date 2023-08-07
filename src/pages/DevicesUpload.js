@@ -26,7 +26,17 @@ import { AlertComponent } from "../components/alert-component";
 
 import { Upload } from '../icons/upload';
 import { apiGetFileName } from "../api.js";
-import { apiDevices, apiWorkShopList, apiDevicesData, apiGetSystemEnvSetting, apiPostSystemEnvSetting, apiGetSystemEnvSettingCount, apiPostSystemEnvSettingCount } from "../api.js";
+import {
+    apiDevices,
+    apiWorkShopList,
+    apiDevicesData,
+    apiGetSystemEnvSetting,
+    apiPostSystemEnvSetting,
+    apiGetSystemEnvSettingCount,
+    apiPostSystemEnvSettingCount,
+    apiGetSystemEnvSettingInterval,
+    apiPostSystemEnvSettingInterval
+} from "../api.js";
 
 const CONTENT = {
     id: "装置 ID",
@@ -123,6 +133,12 @@ export default function DevicesUpload({ token, ...rest }) {
                     return ('手动')
                 })
             }
+        });
+        // 抓救援站區間
+        apiGetSystemEnvSettingInterval({ "key": "history_record_days", token: token }).then(res => {
+            setRescueTime(() => {
+                return (res.data.value)
+            })
         });
         apiWorkShopList(token).then(res => {
             setSelectItem(res.data.map(name => {
@@ -281,44 +297,6 @@ export default function DevicesUpload({ token, ...rest }) {
         updateFileName(data);
     }
 
-    // useEffect(() => {
-    //     valueChange();
-    // })
-
-    // const valueChange = () => {
-    //     const data = {
-    //         token: token,
-    //         key: "auto_rescue",
-    //     }
-    //     apiGetSystemEnvSetting(data).then(res => {
-    //         setRescueValue(res.data.value)
-    //         console.log('接到的Settings value')
-    //         console.log(rescueValue)
-    //         if (res.data.value == "0") {
-    //             setRescueStatus("手動")
-    //         }
-    //         else if (res.data.value == "1") {
-    //             setRescueStatus("自動")
-    //         }
-    //     })
-    // }
-
-    // useEffect(() => {
-    //     // Just run the first time
-    //     const data = {
-    //         "token": token,
-    //         "key": "auto_rescue"
-    //     }
-    //     apiGetSystemEnvSetting(data, res => {
-    //         console.log(res.data)
-    //         if (res.data.value == "1") {
-    //             setRescueStatus('自动')
-    //         } else {
-    //             setRescueStatus('手动')
-    //         }
-    //     })
-    // })
-
     // 設定救援站設定
     const handleOnClickSetting = () => {
         let temp = ""
@@ -384,23 +362,20 @@ export default function DevicesUpload({ token, ...rest }) {
     }
 
     // 設定救援站區間
-    // const handleOnClickSettingTime = () => {
-    //     const data = {
-    //         "token": token,
-    //         "key": 'rescue_count',
-    //         "value": rescueCount,
-    //         "start": 0,
-    //         "end": 0
-    //     }
-    //     data.start = document.getElementById('start').value;
-    //     data.end = document.getElementById('end').value;
-    //     apiPostSystemEnvSettingCount(data).catch(err => {
-    //         console.log(err);
-    //         setErrMsg("更新失败！");
-    //     })
-    //     handleOpen()
-    //     setRescueTime(document.getElementById('start').value + document.getElementById('end').value)
-    // }
+    const handleOnClickSettingTime = () => {
+        const data = {
+            "token": token,
+            "key": 'history_record_days',
+            "value": rescueTime
+        }
+        data.value = document.getElementById('interval').value;
+        apiPostSystemEnvSettingInterval(data).catch(err => {
+            console.log(err);
+            setErrMsg("更新失败！");
+        })
+        handleOpen()
+        setRescueTime(document.getElementById('interval').value)
+    }
 
     return (
         <ThemeProvider theme={darkTheme}>
@@ -562,7 +537,7 @@ export default function DevicesUpload({ token, ...rest }) {
                             更新数量
                         </LoadingButton>
                     </Box>
-                    {/* <Divider sx={{ borderBottomWidth: 3, m: 3 }} />
+                    <Divider sx={{ borderBottomWidth: 3, m: 3 }} />
                     <Box
                         sx={{
                             display: 'flex',
@@ -576,7 +551,7 @@ export default function DevicesUpload({ token, ...rest }) {
                             variant="overline"
                             fontSize="large"
                         >
-                            目前救援站區間:{rescueTime}
+                            目前救援站區間:{rescueTime}天
                         </Typography>
                     </Box>
                     <Box
@@ -589,15 +564,8 @@ export default function DevicesUpload({ token, ...rest }) {
                         <TextField
                             label="请输入救援站區間"
                             margin="normal"
-                            name="start"
-                            id="start"
-                            variant="outlined"
-                        />
-                        <TextField
-                            label="请输入救援站區間"
-                            margin="normal"
-                            name="end"
-                            id="end"
+                            name="interval"
+                            id="interval"
                             variant="outlined"
                         />
                         <LoadingButton
@@ -616,7 +584,7 @@ export default function DevicesUpload({ token, ...rest }) {
                         >
                             更新區間
                         </LoadingButton>
-                    </Box> */}
+                    </Box>
                     <Divider sx={{ borderBottomWidth: 3, m: 3 }} />
                     <Box
                         sx={{

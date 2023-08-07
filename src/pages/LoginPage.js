@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 
-import { Box, Button, Container, TextField, Typography, Grid } from '@mui/material';
+import { Box, Button, Container, TextField, Typography, Grid, Card, CardHeader, Link } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Logo } from "../components/logo.js";
 
@@ -12,19 +12,18 @@ import { encrypt, verify } from "../tools/crypt";
 
 const darkTheme = createTheme({
     palette: {
-        mode: 'dark',
+        mode: 'light',
         background: {
-            default: '#1a1e2b',
-            paper: '#1a1e2b',
+            default: '#1976d2',
+            paper: '#e7f2fd',
         },
         text: {
-            primary: '#EDF2F7',
+            primary: '#000000',
         },
         primary: {
             // Purple and green play nicely together.
-            main: '#5048E5',
+            main: '#2196f3',
         },
-
     },
 });
 
@@ -36,6 +35,7 @@ export default function Login({ setUser, setAlert }) {
             _isMounted.current = false;
         }
     }, []);
+
     function handleOnClick() {
         try {
             let account = document.getElementById('account').value;
@@ -87,6 +87,7 @@ export default function Login({ setUser, setAlert }) {
         document.getElementById('account').value = "";
         document.getElementById('password').value = "";
     }
+
     return (
         <ThemeProvider theme={darkTheme}>
             <Grid
@@ -95,7 +96,7 @@ export default function Login({ setUser, setAlert }) {
                 direction="column"
                 alignItems="center"
                 justifyContent="center"
-                sx={{ minHeight: '100vh', background: '#121212' }}
+                sx={{ minHeight: '100vh' }}
             >
                 <Grid item xs={3}>
                     <Box
@@ -106,7 +107,7 @@ export default function Login({ setUser, setAlert }) {
                             flexGrow: 1,
                             minHeight: '100%',
                             maxWidth: 'sm',
-                            background: '#1a1e2b',
+                            background: '#62aaf4',
                             borderRadius: 4,
                             border: 'solid',
                             borderColor: '#2D3748'
@@ -119,7 +120,7 @@ export default function Login({ setUser, setAlert }) {
                                 direction="column"
                                 alignItems="center"
                                 justifyContent="center"
-                                sx={{ pt: 5 }}
+                                sx={{ pt: 5, background: "1976d2" }}
                             >
                                 <Grid item xs={3}>
                                     <Logo />
@@ -132,15 +133,9 @@ export default function Login({ setUser, setAlert }) {
                                 <Typography
                                     color="textPrimary"
                                     variant="h4"
+                                    align="center"
                                 >
                                     系统登入
-                                </Typography>
-                                <Typography
-                                    color="textSecondary"
-                                    gutterBottom
-                                    variant="body2"
-                                >
-                                    使用主管级帐户进入
                                 </Typography>
                             </Box>
                             <Box
@@ -178,6 +173,12 @@ export default function Login({ setUser, setAlert }) {
                                 >
                                     登入
                                 </Button>
+                            </Box>
+                            <Box sx={{ py: 2 }}>
+                                如果沒有帳號請點選下方按鈕
+                                <Link href='/login/signup' underline="hover">
+                                    註冊帳號
+                                </Link>
                             </Box>
                         </Container>
                     </Box>
