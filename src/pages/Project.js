@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 
 import {
   Box,
@@ -7,14 +7,13 @@ import {
   CardContent,
   Divider,
   Grid,
-  Button,
   Typography,
   TextField,
   FormControl,
   InputLabel
 } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
-
+import { DataGrid } from '@mui/x-data-grid';
 // import dialog
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -25,11 +24,8 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Emergency } from "../components/emergency.js";
-import { MissionNeedRepair } from "../components/mission-need-repair.js";
-import { WorkshopPicker } from "../components/workshop-picker.js";
 
-import { apiMissionEmergency, apiMissionNeedRepair } from "../api.js";
+// import { apiMissionEmergency, apiMissionNeedRepair } from "../api.js";
 
 
 const darkTheme = createTheme({
@@ -48,6 +44,46 @@ const darkTheme = createTheme({
     },
   },
 });
+
+const columns = [
+  { field: 'id', headerName: 'ID', width: 150 },
+  { field: 'machineName', headerName: '機台名稱', width: 400 }
+];
+
+const empColumns = [
+  { field: 'id', headerName: 'ID', width: 150 },
+  { field: 'badge', headerName: '員工編號', width: 250 },
+  { field: 'empName', headerName: '員工名稱', width: 250 },
+
+];
+
+const rows = [
+  { id: 1, machineName: 'Device1' },
+  { id: 2, machineName: 'Device2' },
+  { id: 3, machineName: 'Device3' },
+  { id: 4, machineName: 'Device4' },
+  { id: 5, machineName: 'Device5' },
+  { id: 6, machineName: 'Device6' },
+  { id: 7, machineName: 'Device7' },
+  { id: 8, machineName: 'Device8' },
+  { id: 9, machineName: 'Device9' },
+  { id: 10, machineName: 'Device10' },
+  { id: 11, machineName: 'Device11' },
+];
+
+const empRows = [
+  { id: 1, badge: "c001", empName: '王小明' },
+  { id: 2, badge: "c002", empName: '王小美' },
+  { id: 3, badge: "c003", empName: '陳小新' },
+  { id: 4, badge: "c004", empName: '羅聖閔' },
+  { id: 5, badge: "c005", empName: '李大同' },
+  { id: 6, badge: "c006", empName: '林定遠' },
+  { id: 7, badge: "c007", empName: '李小翔' },
+  { id: 8, badge: "c008", empName: '許銘軒' },
+  { id: 9, badge: "c009", empName: '陳小龍' },
+  { id: 10, badge: "c0010", empName: '江小婷' },
+  { id: 11, badge: "c0011", empName: '何美美' },
+];
 
 export default function Project({ token, ...rest }) {
   const [age, setAge] = useState("");
@@ -75,20 +111,6 @@ export default function Project({ token, ...rest }) {
             <Grid item xs={12} md={12}>
               <Box pt={4} pb={3} px={3}>
                 <Box component="form" role="form">
-                  <Typography variant="h4" fontWeight="medium">
-                    新增專案
-                  </Typography>
-                  <Box display="flex" alignItems="center" pt={3} px={2}>
-                    <Typography variant="h5" fontWeight="medium" mr={2}>
-                      名稱:
-                    </Typography>
-                    <Box mr={2}>
-                      <TextField type="projec-name" label="專案名稱" />
-                    </Box>
-                    <LoadingButton variant="contained" color="info">
-                      新增
-                    </LoadingButton>
-                  </Box>
                   <Typography variant="h4" fontWeight="medium" mt={3}>
                     刪除專案
                   </Typography>
@@ -203,35 +225,49 @@ export default function Project({ token, ...rest }) {
                     新增
                   </LoadingButton>
                 </Box>
+                <Box display="flex" alignItems="center" pt={3} px={2}>
+                  <div style={{ height: 400, width: '100%' }}>
+                    <DataGrid
+                      rows={empRows}
+                      columns={empColumns}
+                      initialState={{
+                        pagination: {
+                          paginationModel: { page: 0, pageSize: 5 },
+                        },
+                      }}
+                      pageSizeOptions={[5, 10]}
+                      checkboxSelection
+                    />
+                  </div>
+                </Box>
+                <Box display="flex" pt={3} px={2}>
+                  <Box>
+                    <LoadingButton variant="contained" color="error">
+                      刪除
+                    </LoadingButton>
+                  </Box>
+                </Box>
               </Box>
-              <Divider sx={{ borderBottomWidth: 3 }} />
             </Grid>
           </Grid>
-          <Grid container spacing={1} mt={1}>
-            <Grid xs={{ md: 12 }}>
+        </CardContent>
+      </Card>
+      <Card sx={{ mt: 2 }}>
+        <Box sx={{ bgcolor: 'info.main' }}>
+          <CardHeader title="編輯專案機台" color="#62aaf4" />
+        </Box>
+        <Divider sx={{ borderBottomWidth: 3 }} />
+        <CardContent>
+          <Grid container spacing={1} mt={2}>
+            <Grid xs={12} sx={{ md: 12 }}>
               <Box pt={4} pb={3} px={3}>
-                <Typography variant="h4" fontWeight="medium" mt={3}>
-                  編輯專案機台
-                </Typography>
                 <Box display="flex" alignItems="center" pt={3} px={2}>
                   <Typography variant="h5" fontWeight="medium" mr={2}>
                     專案名稱:
                   </Typography>
-                  <FormControl>
-                    <InputLabel id="demo-simple-select-label">專案</InputLabel>
-                    <Select
-                      labelId="permission-select-label"
-                      id="permission-select"
-                      value={age}
-                      label="專案"
-                      onChange={handleChange}
-                      style={{ minWidth: "200px", height: "45px" }}
-                    >
-                      <MenuItem value={10}>專案 A</MenuItem>
-                      <MenuItem value={20}>專案 B</MenuItem>
-                      <MenuItem value={30}>專案 C</MenuItem>
-                    </Select>
-                  </FormControl>
+                  <Box mr={2}>
+                    <TextField type="search-staff" label="請輸入專案名稱" />
+                  </Box>
                   <Box ml={2}>
                     <LoadingButton variant="contained" color="info">
                       查詢
@@ -249,76 +285,20 @@ export default function Project({ token, ...rest }) {
                     新增
                   </LoadingButton>
                 </Box>
-              </Box>
-              <Divider sx={{ borderBottomWidth: 3 }} />
-            </Grid>
-          </Grid>
-          <Grid container spacing={1} mt={1}>
-            <Grid sx={{ md: 12 }}>
-              <Box pt={4} pb={3} px={3}>
-                <Typography variant="h4" fontWeight="medium" mt={3}>
-                  編輯機台事件
-                </Typography>
                 <Box display="flex" alignItems="center" pt={3} px={2}>
-                  <Typography variant="h5" fontWeight="medium" mr={2}>
-                    專案名稱:
-                  </Typography>
-                  <FormControl>
-                    <InputLabel id="demo-simple-select-label">專案</InputLabel>
-                    <Select
-                      labelId="permission-select-label"
-                      id="permission-select"
-                      value={age}
-                      label="專案"
-                      onChange={handleChange}
-                      style={{ minWidth: "200px", height: "45px" }}
-                    >
-                      <MenuItem value={10}>專案 A</MenuItem>
-                      <MenuItem value={20}>專案 B</MenuItem>
-                      <MenuItem value={30}>專案 C</MenuItem>
-                    </Select>
-                  </FormControl>
-                  <Box ml={2}>
-                    <LoadingButton variant="contained" color="info">
-                      查詢
-                    </LoadingButton>
-                  </Box>
-                </Box>
-                <Box display="flex" alignItems="center" pt={3} px={2}>
-                  <Typography variant="h5" fontWeight="medium" mr={2}>
-                    機台名稱:
-                  </Typography>
-                  <FormControl>
-                    <InputLabel id="demo-simple-select-label">機台</InputLabel>
-                    <Select
-                      labelId="permission-select-label"
-                      id="permission-select"
-                      value={age}
-                      label="機台"
-                      onChange={handleChange}
-                      style={{ minWidth: "200px", height: "45px" }}
-                    >
-                      <MenuItem value={10}>機台 A</MenuItem>
-                      <MenuItem value={20}>機台 B</MenuItem>
-                      <MenuItem value={30}>機台 C</MenuItem>
-                    </Select>
-                  </FormControl>
-                  <Box ml={2}>
-                    <LoadingButton variant="contained" color="info">
-                      查詢
-                    </LoadingButton>
-                  </Box>
-                </Box>
-                <Box display="flex" alignItems="center" pt={3} px={2}>
-                  <Typography variant="h5" fontWeight="medium" mr={2}>
-                    事件名稱:
-                  </Typography>
-                  <Box mr={2}>
-                    <TextField type="search-staff" label="請輸入事件名稱" />
-                  </Box>
-                  <LoadingButton variant="contained" color="info">
-                    新增
-                  </LoadingButton>
+                  <div style={{ height: 600, width: '100%' }}>
+                    <DataGrid
+                      rows={rows}
+                      columns={columns}
+                      initialState={{
+                        pagination: {
+                          paginationModel: { page: 0, pageSize: 5 },
+                        },
+                      }}
+                      pageSizeOptions={[5, 10]}
+                      checkboxSelection
+                    />
+                  </div>
                 </Box>
               </Box>
             </Grid>

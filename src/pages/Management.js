@@ -1,26 +1,21 @@
 import React, { useState, useEffect } from "react";
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import { apiGetPeddingList } from '../api'
+import { apiGetPeddingList, apiConfirmedUser } from '../api'
 import {
     Box,
-    Button,
     Card,
     TextField,
+    Typography,
     Grid,
-    CardContent,
     CardHeader,
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableRow,
     createTheme,
     ThemeProvider,
-    Divider,
 } from '@mui/material';
-import { Typography, Container, InputLabel, MenuItem, Select, FormControl } from '@mui/material';
+import { DataGrid } from '@mui/x-data-grid';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { apiGetWhiteList, apiGetDeviceNameById, apiWorkShopList, apiGetDeviceRecommend, apiGetWorkersByDevice, apiPostAddWorkersWhitelist, apiDeleteWorkersWhitelist } from "../api.js";
+import { AlertComponent } from "../components/alert-component";
+
+// import { apiGetWhiteList, apiGetDeviceNameById, apiWorkShopList, apiGetDeviceRecommend, apiGetWorkersByDevice, apiPostAddWorkersWhitelist, apiDeleteWorkersWhitelist } from "../api.js";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -70,23 +65,44 @@ const darkTheme = createTheme({
     },
 });
 
-function createData(id, badge, username, createtime) {
-    return { id, badge, username, createtime };
-}
-
-const rows = [
-    createData('c001', 20220711, "設定完整備份時間"),
-    createData('c002', 20220713, "設定差異備份時間"),
-    createData('c003', 20220715, "核准員工帳號申請"),
-    createData('c004', 20220722, "刪除人員"),
-    createData('c005', 20220802, "編輯人員等級"),
+const columns = [
+    { field: 'id', headerName: 'ID', width: 120 },
+    { field: 'badge', headerName: '員工編號', width: 180 },
+    { field: 'username', headerName: '員工姓名', width: 180 },
+    {
+        field: 'created_date',
+        headerName: '操作時間',
+        type: 'string',
+        width: 250,
+    },
 ];
+
 
 
 export default function Management({ token, ...rest }) {
     const [permissionOpen, setPermissionOpen] = useState(false);
     const [permissionDeleteOpen, setPermissionDeleteOpen] = useState(false);
-    // const loading = false;
+    const [registerData, setRegisterData] = useState();
+    // const [rowSelectionModel, setRowSelectionModel] = React.useState([]);
+    const [selectedRowsData, setSelectedRowsData] = useState();
+
+    const [alert, setAlert] = useState(false);
+    const [open, setOpen] = useState(false);
+    const [successMsg, setSuccessMsg] = useState();
+    const [errmsg, setErrMsg] = useState();
+    const [conData, setConData] = useState([]);
+
+    useEffect(() => {
+        if (successMsg) {
+            setAlert(true);
+        }
+    }, [successMsg])
+
+    const onRowsSelectionHandler = (ids) => {
+        const selectedRowsData = ids.map((id) => registerData.find((row) => row.id === id));
+        setSelectedRowsData(selectedRowsData);
+        console.log(selectedRowsData);
+    };
 
     const CONTENT = {
         title: "註冊人員名單",
@@ -105,51 +121,79 @@ export default function Management({ token, ...rest }) {
         handleOnClick();
     }, [])
     const [data, setData] = useState();
-    const [open, setOpen] = useState(false);
     const handleClickOpen = () => {
         setOpen(true);
+
     };
     const handleClose = () => {
+        setAlert(false);
         setOpen(false);
     };
 
     function handleOnClick() {
         apiGetPeddingList(token)
             .then(data => {
-                console.log(data)
-                console.log(typeof (data))
+                setRegisterData(data.data)
                 const display = data.data.map(
                     register => {
-                        return (
-                            <Card sx={{ m: 1, minWidth: "500px" }}
-                                key={register.id}>
-                                <CardContent>
-                                    <Typography
-                                        color="textSecondary"
-                                        gutterBottom
-                                        variant="overline"
-                                        fontSize="large"
-                                    >
-                                        员工编号 : {register.badge}
-                                    </Typography>
-                                    <Typography>
-                                        员工姓名 : {register.username}
-                                    </Typography>
-                                    <Typography>
-                                        申請日期 : {register.created_date}
-                                    </Typography>
-                                </CardContent>
-                            </Card>
-                        )
                     }
                 )
                 setData(display);
-                console.log(display);
+                // console.log(display);
             }).catch(err => { console.log(err) })
+    };
+
+    function handleOnClickConfirmed() {
+        const confirmedData = selectedRowsData.map(
+            data => {
+                console.log(data)
+                const condata = [{
+                    'badge': data.badge,
+                    'username': data.username,
+                    'confirmed': true
+                }]
+                console.log(condata)
+                apiConfirmedUser(condata)
+                    .then(data => {
+                        console.log(data)
+                        console.log(data.data.badge)
+                        setErrMsg(data.data.badge)
+                    }).catch(err => { console.log(err) })
+            }
+        )
+        // console.log(conData)
+        // apiConfirmedUser(conData)
+        //     .then(data => {
+        //         console.log(data)
+        //         console.log(data.data.badge)
+        //         setErrMsg(data.data.badge)
+        //     }).catch(err => { console.log(err) })
+        setAlert(true);
+        setTimeout(handleClose, 3000);
+    };
+
+    function handleOnClickReject() {
+        const rejectData = {
+            badge: selectedRowsData.badge,
+            username: selectedRowsData.username,
+            confirmed: false
+        }
+        console.log(selectedRowsData);
+        console.log(rejectData)
+        apiConfirmedUser(rejectData)
+            .then(data => {
+                console.log(data)
+                console.log(data.data.badge)
+                setSuccessMsg(data.data.badge)
+            }).catch(err => { console.log(err) })
+        setOpen(true);
+        setTimeout(handleClose, 3000);
     };
 
     return (
         <ThemeProvider theme={darkTheme}>
+            <AlertComponent open={alert} setOpen={setAlert} message={`${successMsg}已核准`} severity={"success"} />
+            <AlertComponent open={open} setOpen={setOpen} message={`${successMsg}已拒絕`} severity={"info"} />
             <Box>
                 <Box mb={3}>
                     <Grid container spacing={2}>
@@ -166,30 +210,42 @@ export default function Management({ token, ...rest }) {
                                         </Box>
                                     </Box>
                                     <Box display="flex" alignItems="center" pt={3} px={2}>
-                                        <LoadingButton variant="contained" color="info" onClick={handleClickOpen} ml={2}>
-                                            查詢
-                                        </LoadingButton>
-                                        <Dialog
-                                            open={open}
-                                            onClose={handleClose}
-                                            aria-labelledby="alert-dialog-title"
-                                            aria-describedby="alert-dialog-description"
-                                            sx={{ width: '100%' }}
-                                        >
-                                            <DialogTitle id="alert-dialog-title">
-                                                {CONTENT.title}
-                                            </DialogTitle>
-                                            <DialogContent>
-                                                {
-                                                    data
-                                                }
-                                            </DialogContent>
-                                            <DialogActions >
-                                                <Button onClick={handleClose} autoFocus variant="contained">
-                                                    关闭
-                                                </Button>
-                                            </DialogActions>
-                                        </Dialog>
+                                        <div style={{ height: 650, width: '100%' }}>
+                                            <DataGrid
+                                                rows={registerData}
+                                                columns={columns}
+                                                initialState={{
+                                                    pagination: {
+                                                        paginationModel: { page: 0, pageSize: 5 },
+                                                    },
+                                                }}
+                                                pageSizeOptions={[5, 10]}
+                                                checkboxSelection
+                                                onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
+                                            // checkboxSelection
+                                            // onRowSelectionModelChange={(newRowSelectionModel) => {
+                                            //     setRowSelectionModel(newRowSelectionModel);
+                                            // }}
+                                            // rowSelectionModel={rowSelectionModel}
+                                            />
+                                        </div>
+                                    </Box>
+                                    <Box display="flex" pt={3} px={2}>
+                                        <Box>
+                                            <LoadingButton variant="contained" color="info" onClick={handleOnClick} ml={2}>
+                                                更新
+                                            </LoadingButton>
+                                        </Box>
+                                        <Box sx={{ ml: 2 }}>
+                                            <LoadingButton variant="contained" color="info" onClick={handleOnClickConfirmed} sx={{ ml: 2 }}>
+                                                確認
+                                            </LoadingButton>
+                                        </Box>
+                                        <Box sx={{ ml: 2 }}>
+                                            <LoadingButton variant="contained" color="error" onClick={handleOnClickReject} sx={{ ml: 2 }}>
+                                                拒絕
+                                            </LoadingButton>
+                                        </Box>
                                     </Box>
                                 </Box>
                             </Card>

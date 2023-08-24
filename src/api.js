@@ -16,6 +16,32 @@ const auth_except = (x) => x.catch((e) => {
   throw e;
 })
 
+// ============================第二期============================
+export const apiConfirmedUser = (data) => auth_except(baseRequest.post(`/users/create-user`, data, {
+  headers:
+  {
+    'accept': 'application/json',
+    'Content-Type': 'application/x-www-form-urlencoded'
+  }
+}));
+
+export const apiGetPeddingList = (token) => auth_except(baseRequest.get(`/users/pending-approvals-list`, {
+  headers:
+  {
+    'accept': 'application/json',
+    'Authorization': `Bearer ${token}`
+  }
+}));
+
+export const apiPostPeddingList = (data) => auth_except(baseRequest.post(`/users/pending-approval-user`, data, {
+  headers:
+  {
+    'accept': 'application/json',
+    'Content-Type': 'application/json'
+  }
+}));
+// ============================第二期============================
+
 export const apiSystemSpace = (token) => auth_except(baseRequest.get('/system/space', {
   headers: {
     'accept': 'application/json',
@@ -46,13 +72,6 @@ export const apiStatisticsWithDate = (data) => auth_except(baseRequest.get(`/sta
   }
 }));
 
-export const apiGetPeddingList = (token) => auth_except(baseRequest.get(`/users/pending-approvals-list`, {
-  headers:
-  {
-    'accept': 'application/json',
-    'Authorization': `Bearer ${token}`
-  }
-}));
 
 // export const apiStatisticsWithDate = (data) => auth_except(baseRequest.get(`/stats/?workshop_name=${data['workshop']}&start_date=${data['start']}&end_date=${data['end']}`, {
 //   headers:
@@ -69,6 +88,7 @@ export const apiStatisticsWithShift = (data) => auth_except(baseRequest.get(`/st
   }
 
 }));
+
 /*
 *
 * FQ-9%E8%BB%8A%E9%96%93 新改 ＡＰＩ
