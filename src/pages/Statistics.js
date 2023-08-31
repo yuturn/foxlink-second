@@ -1,233 +1,306 @@
 import React, { useState, useRef } from "react";
-
+import { DataGrid } from '@mui/x-data-grid';
 import {
   Box,
   Card,
   Grid,
   FormControl,
-  InputLabel
+  InputLabel,
+  CardHeader,
+  Typography
 } from '@mui/material';
-import LoadingButton from '@mui/lab/LoadingButton';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { DateRange } from "../components/date-range.js";
-import { Rate } from "../components/rate.js";
-import { CrashedDevices } from "../components/crashed-devices.js";
-import { AcceptMissionEmployees } from "../components/accept-mission-employees.js";
-import { RejectMissionEmployees } from "../components/reject-mission-employees.js";
-import { AbnormalMissions } from "../components/abnormal-missions.js";
-import { AbnormalDevices } from "../components/abnormal-devices.js";
-import { WorkshopPicker } from "../components/workshop-picker.js";
-import { apiStatisticsWithDate, apiStatisticsWithShift } from "../api.js";
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import { BsFillCircleFill } from "react-icons/bs";
 
 const darkTheme = createTheme({
   palette: {
-    mode: 'dark',
+    mode: 'light',
     background: {
-      default: '#1a1e2b',
-      paper: '#1a1e2b',
+      default: '#62aaf4',
+      paper: '#e7f2fd',
     },
     text: {
-      primary: '#EDF2F7',
+      primary: '#000000',
     },
     primary: {
       // Purple and green play nicely together.
-      main: '#5048E5',
+      main: '#2196f3',
     },
   },
 });
 
 export default function Statistics({ token, setAlert, ...rest }) {
-  const _isMounted = useRef(true);
-  const [statusData, setData] = useState();
-  const [workshop, setWorkshop] = useState("");
-  const [loading, setLoading] = useState(false);
 
-  const [sDate, setSDate] = useState(new Date());
-  const [eDate, setEDate] = useState(new Date());
-  const [shift, setShift] = useState();
-
-  const updatedata = (data) => {
-    setData(null);
-    console.log(data);
-    setLoading(true);
-    if (data.shift !== null) {
-      // 更改時間，讓時間只剩下日期(正崴需求! (2023/01/10 17:46))
-      // data['start'] = data['start'].substring(0, 10)
-      // data['end'] = data['end'].substring(0, 10)
-
-      apiStatisticsWithShift(data).then(res => {
-        setData(res.data);
-        setAlert({
-          'open': true,
-          'msg': "更新成功",
-          'type': 'success'
-        });
-      }).catch(err => {
-        setAlert({
-          'open': true,
-          'msg': "错误代码：" + err.response.status,
-          'type': 'error'
-        });
-        console.log(err);
-      }).finally(() => {
-        setLoading(false);
-      });
-    }
-    else {
-      apiStatisticsWithDate(data).then(res => {
-        console.log('APICALL資料(不分班別)')
-        console.log(res.data)
-        setData(res.data);
-        setAlert({
-          'open': true,
-          'msg': "更新成功",
-          'type': 'success'
-        });
-      }).catch(err => {
-        setAlert({
-          'open': true,
-          'msg': "请选取车间",
-          'type': 'error'
-        });
-        console.log(err);
-      }).finally(() => {
-        setLoading(false);
-      });
-    }
-  }
-  const handleOnClick = () => {
-    if (workshop === "") {
-      setAlert({
-        'open': true,
-        'msg': "请选取车间",
-        'type': 'error'
-      });
-      return;
-    }
-    let _shift;
-    if (shift == "夜") {
-      _shift = true;
-    } else if (shift == "日") {
-      _shift = false;
+  function getCircleIcon(color) {
+    if (color === "red") {
+      return <RCircle />;
+    } else if (color === "yellow") {
+      return <YCircle />;
+    } else if (color === "green") {
+      return <GCircle />;
     } else {
-      _shift = null;
+      return null; // 或者返回一个默认的图标
     }
-    const data = {
-      token: token,
-      start: new Date(sDate).toISOString(),
-      end: new Date(eDate).toISOString(),
-      workshop: workshop,
-      shift: _shift
-    }
-    updatedata(data);
   }
+
+  const RCircle = () => {
+    return (
+      <BsFillCircleFill style={{ color: 'red', fontSize: '30px' }} />
+    );
+  }
+  const YCircle = () => {
+    return (
+      <BsFillCircleFill style={{ color: 'yellow', fontSize: '30px' }} />
+    );
+  }
+  const GCircle = () => {
+    return (
+      <BsFillCircleFill style={{ color: 'green', fontSize: '30px' }} />
+    );
+  }
+
+  function getCircleIcon(value) {
+    if (value === 1) {
+      return <RCircle />;
+    } else if (value === 2) {
+      return <YCircle />;
+    } else if (value === 3) {
+      return <GCircle />;
+    } else {
+      return null; // 或者返回一个默认的图标
+    }
+  }
+  const columns = {
+    "d7x": {
+      "Device5": [
+        {
+          id: 1,
+          name: "料盤取材上下氣缸故障",
+          value: 1
+        },
+        {
+          id: 2,
+          name: "tray盤站故障",
+          value: 2
+        },
+        {
+          id: 3,
+          name: "UV檢測站故障",
+          value: 3
+        },
+        {
+          id: 4,
+          name: "Glue異常",
+          value: 3
+        }
+      ],
+      "Devive6": [
+        {
+          id: 1,
+          name: "1#插針定位氣缸故障",
+          value: 3
+        },
+        {
+          id: 2,
+          name: "2#插針定位氣缸故障",
+          value: 2
+        },
+        {
+          id: 3,
+          name: "2#插針站故障",
+          value: 1
+        },
+        {
+          id: 4,
+          name: "主撥料站故障",
+          value: 1
+        },
+        {
+          id: 5,
+          name: "出料撥料氣缸氣缸故障",
+          value: 2
+        },
+        {
+          id: 6,
+          name: "出料翻轉氣缸氣缸故障",
+          value: 3
+        },
+        {
+          id: 7,
+          name: "壓入檢測站故障",
+          value: 2
+        },
+        {
+          id: 8,
+          name: "撥料上下1氣缸故障",
+          value: 3
+        },
+        {
+          id: 9,
+          name: "撥料上下2氣缸故障",
+          value: 3
+        },
+        {
+          id: 10,
+          name: "撥料上下3氣缸故障",
+          value: 2
+        },
+        {
+          id: 11,
+          name: "撥料上下4氣缸故障",
+          value: 3
+        },
+        {
+          id: 12,
+          name: "進料錯位氣缸故障",
+          value: 2
+        },
+        {
+          id: 13,
+          name: "整形氣缸故障",
+          value: 3
+        },
+        {
+          id: 14,
+          name: "House擋料氣缸故障",
+          value: 3
+        },
+        {
+          id: 15,
+          name: "NG排料氣缸故障",
+          value: 2
+        },
+        {
+          id: 16,
+          name: "軸7-2#送料馬達故障",
+          value: 3
+        },
+        {
+          id: 17,
+          name: "Bush異常",
+          value: 2
+        }
+      ],
+      "Device8": [
+        {
+          id: 1,
+          name: "出料撥爪橫移氣缸故障",
+          value: 1
+        },
+        {
+          id: 2,
+          name: "出料站氣缸故障",
+          value: 2
+        },
+        {
+          id: 3,
+          name: "出料翻轉氣缸故障",
+          value: 3
+        },
+        {
+          id: 4,
+          name: "轉盤下料站故障",
+          value: 3
+        },
+        {
+          id: 5,
+          name: "軸4-House旋轉馬達故障",
+          value: 2
+        },
+        {
+          id: 6,
+          name: "軸5-House供料PP馬達故障",
+          value: 1
+        },
+        {
+          id: 7,
+          name: "軸8-DD取料PP夾爪氣缸故障",
+          value: 2
+        },
+        {
+          id: 8,
+          name: "軸10-出料搬送上下故障",
+          value: 3
+        },
+        {
+          id: 9,
+          name: "DD取料PP夾爪氣缸故障",
+          value: 3
+        },
+        {
+          id: 10,
+          name: "DD轉盤工位3壓入氣缸故障",
+          value: 2
+        },
+        {
+          id: 11,
+          name: "DD轉盤站故障",
+          value: 1
+        },
+        {
+          id: 12,
+          name: "house上料站故障",
+          value: 2
+        },
+        {
+          id: 13,
+          name: "House供料PP夾爪氣缸故障",
+          value: 3
+        },
+        {
+          id: 14,
+          name: "Shell異常",
+          value: 3
+        },
+        {
+          id: 15,
+          name: "Shell尾料裁切氣缸故障",
+          value: 2
+        }
+      ]
+    }
+  }
+
+  const createDataTable = (data) => {
+    return Object.keys(data).map((project) => (
+      Object.keys(data[project]).map((device) => (
+        <Card key={device} sx={{ mt: 2 }}>
+          <Box sx={{ bgcolor: 'info.main' }}>
+            <CardHeader title={project + "-" + device} color="#62aaf4" />
+          </Box>
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
+                {data[project][device].map((columns) => (
+                  <TableCell key={columns.id} align="center">
+                    {columns.name}
+                  </TableCell>
+                ))}
+              </TableHead>
+              <TableBody>
+                {data[project][device].map((columns) => (
+                  <TableCell key={columns.id} align="center">
+                    {getCircleIcon(columns.value)}
+                  </TableCell>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Card>
+      ))
+    ));
+  };
 
   return (
     <ThemeProvider theme={darkTheme}>
-      {/* <Grid
-        container
-        spacing={3}
-        sx={{ pb: 5 }}
-      >
-        <Grid item xs={8}>
-          <DateRange sDate={sDate} eDate={eDate} setSDate={setSDate} setEDate={setEDate} setShift={setShift} />
-        </Grid>
-        <Grid item xs={4} justifyContent={"center"}>
-          <Card >
-            <Box>
-              <FormControl sx={{ mt: 3, mb: 3, mr: 3, ml: 3 }}>
-                <InputLabel id="demo-simple-select-label" >WorkShop</InputLabel>
-                <WorkshopPicker token={token} workshop={workshop} setWorkshop={setWorkshop} />
-              </FormControl>
-              <LoadingButton
-                variant="contained"
-                size="large"
-                component="span"
-                sx={{
-                  borderRadius: 4,
-                  justifyContent: 'center',
-                  letterSpacing: 3,
-                  mt: 4
-                }}
-                loading={loading}
-                onClick={handleOnClick}
-              >
-                更新资料
-              </LoadingButton>
-            </Box>
-          </Card>
-        </Grid>
-      </Grid>
-      {
-        statusData &&
-        <Grid
-          container
-          spacing={3}
-        >
-          <Grid
-            item
-            lg={4}
-          >
-            {
-              statusData
-              && <Rate list_data={statusData.login_users_percentage_this_week} />
-              // statusData
-              // && (statusData['login_users_percentage_this_week'] == 0 ? <Rate rate={0} /> :
-              //   <Rate list_data={statusData['login_users_percentage_this_week'][0] * 100} />
-              // )
-              // && <Rate list_data={statusData.login_users_percentage_this_week[1].login_users} />
-            }
-          </Grid>
-          <Grid
-            item
-            lg={4}
-          >
-            {
-              statusData.devices_stats &&
-              <CrashedDevices list_data={statusData.devices_stats.most_frequent_crashed_devices} />
-            }
-          </Grid>
-          <Grid
-            item
-            lg={4}
-          >
-            {
-              statusData.top_most_accept_mission_employees &&
-              <AcceptMissionEmployees list_data={statusData.top_most_accept_mission_employees} />
-            }
-
-          </Grid>
-          <Grid
-            item
-            lg={4}
-          >
-            {
-              statusData.top_most_reject_mission_employees &&
-              <RejectMissionEmployees list_data={statusData.top_most_reject_mission_employees} />
-            }
-
-          </Grid>
-          <Grid
-            item
-            lg={4}
-          >
-            {
-              statusData.devices_stats &&
-              <AbnormalMissions list_data={statusData.devices_stats.top_abnormal_missions_this_month} />
-            }
-
-          </Grid>
-          <Grid
-            item
-            lg={4}
-          >
-            {
-              statusData.devices_stats &&
-              <AbnormalDevices list_data={statusData.devices_stats.top_abnormal_devices} />
-            }
-          </Grid>
-        </Grid>
-      } */}
+      {createDataTable(columns)}
     </ThemeProvider>
   );
 }
