@@ -83,7 +83,6 @@ export default function Management({ token, ...rest }) {
     const [permissionOpen, setPermissionOpen] = useState(false);
     const [permissionDeleteOpen, setPermissionDeleteOpen] = useState(false);
     const [registerData, setRegisterData] = useState();
-    // const [rowSelectionModel, setRowSelectionModel] = React.useState([]);
     const [selectedRowsData, setSelectedRowsData] = useState();
 
     const [alert, setAlert] = useState(false);
@@ -161,13 +160,6 @@ export default function Management({ token, ...rest }) {
                     }).catch(err => { console.log(err) })
             }
         )
-        // console.log(conData)
-        // apiConfirmedUser(conData)
-        //     .then(data => {
-        //         console.log(data)
-        //         console.log(data.data.badge)
-        //         setErrMsg(data.data.badge)
-        //     }).catch(err => { console.log(err) })
         setAlert(true);
         setTimeout(handleClose, 3000);
     };
@@ -211,7 +203,7 @@ export default function Management({ token, ...rest }) {
                                     </Box>
                                     <Box display="flex" alignItems="center" pt={3} px={2}>
                                         <div style={{ height: 650, width: '100%' }}>
-                                            <DataGrid
+                                            {/* <DataGrid
                                                 rows={registerData}
                                                 columns={columns}
                                                 initialState={{
@@ -222,12 +214,7 @@ export default function Management({ token, ...rest }) {
                                                 pageSizeOptions={[5, 10]}
                                                 checkboxSelection
                                                 onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
-                                            // checkboxSelection
-                                            // onRowSelectionModelChange={(newRowSelectionModel) => {
-                                            //     setRowSelectionModel(newRowSelectionModel);
-                                            // }}
-                                            // rowSelectionModel={rowSelectionModel}
-                                            />
+                                            /> */}
                                         </div>
                                     </Box>
                                     <Box display="flex" pt={3} px={2}>

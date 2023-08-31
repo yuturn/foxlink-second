@@ -1,16 +1,12 @@
 import React, { useRef, useEffect } from "react";
 
-import { Box, Button, Container, TextField, Typography, Grid, Link } from '@mui/material';
+import { Box, Button, Container, TextField, Typography, Grid, Card, CardHeader, Link } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Logo } from "../components/logo.js";
 
 import { apiUserLogin, apiSystemSpace } from "../api.js";
 
-// import { useNavigate } from 'react-router-dom';
-import {
-    useNavigate,
-    Outlet,
-} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
 
 import { encrypt, verify } from "../tools/crypt";
 
@@ -44,7 +40,7 @@ export default function Login({ setUser, setAlert }) {
         try {
             let account = document.getElementById('account').value;
             let password = document.getElementById('password').value;
-            const hashPassWord = encrypt(password, "$5$rounds=10000$F0XL1NKPWDHaSH");
+            const hashPassWord = encrypt("foxlink", "$5$rounds=10000$F0XL1NKPWDHaSH");
 
             if (account == '' || password == '') throw "帐密不可為空";
             apiUserLogin(`grant_type=&username=${account}&password=${hashPassWord}&scope=&client_id=123&client_secret=`)
@@ -179,9 +175,14 @@ export default function Login({ setUser, setAlert }) {
                                 </Button>
                             </Box>
                             <Box sx={{ py: 2 }}>
-                                如果沒有帳號請點選右方按鈕
-                                <Link href='signup' underline="hover">
+                                如果沒有帳號請點選下方按鈕
+                                <Link href='/login/signup' underline="hover">
                                     註冊帳號
+                                </Link>
+                            </Box>
+                            <Box sx={{ py: 2 }}>
+                                <Link href='/' underline="hover">
+                                    測試登入
                                 </Link>
                             </Box>
                         </Container>

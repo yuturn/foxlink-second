@@ -165,11 +165,11 @@ export default function Backup({ token, setAlert, ...rest }) {
                                         </LoadingButton>
                                     </Box>
                                 </Box>
-                                <Box display="flex" alignItems="center" pt={3} px={2}>
+                                <Box pt={3} px={2}>
                                     <Typography variant="h5" fontWeight="medium" mr={2}>
                                         備份目的地1:
                                     </Typography>
-                                    <TextField type="string" label="Password" />
+                                    <TextField type="password" label="Password" />
                                     <Box ml={2}>
                                         <LoadingButton variant="contained"
                                             size="large"
@@ -190,7 +190,7 @@ export default function Backup({ token, setAlert, ...rest }) {
                                     <Typography variant="h5" fontWeight="medium" mr={2}>
                                         備份目的地2:
                                     </Typography>
-                                    <TextField type="string" label="Password" />
+                                    <TextField type="password" label="Password" />
                                     <Box ml={2}>
                                         <LoadingButton variant="contained"
                                             size="large"

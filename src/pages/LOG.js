@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import { saveAs } from 'file-saver';
 
-import { Box, Card, CardContent, CardHeader, Divider, FormControl, createTheme, ThemeProvider, TextField, Grid, Select, MenuItem, InputLabel } from '@mui/material';
+import { Box, Card, CardContent, CardHeader, Divider, Typography, createTheme, ThemeProvider, TextField, Grid, Select, FormControl } from '@mui/material';
 
 // import 選擇日期套件
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -19,7 +19,6 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-
 
 const darkTheme = createTheme({
     palette: {
@@ -43,22 +42,17 @@ function createData(id, date, behavior) {
 }
 
 const rows = [
-    createData('c001', 20220711, "完整備份執行"),
-    createData('c002', 20220713, "差異備份執行"),
-    createData('c003', 20220715, "備份時間更改"),
-    createData('c004', 20220722, "備份路徑更改"),
-    createData('c005', 20220802, "模型執行"),
+    createData('c001', 20220711, "設定完整備份時間"),
+    createData('c002', 20220713, "設定差異備份時間"),
+    createData('c003', 20220715, "核准員工帳號申請"),
+    createData('c004', 20220722, "刪除人員"),
+    createData('c005', 20220802, "編輯人員等級"),
 ];
 
 
 export default function LOG({ token, ...rest }) {
     const [sDate, setSDate] = useState(new Date());
     const [eDate, setEDate] = useState(new Date());
-    const [age, setAge] = useState("");
-
-    const handleChange = (event) => {
-        setAge(event.target.value);
-    };
 
     useEffect(() => {
         const data = {
@@ -118,25 +112,14 @@ export default function LOG({ token, ...rest }) {
                             </Box>
                         </Grid>
                         <Grid item xs={{ md: 3 }}>
-                            <Box sx={{ mt: 2 }}>
-                                <FormControl>
-                                    <InputLabel id="demo-simple-select-label">操作紀錄</InputLabel>
-                                    <Select
-                                        labelId="permission-select-label"
-                                        id="permission-select"
-                                        value={age}
-                                        label="操作紀錄"
-                                        onChange={handleChange}
-                                        style={{ minWidth: "200px", height: "56px" }}
-                                    >
-                                        <MenuItem value={10}>完整備份執行</MenuItem>
-                                        <MenuItem value={20}>差異備份執行</MenuItem>
-                                        <MenuItem value={30}>備份時間更改</MenuItem>
-                                        <MenuItem value={40}>備份路徑更改</MenuItem>
-                                        <MenuItem value={50}>模型執行</MenuItem>
-                                    </Select>
-                                </FormControl>
-                            </Box>
+                            <TextField
+                                fullWidth
+                                label="操作紀錄"
+                                margin="normal"
+                                name="behavior"
+                                id="behavior"
+                                variant="outlined"
+                            />
                         </Grid>
                         <Grid item xs={{ md: 1 }}>
                             <LoadingButton variant="contained"

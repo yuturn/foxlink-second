@@ -20,7 +20,7 @@ export const DashboardSidebar = ({ idx, setIdx }) => {
     {
       url: '/statistics',
       icon: (<StatusIcon fontSize="small" />),
-      title: '统计资料',
+      title: '機臺健康狀況',
       active: false
     },
     {
@@ -74,23 +74,11 @@ export const DashboardSidebar = ({ idx, setIdx }) => {
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        height: '100%'
+        height: '100%',
+        py:8,
       }}
     >
-      <Box sx={{ p: 3 }}>
-        <Link to={'/all-status'}>
-          <Logo sx={{ height: 42, width: 42 }} />
-        </Link>
-      </Box>
-      <Divider
-        sx={{
-          borderColor: '#2D3748',
-          my: 3,
-          height: 1.5
-        }}
-      />
       <Box sx={{ flexGrow: 1 }}>
-
         {items.map((item) => (
           <NavItem
             key={item.title}
@@ -135,7 +123,7 @@ export const DashboardSidebar = ({ idx, setIdx }) => {
             text: {
               primary: '#ffffff',
             },
-            width: 280
+            width: 280,
           }
         }}
         variant="permanent"

@@ -42,12 +42,11 @@ export default function App() {
             <SnackbarAlert open={alert.open} message={alert.msg} type={alert.type} setAlert={setAlert} duration={alert.duration} />
             <Router>
                 <Routes>
-                    <Route element={<Login setAlert={setAlert} setUser={setAuthUser} />} path="/login" />
-                    {/* <Route element={<SignUp />} path="signup" />
-                    </Route> */}
-                    <Route element={<SignUp />} path="/signup" />
+                    <Route element={<Login setAlert={setAlert} setUser={setAuthUser} />} path={'/login'}>
+                        <Route element={<SignUp setAlert={setAlert} setUser={setAuthUser} />} path={'/login/signup'}></Route>
+                    </Route>
                     <Route element={<FoxlinkPages authUser={authUser} />} path={'/'}>
-                        <Route element={<Status token={authUser.token} setAlert={setAlert} />} path={'/all-status'}></Route>
+                        <Route element={<Status token={"$5$rounds=10000$F0XL1NKPWDHaSH$x7OJPMIuQs3XFigY6rsIzhYVDezZa0i3O1qZrDemcm5"} setAlert={setAlert} />} path={'/all-status'}></Route>
                         <Route element={<WorkerinfoUpload setAlert={setAlert} token={authUser.token} />} path={'/worker-info-upload'}></Route>
                         <Route element={<DevicesUpload token={authUser.token} />} path={'/devices-upload'}></Route>
                         <Route element={<Statistics token={authUser.token} setAlert={setAlert} />} path={'/statistics'}></Route>
