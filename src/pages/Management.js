@@ -203,7 +203,7 @@ export default function Management({ token, ...rest }) {
                                     </Box>
                                     <Box display="flex" alignItems="center" pt={3} px={2}>
                                         <div style={{ height: 650, width: '100%' }}>
-                                            {/* <DataGrid
+                                            <DataGrid
                                                 rows={registerData}
                                                 columns={columns}
                                                 initialState={{
@@ -214,7 +214,7 @@ export default function Management({ token, ...rest }) {
                                                 pageSizeOptions={[5, 10]}
                                                 checkboxSelection
                                                 onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
-                                            /> */}
+                                            />
                                         </div>
                                     </Box>
                                     <Box display="flex" pt={3} px={2}>
