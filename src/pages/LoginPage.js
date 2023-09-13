@@ -180,11 +180,6 @@ export default function Login({ setUser, setAlert }) {
                                     註冊帳號
                                 </Link>
                             </Box>
-                            <Box sx={{ py: 2 }}>
-                                <Link href='/' underline="hover">
-                                    測試登入
-                                </Link>
-                            </Box>
                         </Container>
                     </Box>
                 </Grid>

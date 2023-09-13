@@ -1,16 +1,16 @@
 import React, { useEffect } from "react";
-import {DashboardLayout} from "../components/dashboard-layout";
+import { DashboardLayout } from "../components/dashboard-layout";
 import {
     useNavigate,
     Outlet,
-  } from 'react-router-dom'
+} from 'react-router-dom'
 
-export default function FoxlinkPages({authUser}) {
+export default function FoxlinkPages({ authUser }) {
     const navigate = useNavigate();
     useEffect(() => {
-        if("$5$rounds=10000$F0XL1NKPWDHaSH$x7OJPMIuQs3XFigY6rsIzhYVDezZa0i3O1qZrDemcm5"){
+        if (authUser.token) {
             // pass
-        } else{
+        } else {
             navigate('404-not-found');
         }
     }, []);

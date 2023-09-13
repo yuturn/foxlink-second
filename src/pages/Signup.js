@@ -25,7 +25,6 @@ const darkTheme = createTheme({
 });
 
 export default function SignUp() {
-  const Link = "http://localhost:8888/login"
   function handleOnClick() {
     try {
       const name = document.getElementById("name").value;
