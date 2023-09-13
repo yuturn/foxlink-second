@@ -165,7 +165,7 @@ export default function Backup({ token, setAlert, ...rest }) {
                                         </LoadingButton>
                                     </Box>
                                 </Box>
-                                <Box pt={3} px={2}>
+                                <Box display="flex" alignItems="center" pt={3} px={2}>
                                     <Typography variant="h5" fontWeight="medium" mr={2}>
                                         備份目的地1:
                                     </Typography>

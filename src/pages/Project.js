@@ -103,14 +103,31 @@ export default function Project({ token, ...rest }) {
     <ThemeProvider theme={darkTheme}>
       <Card>
         <Box sx={{ bgcolor: 'info.main' }}>
-          <CardHeader title="專案頁面" color="#62aaf4" />
+          <CardHeader title="專案" color="#62aaf4" />
         </Box>
         <Divider sx={{ borderBottomWidth: 3 }} />
         <CardContent>
           <Grid container spacing={1}>
             <Grid item xs={12} md={12}>
-              <Box pt={4} pb={3} px={3}>
-                <Box component="form" role="form">
+              <Box>
+                <Box component="form" role="form" mb={3}>
+                  <Typography variant="h4" fontWeight="medium" mt={3}>
+                    新增專案
+                  </Typography>
+                  <Box display="flex" alignItems="center" pt={3} px={2}>
+                    <Typography variant="h5" fontWeight="medium" mr={2}>
+                      專案名稱:
+                    </Typography>
+                    <Box mr={2}>
+                      <TextField type="search-staff" label="專案名稱" />
+                    </Box>
+                    <LoadingButton variant="contained" color="info">
+                      新增
+                    </LoadingButton>
+                  </Box>
+                </Box>
+                <Divider sx={{ borderBottomWidth: 3 }} />
+                <Box component="form" role="form" mb={3}>
                   <Typography variant="h4" fontWeight="medium" mt={3}>
                     刪除專案
                   </Typography>
@@ -175,56 +192,60 @@ export default function Project({ token, ...rest }) {
                     </Dialog>
                   </Box>
                 </Box>
-                <Typography variant="h4" fontWeight="medium" mt={3}>
-                  編輯專案人員
-                </Typography>
-                <Box display="flex" alignItems="center" pt={3} px={2}>
-                  <Typography variant="h5" fontWeight="medium" mr={2}>
-                    專案名稱:
+                <Divider sx={{ borderBottomWidth: 3 }} />
+                <Box component="form" role="form" mb={3}>
+                  <Typography variant="h4" fontWeight="medium" mt={3}>
+                    編輯專案人員
                   </Typography>
-                  <FormControl>
-                    <InputLabel id="demo-simple-select-label">專案</InputLabel>
-                    <Select
-                      labelId="permission-select-label"
-                      id="permission-select"
-                      value={age}
-                      label="專案"
-                      onChange={handleChange}
-                      style={{ minWidth: "200px", height: "45px" }}
-                    >
-                      <MenuItem value={10}>專案 A</MenuItem>
-                      <MenuItem value={20}>專案 B</MenuItem>
-                      <MenuItem value={30}>專案 C</MenuItem>
-                    </Select>
-                  </FormControl>
-                  <Box ml={2}>
+                  <Box display="flex" alignItems="center" pt={3} px={2}>
+                    <Typography variant="h5" fontWeight="medium" mr={2}>
+                      專案名稱:
+                    </Typography>
+                    <FormControl>
+                      <InputLabel id="demo-simple-select-label">專案</InputLabel>
+                      <Select
+                        labelId="permission-select-label"
+                        id="permission-select"
+                        value={age}
+                        label="專案"
+                        onChange={handleChange}
+                        style={{ minWidth: "200px", height: "45px" }}
+                      >
+                        <MenuItem value={10}>專案 A</MenuItem>
+                        <MenuItem value={20}>專案 B</MenuItem>
+                        <MenuItem value={30}>專案 C</MenuItem>
+                      </Select>
+                    </FormControl>
+                    <Box ml={2}>
+                      <LoadingButton variant="contained" color="info">
+                        查詢
+                      </LoadingButton>
+                    </Box>
+                  </Box>
+                  <Box display="flex" alignItems="center" pt={3} px={2}>
+                    <Typography variant="h5" fontWeight="medium" mr={2}>
+                      人員查詢:
+                    </Typography>
+                    <Box mr={2}>
+                      <TextField type="search-staff" label="請輸入帳號" />
+                    </Box>
                     <LoadingButton variant="contained" color="info">
                       查詢
                     </LoadingButton>
                   </Box>
-                </Box>
-                <Box display="flex" alignItems="center" pt={3} px={2}>
-                  <Typography variant="h5" fontWeight="medium" mr={2}>
-                    人員查詢:
-                  </Typography>
-                  <Box mr={2}>
-                    <TextField type="search-staff" label="請輸入帳號" />
+                  <Box display="flex" alignItems="center" pt={3} px={2}>
+                    <Typography variant="h5" fontWeight="medium" mr={2}>
+                      人員名稱:
+                    </Typography>
+                    <Box mr={2}>
+                      <TextField type="add-staff" label="人員新增" />
+                    </Box>
+                    <LoadingButton variant="contained" color="info">
+                      新增
+                    </LoadingButton>
                   </Box>
-                  <LoadingButton variant="contained" color="info">
-                    查詢
-                  </LoadingButton>
                 </Box>
-                <Box display="flex" alignItems="center" pt={3} px={2}>
-                  <Typography variant="h5" fontWeight="medium" mr={2}>
-                    人員名稱:
-                  </Typography>
-                  <Box mr={2}>
-                    <TextField type="add-staff" label="人員新增" />
-                  </Box>
-                  <LoadingButton variant="contained" color="info">
-                    新增
-                  </LoadingButton>
-                </Box>
+                <Divider sx={{ borderBottomWidth: 3 }} />
                 <Box display="flex" alignItems="center" pt={3} px={2}>
                   <div style={{ height: 400, width: '100%' }}>
                     <DataGrid
@@ -254,37 +275,32 @@ export default function Project({ token, ...rest }) {
       </Card>
       <Card sx={{ mt: 2 }}>
         <Box sx={{ bgcolor: 'info.main' }}>
-          <CardHeader title="編輯專案機台" color="#62aaf4" />
+          <CardHeader title="專案機台" color="#62aaf4" />
         </Box>
         <Divider sx={{ borderBottomWidth: 3 }} />
         <CardContent>
           <Grid container spacing={1} mt={2}>
             <Grid xs={12} sx={{ md: 12 }}>
               <Box pt={4} pb={3} px={3}>
-                <Box display="flex" alignItems="center" pt={3} px={2}>
-                  <Typography variant="h5" fontWeight="medium" mr={2}>
-                    專案名稱:
+                <Box display="flex" alignItems="center" px={2} mb={3}>
+                  <Typography variant="h4" fontWeight="medium" mr={2}>
+                    編輯專案機台
                   </Typography>
-                  <Box mr={2}>
-                    <TextField type="search-staff" label="請輸入專案名稱" />
-                  </Box>
-                  <Box ml={2}>
-                    <LoadingButton variant="contained" color="info">
-                      查詢
-                    </LoadingButton>
+                  <Box display="flex" alignItems="center" pt={3} px={2}>
+                    <Typography variant="h5" fontWeight="medium" mr={2}>
+                      專案名稱:
+                    </Typography>
+                    <Box mr={2}>
+                      <TextField type="search-staff" label="請輸入專案名稱" />
+                    </Box>
+                    <Box ml={2}>
+                      <LoadingButton variant="contained" color="info">
+                        查詢
+                      </LoadingButton>
+                    </Box>
                   </Box>
                 </Box>
-                <Box display="flex" alignItems="center" pt={3} px={2}>
-                  <Typography variant="h5" fontWeight="medium" mr={2}>
-                    新增機台:
-                  </Typography>
-                  <Box mr={2}>
-                    <TextField type="search-staff" label="請輸入機台名稱" />
-                  </Box>
-                  <LoadingButton variant="contained" color="info">
-                    新增
-                  </LoadingButton>
-                </Box>
+                <Divider sx={{ borderBottomWidth: 3 }} />
                 <Box display="flex" alignItems="center" pt={3} px={2}>
                   <div style={{ height: 600, width: '100%' }}>
                     <DataGrid
@@ -299,6 +315,13 @@ export default function Project({ token, ...rest }) {
                       checkboxSelection
                     />
                   </div>
+                </Box>
+                <Box display="flex" pt={3} px={2}>
+                  <Box>
+                    <LoadingButton variant="contained" color="info">
+                      新增
+                    </LoadingButton>
+                  </Box>
                 </Box>
               </Box>
             </Grid>
