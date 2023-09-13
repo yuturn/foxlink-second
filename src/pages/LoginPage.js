@@ -174,12 +174,12 @@ export default function Login({ setUser, setAlert }) {
                                     登入
                                 </Button>
                             </Box>
-                            <Box sx={{ py: 2 }}>
+                            {/* <Box sx={{ py: 2 }}>
                                 如果沒有帳號請點選下方按鈕
                                 <Link href='/login/signup' underline="hover">
                                     註冊帳號
                                 </Link>
-                            </Box>
+                            </Box> */}
                         </Container>
                     </Box>
                 </Grid>
