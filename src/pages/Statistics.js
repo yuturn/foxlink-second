@@ -21,6 +21,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { PieChart, pieArcLabelClasses } from '@mui/x-charts';
+import Slider from "react-slick";
 
 const darkTheme = createTheme({
   palette: {
@@ -89,6 +90,14 @@ export default function Statistics({ token, setAlert, ...rest }) {
   //     return null; // 或者返回一个默认的图标
   //   }
   // }
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 5000,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+  };
+
   function getColor(lightColor) {
     if (lightColor === 1) {
       return "red";
@@ -401,139 +410,141 @@ export default function Statistics({ token, setAlert, ...rest }) {
     height: 200,
   };
 
-  // const createDataTable = (data) => {
+
+  // const createDeviceCard = (data) => {
   //   return Object.keys(data).map((project) => (
   //     Object.keys(data[project]).map((device) => (
-  //       <Card key={device} sx={{ mt: 2 }}>
-  //         <Box sx={{ bgcolor: 'info.main' }}>
-  //           <CardHeader title={project + "-" + device} color="#62aaf4" />
-  //         </Box>
-  //         <TableContainer component={Paper}>
-  //           <Table sx={{ minWidth: 650 }} aria-label="simple table">
-  //             <TableHead>
-  //               {data[project][device].map((columns) => (
-  //                 <TableCell key={columns.id} align="center">
-  //                   {columns.name}
-  //                 </TableCell>
-  //               ))}
-  //             </TableHead>
-  //             <TableBody>
-  //               {data[project][device].map((columns) => (
-  //                 <TableCell key={columns.id} align="center">
-  //                   {getCircleIcon(columns.lightColor)}
-  //                 </TableCell>
-  //               ))}
-  //             </TableBody>
-  //           </Table>
-  //         </TableContainer>
-  //       </Card>
+  //       <div>
+  //         <Card key={device} sx={{ mt: 2 }}>
+  //           <Box sx={{ bgcolor: 'info.main' }}>
+  //             <CardHeader title={project + "-" + device} color="#62aaf4" align="center" />
+  //           </Box>
+  //           <TableContainer component={Paper}>
+  //             <Grid container spacing={2}>
+  //               <Grid xs={3}>
+  //                 <Box border={1} sx={{ mt: 4, ml: 6, width: 120, height: 'auto' }}>
+  //                   <Typography align="center" fontSize={25}>異常增加</Typography>
+  //                   <Box sx={{ bgcolor: 'red', width: 'auto', height: 'auto' }}>
+  //                     <Typography align="center" fontSize={20}>lightColor</Typography>
+  //                   </Box>
+  //                 </Box>
+  //                 <Box border={1} sx={{ mt: 4, ml: 6, width: 118, height: 'auto' }}>
+  //                   <Typography align="center" fontSize={25}>需注意</Typography>
+  //                   <Box sx={{ bgcolor: 'yellow', width: 'auto', height: 'auto' }}>
+  //                     <Typography align="center" fontSize={20}>lightColor</Typography>
+  //                   </Box>
+  //                 </Box>
+  //                 <Box border={1} sx={{ mt: 4, ml: 6, width: 118, height: 'auto' }}>
+  //                   <Typography align="center" fontSize={25}>穩定</Typography>
+  //                   <Box sx={{ bgcolor: 'green', width: 'auto', height: 'auto' }}>
+  //                     <Typography align="center" fontSize={20}>lightColor</Typography>
+  //                   </Box>
+  //                 </Box>
+  //                 <Box border={1} sx={{ mt: 4, ml: 6, width: 118, height: 'auto' }}>
+  //                   <Typography align="center" fontSize={25}>事件減少</Typography>
+  //                   <Box sx={{ bgcolor: '#4169e1', width: 'auto', height: 'auto' }}>
+  //                     <Typography align="center" fontSize={20}>lightColor</Typography>
+  //                   </Box>
+  //                 </Box>
+  //               </Grid>
+  //               <Grid xs={9}>
+  //                 <Box sx={{ mt: 16 }}>
+  //                   <PieChart
+  //                     colors={['red', 'yellow', 'green', '#4169e1']}
+  //                     series={[
+  //                       {
+  //                         arcLabel: (item) => `${item.label} (${item.value})`,
+  //                         arcLabelMinAngle: 50,
+  //                         data: getPie(device),
+  //                       },
+  //                     ]}
+  //                     sx={{
+  //                       [`& .${pieArcLabelClasses.root}`]: {
+  //                         fill: 'default',
+  //                         fontWeight: 'bold',
+  //                       },
+  //                     }}
+  //                     width={600}
+  //                     height={300}
+  //                   />
+  //                 </Box>
+  //               </Grid>
+  //             </Grid>
+  //             <Divider
+  //               sx={{
+  //                 borderColor: '#2D3748',
+  //                 my: 3,
+  //                 height: 1.5
+  //               }}
+  //             />
+  //             <Table sx={{ minWidth: 650 }}>
+  //               <TableHead style={{ backgroundColor: '#2196f3', color: 'white' }}>
+  //                 <TableCell align="left" sx={{ width: 50 }}><Typography fontSize={20}>類型</Typography></TableCell>
+  //                 <TableCell align="left" sx={{ mr: 20 }}><Typography fontSize={20}>事件</Typography></TableCell>
+  //               </TableHead>
+  //               <TableBody>
+  //                 {data[project][device].map((columns) => (
+  //                   <TableRow
+  //                     key={columns.name}
+  //                   >
+  //                     <TableCell key={columns.id} align="center">
+  //                       <Grid container spacing={1}>
+  //                         <Grid xs={9}>
+  //                           <Box align="center" sx={{ bgcolor: getColor(columns.lightColor), width: 100, height: 'auto' }}>
+  //                             <Typography fontSize={20}>{columns.label}</Typography>
+  //                           </Box>
+  //                         </Grid>
+  //                         <Grid xs={3}>
+  //                           <Box align="left" sx={{ width: 400, height: 'auto', ml: 20 }}>
+  //                             <Typography fontSize={20}>{columns.name}</Typography>
+  //                           </Box>
+  //                         </Grid>
+  //                       </Grid>
+  //                     </TableCell>
+  //                   </TableRow>
+  //                 ))}
+  //               </TableBody>
+  //             </Table>
+  //           </TableContainer>
+  //         </Card>
+  //       </div>
   //     ))
   //   ));
   // };
 
-  const createDeviceCard = (data) => {
-    return Object.keys(data).map((project) => (
-      Object.keys(data[project]).map((device) => (
-        <Card key={device} sx={{ mt: 2 }}>
-          <Box sx={{ bgcolor: 'info.main' }}>
-            <CardHeader title={project + "-" + device} color="#62aaf4" align="center" />
-          </Box>
-          <TableContainer component={Paper}>
-            <Grid container spacing={2}>
-              <Grid xs={3}>
-                <Box border={1} sx={{ mt: 4, ml: 6, width: 120, height: 'auto' }}>
-                  <Typography align="center" fontSize={25}>異常增加</Typography>
-                  <Box sx={{ bgcolor: 'red', width: 'auto', height: 'auto' }}>
-                    <Typography align="center" fontSize={20}>lightColor</Typography>
-                  </Box>
-                </Box>
-                <Box border={1} sx={{ mt: 4, ml: 6, width: 118, height: 'auto' }}>
-                  <Typography align="center" fontSize={25}>需注意</Typography>
-                  <Box sx={{ bgcolor: 'yellow', width: 'auto', height: 'auto' }}>
-                    <Typography align="center" fontSize={20}>lightColor</Typography>
-                  </Box>
-                </Box>
-                <Box border={1} sx={{ mt: 4, ml: 6, width: 118, height: 'auto' }}>
-                  <Typography align="center" fontSize={25}>穩定</Typography>
-                  <Box sx={{ bgcolor: 'green', width: 'auto', height: 'auto' }}>
-                    <Typography align="center" fontSize={20}>lightColor</Typography>
-                  </Box>
-                </Box>
-                <Box border={1} sx={{ mt: 4, ml: 6, width: 118, height: 'auto' }}>
-                  <Typography align="center" fontSize={25}>事件減少</Typography>
-                  <Box sx={{ bgcolor: '#4169e1', width: 'auto', height: 'auto' }}>
-                    <Typography align="center" fontSize={20}>lightColor</Typography>
-                  </Box>
-                </Box>
-              </Grid>
-              <Grid xs={9}>
-                <Box sx={{ mt: 16 }}>
-                  <PieChart
-                    colors={['red', 'yellow', 'green', '#4169e1']}
-                    series={[
-                      {
-                        arcLabel: (item) => `${item.label} (${item.value})`,
-                        arcLabelMinAngle: 50,
-                        data: getPie(device),
-                      },
-                    ]}
-                    sx={{
-                      [`& .${pieArcLabelClasses.root}`]: {
-                        fill: 'default',
-                        fontWeight: 'bold',
-                      },
-                    }}
-                    width={600}
-                    height={300}
-                  />
-                </Box>
-              </Grid>
-            </Grid>
-            <Divider
-              sx={{
-                borderColor: '#2D3748',
-                my: 3,
-                height: 1.5
-              }}
-            />
-            <Table sx={{ minWidth: 650 }}>
-              <TableHead style={{ backgroundColor: '#2196f3', color: 'white' }}>
-                <TableCell align="left" sx={{ width: 50 }}><Typography fontSize={20}>類型</Typography></TableCell>
-                <TableCell align="left" sx={{ mr: 20 }}><Typography fontSize={20}>事件</Typography></TableCell>
-              </TableHead>
-              <TableBody>
-                {data[project][device].map((columns) => (
-                  <TableRow
-                    key={columns.name}
-                  >
-                    <TableCell key={columns.id} align="center">
-                      <Grid container spacing={1}>
-                        <Grid xs={9}>
-                          <Box align="center" sx={{ bgcolor: getColor(columns.lightColor), width: 100, height: 'auto' }}>
-                            <Typography fontSize={20}>{columns.label}</Typography>
-                          </Box>
-                        </Grid>
-                        <Grid xs={3}>
-                          <Box align="left" sx={{ width: 400, height: 'auto', ml: 20 }}>
-                            <Typography fontSize={20}>{columns.name}</Typography>
-                          </Box>
-                        </Grid>
-                      </Grid>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Card>
-      ))
-    ));
-  };
+  const [nav1, setNav1] = useState();
+  const [nav2, setNav2] = useState();
+  const slider1 = useRef();
+  const slider2 = useRef();
 
   return (
     <ThemeProvider theme={darkTheme}>
-      {/* {createDataTable(columns)} */}
-      {createDeviceCard(columns)}
+      {/* {createDeviceCard(columns)} */}
+      <div style={{ padding: "0 30px", background: "#ccc" }}>
+        <Slider
+          asNavFor={nav2}
+          ref={slider1 => setNav2(slider1)}
+        >
+          <div>
+            <h3>1</h3>
+          </div>
+          <div>
+            <h3>2</h3>
+          </div>
+          <div>
+            <h3>3</h3>
+          </div>
+          <div>
+            <h3>4</h3>
+          </div>
+          <div>
+            <h3>5</h3>
+          </div>
+          <div>
+            <h3>6</h3>
+          </div>
+        </Slider>
+      </div>
     </ThemeProvider>
   );
 }
