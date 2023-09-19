@@ -27,7 +27,7 @@ const darkTheme = createTheme({
         mode: 'light',
         background: {
             default: '#62aaf4',
-            paper: '#e7f2fd',
+            paper: '#FFFFFF',
         },
         text: {
             primary: '#000000',
@@ -191,7 +191,7 @@ export default function Management({ token, ...rest }) {
                     <Grid container spacing={2}>
                         <Grid item xs={12} md={12}>
                             <Card>
-                                <Box sx={{ bgcolor: 'info.main' }}>
+                                <Box sx={{ bgcolor: '#696969' }}>
                                     <CardHeader title="註冊人員名單:" color="#62aaf4" />
                                 </Box>
                                 <Box pt={4} pb={3} px={3}>
@@ -241,7 +241,7 @@ export default function Management({ token, ...rest }) {
                     <Grid container spacing={2} mt={1}>
                         <Grid item xs={12} md={6}>
                             <Card>
-                                <Box sx={{ bgcolor: 'info.main' }}>
+                                <Box sx={{ bgcolor: '#696969' }}>
                                     <CardHeader title="編輯人員:" color="#62aaf4" />
                                 </Box>
                                 <Box pt={4} pb={3} px={3}>

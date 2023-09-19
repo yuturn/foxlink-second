@@ -24,42 +24,42 @@ const darkTheme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: '#1976d2',
+      main: '#FFFFFF',
     },
   },
 });
 
-export const DashboardLayout = ({children, user}) => {
+export const DashboardLayout = ({ children, user }) => {
   return (
-  <ThemeProvider theme={darkTheme}>
-    <Box
-      component="main"
-      sx={{
-      flexGrow: 1,
-      }}
-    >
-      <Box sx={{ mb:3, bgcolor: 'text.primary', color: 'background.paper',}}>
-        <AppBar position="fixed" color="primary" enableColorOnDark>
-          <Logo sx={{ height: 42, width: 42 }} />
-        </AppBar>
-      </Box>
-      <Container maxWidth={false}>
-      <DashboardLayoutRoot>
-        <Box
-          sx={{
-            display: 'flex',
-            flex: '1 1 auto',
-            flexDirection: 'column',
-            width: '100%',
-          }}
-        >
-          {children}
+    <ThemeProvider theme={darkTheme}>
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+        }}
+      >
+        <Box sx={{ mb: 3, bgcolor: 'text.primary', color: 'background.paper', }}>
+          <AppBar position="fixed" color="primary" enableColorOnDark>
+            <Logo sx={{ height: 42, width: 42 }} />
+          </AppBar>
         </Box>
-      </DashboardLayoutRoot>
-      <DashboardSidebar />
-      <DashboardNavbar user={user} />
-      </Container>
-    </Box>  
-  </ThemeProvider>
+        <Container maxWidth={false}>
+          <DashboardLayoutRoot>
+            <Box
+              sx={{
+                display: 'flex',
+                flex: '1 1 auto',
+                flexDirection: 'column',
+                width: '100%',
+              }}
+            >
+              {children}
+            </Box>
+          </DashboardLayoutRoot>
+          <DashboardSidebar />
+          <DashboardNavbar user={user} />
+        </Container>
+      </Box>
+    </ThemeProvider>
   );
 };

@@ -33,14 +33,14 @@ const darkTheme = createTheme({
     mode: 'light',
     background: {
       default: '#62aaf4',
-      paper: '#e7f2fd',
+      paper: '#FFFFFF',
     },
     text: {
       primary: '#000000',
     },
     primary: {
       // Purple and green play nicely together.
-      main: '#2196f3',
+      main: '#696969',
     },
   },
 });
@@ -102,8 +102,8 @@ export default function Project({ token, ...rest }) {
   return (
     <ThemeProvider theme={darkTheme}>
       <Card>
-        <Box sx={{ bgcolor: 'info.main' }}>
-          <CardHeader title="專案" color="#62aaf4" />
+        <Box sx={{ bgcolor: '#696969' }}>
+          <CardHeader title="專案" color="#696969" />
         </Box>
         <Divider sx={{ borderBottomWidth: 3 }} />
         <CardContent>
@@ -274,7 +274,7 @@ export default function Project({ token, ...rest }) {
         </CardContent>
       </Card>
       <Card sx={{ mt: 2 }}>
-        <Box sx={{ bgcolor: 'info.main' }}>
+        <Box sx={{ bgcolor: '#696969' }}>
           <CardHeader title="專案機台" color="#62aaf4" />
         </Box>
         <Divider sx={{ borderBottomWidth: 3 }} />

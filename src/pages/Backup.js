@@ -24,14 +24,14 @@ const darkTheme = createTheme({
         mode: 'light',
         background: {
             default: '#62aaf4',
-            paper: '#e7f2fd',
+            paper: '#FFFFFF',
         },
         text: {
             primary: '#000000',
         },
         primary: {
             // Purple and green play nicely together.
-            main: '#2196f3',
+            main: '#696969',
         },
     },
 });
@@ -70,7 +70,7 @@ export default function Backup({ token, setAlert, ...rest }) {
     return (
         <ThemeProvider theme={darkTheme}>
             <Card>
-                <Box sx={{ bgcolor: 'info.main' }}>
+                <Box sx={{ bgcolor: '#696969' }}>
                     <CardHeader title="備份頁面" color="#62aaf4" />
                 </Box>
                 <Divider sx={{ borderBottomWidth: 3 }} />
@@ -100,7 +100,7 @@ export default function Backup({ token, setAlert, ...rest }) {
             <Grid container spacing={2} mt={1}>
                 <Grid item xs={12} md={6}>
                     <Card>
-                        <Box sx={{ bgcolor: 'info.main' }}>
+                        <Box sx={{ bgcolor: '#696969' }}>
                             <CardHeader title="設定" color="#62aaf4" />
                         </Box>
                         <Box pt={4} pb={3} px={3}>
@@ -213,7 +213,7 @@ export default function Backup({ token, setAlert, ...rest }) {
                 </Grid>
                 <Grid item xs={12} md={6}>
                     <Card>
-                        <Box sx={{ bgcolor: 'info.main' }}>
+                        <Box sx={{ bgcolor: '#696969' }}>
                             <CardHeader title="手動備份" color="#62aaf4" />
                         </Box>
                         <Box pt={4} pb={3} px={3}>

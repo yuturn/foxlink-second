@@ -75,9 +75,20 @@ export const DashboardSidebar = ({ idx, setIdx }) => {
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
-        py:8,
       }}
     >
+      <Box sx={{ p: 3 }}>
+        <Link to={'/all-status'}>
+          <Logo sx={{ height: 42, width: 42 }} />
+        </Link>
+      </Box>
+      <Divider
+        sx={{
+          borderColor: '#2D3748',
+          my: 3,
+          height: 1.5
+        }}
+      />
       <Box sx={{ flexGrow: 1 }}>
         {items.map((item) => (
           <NavItem
@@ -118,7 +129,7 @@ export const DashboardSidebar = ({ idx, setIdx }) => {
         anchor="left"
         PaperProps={{
           sx: {
-            backgroundColor: '#1976d2',
+            backgroundColor: '#323232',
             color: '#ffffff',
             text: {
               primary: '#ffffff',

@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from "react";
 
 import { Box, Button, Container, TextField, Typography, Grid, Card, CardHeader, Link } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Logo } from "../components/logo.js";
+import { Logo } from "../components/logo-login.js";
 
 import { apiUserLogin, apiSystemSpace } from "../api.js";
 
@@ -12,17 +12,20 @@ import { encrypt, verify } from "../tools/crypt";
 
 const darkTheme = createTheme({
     palette: {
-        mode: 'light',
+        mode: 'dark',
         background: {
-            default: '#1976d2',
-            paper: '#e7f2fd',
+            default: '#696969',
+            paper: '#EDF2F7',
         },
         text: {
-            primary: '#000000',
+            primary: '#696969',
         },
         primary: {
             // Purple and green play nicely together.
             main: '#2196f3',
+        },
+        secondary: {
+            main: '#696969',
         },
     },
 });
@@ -96,7 +99,7 @@ export default function Login({ setUser, setAlert }) {
                 direction="column"
                 alignItems="center"
                 justifyContent="center"
-                sx={{ minHeight: '100vh' }}
+                sx={{ minHeight: '100vh', background: '#696969' }}
             >
                 <Grid item xs={3}>
                     <Box
@@ -107,10 +110,10 @@ export default function Login({ setUser, setAlert }) {
                             flexGrow: 1,
                             minHeight: '100%',
                             maxWidth: 'sm',
-                            background: '#62aaf4',
+                            background: '#FFFFFF',
                             borderRadius: 4,
                             border: 'solid',
-                            borderColor: '#2D3748'
+                            borderColor: '#FFFFFF'
                         }}
                     >
                         <Container maxWidth="sm">
@@ -120,7 +123,7 @@ export default function Login({ setUser, setAlert }) {
                                 direction="column"
                                 alignItems="center"
                                 justifyContent="center"
-                                sx={{ pt: 5, background: "1976d2" }}
+                                sx={{ pt: 5, background: "#FFFFFF" }}
                             >
                                 <Grid item xs={3}>
                                     <Logo />
@@ -152,6 +155,8 @@ export default function Login({ setUser, setAlert }) {
                                 name="account"
                                 id="account"
                                 variant="outlined"
+                                color='secondary'
+                                focused
                             />
                             <TextField
                                 fullWidth
@@ -161,6 +166,8 @@ export default function Login({ setUser, setAlert }) {
                                 id="password"
                                 type="password"
                                 variant="outlined"
+                                color='secondary'
+                                focused
                             />
                             <Box sx={{ py: 2 }}>
                                 <Button

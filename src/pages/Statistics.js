@@ -28,14 +28,14 @@ const darkTheme = createTheme({
     mode: 'light',
     background: {
       default: '#62aaf4',
-      paper: '#e7f2fd',
+      paper: '#FFFFFF',
     },
     text: {
       primary: '#000000',
     },
     primary: {
       // Purple and green play nicely together.
-      main: '#2196f3',
+      main: '#696969',
     },
   },
 });
@@ -100,11 +100,11 @@ export default function Statistics({ token, setAlert, ...rest }) {
 
   function getColor(lightColor) {
     if (lightColor === 1) {
-      return "red";
+      return "#C5291C";
     } else if (lightColor === 2) {
-      return "yellow";
+      return "#F5C242";
     } else if (lightColor === 3) {
-      return "green";
+      return "#4CA85A";
     } else if (lightColor === 4) {
       return "#4169e1";
     } else {
@@ -416,27 +416,27 @@ export default function Statistics({ token, setAlert, ...rest }) {
       Object.keys(data[project]).map((device) => (
         <div>
           <Card key={device} sx={{ mt: 2 }}>
-            <Box sx={{ bgcolor: 'info.main' }}>
-              <CardHeader title={project + "-" + device} color="#62aaf4" align="center" />
+            <Box sx={{ bgcolor: '#696969' }}>
+              <CardHeader title={project + "-" + device} color="#696969" align="center" />
             </Box>
             <TableContainer component={Paper}>
               <Grid container spacing={2}>
                 <Grid xs={3}>
                   <Box border={1} sx={{ mt: 4, ml: 6, width: 120, height: 'auto' }}>
                     <Typography align="center" fontSize={25}>異常增加</Typography>
-                    <Box sx={{ bgcolor: 'red', width: 'auto', height: 'auto' }}>
+                    <Box sx={{ bgcolor: '#C5291C', width: 'auto', height: 'auto' }}>
                       <Typography align="center" fontSize={20}>lightColor</Typography>
                     </Box>
                   </Box>
                   <Box border={1} sx={{ mt: 4, ml: 6, width: 118, height: 'auto' }}>
                     <Typography align="center" fontSize={25}>需注意</Typography>
-                    <Box sx={{ bgcolor: 'yellow', width: 'auto', height: 'auto' }}>
+                    <Box sx={{ bgcolor: '#F5C242', width: 'auto', height: 'auto' }}>
                       <Typography align="center" fontSize={20}>lightColor</Typography>
                     </Box>
                   </Box>
                   <Box border={1} sx={{ mt: 4, ml: 6, width: 118, height: 'auto' }}>
                     <Typography align="center" fontSize={25}>穩定</Typography>
-                    <Box sx={{ bgcolor: 'green', width: 'auto', height: 'auto' }}>
+                    <Box sx={{ bgcolor: '#4CA85A', width: 'auto', height: 'auto' }}>
                       <Typography align="center" fontSize={20}>lightColor</Typography>
                     </Box>
                   </Box>
@@ -450,7 +450,7 @@ export default function Statistics({ token, setAlert, ...rest }) {
                 <Grid xs={9}>
                   <Box sx={{ mt: 16 }}>
                     <PieChart
-                      colors={['red', 'yellow', 'green', '#4169e1']}
+                      colors={['#C5291C', '#F5C242', '#4CA85A', '#4169e1']}
                       series={[
                         {
                           arcLabel: (item) => `${item.label} (${item.value})`,
@@ -478,7 +478,7 @@ export default function Statistics({ token, setAlert, ...rest }) {
                 }}
               />
               <Table sx={{ minWidth: 650 }}>
-                <TableHead style={{ backgroundColor: '#2196f3', color: 'white' }}>
+                <TableHead style={{ backgroundColor: '#696969', color: 'white' }}>
                   <TableCell align="left" sx={{ width: 50 }}><Typography fontSize={20}>類型</Typography></TableCell>
                   <TableCell align="left" sx={{ mr: 20 }}><Typography fontSize={20}>事件</Typography></TableCell>
                 </TableHead>
@@ -489,13 +489,13 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     >
                       <TableCell key={columns.id} align="center">
                         <Grid container spacing={1}>
-                          <Grid xs={9}>
+                          <Grid xs={10}>
                             <Box align="center" sx={{ bgcolor: getColor(columns.lightColor), width: 100, height: 'auto' }}>
                               <Typography fontSize={20}>{columns.label}</Typography>
                             </Box>
                           </Grid>
-                          <Grid xs={3}>
-                            <Box align="left" sx={{ width: 400, height: 'auto', ml: 20 }}>
+                          <Grid xs={2}>
+                            <Box align="left" sx={{ width: 400, height: 'auto' }}>
                               <Typography fontSize={20}>{columns.name}</Typography>
                             </Box>
                           </Grid>
