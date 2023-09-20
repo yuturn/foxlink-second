@@ -110,7 +110,7 @@ export default function Project({ token, ...rest }) {
       .then(data => {
         console.log(data.data)
         const list = Object.keys(data.data)
-        console.log(keys)
+        console.log(list)
         const transformedData = list.map((machineName, index) => ({
           id: index + 1,
           machineName: machineName,

@@ -13,6 +13,7 @@ import {
   palette
 } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import LoadingButton from '@mui/lab/LoadingButton';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -416,115 +417,185 @@ export default function Statistics({ token, setAlert, ...rest }) {
     height: 200,
   };
 
+  // 自定義上一頁按鈕
+  const renderCustomPrevButton = (onClickHandler, hasPrev, label) => {
+    return (
+      <LoadingButton onClick={onClickHandler} variant="contained" color="info" className="my-custom-prev-button">
+        上一頁
+      </LoadingButton>
+    );
+  };
+
+  // 自定義下一頁按鈕
+  const renderCustomNextButton = (onClickHandler, hasNext, label) => {
+    return (
+      <LoadingButton onClick={onClickHandler} variant="contained" color="info" className="my-custom-next-button">
+        下一頁
+      </LoadingButton>
+    );
+  };
+
+  const [selectedSlide, setSelectedSlide] = useState(0);
+
+  const handleSelectSlide = (index) => {
+    setSelectedSlide(index);
+  }
+
+  const customRenderIndicator = (clickHandler, isSelected, index) => {
+    const indicatorStyles = {
+      background: isSelected ? "lightblue" : "lightgray",
+      width: 15,
+      height: 15,
+      borderRadius: "50%",
+      display: "inline-block",
+      margin: "0 8px",
+      cursor: "pointer",
+    };
+
+    return (
+      <div
+        style={indicatorStyles}
+        onClick={() => {
+          clickHandler();
+          handleSelectSlide(index);
+        }}
+      />
+    );
+  };
+
+  const tableContainerStyle = {
+    tableContainer: {
+      maxHeight: '300px', // 設置表格容器的最大高度
+      overflowY: 'auto',  // 啟用垂直滾輪
+    },
+  };
+
+  const tableCellStyle = {
+    extendedCell: {
+      borderBottom: 'none', // 移除底部分隔線
+      // paddingLeft: '20px',  // 調整內邊距以增加內容區域
+      // paddingRight: '20px', // 調整內邊距以增加內容區域
+    },
+  };
 
   const createDeviceCard = (data) => {
     return (
       <div>
-        <button onClick={togglePause}>
-          {isPaused ? '恢復輪播' : '暫停輪播'}
-        </button>
-        <Carousel infiniteLoop={true} autoPlay={!isPaused} stopOnHover={true} interval={2000}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+          <LoadingButton variant="contained" color="info" onClick={togglePause}>
+            {isPaused ? '恢復輪播' : '暫停輪播'}
+          </LoadingButton>
+        </Box>
+        <Carousel
+          showArrows={false}
+          renderIndicator={customRenderIndicator}
+          // renderArrowPrev={renderCustomPrevButton}
+          // renderArrowNext={renderCustomNextButton}
+          infiniteLoop={true}
+          autoPlay={!isPaused}
+          stopOnHover={true}
+          interval={3000}
+        >
           {Object.keys(data).map((project) => (
             Object.keys(data[project]).map((device) => (
               <div>
-                <Card key={device} sx={{ mt: 2 }}>
+                <Card key={device}>
                   <Box sx={{ bgcolor: '#696969' }}>
                     <CardHeader title={project + "-" + device} color="#696969" align="center" />
                   </Box>
-                  <TableContainer component={Paper}>
-                    <Grid container spacing={2}>
-                      <Grid xs={3}>
-                        <Box border={1} sx={{ mt: 4, ml: 6, width: 120, height: 'auto' }}>
-                          <Typography align="center" fontSize={25}>異常增加</Typography>
-                          <Box sx={{ bgcolor: '#C5291C', width: 'auto', height: 'auto' }}>
-                            <Typography align="center" fontSize={20}>lightColor</Typography>
-                          </Box>
+                  <Grid container spacing={2}>
+                    <Grid xs={3}>
+                      <Box border={1} sx={{ mt: 4, ml: 6, width: 120, height: 'auto' }}>
+                        <Typography align="center" fontSize={25}>異常增加</Typography>
+                        <Box sx={{ bgcolor: '#C5291C', width: 'auto', height: 'auto' }}>
+                          <Typography align="center" fontSize={20}>lightColor</Typography>
                         </Box>
-                        <Box border={1} sx={{ mt: 4, ml: 6, width: 118, height: 'auto' }}>
-                          <Typography align="center" fontSize={25}>需注意</Typography>
-                          <Box sx={{ bgcolor: '#F5C242', width: 'auto', height: 'auto' }}>
-                            <Typography align="center" fontSize={20}>lightColor</Typography>
-                          </Box>
+                      </Box>
+                      <Box border={1} sx={{ mt: 4, ml: 6, width: 118, height: 'auto' }}>
+                        <Typography align="center" fontSize={25}>需注意</Typography>
+                        <Box sx={{ bgcolor: '#F5C242', width: 'auto', height: 'auto' }}>
+                          <Typography align="center" fontSize={20}>lightColor</Typography>
                         </Box>
-                        <Box border={1} sx={{ mt: 4, ml: 6, width: 118, height: 'auto' }}>
-                          <Typography align="center" fontSize={25}>穩定</Typography>
-                          <Box sx={{ bgcolor: '#4CA85A', width: 'auto', height: 'auto' }}>
-                            <Typography align="center" fontSize={20}>lightColor</Typography>
-                          </Box>
+                      </Box>
+                      <Box border={1} sx={{ mt: 4, ml: 6, width: 118, height: 'auto' }}>
+                        <Typography align="center" fontSize={25}>穩定</Typography>
+                        <Box sx={{ bgcolor: '#4CA85A', width: 'auto', height: 'auto' }}>
+                          <Typography align="center" fontSize={20}>lightColor</Typography>
                         </Box>
-                        <Box border={1} sx={{ mt: 4, ml: 6, width: 118, height: 'auto' }}>
-                          <Typography align="center" fontSize={25}>事件減少</Typography>
-                          <Box sx={{ bgcolor: '#4169e1', width: 'auto', height: 'auto' }}>
-                            <Typography align="center" fontSize={20}>lightColor</Typography>
-                          </Box>
+                      </Box>
+                      <Box border={1} sx={{ mt: 4, ml: 6, width: 118, height: 'auto' }}>
+                        <Typography align="center" fontSize={25}>事件減少</Typography>
+                        <Box sx={{ bgcolor: '#4169e1', width: 'auto', height: 'auto' }}>
+                          <Typography align="center" fontSize={20}>lightColor</Typography>
                         </Box>
-                      </Grid>
-                      <Grid xs={9}>
-                        <Box sx={{ mt: 16 }}>
-                          <PieChart
-                            colors={['#C5291C', '#F5C242', '#4CA85A', '#4169e1']}
-                            series={[
-                              {
-                                arcLabel: (item) => `${item.label} (${item.value})`,
-                                arcLabelMinAngle: 50,
-                                data: getPie(device),
-                              },
-                            ]}
-                            sx={{
-                              [`& .${pieArcLabelClasses.root}`]: {
-                                fill: 'default',
-                                fontWeight: 'bold',
-                              },
-                            }}
-                            width={600}
-                            height={300}
-                          />
-                        </Box>
-                      </Grid>
+                      </Box>
                     </Grid>
-                    <Divider
-                      sx={{
-                        borderColor: '#2D3748',
-                        my: 3,
-                        height: 1.5
-                      }}
-                    />
-                    <Table sx={{ minWidth: 650 }}>
-                      <TableHead style={{ backgroundColor: '#696969', color: 'white' }}>
-                        <TableCell align="left" sx={{ width: 50 }}><Typography fontSize={20}>類型</Typography></TableCell>
-                        <TableCell align="left" sx={{ mr: 20 }}><Typography fontSize={20}>事件</Typography></TableCell>
-                      </TableHead>
-                      <TableBody>
-                        {data[project][device].map((columns) => (
-                          <TableRow
-                            key={columns.name}
-                          >
-                            <TableCell key={columns.id} align="center">
-                              <Grid container spacing={1}>
-                                <Grid xs={10}>
-                                  <Box align="center" sx={{ bgcolor: getColor(columns.lightColor), width: 100, height: 'auto' }}>
-                                    <Typography fontSize={20}>{columns.label}</Typography>
-                                  </Box>
-                                </Grid>
-                                <Grid xs={2}>
-                                  <Box align="left" sx={{ width: 400, height: 'auto' }}>
-                                    <Typography fontSize={20}>{columns.name}</Typography>
-                                  </Box>
-                                </Grid>
-                              </Grid>
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
+                    <Grid xs={6}>
+                      <Box sx={{ mt: 10 }}>
+                        <PieChart
+                          colors={['#C5291C', '#F5C242', '#4CA85A', '#4169e1']}
+                          series={[
+                            {
+                              arcLabel: (item) => `${item.label} (${item.value})`,
+                              arcLabelMinAngle: 50,
+                              data: getPie(device),
+                            },
+                          ]}
+                          sx={{
+                            [`& .${pieArcLabelClasses.root}`]: {
+                              fill: 'default',
+                              fontWeight: 'bold',
+                            },
+                          }}
+                          width={600}
+                          height={300}
+                        />
+                      </Box>
+                    </Grid>
+                  </Grid>
+                  <Divider sx={{ mt: 3, borderBottomWidth: 3 }} />
+                  <Grid container spacing={2} mt={1}>
+                    <Grid item xs={12} md={6}>
+                      <TableContainer component={Paper} style={tableContainerStyle.tableContainer}>
+                        <Table>
+                          <TableHead style={{ backgroundColor: '#696969' }}>
+                            <TableCell align="left" style={{ width: '20% !important' }}><Typography fontSize={20}>類型</Typography></TableCell>
+                            <TableCell align="left" style={{ width: '80% !important' }}><Typography fontSize={20}>事件</Typography></TableCell>
+                          </TableHead>
+                          <TableBody>
+                            {data[project][device].map((columns) => (
+                              <TableRow
+                                key={columns.name}
+                              >
+                                <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center">
+                                  <Grid container spacing={1}>
+                                    <Grid xs={6}>
+                                      <Box align="center" sx={{ bgcolor: getColor(columns.lightColor), width: 100, height: 'auto' }}>
+                                        <Typography fontSize={20}>{columns.label}</Typography>
+                                      </Box>
+                                    </Grid>
+                                    <Grid xs={4}>
+                                      <Box align="left" sx={{ width: 400, height: 'auto' }}>
+                                        <Typography fontSize={20}>{columns.name}</Typography>
+                                      </Box>
+                                    </Grid>
+                                  </Grid>
+                                </TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
+                    </Grid>
+                  </Grid>
                 </Card>
               </div>
             ))
           )
-          )}
-        </Carousel>
-      </div>
+          )
+          }
+        </Carousel >
+      </div >
     )
   };
 
