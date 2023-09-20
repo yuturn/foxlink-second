@@ -1,0 +1,22 @@
+.custom-carousel {
+    position: relative;
+    /* 確保輪播元件的內容區域是相對定位的 */
+}
+
+.my-custom-prev-button {
+    position: absolute;
+    top: 10px;
+    /* 調整上下位置 */
+    /* 若要將左上角的上一頁按鈕移到右上角，可以使用 right 調整左右位置 */
+    /* 若要將右上角的下一頁按鈕移到左上角，可以使用 left 調整左右位置 */
+    /* left: 10px; 或者 right: 10px; */
+}
+
+.my-custom-next-button {
+    position: absolute;
+    top: 10px;
+    /* 調整上下位置 */
+    /* 若要將左上角的上一頁按鈕移到右上角，可以使用 right 調整左右位置 */
+    /* 若要將右上角的下一頁按鈕移到左上角，可以使用 left 調整左右位置 */
+    /* left: 10px; 或者 right: 10px; */
+}
