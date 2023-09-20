@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-
+import React, { useState, useEffect } from "react";
+import { apiGetProjectDevices } from '../api'
 import {
   Box,
   Card,
@@ -46,7 +46,6 @@ const darkTheme = createTheme({
 });
 
 const columns = [
-  { field: 'id', headerName: 'ID', width: 150 },
   { field: 'machineName', headerName: '機台名稱', width: 400 }
 ];
 
@@ -85,9 +84,12 @@ const empRows = [
   { id: 11, badge: "c0011", empName: '何美美' },
 ];
 
+
+
 export default function Project({ token, ...rest }) {
   const [age, setAge] = useState("");
   const [projectDeleteOpen, setProjectDeleteOpen] = useState(false);
+  const [projectList, setProjectList] = useState();
 
   const handleChange = (event) => {
     setAge(event.target.value);
@@ -97,6 +99,25 @@ export default function Project({ token, ...rest }) {
   };
   const projectDeleteHandleClose = () => {
     setProjectDeleteOpen(false);
+  };
+
+  function handleOnClickProject() {
+    let projectName = document.getElementById('projectName').value;
+    const data = {
+      'name': projectName
+    }
+    apiGetProjectDevices(data)
+      .then(data => {
+        console.log(data.data)
+        const list = Object.keys(data.data)
+        console.log(keys)
+        const transformedData = list.map((machineName, index) => ({
+          id: index + 1,
+          machineName: machineName,
+        }));
+        setProjectList(transformedData)
+        console.log(projectList)
+      }).catch(err => { console.log(err) })
   };
 
   return (
@@ -282,29 +303,29 @@ export default function Project({ token, ...rest }) {
           <Grid container spacing={1} mt={2}>
             <Grid xs={12} sx={{ md: 12 }}>
               <Box pt={4} pb={3} px={3}>
-                <Box display="flex" alignItems="center" px={2} mb={3}>
-                  <Typography variant="h4" fontWeight="medium" mr={2}>
+                <Box display="flex" alignItems="center" px={2} mb={3} fullwidth >
+                  <Typography variant="h4" fontWeight="medium" mr={2} >
                     編輯專案機台
                   </Typography>
-                  <Box display="flex" alignItems="center" pt={3} px={2}>
-                    <Typography variant="h5" fontWeight="medium" mr={2}>
-                      專案名稱:
-                    </Typography>
-                    <Box mr={2}>
-                      <TextField type="search-staff" label="請輸入專案名稱" />
-                    </Box>
-                    <Box ml={2}>
-                      <LoadingButton variant="contained" color="info">
-                        查詢
-                      </LoadingButton>
-                    </Box>
+                </Box>
+                <Box display="flex" alignItems="center" pt={3} px={2}>
+                  <Typography variant="h5" fontWeight="medium" mr={2}>
+                    專案名稱:
+                  </Typography>
+                  <Box mr={2}>
+                    <TextField type="search-staff" label="請輸入專案名稱" name="projectName" id="projectName" />
+                  </Box>
+                  <Box ml={2}>
+                    <LoadingButton variant="contained" color="info" onClick={handleOnClickProject}>
+                      查詢
+                    </LoadingButton>
                   </Box>
                 </Box>
-                <Divider sx={{ borderBottomWidth: 3 }} />
+                <Divider sx={{ borderBottomWidth: 3, mt: 2 }} />
                 <Box display="flex" alignItems="center" pt={3} px={2}>
                   <div style={{ height: 600, width: '100%' }}>
                     <DataGrid
-                      rows={rows}
+                      rows={projectList}
                       columns={columns}
                       initialState={{
                         pagination: {

@@ -138,7 +138,6 @@ export default function Management({ token, ...rest }) {
                     }
                 )
                 setData(display);
-                // console.log(display);
             }).catch(err => { console.log(err) })
     };
 
