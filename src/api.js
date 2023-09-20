@@ -41,11 +41,11 @@ export const apiPostPeddingList = (data) => auth_except(baseRequest.post(`/users
   }
 }));
 
-export const apiGetProjectDevices = (token) => auth_except(baseRequest.get(`project/search-project-devices?project_id=${data['name']}`, {
+export const apiGetProjectDevices = (data) => auth_except(baseRequest.get(`project/search-project-devices?project_id=${data['name']}`, {
   headers:
   {
     'accept': 'application/json',
-    'Authorization': `Bearer ${token}`
+    'Content-Type': 'application/x-www-form-urlencoded'
   }
 }));
 // ============================第二期============================

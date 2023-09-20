@@ -21,7 +21,8 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { PieChart, pieArcLabelClasses } from '@mui/x-charts';
-import Slider from "react-slick";
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+import { Carousel } from 'react-responsive-carousel';
 
 const darkTheme = createTheme({
   palette: {
@@ -42,6 +43,11 @@ const darkTheme = createTheme({
 
 export default function Statistics({ token, setAlert, ...rest }) {
 
+  const [isPaused, setIsPaused] = useState(false);
+
+  const togglePause = () => {
+    setIsPaused(!isPaused);
+  };
   // function getCircleIcon(color) {
   //   if (color === "red") {
   //     return <RCircle />;
@@ -412,104 +418,114 @@ export default function Statistics({ token, setAlert, ...rest }) {
 
 
   const createDeviceCard = (data) => {
-    return Object.keys(data).map((project) => (
-      Object.keys(data[project]).map((device) => (
-        <div>
-          <Card key={device} sx={{ mt: 2 }}>
-            <Box sx={{ bgcolor: '#696969' }}>
-              <CardHeader title={project + "-" + device} color="#696969" align="center" />
-            </Box>
-            <TableContainer component={Paper}>
-              <Grid container spacing={2}>
-                <Grid xs={3}>
-                  <Box border={1} sx={{ mt: 4, ml: 6, width: 120, height: 'auto' }}>
-                    <Typography align="center" fontSize={25}>異常增加</Typography>
-                    <Box sx={{ bgcolor: '#C5291C', width: 'auto', height: 'auto' }}>
-                      <Typography align="center" fontSize={20}>lightColor</Typography>
-                    </Box>
+    return (
+      <div>
+        <button onClick={togglePause}>
+          {isPaused ? '恢復輪播' : '暫停輪播'}
+        </button>
+        <Carousel infiniteLoop={true} autoPlay={!isPaused} stopOnHover={true} interval={2000}>
+          {Object.keys(data).map((project) => (
+            Object.keys(data[project]).map((device) => (
+              <div>
+                <Card key={device} sx={{ mt: 2 }}>
+                  <Box sx={{ bgcolor: '#696969' }}>
+                    <CardHeader title={project + "-" + device} color="#696969" align="center" />
                   </Box>
-                  <Box border={1} sx={{ mt: 4, ml: 6, width: 118, height: 'auto' }}>
-                    <Typography align="center" fontSize={25}>需注意</Typography>
-                    <Box sx={{ bgcolor: '#F5C242', width: 'auto', height: 'auto' }}>
-                      <Typography align="center" fontSize={20}>lightColor</Typography>
-                    </Box>
-                  </Box>
-                  <Box border={1} sx={{ mt: 4, ml: 6, width: 118, height: 'auto' }}>
-                    <Typography align="center" fontSize={25}>穩定</Typography>
-                    <Box sx={{ bgcolor: '#4CA85A', width: 'auto', height: 'auto' }}>
-                      <Typography align="center" fontSize={20}>lightColor</Typography>
-                    </Box>
-                  </Box>
-                  <Box border={1} sx={{ mt: 4, ml: 6, width: 118, height: 'auto' }}>
-                    <Typography align="center" fontSize={25}>事件減少</Typography>
-                    <Box sx={{ bgcolor: '#4169e1', width: 'auto', height: 'auto' }}>
-                      <Typography align="center" fontSize={20}>lightColor</Typography>
-                    </Box>
-                  </Box>
-                </Grid>
-                <Grid xs={9}>
-                  <Box sx={{ mt: 16 }}>
-                    <PieChart
-                      colors={['#C5291C', '#F5C242', '#4CA85A', '#4169e1']}
-                      series={[
-                        {
-                          arcLabel: (item) => `${item.label} (${item.value})`,
-                          arcLabelMinAngle: 50,
-                          data: getPie(device),
-                        },
-                      ]}
+                  <TableContainer component={Paper}>
+                    <Grid container spacing={2}>
+                      <Grid xs={3}>
+                        <Box border={1} sx={{ mt: 4, ml: 6, width: 120, height: 'auto' }}>
+                          <Typography align="center" fontSize={25}>異常增加</Typography>
+                          <Box sx={{ bgcolor: '#C5291C', width: 'auto', height: 'auto' }}>
+                            <Typography align="center" fontSize={20}>lightColor</Typography>
+                          </Box>
+                        </Box>
+                        <Box border={1} sx={{ mt: 4, ml: 6, width: 118, height: 'auto' }}>
+                          <Typography align="center" fontSize={25}>需注意</Typography>
+                          <Box sx={{ bgcolor: '#F5C242', width: 'auto', height: 'auto' }}>
+                            <Typography align="center" fontSize={20}>lightColor</Typography>
+                          </Box>
+                        </Box>
+                        <Box border={1} sx={{ mt: 4, ml: 6, width: 118, height: 'auto' }}>
+                          <Typography align="center" fontSize={25}>穩定</Typography>
+                          <Box sx={{ bgcolor: '#4CA85A', width: 'auto', height: 'auto' }}>
+                            <Typography align="center" fontSize={20}>lightColor</Typography>
+                          </Box>
+                        </Box>
+                        <Box border={1} sx={{ mt: 4, ml: 6, width: 118, height: 'auto' }}>
+                          <Typography align="center" fontSize={25}>事件減少</Typography>
+                          <Box sx={{ bgcolor: '#4169e1', width: 'auto', height: 'auto' }}>
+                            <Typography align="center" fontSize={20}>lightColor</Typography>
+                          </Box>
+                        </Box>
+                      </Grid>
+                      <Grid xs={9}>
+                        <Box sx={{ mt: 16 }}>
+                          <PieChart
+                            colors={['#C5291C', '#F5C242', '#4CA85A', '#4169e1']}
+                            series={[
+                              {
+                                arcLabel: (item) => `${item.label} (${item.value})`,
+                                arcLabelMinAngle: 50,
+                                data: getPie(device),
+                              },
+                            ]}
+                            sx={{
+                              [`& .${pieArcLabelClasses.root}`]: {
+                                fill: 'default',
+                                fontWeight: 'bold',
+                              },
+                            }}
+                            width={600}
+                            height={300}
+                          />
+                        </Box>
+                      </Grid>
+                    </Grid>
+                    <Divider
                       sx={{
-                        [`& .${pieArcLabelClasses.root}`]: {
-                          fill: 'default',
-                          fontWeight: 'bold',
-                        },
+                        borderColor: '#2D3748',
+                        my: 3,
+                        height: 1.5
                       }}
-                      width={600}
-                      height={300}
                     />
-                  </Box>
-                </Grid>
-              </Grid>
-              <Divider
-                sx={{
-                  borderColor: '#2D3748',
-                  my: 3,
-                  height: 1.5
-                }}
-              />
-              <Table sx={{ minWidth: 650 }}>
-                <TableHead style={{ backgroundColor: '#696969', color: 'white' }}>
-                  <TableCell align="left" sx={{ width: 50 }}><Typography fontSize={20}>類型</Typography></TableCell>
-                  <TableCell align="left" sx={{ mr: 20 }}><Typography fontSize={20}>事件</Typography></TableCell>
-                </TableHead>
-                <TableBody>
-                  {data[project][device].map((columns) => (
-                    <TableRow
-                      key={columns.name}
-                    >
-                      <TableCell key={columns.id} align="center">
-                        <Grid container spacing={1}>
-                          <Grid xs={10}>
-                            <Box align="center" sx={{ bgcolor: getColor(columns.lightColor), width: 100, height: 'auto' }}>
-                              <Typography fontSize={20}>{columns.label}</Typography>
-                            </Box>
-                          </Grid>
-                          <Grid xs={2}>
-                            <Box align="left" sx={{ width: 400, height: 'auto' }}>
-                              <Typography fontSize={20}>{columns.name}</Typography>
-                            </Box>
-                          </Grid>
-                        </Grid>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Card>
-        </div>
-      ))
-    ));
+                    <Table sx={{ minWidth: 650 }}>
+                      <TableHead style={{ backgroundColor: '#696969', color: 'white' }}>
+                        <TableCell align="left" sx={{ width: 50 }}><Typography fontSize={20}>類型</Typography></TableCell>
+                        <TableCell align="left" sx={{ mr: 20 }}><Typography fontSize={20}>事件</Typography></TableCell>
+                      </TableHead>
+                      <TableBody>
+                        {data[project][device].map((columns) => (
+                          <TableRow
+                            key={columns.name}
+                          >
+                            <TableCell key={columns.id} align="center">
+                              <Grid container spacing={1}>
+                                <Grid xs={10}>
+                                  <Box align="center" sx={{ bgcolor: getColor(columns.lightColor), width: 100, height: 'auto' }}>
+                                    <Typography fontSize={20}>{columns.label}</Typography>
+                                  </Box>
+                                </Grid>
+                                <Grid xs={2}>
+                                  <Box align="left" sx={{ width: 400, height: 'auto' }}>
+                                    <Typography fontSize={20}>{columns.name}</Typography>
+                                  </Box>
+                                </Grid>
+                              </Grid>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                </Card>
+              </div>
+            ))
+          )
+          )}
+        </Carousel>
+      </div>
+    )
   };
 
   const [nav1, setNav1] = useState();
