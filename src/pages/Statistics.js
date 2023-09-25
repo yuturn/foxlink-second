@@ -478,6 +478,7 @@ export default function Statistics({ token, setAlert, ...rest }) {
     },
   };
 
+
   const createDeviceCard = (data) => {
     return (
       <div>
