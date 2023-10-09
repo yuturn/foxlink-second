@@ -46,53 +46,57 @@ const darkTheme = createTheme({
 });
 
 const columns = [
-  { field: 'machineName', headerName: '機台名稱', width: 400 }
+  { field: 'id', headerName: '機台名稱', width: 400 }
 ];
 
 const empColumns = [
-  { field: 'id', headerName: 'ID', width: 150 },
-  { field: 'badge', headerName: '員工編號', width: 250 },
+  { field: 'id', headerName: '員工編號', width: 250 },
   { field: 'empName', headerName: '員工名稱', width: 250 },
-
+  { field: 'permission', headerName: '權限', width: 250 },
 ];
 
 const rows = [
-  { id: 1, machineName: 'Device1' },
-  { id: 2, machineName: 'Device2' },
-  { id: 3, machineName: 'Device3' },
-  { id: 4, machineName: 'Device4' },
-  { id: 5, machineName: 'Device5' },
-  { id: 6, machineName: 'Device6' },
-  { id: 7, machineName: 'Device7' },
-  { id: 8, machineName: 'Device8' },
-  { id: 9, machineName: 'Device9' },
-  { id: 10, machineName: 'Device10' },
-  { id: 11, machineName: 'Device11' },
+  { id: 'Device1' },
+  { id: 'Device2' },
+  { id: 'Device3' },
+  { id: 'Device4' },
+  { id: 'Device5' },
+  { id: 'Device6' },
+  { id: 'Device7' },
+  { id: 'Device8' },
+  { id: 'Device9' },
+  { id: 'Device10' },
+  { id: 'Device11' },
 ];
 
 const empRows = [
-  { id: 1, badge: "c001", empName: '王小明' },
-  { id: 2, badge: "c002", empName: '王小美' },
-  { id: 3, badge: "c003", empName: '陳小新' },
-  { id: 4, badge: "c004", empName: '羅聖閔' },
-  { id: 5, badge: "c005", empName: '李大同' },
-  { id: 6, badge: "c006", empName: '林定遠' },
-  { id: 7, badge: "c007", empName: '李小翔' },
-  { id: 8, badge: "c008", empName: '許銘軒' },
-  { id: 9, badge: "c009", empName: '陳小龍' },
-  { id: 10, badge: "c0010", empName: '江小婷' },
-  { id: 11, badge: "c0011", empName: '何美美' },
+  { id: "c001", empName: '王小明', permission: '系統管理者' },
+  { id: "c002", empName: '王小美', permission: '專案管理者' },
+  { id: "c003", empName: '陳小新', permission: '專案負責人' },
+  { id: "c004", empName: '羅聖閔', permission: '一般員工' },
+  { id: "c005", empName: '李大同', permission: '系統管理者' },
+  { id: "c006", empName: '林定遠', permission: '專案管理者' },
+  { id: "c007", empName: '李小翔', permission: '專案負責人' },
+  { id: "c008", empName: '許銘軒', permission: '一般員工' },
+  { id: "c009", empName: '陳小龍', permission: '專案負責人' },
+  { id: "c0010", empName: '江小婷', permission: '一般員工' },
+  { id: "c0011", empName: '何美美', permission: '一般員工' },
 ];
 
 
 
 export default function Project({ token, ...rest }) {
   const [age, setAge] = useState("");
+  const [projectName, setProjectName] = useState("");
+  const [permission, setPermission] = useState("");
   const [projectDeleteOpen, setProjectDeleteOpen] = useState(false);
   const [projectList, setProjectList] = useState();
-
-  const handleChange = (event) => {
-    setAge(event.target.value);
+  const [employeeName, setEmployeeName] = useState("");
+  const projectNameChange = (event) => {
+    setProjectName(event.target.value);
+  };
+  const permissionChange = (event) => {
+    setPermission(event.target.value);
   };
   const projectDeleteHandleClickOpen = () => {
     setProjectDeleteOpen(true);
@@ -142,12 +146,36 @@ export default function Project({ token, ...rest }) {
                     <Box mr={2}>
                       <TextField type="search-staff" label="專案名稱" />
                     </Box>
+                    <Box ml={2}>
+                      <LoadingButton variant="contained" color="info" onClick={handleOnClickProject}>
+                        查詢
+                      </LoadingButton>
+                    </Box>
+                  </Box>
+                </Box>
+                <Box display="flex" alignItems="center" pt={3} px={2}>
+                  <div style={{ height: 600, width: '100%' }}>
+                    <DataGrid
+                      rows={rows}
+                      columns={columns}
+                      initialState={{
+                        pagination: {
+                          paginationModel: { page: 0, pageSize: 5 },
+                        },
+                      }}
+                      pageSizeOptions={[5, 10]}
+                      checkboxSelection
+                    />
+                  </div>
+                </Box>
+                <Box display="flex" pt={3} px={2}>
+                  <Box>
                     <LoadingButton variant="contained" color="info">
-                      新增
+                      新增專案
                     </LoadingButton>
                   </Box>
                 </Box>
-                <Divider sx={{ borderBottomWidth: 3 }} />
+                <Divider sx={{ borderBottomWidth: 3, mt: 2 }} />
                 <Box component="form" role="form" mb={3}>
                   <Typography variant="h4" fontWeight="medium" mt={3}>
                     刪除專案
@@ -164,12 +192,12 @@ export default function Project({ token, ...rest }) {
                           id="permission-select"
                           value={age}
                           label="專案"
-                          onChange={handleChange}
+                          onChange={projectNameChange}
                           style={{ minWidth: "200px", height: "45px" }}
                         >
-                          <MenuItem value={10}>專案 A</MenuItem>
-                          <MenuItem value={20}>專案 B</MenuItem>
-                          <MenuItem value={30}>專案 C</MenuItem>
+                          <MenuItem value={10}>D7X</MenuItem>
+                          <MenuItem value={20}>D6X</MenuItem>
+                          <MenuItem value={30}>D1Y</MenuItem>
                         </Select>
                       </FormControl>
                     </Box>
@@ -216,39 +244,14 @@ export default function Project({ token, ...rest }) {
                 <Divider sx={{ borderBottomWidth: 3 }} />
                 <Box component="form" role="form" mb={3}>
                   <Typography variant="h4" fontWeight="medium" mt={3}>
-                    編輯專案人員
+                    新增專案人員
                   </Typography>
                   <Box display="flex" alignItems="center" pt={3} px={2}>
                     <Typography variant="h5" fontWeight="medium" mr={2}>
-                      專案名稱:
-                    </Typography>
-                    <FormControl>
-                      <InputLabel id="demo-simple-select-label">專案</InputLabel>
-                      <Select
-                        labelId="permission-select-label"
-                        id="permission-select"
-                        value={age}
-                        label="專案"
-                        onChange={handleChange}
-                        style={{ minWidth: "200px", height: "45px" }}
-                      >
-                        <MenuItem value={10}>專案 A</MenuItem>
-                        <MenuItem value={20}>專案 B</MenuItem>
-                        <MenuItem value={30}>專案 C</MenuItem>
-                      </Select>
-                    </FormControl>
-                    <Box ml={2}>
-                      <LoadingButton variant="contained" color="info">
-                        查詢
-                      </LoadingButton>
-                    </Box>
-                  </Box>
-                  <Box display="flex" alignItems="center" pt={3} px={2}>
-                    <Typography variant="h5" fontWeight="medium" mr={2}>
-                      人員查詢:
+                      員工ID:
                     </Typography>
                     <Box mr={2}>
-                      <TextField type="search-staff" label="請輸入帳號" />
+                      <TextField type="search-staff" label="請輸入員工ID" />
                     </Box>
                     <LoadingButton variant="contained" color="info">
                       查詢
@@ -258,15 +261,92 @@ export default function Project({ token, ...rest }) {
                     <Typography variant="h5" fontWeight="medium" mr={2}>
                       人員名稱:
                     </Typography>
-                    <Box mr={2}>
-                      <TextField type="add-staff" label="人員新增" />
+                    <Typography variant="h5" fontWeight="medium" mr={2}>
+                      {employeeName}
+                    </Typography>
+                  </Box>
+                  <Box display="flex" alignItems="center" pt={3} px={2}>
+                    <Typography variant="h5" fontWeight="medium" mr={2}>
+                      專案名稱:
+                    </Typography>
+                    <FormControl>
+                      <InputLabel id="demo-simple-select-label">專案</InputLabel>
+                      <Select
+                        labelId="permission-select-label"
+                        id="permission-select"
+                        value={projectName}
+                        label="專案"
+                        onChange={projectNameChange}
+                        style={{ minWidth: "200px", height: "45px" }}
+                      >
+                        <MenuItem value={10}>D7X</MenuItem>
+                        <MenuItem value={20}>D6X</MenuItem>
+                        <MenuItem value={30}>D1Y</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Box>
+                  <Box display="flex" alignItems="center" pt={3} px={2}>
+                    <Typography variant="h5" fontWeight="medium" mr={2}>
+                      指定權限:
+                    </Typography>
+                    <FormControl>
+                      <InputLabel id="demo-simple-select-label">權限</InputLabel>
+                      <Select
+                        labelId="permission-select-label"
+                        id="permission-select"
+                        value={permission}
+                        label="權限"
+                        onChange={permissionChange}
+                        style={{ minWidth: "200px", height: "45px" }}
+                      >
+                        <MenuItem value={10}>系統管理者</MenuItem>
+                        <MenuItem value={20}>專案管理者</MenuItem>
+                        <MenuItem value={30}>專案負責人</MenuItem>
+                        <MenuItem value={40}>一般員工</MenuItem>
+                      </Select>
+                    </FormControl>
+                    <Box ml={2}>
+                      <LoadingButton variant="contained" color="info">
+                        新增
+                      </LoadingButton>
                     </Box>
-                    <LoadingButton variant="contained" color="info">
-                      新增
-                    </LoadingButton>
+                  </Box>
+                  <Box display="flex" alignItems="center" pt={3} px={2}>
+                    <Box>
+                      <LoadingButton variant="contained" color="info">
+                        新增
+                      </LoadingButton>
+                    </Box>
                   </Box>
                 </Box>
                 <Divider sx={{ borderBottomWidth: 3 }} />
+                <Box component="form" role="form" mb={3}>
+                  <Typography variant="h4" fontWeight="medium" mt={3}>
+                    刪除專案人員
+                  </Typography>
+                  <Box display="flex" alignItems="center" pt={3} px={2}>
+                    <Typography variant="h5" fontWeight="medium" mr={2}>
+                      專案名稱:
+                    </Typography>
+                    <Box mr={2}>
+                      <FormControl>
+                        <InputLabel id="demo-simple-select-label">專案</InputLabel>
+                        <Select
+                          labelId="permission-select-label"
+                          id="permission-select"
+                          value={age}
+                          label="專案"
+                          onChange={projectNameChange}
+                          style={{ minWidth: "200px", height: "45px" }}
+                        >
+                          <MenuItem value={10}>D7X</MenuItem>
+                          <MenuItem value={20}>D6X</MenuItem>
+                          <MenuItem value={30}>D1Y</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  </Box>
+                </Box>
                 <Box display="flex" alignItems="center" pt={3} px={2}>
                   <div style={{ height: 400, width: '100%' }}>
                     <DataGrid
@@ -284,64 +364,44 @@ export default function Project({ token, ...rest }) {
                 </Box>
                 <Box display="flex" pt={3} px={2}>
                   <Box>
-                    <LoadingButton variant="contained" color="error">
+                    <LoadingButton
+                      variant="contained"
+                      color="error"
+                      onClick={projectDeleteHandleClickOpen}
+                    >
                       刪除
                     </LoadingButton>
-                  </Box>
-                </Box>
-              </Box>
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
-      <Card sx={{ mt: 2 }}>
-        <Box sx={{ bgcolor: '#696969' }}>
-          <CardHeader title="專案機台" color="#62aaf4" />
-        </Box>
-        <Divider sx={{ borderBottomWidth: 3 }} />
-        <CardContent>
-          <Grid container spacing={1} mt={2}>
-            <Grid xs={12} sx={{ md: 12 }}>
-              <Box pt={4} pb={3} px={3}>
-                <Box display="flex" alignItems="center" px={2} mb={3} fullwidth >
-                  <Typography variant="h4" fontWeight="medium" mr={2} >
-                    編輯專案機台
-                  </Typography>
-                </Box>
-                <Box display="flex" alignItems="center" pt={3} px={2}>
-                  <Typography variant="h5" fontWeight="medium" mr={2}>
-                    專案名稱:
-                  </Typography>
-                  <Box mr={2}>
-                    <TextField type="search-staff" label="請輸入專案名稱" name="projectName" id="projectName" />
-                  </Box>
-                  <Box ml={2}>
-                    <LoadingButton variant="contained" color="info" onClick={handleOnClickProject}>
-                      查詢
-                    </LoadingButton>
-                  </Box>
-                </Box>
-                <Divider sx={{ borderBottomWidth: 3, mt: 2 }} />
-                <Box display="flex" alignItems="center" pt={3} px={2}>
-                  <div style={{ height: 600, width: '100%' }}>
-                    <DataGrid
-                      rows={projectList}
-                      columns={columns}
-                      initialState={{
-                        pagination: {
-                          paginationModel: { page: 0, pageSize: 5 },
-                        },
-                      }}
-                      pageSizeOptions={[5, 10]}
-                      checkboxSelection
-                    />
-                  </div>
-                </Box>
-                <Box display="flex" pt={3} px={2}>
-                  <Box>
-                    <LoadingButton variant="contained" color="info">
-                      新增
-                    </LoadingButton>
+                    <Dialog
+                      open={projectDeleteOpen}
+                      onClose={projectDeleteHandleClose}
+                      aria-labelledby="alert-dialog-permission"
+                      aria-describedby="alert-dialog-permission"
+                    >
+                      <DialogTitle id="alert-dialog-title">是否刪除專案人員?</DialogTitle>
+                      <DialogContent>
+                        <DialogContentText id="alert-dialog-permission">
+                          按下刪除按鈕後將會刪除專案人員
+                        </DialogContentText>
+                      </DialogContent>
+                      <DialogActions>
+                        <LoadingButton
+                          onClick={projectDeleteHandleClose}
+                          color="error"
+                          autoFocus
+                          variant="contained"
+                        >
+                          刪除
+                        </LoadingButton>
+                        <LoadingButton
+                          onClick={projectDeleteHandleClose}
+                          color="info"
+                          autoFocus
+                          variant="contained"
+                        >
+                          关闭
+                        </LoadingButton>
+                      </DialogActions>
+                    </Dialog>
                   </Box>
                 </Box>
               </Box>

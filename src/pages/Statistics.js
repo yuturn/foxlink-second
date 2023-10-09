@@ -10,7 +10,9 @@ import {
   Typography,
   CardContent,
   Divider,
-  palette
+  palette,
+  Select,
+  MenuItem
 } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -45,7 +47,14 @@ const darkTheme = createTheme({
 export default function Statistics({ token, setAlert, ...rest }) {
 
   const [isPaused, setIsPaused] = useState(false);
-
+  const [projectName, setProjectName] = useState("");
+  const [deviceName, setDeviceName] = useState("");
+  const projectNameChange = (event) => {
+    setProjectName(event.target.value);
+  };
+  const deviceNameChange = (event) => {
+    setDeviceName(event.target.value);
+  };
   const togglePause = () => {
     setIsPaused(!isPaused);
   };
@@ -109,11 +118,7 @@ export default function Statistics({ token, setAlert, ...rest }) {
     if (lightColor === 1) {
       return "#C5291C";
     } else if (lightColor === 2) {
-      return "#F5C242";
-    } else if (lightColor === 3) {
       return "#4CA85A";
-    } else if (lightColor === 4) {
-      return "#4169e1";
     } else {
       return null; // 或者返回一个默认的图标
     }
@@ -125,6 +130,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
     } else if (device === "Device6") {
       return pieData2;
     } else if (device === "Device8") {
+      return pieData3;
+    } else if (device === "Device15") {
       return pieData3;
     } else {
       return null; // 或者返回一个默认的图标
@@ -139,149 +146,163 @@ export default function Statistics({ token, setAlert, ...rest }) {
           name: "料盤取材上下氣缸故障",
           lightColor: 1,
           value: 10,
-          label: '異常增加'
+          label: '異常',
+          date: '2022/01/02 15:00',
+          frequency: '週預測'
         },
         {
           id: 2,
           name: "tray盤站故障",
-          lightColor: 2,
+          lightColor: 1,
           value: 10,
-          label: '需注意'
+          label: '異常'
         },
         {
           id: 3,
           name: "UV檢測站故障",
-          lightColor: 3,
+          lightColor: 2,
           value: 10,
-          label: '穩定'
+          label: '非異常',
+          date: '2022/01/02 15:00',
+          frequency: '日預測'
         },
         {
           id: 4,
           name: "Glue異常",
-          lightColor: 4,
+          lightColor: 2,
           value: 10,
-          label: '事件減少'
+          label: '非異常'
         }
       ],
       "Device6": [
         {
           id: 1,
           name: "1#插針定位氣缸故障",
-          lightColor: 3,
+          lightColor: 2,
           value: 7,
-          label: '穩定'
+          label: '非異常'
         },
         {
           id: 2,
           name: "2#插針定位氣缸故障",
-          lightColor: 2,
+          lightColor: 1,
           value: 7,
-          label: '需注意'
+          label: '異常'
         },
         {
           id: 3,
           name: "2#插針站故障",
           lightColor: 1,
           value: 2,
-          label: '異常增加'
+          label: '異常'
         },
         {
           id: 4,
           name: "主撥料站故障",
           lightColor: 1,
           value: 2,
-          label: '異常增加'
+          label: '異常'
         },
         {
           id: 5,
           name: "出料撥料氣缸氣缸故障",
-          lightColor: 2,
+          lightColor: 1,
           value: 7,
-          label: '需注意'
+          label: '異常'
         },
         {
           id: 6,
           name: "出料翻轉氣缸氣缸故障",
-          lightColor: 3,
+          lightColor: 2,
           value: 7,
-          label: '穩定'
+          label: '非異常'
         },
         {
           id: 7,
           name: "壓入檢測站故障",
-          lightColor: 2,
+          lightColor: 1,
           value: 7,
-          label: '需注意'
+          label: '異常',
+          date: '2022/02/05 18:00',
+          frequency: '週預測'
         },
         {
           id: 8,
           name: "撥料上下1氣缸故障",
-          lightColor: 3,
+          lightColor: 2,
           value: 7,
-          label: '穩定'
+          label: '非異常'
         },
         {
           id: 9,
           name: "撥料上下2氣缸故障",
-          lightColor: 3,
+          lightColor: 2,
           value: 7,
-          label: '穩定'
+          label: '非異常',
+          date: '2022/02/05 18:00',
+          frequency: '週預測'
         },
         {
           id: 10,
           name: "撥料上下3氣缸故障",
-          lightColor: 2,
+          lightColor: 1,
           value: 7,
-          label: '需注意'
+          label: '異常'
         },
         {
           id: 11,
           name: "撥料上下4氣缸故障",
-          lightColor: 3,
+          lightColor: 2,
           value: 7,
-          label: '穩定'
+          label: '非異常'
         },
         {
           id: 12,
           name: "進料錯位氣缸故障",
-          lightColor: 2,
+          lightColor: 1,
           value: 7,
-          label: '需注意'
+          label: '異常',
+          date: '2022/02/05 18:00',
+          frequency: '週預測'
         },
         {
           id: 13,
           name: "整形氣缸故障",
-          lightColor: 4,
+          lightColor: 2,
           value: 1,
-          label: '事件減少'
+          label: '非異常'
         },
         {
           id: 14,
           name: "House擋料氣缸故障",
-          lightColor: 3,
+          lightColor: 2,
           value: 7,
-          label: '穩定'
+          label: '非異常',
+          date: '2022/02/05 18:00',
+          frequency: '週預測'
         },
         {
           id: 15,
           name: "NG排料氣缸故障",
-          lightColor: 2,
+          lightColor: 1,
           value: 7,
-          label: '需注意'
+          label: '異常'
         },
         {
           id: 16,
           name: "軸7-2#送料馬達故障",
-          lightColor: 3,
+          lightColor: 2,
           value: 7,
-          label: '穩定'
+          label: '非異常'
         },
         {
           id: 17,
           name: "Bush異常",
-          lightColor: 2,
+          lightColor: 1,
           value: 7,
-          label: '需注意'
+          label: '異常',
+          date: '2022/02/05 18:00',
+          frequency: '週預測'
         }
       ],
       "Device8": [
@@ -290,127 +311,526 @@ export default function Statistics({ token, setAlert, ...rest }) {
           name: "出料撥爪橫移氣缸故障",
           lightColor: 1,
           value: 2,
-          label: '異常增加'
+          label: '異常',
+          date: '2022/04/24 06:00',
+          frequency: '日預測'
         },
         {
           id: 2,
           name: "出料站氣缸故障",
-          lightColor: 2,
+          lightColor: 1,
           value: 7,
-          label: '需注意'
+          label: '異常'
         },
         {
           id: 3,
           name: "出料翻轉氣缸故障",
-          lightColor: 3,
+          lightColor: 2,
           value: 7,
-          label: '穩定'
+          label: '非異常',
+          date: '2022/04/24 06:00',
+          frequency: '日預測'
         },
         {
           id: 4,
           name: "轉盤下料站故障",
-          lightColor: 3,
+          lightColor: 2,
           value: 7,
-          label: '穩定'
+          label: '非異常'
         },
         {
           id: 5,
           name: "軸4-House旋轉馬達故障",
-          lightColor: 4,
+          lightColor: 2,
           value: 1,
-          label: '事件減少'
+          label: '非異常'
         },
         {
           id: 6,
           name: "軸5-House供料PP馬達故障",
           lightColor: 1,
           value: 2,
-          label: '異常增加'
+          label: '異常'
         },
         {
           id: 7,
           name: "軸8-DD取料PP夾爪氣缸故障",
-          lightColor: 2,
+          lightColor: 1,
           value: 7,
-          label: '需注意'
+          label: '異常'
         },
         {
           id: 8,
           name: "軸10-出料搬送上下故障",
-          lightColor: 3,
+          lightColor: 2,
           value: 7,
-          label: '穩定'
+          label: '非異常'
         },
         {
           id: 9,
           name: "DD取料PP夾爪氣缸故障",
-          lightColor: 3,
+          lightColor: 2,
           value: 7,
-          label: '穩定'
+          label: '非異常'
         },
         {
           id: 10,
           name: "DD轉盤工位3壓入氣缸故障",
-          lightColor: 2,
+          lightColor: 1,
           value: 7,
-          label: '需注意'
+          label: '異常',
+          date: '2022/04/24 06:00',
+          frequency: '日預測'
         },
         {
           id: 11,
           name: "DD轉盤站故障",
           lightColor: 1,
           value: 2,
-          label: '異常增加'
+          label: '異常'
         },
         {
           id: 12,
           name: "house上料站故障",
-          lightColor: 2,
+          lightColor: 1,
           value: 7,
-          label: '需注意'
+          label: '異常'
         },
         {
           id: 13,
           name: "House供料PP夾爪氣缸故障",
-          lightColor: 3,
+          lightColor: 2,
           value: 7,
-          label: '穩定'
+          label: '非異常'
         },
         {
           id: 14,
           name: "Shell異常",
-          lightColor: 3,
+          lightColor: 2,
           value: 7,
-          label: '穩定'
+          label: '非異常',
+          date: '2022/04/24 06:00',
+          frequency: '日預測'
         },
         {
           id: 15,
           name: "Shell尾料裁切氣缸故障",
-          lightColor: 4,
+          lightColor: 2,
           value: 1,
-          label: '事件減少'
+          label: '非異常'
+        }
+      ]
+    },
+    "d1x": {
+      "Device5": [
+        {
+          id: 1,
+          name: "料盤取材上下氣缸故障",
+          lightColor: 1,
+          value: 10,
+          label: '異常',
+          date: '2022/01/02 15:00',
+          frequency: '週預測'
+        },
+        {
+          id: 2,
+          name: "tray盤站故障",
+          lightColor: 1,
+          value: 10,
+          label: '異常'
+        },
+        {
+          id: 3,
+          name: "UV檢測站故障",
+          lightColor: 2,
+          value: 10,
+          label: '非異常',
+          date: '2022/01/02 15:00',
+          frequency: '日預測'
+        },
+        {
+          id: 4,
+          name: "Glue異常",
+          lightColor: 2,
+          value: 10,
+          label: '非異常'
+        }
+      ],
+      "Device6": [
+        {
+          id: 1,
+          name: "1#插針定位氣缸故障",
+          lightColor: 2,
+          value: 7,
+          label: '非異常'
+        },
+        {
+          id: 2,
+          name: "2#插針定位氣缸故障",
+          lightColor: 1,
+          value: 7,
+          label: '異常'
+        },
+        {
+          id: 3,
+          name: "2#插針站故障",
+          lightColor: 1,
+          value: 2,
+          label: '異常'
+        },
+        {
+          id: 4,
+          name: "主撥料站故障",
+          lightColor: 1,
+          value: 2,
+          label: '異常'
+        },
+        {
+          id: 5,
+          name: "出料撥料氣缸氣缸故障",
+          lightColor: 1,
+          value: 7,
+          label: '異常'
+        },
+        {
+          id: 6,
+          name: "出料翻轉氣缸氣缸故障",
+          lightColor: 2,
+          value: 7,
+          label: '非異常'
+        },
+        {
+          id: 7,
+          name: "壓入檢測站故障",
+          lightColor: 1,
+          value: 7,
+          label: '異常',
+          date: '2022/02/05 18:00',
+          frequency: '週預測'
+        },
+        {
+          id: 8,
+          name: "撥料上下1氣缸故障",
+          lightColor: 2,
+          value: 7,
+          label: '非異常'
+        },
+        {
+          id: 9,
+          name: "撥料上下2氣缸故障",
+          lightColor: 2,
+          value: 7,
+          label: '非異常',
+          date: '2022/02/05 18:00',
+          frequency: '週預測'
+        },
+        {
+          id: 10,
+          name: "撥料上下3氣缸故障",
+          lightColor: 1,
+          value: 7,
+          label: '異常'
+        },
+        {
+          id: 11,
+          name: "撥料上下4氣缸故障",
+          lightColor: 2,
+          value: 7,
+          label: '非異常'
+        },
+        {
+          id: 12,
+          name: "進料錯位氣缸故障",
+          lightColor: 1,
+          value: 7,
+          label: '異常',
+          date: '2022/02/05 18:00',
+          frequency: '週預測'
+        },
+        {
+          id: 13,
+          name: "整形氣缸故障",
+          lightColor: 2,
+          value: 1,
+          label: '非異常'
+        },
+        {
+          id: 14,
+          name: "House擋料氣缸故障",
+          lightColor: 2,
+          value: 7,
+          label: '非異常',
+          date: '2022/02/05 18:00',
+          frequency: '週預測'
+        },
+        {
+          id: 15,
+          name: "NG排料氣缸故障",
+          lightColor: 1,
+          value: 7,
+          label: '異常'
+        },
+        {
+          id: 16,
+          name: "軸7-2#送料馬達故障",
+          lightColor: 2,
+          value: 7,
+          label: '非異常'
+        },
+        {
+          id: 17,
+          name: "Bush異常",
+          lightColor: 1,
+          value: 7,
+          label: '異常',
+          date: '2022/02/05 18:00',
+          frequency: '週預測'
+        }
+      ],
+      "Device8": [
+        {
+          id: 1,
+          name: "出料撥爪橫移氣缸故障",
+          lightColor: 1,
+          value: 2,
+          label: '異常',
+          date: '2022/04/24 06:00',
+          frequency: '日預測'
+        },
+        {
+          id: 2,
+          name: "出料站氣缸故障",
+          lightColor: 1,
+          value: 7,
+          label: '異常'
+        },
+        {
+          id: 3,
+          name: "出料翻轉氣缸故障",
+          lightColor: 2,
+          value: 7,
+          label: '非異常',
+          date: '2022/04/24 06:00',
+          frequency: '日預測'
+        },
+        {
+          id: 4,
+          name: "轉盤下料站故障",
+          lightColor: 2,
+          value: 7,
+          label: '非異常'
+        },
+        {
+          id: 5,
+          name: "軸4-House旋轉馬達故障",
+          lightColor: 2,
+          value: 1,
+          label: '非異常'
+        },
+        {
+          id: 6,
+          name: "軸5-House供料PP馬達故障",
+          lightColor: 1,
+          value: 2,
+          label: '異常'
+        },
+        {
+          id: 7,
+          name: "軸8-DD取料PP夾爪氣缸故障",
+          lightColor: 1,
+          value: 7,
+          label: '異常'
+        },
+        {
+          id: 8,
+          name: "軸10-出料搬送上下故障",
+          lightColor: 2,
+          value: 7,
+          label: '非異常'
+        },
+        {
+          id: 9,
+          name: "DD取料PP夾爪氣缸故障",
+          lightColor: 2,
+          value: 7,
+          label: '非異常'
+        },
+        {
+          id: 10,
+          name: "DD轉盤工位3壓入氣缸故障",
+          lightColor: 1,
+          value: 7,
+          label: '異常',
+          date: '2022/04/24 06:00',
+          frequency: '日預測'
+        },
+        {
+          id: 11,
+          name: "DD轉盤站故障",
+          lightColor: 1,
+          value: 2,
+          label: '異常'
+        },
+        {
+          id: 12,
+          name: "house上料站故障",
+          lightColor: 1,
+          value: 7,
+          label: '異常'
+        },
+        {
+          id: 13,
+          name: "House供料PP夾爪氣缸故障",
+          lightColor: 2,
+          value: 7,
+          label: '非異常'
+        },
+        {
+          id: 14,
+          name: "Shell異常",
+          lightColor: 2,
+          value: 7,
+          label: '非異常',
+          date: '2022/04/24 06:00',
+          frequency: '日預測'
+        },
+        {
+          id: 15,
+          name: "Shell尾料裁切氣缸故障",
+          lightColor: 2,
+          value: 1,
+          label: '非異常'
+        }
+      ],
+      "Device15": [
+        {
+          id: 1,
+          name: "出料撥爪橫移氣缸故障",
+          lightColor: 1,
+          value: 2,
+          label: '異常',
+          date: '2022/04/24 06:00',
+          frequency: '日預測'
+        },
+        {
+          id: 2,
+          name: "出料站氣缸故障",
+          lightColor: 1,
+          value: 7,
+          label: '異常'
+        },
+        {
+          id: 3,
+          name: "出料翻轉氣缸故障",
+          lightColor: 2,
+          value: 7,
+          label: '非異常',
+          date: '2022/04/24 06:00',
+          frequency: '日預測'
+        },
+        {
+          id: 4,
+          name: "轉盤下料站故障",
+          lightColor: 2,
+          value: 7,
+          label: '非異常'
+        },
+        {
+          id: 5,
+          name: "軸4-House旋轉馬達故障",
+          lightColor: 2,
+          value: 1,
+          label: '非異常'
+        },
+        {
+          id: 6,
+          name: "軸5-House供料PP馬達故障",
+          lightColor: 1,
+          value: 2,
+          label: '異常'
+        },
+        {
+          id: 7,
+          name: "軸8-DD取料PP夾爪氣缸故障",
+          lightColor: 1,
+          value: 7,
+          label: '異常'
+        },
+        {
+          id: 8,
+          name: "軸10-出料搬送上下故障",
+          lightColor: 2,
+          value: 7,
+          label: '非異常'
+        },
+        {
+          id: 9,
+          name: "DD取料PP夾爪氣缸故障",
+          lightColor: 2,
+          value: 7,
+          label: '非異常'
+        },
+        {
+          id: 10,
+          name: "DD轉盤工位3壓入氣缸故障",
+          lightColor: 1,
+          value: 7,
+          label: '異常',
+          date: '2022/04/24 06:00',
+          frequency: '日預測'
+        },
+        {
+          id: 11,
+          name: "DD轉盤站故障",
+          lightColor: 1,
+          value: 2,
+          label: '異常'
+        },
+        {
+          id: 12,
+          name: "house上料站故障",
+          lightColor: 1,
+          value: 7,
+          label: '異常'
+        },
+        {
+          id: 13,
+          name: "House供料PP夾爪氣缸故障",
+          lightColor: 2,
+          value: 7,
+          label: '非異常'
+        },
+        {
+          id: 14,
+          name: "Shell異常",
+          lightColor: 2,
+          value: 7,
+          label: '非異常',
+          date: '2022/04/24 06:00',
+          frequency: '日預測'
+        },
+        {
+          id: 15,
+          name: "Shell尾料裁切氣缸故障",
+          lightColor: 2,
+          value: 1,
+          label: '非異常'
         }
       ]
     }
   }
 
   const pieData = [
-    { value: 1, label: '異常增加' },
-    { value: 1, label: '需注意' },
-    { value: 1, label: '穩定' },
-    { value: 1, label: '事件減少' },
+    { value: 1, label: '異常' },
+    { value: 1, label: '非異常' },
   ];
   const pieData2 = [
-    { value: 11, label: '異常增加' },
-    { value: 8, label: '需注意' },
-    { value: 5, label: '穩定' },
-    { value: 17, label: '事件減少' },
+    { value: 11, label: '異常' },
+    { value: 8, label: '非異常' },
   ];
   const pieData3 = [
-    { value: 6, label: '異常增加' },
-    { value: 10, label: '需注意' },
-    { value: 14, label: '穩定' },
-    { value: 4, label: '事件減少' },
+    { value: 6, label: '異常' },
+    { value: 10, label: '非異常' },
   ];
   const size = {
     width: 400,
@@ -482,131 +902,141 @@ export default function Statistics({ token, setAlert, ...rest }) {
   const createDeviceCard = (data) => {
     return (
       <div>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-          <LoadingButton variant="contained" color="info" onClick={togglePause}>
-            {isPaused ? '恢復輪播' : '暫停輪播'}
-          </LoadingButton>
-        </Box>
-        <Carousel
-          showArrows={false}
-          renderIndicator={customRenderIndicator}
-          // renderArrowPrev={renderCustomPrevButton}
-          // renderArrowNext={renderCustomNextButton}
-          infiniteLoop={true}
-          autoPlay={!isPaused}
-          stopOnHover={true}
-          interval={3000}
-        >
-          {Object.keys(data).map((project) => (
-            Object.keys(data[project]).map((device) => (
-              <div>
-                <Card key={device}>
-                  <Box sx={{ bgcolor: '#696969' }}>
-                    <CardHeader title={project + "-" + device} color="#696969" align="center" />
-                  </Box>
-                  <Grid container spacing={2}>
-                    <Grid xs={3}>
-                      <Box border={1} sx={{ mt: 4, ml: 6, width: 120, height: 'auto' }}>
-                        <Typography align="center" fontSize={25}>異常增加</Typography>
-                        <Box sx={{ bgcolor: '#C5291C', width: 'auto', height: 'auto' }}>
-                          <Typography align="center" fontSize={20}>lightColor</Typography>
+        {Object.keys(data).map((project) => (
+          <div>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+              <LoadingButton variant="contained" color="info" onClick={togglePause}>
+                {isPaused ? '恢復輪播' : '暫停輪播'}
+              </LoadingButton>
+            </Box>
+            <Carousel
+              showArrows={false}
+              renderIndicator={customRenderIndicator}
+              // renderArrowPrev={renderCustomPrevButton}
+              // renderArrowNext={renderCustomNextButton}
+              infiniteLoop={true}
+              autoPlay={!isPaused}
+              stopOnHover={true}
+              interval={3000}
+            >
+              {Object.keys(data[project]).map((device) => (
+                <div>
+                  <Card key={device}>
+                    <Box sx={{ bgcolor: '#696969' }}>
+                      <CardHeader title={project + "-" + device} color="#696969" align="center" />
+                    </Box>
+                    <Grid container spacing={2}>
+                      <Grid xs={3}>
+                        <Box border={1} sx={{ mt: 4, ml: 6, width: 120, height: 'auto' }}>
+                          <Typography align="center" fontSize={25}>異常</Typography>
+                          <Box sx={{ bgcolor: '#C5291C', width: 'auto', height: 'auto' }}>
+                            <Typography align="center" fontSize={20}>lightColor</Typography>
+                          </Box>
                         </Box>
-                      </Box>
-                      <Box border={1} sx={{ mt: 4, ml: 6, width: 118, height: 'auto' }}>
-                        <Typography align="center" fontSize={25}>需注意</Typography>
-                        <Box sx={{ bgcolor: '#F5C242', width: 'auto', height: 'auto' }}>
-                          <Typography align="center" fontSize={20}>lightColor</Typography>
+                        <Box border={1} sx={{ mt: 4, ml: 6, width: 118, height: 'auto' }}>
+                          <Typography align="center" fontSize={25}>非異常</Typography>
+                          <Box sx={{ bgcolor: '#4CA85A', width: 'auto', height: 'auto' }}>
+                            <Typography align="center" fontSize={20}>lightColor</Typography>
+                          </Box>
                         </Box>
-                      </Box>
-                      <Box border={1} sx={{ mt: 4, ml: 6, width: 118, height: 'auto' }}>
-                        <Typography align="center" fontSize={25}>穩定</Typography>
-                        <Box sx={{ bgcolor: '#4CA85A', width: 'auto', height: 'auto' }}>
-                          <Typography align="center" fontSize={20}>lightColor</Typography>
+                      </Grid>
+                      <Grid xs={6}>
+                        <Box sx={{ mt: 10 }}>
+                          <PieChart
+                            colors={['#C5291C', '#4CA85A']}
+                            series={[
+                              {
+                                arcLabel: (item) => `${item.label} (${item.value})`,
+                                arcLabelMinAngle: 50,
+                                data: getPie(device),
+                              },
+                            ]}
+                            sx={{
+                              [`& .${pieArcLabelClasses.root}`]: {
+                                fill: 'default',
+                                fontWeight: 'bold',
+                              },
+                            }}
+                            width={600}
+                            height={300}
+                          />
                         </Box>
-                      </Box>
-                      <Box border={1} sx={{ mt: 4, ml: 6, width: 118, height: 'auto' }}>
-                        <Typography align="center" fontSize={25}>事件減少</Typography>
-                        <Box sx={{ bgcolor: '#4169e1', width: 'auto', height: 'auto' }}>
-                          <Typography align="center" fontSize={20}>lightColor</Typography>
-                        </Box>
-                      </Box>
+                      </Grid>
                     </Grid>
-                    <Grid xs={6}>
-                      <Box sx={{ mt: 10 }}>
-                        <PieChart
-                          colors={['#C5291C', '#F5C242', '#4CA85A', '#4169e1']}
-                          series={[
-                            {
-                              arcLabel: (item) => `${item.label} (${item.value})`,
-                              arcLabelMinAngle: 50,
-                              data: getPie(device),
-                            },
-                          ]}
-                          sx={{
-                            [`& .${pieArcLabelClasses.root}`]: {
-                              fill: 'default',
-                              fontWeight: 'bold',
-                            },
-                          }}
-                          width={600}
-                          height={300}
-                        />
-                      </Box>
-                    </Grid>
-                  </Grid>
-                  <Divider sx={{ mt: 3, borderBottomWidth: 3 }} />
-                  <Grid container spacing={2} mt={1}>
-                    <Grid item xs={12} md={12}>
-                      <TableContainer component={Paper} style={tableContainerStyle.tableContainer}>
-                        <Table>
-                          <TableHead style={{ backgroundColor: '#696969' }}>
-                            <Grid container spacing={1}>
-                              <Grid xs={4}>
-                                <Box align="left" sx={{ height: 'auto', ml: 2 }}>
-                                  <TableCell align="left" ><Typography fontSize={20}>類型</Typography></TableCell>
-                                </Box>
+                    <Divider sx={{ mt: 3, borderBottomWidth: 3 }} />
+                    <Grid container spacing={2} mt={1}>
+                      <Grid item xs={12} md={12}>
+                        <TableContainer component={Paper} style={tableContainerStyle.tableContainer}>
+                          <Table>
+                            <TableHead style={{ backgroundColor: '#696969' }}>
+                              <Grid container spacing={1}>
+                                <Grid xs={1}>
+                                  <Box align="center" sx={{ height: 'auto' }}>
+                                    <TableCell align="left" ><Typography fontSize={20}>類型</Typography></TableCell>
+                                  </Box>
+                                </Grid>
+                                <Grid xs={4}>
+                                  <Box align="center" sx={{ height: 'auto' }}>
+                                    <TableCell align="left" ><Typography fontSize={20}>異常事件</Typography></TableCell>
+                                  </Box>
+                                </Grid>
+                                <Grid xs={4}>
+                                  <Box align="center" sx={{ height: 'auto' }}>
+                                    <TableCell align="left" ><Typography fontSize={20}>前次發生時間</Typography></TableCell>
+                                  </Box>
+                                </Grid>
+                                <Grid xs={2}>
+                                  <Box align="center" sx={{ height: 'auto' }}>
+                                    <TableCell align="left" ><Typography fontSize={20}>預測週期</Typography></TableCell>
+                                  </Box>
+                                </Grid>
                               </Grid>
-                              <Grid xs={7}>
-                                <Box align="left" sx={{ height: 'auto', ml: 20 }}>
-                                  <TableCell align="left" ><Typography fontSize={20}>事件</Typography></TableCell>
-                                </Box>
-                              </Grid>
-                            </Grid>
-                          </TableHead>
-                          <TableBody>
-                            {data[project][device].map((columns) => (
-                              <TableRow
-                                key={columns.name}
-                              >
-                                <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center">
-                                  <Grid container spacing={1}>
-                                    <Grid xs={4}>
-                                      <Box align="center" sx={{ bgcolor: getColor(columns.lightColor), width: 100, height: 'auto' }}>
-                                        <Typography fontSize={20}>{columns.label}</Typography>
-                                      </Box>
+                            </TableHead>
+                            <TableBody>
+                              {data[project][device].map((columns) => (
+                                <TableRow
+                                  key={columns.name}
+                                >
+                                  <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center">
+                                    <Grid container spacing={1}>
+                                      <Grid xs={1}>
+                                        <Box align="center" sx={{ bgcolor: getColor(columns.lightColor), height: 'auto' }}>
+                                          <Typography fontSize={20}>{columns.label}</Typography>
+                                        </Box>
+                                      </Grid>
+                                      <Grid xs={4}>
+                                        <Box align="center" sx={{ height: 'auto' }}>
+                                          <Typography fontSize={20}>{columns.name}</Typography>
+                                        </Box>
+                                      </Grid>
+                                      <Grid xs={4}>
+                                        <Box align="center" sx={{ height: 'auto' }}>
+                                          <Typography fontSize={20}>{columns.date}</Typography>
+                                        </Box>
+                                      </Grid>
+                                      <Grid xs={2}>
+                                        <Box align="center" sx={{ height: 'auto' }}>
+                                          <Typography fontSize={20}>{columns.frequency}</Typography>
+                                        </Box>
+                                      </Grid>
                                     </Grid>
-                                    <Grid xs={7}>
-                                      <Box align="left" sx={{ width: 400, height: 'auto', ml: 20 }}>
-                                        <Typography fontSize={20}>{columns.name}</Typography>
-                                      </Box>
-                                    </Grid>
-                                  </Grid>
-                                </TableCell>
-                              </TableRow>
-                            ))}
-                          </TableBody>
-                        </Table>
-                      </TableContainer>
+                                  </TableCell>
+                                </TableRow>
+                              ))}
+                            </TableBody>
+                          </Table>
+                        </TableContainer>
+                      </Grid>
                     </Grid>
-                  </Grid>
-                </Card>
-              </div>
-            ))
-          )
-          )
-          }
-        </Carousel >
-      </div >
+                  </Card>
+                </div>
+              ))}
+            </Carousel>
+          </div>
+        )
+        )
+        }
+      </div>
     )
   };
 
@@ -617,6 +1047,89 @@ export default function Statistics({ token, setAlert, ...rest }) {
 
   return (
     <ThemeProvider theme={darkTheme}>
+      <Card sx={{ mb: 3 }}>
+        <Box sx={{ bgcolor: '#696969' }}>
+          <CardHeader title="机況查詢頁面:" color="#62aaf4" />
+        </Box>
+        <Divider sx={{ borderBottomWidth: 3 }} />
+        <CardContent>
+          <Grid container spacing={1}>
+            <Grid item xs={12} md={12}>
+              <Typography variant="h4" fontWeight="medium" mr={2}>
+                條件篩選:
+              </Typography>
+              <Box>
+                <Box sx={{ mt: 1, ml: 4 }} display="flex" component="form" role="form">
+                  <Box align="center" display="flex">
+                    <Typography variant="h5" fontWeight="medium" mr={2}>
+                      專案名稱:
+                    </Typography>
+                  </Box>
+                  <Box>
+                    <FormControl>
+                      <InputLabel id="operation-type-select-label">專案名稱</InputLabel>
+                      <Select
+                        labelId="permission-select-label"
+                        id="permission-select"
+                        value={projectName}
+                        label="專案名稱"
+                        onChange={projectNameChange}
+                        style={{ minWidth: "271px", height: "56px" }}
+                      >
+                        <MenuItem value={1}>D7X</MenuItem>
+                        <MenuItem value={2}>D6Y</MenuItem>
+                        <MenuItem value={3}>D1Y</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Box>
+                </Box>
+                <Box sx={{ mt: 1, ml: 4 }} display="flex" component="form" role="form">
+                  <Box align="center" display="flex">
+                    <Typography align="center" variant="h5" mr={2}>
+                      机台名稱:
+                    </Typography>
+                  </Box>
+                  <Box>
+                    <FormControl>
+                      <InputLabel id="operation-type-select-label">机台名稱</InputLabel>
+                      <Select
+                        labelId="permission-select-label"
+                        id="permission-select"
+                        value={deviceName}
+                        label="机台名稱"
+                        onChange={deviceNameChange}
+                        style={{ minWidth: "271px", height: "56px" }}
+                      >
+                        <MenuItem value={1}>Device1</MenuItem>
+                        <MenuItem value={2}>Device2</MenuItem>
+                        <MenuItem value={3}>Device3</MenuItem>
+                        <MenuItem value={4}>Device4</MenuItem>
+                        <MenuItem value={5}>Device5</MenuItem>
+                        <MenuItem value={6}>Device6</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Box>
+                </Box>
+                <Box sx={{ ml: 4 }} display="flex">
+                  <LoadingButton variant="contained"
+                    size="large"
+                    component="span"
+                    color="info"
+                    sx={{
+                      borderRadius: 4,
+                      justifyContent: 'center',
+                      letterSpacing: 3,
+                      mt: 3
+                    }}
+                  >
+                    查詢
+                  </LoadingButton>
+                </Box>
+              </Box>
+            </Grid>
+          </Grid>
+        </CardContent>
+      </Card>
       {createDeviceCard(columns)}
     </ThemeProvider>
   );
