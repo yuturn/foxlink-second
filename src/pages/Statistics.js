@@ -472,7 +472,7 @@ export default function Statistics({ token, setAlert, ...rest }) {
 
   const tableCellStyle = {
     extendedCell: {
-      borderBottom: 'none', // 移除底部分隔線
+      // borderBottom: 'none', // 移除底部分隔線
       // paddingLeft: '20px',  // 調整內邊距以增加內容區域
       // paddingRight: '20px', // 調整內邊距以增加內容區域
     },
@@ -556,12 +556,22 @@ export default function Statistics({ token, setAlert, ...rest }) {
                   </Grid>
                   <Divider sx={{ mt: 3, borderBottomWidth: 3 }} />
                   <Grid container spacing={2} mt={1}>
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12} md={12}>
                       <TableContainer component={Paper} style={tableContainerStyle.tableContainer}>
                         <Table>
                           <TableHead style={{ backgroundColor: '#696969' }}>
-                            <TableCell align="left" style={{ width: '20% !important' }}><Typography fontSize={20}>類型</Typography></TableCell>
-                            <TableCell align="left" style={{ width: '80% !important' }}><Typography fontSize={20}>事件</Typography></TableCell>
+                            <Grid container spacing={1}>
+                              <Grid xs={4}>
+                                <Box align="left" sx={{ height: 'auto', ml: 2 }}>
+                                  <TableCell align="left" ><Typography fontSize={20}>類型</Typography></TableCell>
+                                </Box>
+                              </Grid>
+                              <Grid xs={7}>
+                                <Box align="left" sx={{ height: 'auto', ml: 20 }}>
+                                  <TableCell align="left" ><Typography fontSize={20}>事件</Typography></TableCell>
+                                </Box>
+                              </Grid>
+                            </Grid>
                           </TableHead>
                           <TableBody>
                             {data[project][device].map((columns) => (
@@ -570,13 +580,13 @@ export default function Statistics({ token, setAlert, ...rest }) {
                               >
                                 <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center">
                                   <Grid container spacing={1}>
-                                    <Grid xs={6}>
+                                    <Grid xs={4}>
                                       <Box align="center" sx={{ bgcolor: getColor(columns.lightColor), width: 100, height: 'auto' }}>
                                         <Typography fontSize={20}>{columns.label}</Typography>
                                       </Box>
                                     </Grid>
-                                    <Grid xs={4}>
-                                      <Box align="left" sx={{ width: 400, height: 'auto' }}>
+                                    <Grid xs={7}>
+                                      <Box align="left" sx={{ width: 400, height: 'auto', ml: 20 }}>
                                         <Typography fontSize={20}>{columns.name}</Typography>
                                       </Box>
                                     </Grid>
