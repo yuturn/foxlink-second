@@ -36,7 +36,7 @@ const darkTheme = createTheme({
   },
 });
 
-export default function Statistics({ token, setAlert, ...rest }) {
+export default function Machinehealth({ token, setAlert, ...rest }) {
   const _isMounted = useRef(true);
   const [statusData, setData] = useState();
   const [workshop, setWorkshop] = useState("");
