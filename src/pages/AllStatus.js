@@ -146,7 +146,9 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     name: "tray盤站故障",
                     lightColor: 1,
                     value: 10,
-                    label: '異常'
+                    label: '異常',
+                    date: '2022/09/26 10:30',
+                    frequency: '週預測'
                 },
                 {
                     id: 3,
@@ -162,7 +164,9 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     name: "Glue異常",
                     lightColor: 2,
                     value: 10,
-                    label: '非異常'
+                    label: '非異常',
+                    date: '2022/11/15 22:30',
+                    frequency: '週預測'
                 }
             ],
             "Device6": [
@@ -171,42 +175,54 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     name: "1#插針定位氣缸故障",
                     lightColor: 2,
                     value: 7,
-                    label: '非異常'
+                    label: '非異常',
+                    date: '2022/11/15 22:30',
+                    frequency: '週預測'
                 },
                 {
                     id: 2,
                     name: "2#插針定位氣缸故障",
                     lightColor: 1,
                     value: 7,
-                    label: '異常'
+                    label: '異常',
+                    date: '2022/01/02 15:00',
+                    frequency: '日預測'
                 },
                 {
                     id: 3,
                     name: "2#插針站故障",
                     lightColor: 1,
                     value: 2,
-                    label: '異常'
+                    label: '異常',
+                    date: '2022/11/15 22:30',
+                    frequency: '週預測'
                 },
                 {
                     id: 4,
                     name: "主撥料站故障",
                     lightColor: 1,
                     value: 2,
-                    label: '異常'
+                    label: '異常',
+                    date: '2022/04/02 14:00',
+                    frequency: '日預測'
                 },
                 {
                     id: 5,
                     name: "出料撥料氣缸氣缸故障",
                     lightColor: 1,
                     value: 7,
-                    label: '異常'
+                    label: '異常',
+                    date: '2022/05/23 15:00',
+                    frequency: '日預測'
                 },
                 {
                     id: 6,
                     name: "出料翻轉氣缸氣缸故障",
                     lightColor: 2,
                     value: 7,
-                    label: '非異常'
+                    label: '非異常',
+                    date: '2022/11/15 22:30',
+                    frequency: '週預測'
                 },
                 {
                     id: 7,
@@ -222,7 +238,9 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     name: "撥料上下1氣缸故障",
                     lightColor: 2,
                     value: 7,
-                    label: '非異常'
+                    label: '非異常',
+                    date: '2022/08/17 08:30',
+                    frequency: '週預測'
                 },
                 {
                     id: 9,
@@ -238,14 +256,18 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     name: "撥料上下3氣缸故障",
                     lightColor: 1,
                     value: 7,
-                    label: '異常'
+                    label: '異常',
+                    date: '2022/02/05 18:00',
+                    frequency: '週預測'
                 },
                 {
                     id: 11,
                     name: "撥料上下4氣缸故障",
                     lightColor: 2,
                     value: 7,
-                    label: '非異常'
+                    label: '非異常',
+                    date: '2022/02/05 18:00',
+                    frequency: '週預測'
                 },
                 {
                     id: 12,
@@ -261,7 +283,9 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     name: "整形氣缸故障",
                     lightColor: 2,
                     value: 1,
-                    label: '非異常'
+                    label: '非異常',
+                    date: '2022/12/13 18:12',
+                    frequency: '週預測'
                 },
                 {
                     id: 14,
@@ -277,14 +301,18 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     name: "NG排料氣缸故障",
                     lightColor: 1,
                     value: 7,
-                    label: '異常'
+                    label: '異常',
+                    date: '2022/02/05 18:00',
+                    frequency: '週預測'
                 },
                 {
                     id: 16,
                     name: "軸7-2#送料馬達故障",
                     lightColor: 2,
                     value: 7,
-                    label: '非異常'
+                    label: '非異常',
+                    date: '2022/02/05 18:00',
+                    frequency: '週預測'
                 },
                 {
                     id: 17,
@@ -311,7 +339,9 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     name: "出料站氣缸故障",
                     lightColor: 1,
                     value: 7,
-                    label: '異常'
+                    label: '異常',
+                    date: '2022/02/05 18:00',
+                    frequency: '週預測'
                 },
                 {
                     id: 3,
@@ -327,42 +357,54 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     name: "轉盤下料站故障",
                     lightColor: 2,
                     value: 7,
-                    label: '非異常'
+                    label: '非異常',
+                    date: '2022/02/05 18:00',
+                    frequency: '週預測'
                 },
                 {
                     id: 5,
                     name: "軸4-House旋轉馬達故障",
                     lightColor: 2,
                     value: 1,
-                    label: '非異常'
+                    label: '非異常',
+                    date: '2022/02/05 18:00',
+                    frequency: '週預測'
                 },
                 {
                     id: 6,
                     name: "軸5-House供料PP馬達故障",
                     lightColor: 1,
                     value: 2,
-                    label: '異常'
+                    label: '異常',
+                    date: '2022/02/05 18:00',
+                    frequency: '週預測'
                 },
                 {
                     id: 7,
                     name: "軸8-DD取料PP夾爪氣缸故障",
                     lightColor: 1,
                     value: 7,
-                    label: '異常'
+                    label: '異常',
+                    date: '2022/02/05 18:00',
+                    frequency: '週預測'
                 },
                 {
                     id: 8,
                     name: "軸10-出料搬送上下故障",
                     lightColor: 2,
                     value: 7,
-                    label: '非異常'
+                    label: '非異常',
+                    date: '2022/02/05 18:00',
+                    frequency: '週預測'
                 },
                 {
                     id: 9,
                     name: "DD取料PP夾爪氣缸故障",
                     lightColor: 2,
                     value: 7,
-                    label: '非異常'
+                    label: '非異常',
+                    date: '2022/02/05 18:00',
+                    frequency: '週預測'
                 },
                 {
                     id: 10,
@@ -378,21 +420,27 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     name: "DD轉盤站故障",
                     lightColor: 1,
                     value: 2,
-                    label: '異常'
+                    label: '異常',
+                    date: '2022/02/05 18:00',
+                    frequency: '週預測'
                 },
                 {
                     id: 12,
                     name: "house上料站故障",
                     lightColor: 1,
                     value: 7,
-                    label: '異常'
+                    label: '異常',
+                    date: '2022/12/12 12:00',
+                    frequency: '週預測'
                 },
                 {
                     id: 13,
                     name: "House供料PP夾爪氣缸故障",
                     lightColor: 2,
                     value: 7,
-                    label: '非異常'
+                    label: '非異常',
+                    date: '2022/10/10 10:00',
+                    frequency: '週預測'
                 },
                 {
                     id: 14,
@@ -408,7 +456,9 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     name: "Shell尾料裁切氣缸故障",
                     lightColor: 2,
                     value: 1,
-                    label: '非異常'
+                    label: '非異常',
+                    date: '2022/02/15 12:15',
+                    frequency: '週預測'
                 }
             ]
         },
@@ -428,7 +478,9 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     name: "tray盤站故障",
                     lightColor: 1,
                     value: 10,
-                    label: '異常'
+                    label: '異常',
+                    date: '2022/09/26 10:30',
+                    frequency: '週預測'
                 },
                 {
                     id: 3,
@@ -444,7 +496,9 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     name: "Glue異常",
                     lightColor: 2,
                     value: 10,
-                    label: '非異常'
+                    label: '非異常',
+                    date: '2022/11/15 22:30',
+                    frequency: '週預測'
                 }
             ],
             "Device6": [
@@ -453,42 +507,54 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     name: "1#插針定位氣缸故障",
                     lightColor: 2,
                     value: 7,
-                    label: '非異常'
+                    label: '非異常',
+                    date: '2022/11/15 22:30',
+                    frequency: '週預測'
                 },
                 {
                     id: 2,
                     name: "2#插針定位氣缸故障",
                     lightColor: 1,
                     value: 7,
-                    label: '異常'
+                    label: '異常',
+                    date: '2022/01/02 15:00',
+                    frequency: '日預測'
                 },
                 {
                     id: 3,
                     name: "2#插針站故障",
                     lightColor: 1,
                     value: 2,
-                    label: '異常'
+                    label: '異常',
+                    date: '2022/11/15 22:30',
+                    frequency: '週預測'
                 },
                 {
                     id: 4,
                     name: "主撥料站故障",
                     lightColor: 1,
                     value: 2,
-                    label: '異常'
+                    label: '異常',
+                    date: '2022/04/02 14:00',
+                    frequency: '日預測'
                 },
                 {
                     id: 5,
                     name: "出料撥料氣缸氣缸故障",
                     lightColor: 1,
                     value: 7,
-                    label: '異常'
+                    label: '異常',
+                    date: '2022/05/23 15:00',
+                    frequency: '日預測'
                 },
                 {
                     id: 6,
                     name: "出料翻轉氣缸氣缸故障",
                     lightColor: 2,
                     value: 7,
-                    label: '非異常'
+                    label: '非異常',
+                    date: '2022/11/15 22:30',
+                    frequency: '週預測'
                 },
                 {
                     id: 7,
@@ -504,7 +570,9 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     name: "撥料上下1氣缸故障",
                     lightColor: 2,
                     value: 7,
-                    label: '非異常'
+                    label: '非異常',
+                    date: '2022/08/17 08:30',
+                    frequency: '週預測'
                 },
                 {
                     id: 9,
@@ -520,14 +588,18 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     name: "撥料上下3氣缸故障",
                     lightColor: 1,
                     value: 7,
-                    label: '異常'
+                    label: '異常',
+                    date: '2022/02/05 18:00',
+                    frequency: '週預測'
                 },
                 {
                     id: 11,
                     name: "撥料上下4氣缸故障",
                     lightColor: 2,
                     value: 7,
-                    label: '非異常'
+                    label: '非異常',
+                    date: '2022/02/05 18:00',
+                    frequency: '週預測'
                 },
                 {
                     id: 12,
@@ -543,7 +615,9 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     name: "整形氣缸故障",
                     lightColor: 2,
                     value: 1,
-                    label: '非異常'
+                    label: '非異常',
+                    date: '2022/12/13 18:12',
+                    frequency: '週預測'
                 },
                 {
                     id: 14,
@@ -559,14 +633,18 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     name: "NG排料氣缸故障",
                     lightColor: 1,
                     value: 7,
-                    label: '異常'
+                    label: '異常',
+                    date: '2022/02/05 18:00',
+                    frequency: '週預測'
                 },
                 {
                     id: 16,
                     name: "軸7-2#送料馬達故障",
                     lightColor: 2,
                     value: 7,
-                    label: '非異常'
+                    label: '非異常',
+                    date: '2022/02/05 18:00',
+                    frequency: '週預測'
                 },
                 {
                     id: 17,
@@ -593,7 +671,9 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     name: "出料站氣缸故障",
                     lightColor: 1,
                     value: 7,
-                    label: '異常'
+                    label: '異常',
+                    date: '2022/02/05 18:00',
+                    frequency: '週預測'
                 },
                 {
                     id: 3,
@@ -609,42 +689,54 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     name: "轉盤下料站故障",
                     lightColor: 2,
                     value: 7,
-                    label: '非異常'
+                    label: '非異常',
+                    date: '2022/02/05 18:00',
+                    frequency: '週預測'
                 },
                 {
                     id: 5,
                     name: "軸4-House旋轉馬達故障",
                     lightColor: 2,
                     value: 1,
-                    label: '非異常'
+                    label: '非異常',
+                    date: '2022/02/05 18:00',
+                    frequency: '週預測'
                 },
                 {
                     id: 6,
                     name: "軸5-House供料PP馬達故障",
                     lightColor: 1,
                     value: 2,
-                    label: '異常'
+                    label: '異常',
+                    date: '2022/02/05 18:00',
+                    frequency: '週預測'
                 },
                 {
                     id: 7,
                     name: "軸8-DD取料PP夾爪氣缸故障",
                     lightColor: 1,
                     value: 7,
-                    label: '異常'
+                    label: '異常',
+                    date: '2022/02/05 18:00',
+                    frequency: '週預測'
                 },
                 {
                     id: 8,
                     name: "軸10-出料搬送上下故障",
                     lightColor: 2,
                     value: 7,
-                    label: '非異常'
+                    label: '非異常',
+                    date: '2022/02/05 18:00',
+                    frequency: '週預測'
                 },
                 {
                     id: 9,
                     name: "DD取料PP夾爪氣缸故障",
                     lightColor: 2,
                     value: 7,
-                    label: '非異常'
+                    label: '非異常',
+                    date: '2022/02/05 18:00',
+                    frequency: '週預測'
                 },
                 {
                     id: 10,
@@ -660,21 +752,27 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     name: "DD轉盤站故障",
                     lightColor: 1,
                     value: 2,
-                    label: '異常'
+                    label: '異常',
+                    date: '2022/02/05 18:00',
+                    frequency: '週預測'
                 },
                 {
                     id: 12,
                     name: "house上料站故障",
                     lightColor: 1,
                     value: 7,
-                    label: '異常'
+                    label: '異常',
+                    date: '2022/12/12 12:00',
+                    frequency: '週預測'
                 },
                 {
                     id: 13,
                     name: "House供料PP夾爪氣缸故障",
                     lightColor: 2,
                     value: 7,
-                    label: '非異常'
+                    label: '非異常',
+                    date: '2022/10/10 10:00',
+                    frequency: '週預測'
                 },
                 {
                     id: 14,
@@ -690,125 +788,167 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     name: "Shell尾料裁切氣缸故障",
                     lightColor: 2,
                     value: 1,
-                    label: '非異常'
+                    label: '非異常',
+                    date: '2022/02/15 12:15',
+                    frequency: '週預測'
                 }
             ],
             "Device15": [
                 {
                     id: 1,
-                    name: "出料撥爪橫移氣缸故障",
-                    lightColor: 1,
-                    value: 2,
-                    label: '異常',
-                    date: '2022/04/24 06:00',
-                    frequency: '日預測'
+                    name: "1#插針定位氣缸故障",
+                    lightColor: 2,
+                    value: 7,
+                    label: '非異常',
+                    date: '2022/11/15 22:30',
+                    frequency: '週預測'
                 },
                 {
                     id: 2,
-                    name: "出料站氣缸故障",
-                    lightColor: 1,
-                    value: 7,
-                    label: '異常'
-                },
-                {
-                    id: 3,
-                    name: "出料翻轉氣缸故障",
-                    lightColor: 2,
-                    value: 7,
-                    label: '非異常',
-                    date: '2022/04/24 06:00',
-                    frequency: '日預測'
-                },
-                {
-                    id: 4,
-                    name: "轉盤下料站故障",
-                    lightColor: 2,
-                    value: 7,
-                    label: '非異常'
-                },
-                {
-                    id: 5,
-                    name: "軸4-House旋轉馬達故障",
-                    lightColor: 2,
-                    value: 1,
-                    label: '非異常'
-                },
-                {
-                    id: 6,
-                    name: "軸5-House供料PP馬達故障",
-                    lightColor: 1,
-                    value: 2,
-                    label: '異常'
-                },
-                {
-                    id: 7,
-                    name: "軸8-DD取料PP夾爪氣缸故障",
-                    lightColor: 1,
-                    value: 7,
-                    label: '異常'
-                },
-                {
-                    id: 8,
-                    name: "軸10-出料搬送上下故障",
-                    lightColor: 2,
-                    value: 7,
-                    label: '非異常'
-                },
-                {
-                    id: 9,
-                    name: "DD取料PP夾爪氣缸故障",
-                    lightColor: 2,
-                    value: 7,
-                    label: '非異常'
-                },
-                {
-                    id: 10,
-                    name: "DD轉盤工位3壓入氣缸故障",
+                    name: "2#插針定位氣缸故障",
                     lightColor: 1,
                     value: 7,
                     label: '異常',
-                    date: '2022/04/24 06:00',
+                    date: '2022/01/02 15:00',
                     frequency: '日預測'
                 },
                 {
-                    id: 11,
-                    name: "DD轉盤站故障",
+                    id: 3,
+                    name: "2#插針站故障",
                     lightColor: 1,
                     value: 2,
-                    label: '異常'
+                    label: '異常',
+                    date: '2022/11/15 22:30',
+                    frequency: '週預測'
                 },
                 {
-                    id: 12,
-                    name: "house上料站故障",
+                    id: 4,
+                    name: "主撥料站故障",
+                    lightColor: 1,
+                    value: 2,
+                    label: '異常',
+                    date: '2022/04/02 14:00',
+                    frequency: '日預測'
+                },
+                {
+                    id: 5,
+                    name: "出料撥料氣缸氣缸故障",
                     lightColor: 1,
                     value: 7,
-                    label: '異常'
+                    label: '異常',
+                    date: '2022/05/23 15:00',
+                    frequency: '日預測'
                 },
                 {
-                    id: 13,
-                    name: "House供料PP夾爪氣缸故障",
-                    lightColor: 2,
-                    value: 7,
-                    label: '非異常'
-                },
-                {
-                    id: 14,
-                    name: "Shell異常",
+                    id: 6,
+                    name: "出料翻轉氣缸氣缸故障",
                     lightColor: 2,
                     value: 7,
                     label: '非異常',
-                    date: '2022/04/24 06:00',
-                    frequency: '日預測'
+                    date: '2022/11/15 22:30',
+                    frequency: '週預測'
+                },
+                {
+                    id: 7,
+                    name: "壓入檢測站故障",
+                    lightColor: 1,
+                    value: 7,
+                    label: '異常',
+                    date: '2022/02/05 18:00',
+                    frequency: '週預測'
+                },
+                {
+                    id: 8,
+                    name: "撥料上下1氣缸故障",
+                    lightColor: 2,
+                    value: 7,
+                    label: '非異常',
+                    date: '2022/08/17 08:30',
+                    frequency: '週預測'
+                },
+                {
+                    id: 9,
+                    name: "撥料上下2氣缸故障",
+                    lightColor: 2,
+                    value: 7,
+                    label: '非異常',
+                    date: '2022/02/05 18:00',
+                    frequency: '週預測'
+                },
+                {
+                    id: 10,
+                    name: "撥料上下3氣缸故障",
+                    lightColor: 1,
+                    value: 7,
+                    label: '異常',
+                    date: '2022/02/05 18:00',
+                    frequency: '週預測'
+                },
+                {
+                    id: 11,
+                    name: "撥料上下4氣缸故障",
+                    lightColor: 2,
+                    value: 7,
+                    label: '非異常',
+                    date: '2022/02/05 18:00',
+                    frequency: '週預測'
+                },
+                {
+                    id: 12,
+                    name: "進料錯位氣缸故障",
+                    lightColor: 1,
+                    value: 7,
+                    label: '異常',
+                    date: '2022/02/05 18:00',
+                    frequency: '週預測'
+                },
+                {
+                    id: 13,
+                    name: "整形氣缸故障",
+                    lightColor: 2,
+                    value: 1,
+                    label: '非異常',
+                    date: '2022/12/13 18:12',
+                    frequency: '週預測'
+                },
+                {
+                    id: 14,
+                    name: "House擋料氣缸故障",
+                    lightColor: 2,
+                    value: 7,
+                    label: '非異常',
+                    date: '2022/02/05 18:00',
+                    frequency: '週預測'
                 },
                 {
                     id: 15,
-                    name: "Shell尾料裁切氣缸故障",
+                    name: "NG排料氣缸故障",
+                    lightColor: 1,
+                    value: 7,
+                    label: '異常',
+                    date: '2022/02/05 18:00',
+                    frequency: '週預測'
+                },
+                {
+                    id: 16,
+                    name: "軸7-2#送料馬達故障",
                     lightColor: 2,
-                    value: 1,
-                    label: '非異常'
+                    value: 7,
+                    label: '非異常',
+                    date: '2022/02/05 18:00',
+                    frequency: '週預測'
+                },
+                {
+                    id: 17,
+                    name: "Bush異常",
+                    lightColor: 1,
+                    value: 7,
+                    label: '異常',
+                    date: '2022/02/05 18:00',
+                    frequency: '週預測'
                 }
-            ]
-        }
+            ],
+        },
     }
 
     const pieData = [
