@@ -1040,7 +1040,6 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
               autoPlay={!isPaused}
               stopOnHover={true}
               interval={3000}
-              showThumbs={false}
             >
               {Object.keys(data[project]).map((device) => (
                 <div>
