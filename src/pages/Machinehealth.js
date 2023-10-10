@@ -44,7 +44,7 @@ const darkTheme = createTheme({
   },
 });
 
-export default function Statistics({ token, setAlert, ...rest }) {
+export default function Machinehealth({ token, setAlert, ...rest }) {
 
   const [isPaused, setIsPaused] = useState(false);
   const [projectName, setProjectName] = useState("");
