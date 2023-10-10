@@ -305,11 +305,6 @@ export default function Project({ token, ...rest }) {
                         <MenuItem value={40}>一般員工</MenuItem>
                       </Select>
                     </FormControl>
-                    <Box ml={2}>
-                      <LoadingButton variant="contained" color="info">
-                        新增
-                      </LoadingButton>
-                    </Box>
                   </Box>
                   <Box display="flex" alignItems="center" pt={3} px={2}>
                     <Box>

@@ -18,7 +18,7 @@ import { Link } from "react-router-dom";
 export const DashboardSidebar = ({ idx, setIdx }) => {
   const items = [
     {
-      url: '/statistics',
+      url: '/Machinehealth',
       icon: (<StatusIcon fontSize="small" />),
       title: '機臺健康狀況',
       active: false
