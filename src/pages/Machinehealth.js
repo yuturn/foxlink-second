@@ -977,24 +977,6 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
     height: 200,
   };
 
-  // 自定義上一頁按鈕
-  const renderCustomPrevButton = (onClickHandler, hasPrev, label) => {
-    return (
-      <LoadingButton onClick={onClickHandler} variant="contained" color="info" className="my-custom-prev-button">
-        上一頁
-      </LoadingButton>
-    );
-  };
-
-  // 自定義下一頁按鈕
-  const renderCustomNextButton = (onClickHandler, hasNext, label) => {
-    return (
-      <LoadingButton onClick={onClickHandler} variant="contained" color="info" className="my-custom-next-button">
-        下一頁
-      </LoadingButton>
-    );
-  };
-
   const [selectedSlide, setSelectedSlide] = useState(0);
 
   const handleSelectSlide = (index) => {
@@ -1058,6 +1040,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
               autoPlay={!isPaused}
               stopOnHover={true}
               interval={3000}
+              showThumbs={false}
             >
               {Object.keys(data[project]).map((device) => (
                 <div>

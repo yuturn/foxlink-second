@@ -49,7 +49,7 @@ export default function App() {
                         <Route element={<Status token={authUser.token} setAlert={setAlert} />} path={'/all-status'}></Route>
                         <Route element={<WorkerinfoUpload setAlert={setAlert} token={authUser.token} />} path={'/worker-info-upload'}></Route>
                         <Route element={<DevicesUpload token={authUser.token} />} path={'/devices-upload'}></Route>
-                        <Route element={<Machinehealth token={authUser.token} setAlert={setAlert} />} path={'/statistics'}></Route>
+                        <Route element={<Machinehealth token={authUser.token} setAlert={setAlert} />} path={'/Machinehealth'}></Route>
                         <Route element={<LOG token={authUser.token} />} path={'/LOG'}></Route>
                         <Route element={<Backup setAlert={setAlert} token={authUser.token} />} path={'/backup'}></Route>
                         <Route element={<MapUpload token={authUser.token} />} path={'/map-upload'}></Route>
