@@ -1106,7 +1106,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                         direction={orderBy === '類型' ? order : 'asc'}
                                         onClick={() => handleRequestSort('類型')}
                                       >
-                                        <Typography fontSize={20}>類型</Typography>
+                                        類型
                                       </TableSortLabel>
                                     </TableCell>
                                   </Box>
