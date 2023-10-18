@@ -1089,12 +1089,12 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                           <Table>
                             <TableHead style={{ backgroundColor: '#696969' }}>
                               <Grid container spacing={1}>
-                                <Grid xs={1}>
-                                  <Box align="center" sx={{ height: 'auto' }}>
+                                <Grid xs={2}>
+                                  <Box align="center" sx={{ height: 'auto' }} style={{ backgroundColor: '#696969' }}>
                                     <TableCell align="left" ><Typography fontSize={20}>類型</Typography></TableCell>
                                   </Box>
                                 </Grid>
-                                <Grid xs={4}>
+                                <Grid xs={3}>
                                   <Box align="center" sx={{ height: 'auto' }}>
                                     <TableCell align="left" ><Typography fontSize={20}>異常事件</Typography></TableCell>
                                   </Box>
@@ -1104,7 +1104,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                     <TableCell align="left" ><Typography fontSize={20}>前次發生時間</Typography></TableCell>
                                   </Box>
                                 </Grid>
-                                <Grid xs={2}>
+                                <Grid xs={3}>
                                   <Box align="center" sx={{ height: 'auto' }}>
                                     <TableCell align="left" ><Typography fontSize={20}>預測週期</Typography></TableCell>
                                   </Box>
