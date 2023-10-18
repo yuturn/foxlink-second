@@ -1048,7 +1048,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                       <CardHeader title={project + "-" + device} color="#696969" align="center" />
                     </Box>
                     <Grid container spacing={1}>
-                      <Grid xs={3}>
+                      <Grid xs={1}>
                         <Box border={1} sx={{ mt: 4, ml: 6, width: 120, height: 'auto' }}>
                           <Typography align="center" fontSize={25}>異常</Typography>
                           <Box sx={{ bgcolor: '#C5291C', width: 'auto', height: 'auto' }}>
@@ -1062,7 +1062,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                           </Box>
                         </Box>
                       </Grid>
-                      <Grid xs={3}>
+                      <Grid xs={5}>
                         <Box sx={{ mt: 10 }}>
                           <PieChart
                             colors={['#C5291C', '#4CA85A']}
