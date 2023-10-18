@@ -1012,6 +1012,8 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
+    consolo.log(order);
+    consolo.log(orderBy);
   };
 
   const tableContainerStyle = {
@@ -1106,7 +1108,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                         direction={orderBy === '類型' ? order : 'asc'}
                                         onClick={() => handleRequestSort('類型')}
                                       >
-                                        類型
+                                        <Typography fontSize={20}>類型</Typography>
                                       </TableSortLabel>
                                     </TableCell>
                                   </Box>
