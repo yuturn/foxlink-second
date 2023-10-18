@@ -1030,21 +1030,10 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
   };
 
   // 动态设置排序规则
-  const getComparator = (column) => {
-    return (a, b) => {
-      if (column === 'label') {
-        // 根据标签（'label'）排序
-        return a.label.localeCompare(b.label);
-      } else if (column === 'frequency') {
-        // 根据频率（'frequency'）排序
-        return a.frequency.localeCompare(b.frequency);
-      } else if (column === 'date') {
-        // 根据日期（'date'）排序
-        return new Date(a.date) - new Date(b.date);
-      }
-      // 如果没有匹配的列名，返回0
-      return 0;
-    };
+  const getComparator = (order) => {
+    return order === 'desc'
+      ? (a, b) => (a[orderBy] > b[orderBy] ? -1 : 1)
+      : (a, b) => (a[orderBy] > b[orderBy] ? 1 : -1);
   };
 
   const createDeviceCard = (data) => {
