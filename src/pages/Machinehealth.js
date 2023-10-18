@@ -1008,14 +1008,10 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
     );
   };
 
-  const handleSortRequest = (column) => {
-    // 检查当前排序列和顺序
-    if (column === orderBy) {
-      setOrder(order === 'asc' ? 'desc' : 'asc');
-    } else {
-      setOrderBy(column);
-      setOrder('asc');
-    }
+  const handleSortRequest = (property) => {
+    const isAsc = orderBy === property && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
+    setOrderBy(property);
   };
 
   const tableContainerStyle = {
