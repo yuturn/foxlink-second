@@ -23,6 +23,7 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import TableSortLabel from '@mui/material';
 import Paper from '@mui/material/Paper';
 import { PieChart, pieArcLabelClasses } from '@mui/x-charts';
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
@@ -46,7 +47,8 @@ const darkTheme = createTheme({
 });
 
 export default function Machinehealth({ token, setAlert, ...rest }) {
-
+  const [order, setOrder] = useState('asc');
+  const [orderBy, setOrderBy] = useState('');
   const [isPaused, setIsPaused] = useState(false);
   const [projectName, setProjectName] = useState("");
   const [deviceName, setDeviceName] = useState("");
@@ -1006,6 +1008,12 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
     );
   };
 
+  const handleRequestSort = (property) => {
+    const isAsc = orderBy === property && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
+    setOrderBy(property);
+  };
+
   const tableContainerStyle = {
     tableContainer: {
       maxHeight: '380px', // 設置表格容器的最大高度
@@ -1091,8 +1099,16 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                             <TableHead sx={{ border: 0 }} style={{ backgroundColor: '#696969' }}>
                               <Grid container spacing={1}>
                                 <Grid xs={2}>
-                                  <Box align="center" sx={{ height: 'auto' }} style={{ backgroundColor: '#696969' }}>
-                                    <TableCell align="left" ><Typography fontSize={20}>類型</Typography></TableCell>
+                                  <Box align="center" sx={{ height: 'auto', border: 0 }}>
+                                    <TableCell align="left" >
+                                      <TableSortLabel
+                                        active={orderBy === '類型'}
+                                        direction={orderBy === '類型' ? order : 'asc'}
+                                        onClick={() => handleRequestSort('類型')}
+                                      >
+                                        <Typography fontSize={20}>類型</Typography>
+                                      </TableSortLabel>
+                                    </TableCell>
                                   </Box>
                                 </Grid>
                                 <Grid xs={3}>
@@ -1120,7 +1136,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                   <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center">
                                     <Grid container spacing={1}>
                                       <Grid xs={2}>
-                                        <Box align="center" sx={{ bgcolor: getColor(columns.lightColor), height: 'auto', border: 0 }}>
+                                        <Box align="center" sx={{ bgcolor: getColor(columns.lightColor), height: 'auto' }}>
                                           <Typography fontSize={20}>{columns.label}</Typography>
                                         </Box>
                                       </Grid>
