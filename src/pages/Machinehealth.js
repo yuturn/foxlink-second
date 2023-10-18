@@ -1031,6 +1031,18 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
     },
   };
 
+  const sortedRows = columns.map((project) =>
+  (project.map((devices) =>
+    devices.slice().sort((a, b) => {
+      const isAsc = order === 'asc';
+      if (a[orderBy] < b[orderBy]) {
+        return isAsc ? -1 : 1;
+      } else if (a[orderBy] > b[orderBy]) {
+        return isAsc ? 1 : -1;
+      } else {
+        return 0;
+      }
+    }))));
 
   const createDeviceCard = (data) => {
     return (
@@ -1053,6 +1065,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
               interval={3000}
             >
               {Object.keys(data[project]).map((device) => (
+
                 <div>
                   <Card key={device}>
                     <Box sx={{ bgcolor: '#696969' }}>
@@ -1131,7 +1144,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                               </Grid>
                             </TableHead>
                             <TableBody>
-                              {data[project][device].map((columns) => (
+                              {sortedRows.map((columns) => (
                                 <TableRow
                                   key={columns.name}
                                 >
