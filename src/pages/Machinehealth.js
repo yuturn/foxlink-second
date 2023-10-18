@@ -1047,7 +1047,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                     <Box sx={{ bgcolor: '#696969' }}>
                       <CardHeader title={project + "-" + device} color="#696969" align="center" />
                     </Box>
-                    <Grid container spacing={2}>
+                    <Grid container spacing={1}>
                       <Grid xs={3}>
                         <Box border={1} sx={{ mt: 4, ml: 6, width: 120, height: 'auto' }}>
                           <Typography align="center" fontSize={25}>異常</Typography>
@@ -1314,7 +1314,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
           </Grid>
         </CardContent>
       </Card>
-      {createDeviceCard(columns)}
+      {/* {createDeviceCard(columns)} */}
     </ThemeProvider>
   );
 }
