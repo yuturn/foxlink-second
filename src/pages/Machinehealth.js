@@ -1008,12 +1008,14 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
     );
   };
 
-  const handleRequestSort = (property) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
-    console.log(order);
-    console.log(orderBy);
+  const handleSortRequest = (column) => {
+    // 检查当前排序列和顺序
+    if (column === orderBy) {
+      setOrder(order === 'asc' ? 'desc' : 'asc');
+    } else {
+      setOrderBy(column);
+      setOrder('asc');
+    }
   };
 
   const tableContainerStyle = {
@@ -1031,10 +1033,22 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
     },
   };
 
-  const getComparator = (order) => {
-    return order === 'desc'
-      ? (a, b) => (a[orderBy] > b[orderBy] ? -1 : 1)
-      : (a, b) => (a[orderBy] > b[orderBy] ? 1 : -1);
+  // 动态设置排序规则
+  const getComparator = (column) => {
+    return (a, b) => {
+      if (column === 'label') {
+        // 根据名称排序
+        return a.label.localeCompare(b.label);
+      } else if (column === 'frequency') {
+        // 根据frequency排序
+        return a.frequency.localeCompare(b.frequency);
+      } else if (column === 'date') {
+        // 根据date排序
+        return a.date.localeCompare(b.date);
+      }
+      // 添加更多列的排序规则
+      return 0;
+    };
   };
 
   const createDeviceCard = (data) => {
@@ -1110,9 +1124,9 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                   <Box align="center" sx={{ height: 'auto', border: 0 }}>
                                     <TableCell align="left" >
                                       <TableSortLabel
-                                        active={orderBy === '類型'}
-                                        direction={orderBy === '類型' ? order : 'asc'}
-                                        onClick={() => handleRequestSort('類型')}
+                                        active={orderBy === 'label'}
+                                        direction={orderBy === 'label' ? order : 'asc'}
+                                        onClick={() => handleRequestSort('label')}
                                       >
                                         <Typography fontSize={20}>類型</Typography>
                                       </TableSortLabel>
@@ -1126,12 +1140,28 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                 </Grid>
                                 <Grid xs={4}>
                                   <Box align="center" sx={{ height: 'auto' }}>
-                                    <TableCell align="left" ><Typography fontSize={20}>前次發生時間</Typography></TableCell>
+                                    <TableCell align="left" >
+                                      <TableSortLabel
+                                        active={orderBy === 'date'}
+                                        direction={orderBy === 'date' ? order : 'asc'}
+                                        onClick={() => handleRequestSort('date')}
+                                      >
+                                        <Typography fontSize={20}>前次發生時間</Typography>
+                                      </TableSortLabel>
+                                    </TableCell>
                                   </Box>
                                 </Grid>
                                 <Grid xs={3}>
                                   <Box align="center" sx={{ height: 'auto' }}>
-                                    <TableCell align="left" ><Typography fontSize={20}>預測週期</Typography></TableCell>
+                                    <TableCell align="left" >
+                                      <TableSortLabel
+                                        active={orderBy === 'frequency'}
+                                        direction={orderBy === 'frequency' ? order : 'asc'}
+                                        onClick={() => handleRequestSort('frequency')}
+                                      >
+                                        <Typography fontSize={20}>預測週期</Typography>
+                                      </TableSortLabel>
+                                    </TableCell>
                                   </Box>
                                 </Grid>
                               </Grid>
