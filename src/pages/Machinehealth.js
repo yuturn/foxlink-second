@@ -1062,7 +1062,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                           </Box>
                         </Box>
                       </Grid>
-                      <Grid xs={5}>
+                      <Grid xs={8}>
                         <Box sx={{ mt: 10 }}>
                           <PieChart
                             colors={['#C5291C', '#4CA85A']}
@@ -1084,7 +1084,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                           />
                         </Box>
                       </Grid>
-                      <Grid xs={6}>
+                      <Grid xs={3}>
                         <TableContainer component={Paper} style={tableContainerStyle.tableContainer}>
                           <Table>
                             <TableHead style={{ backgroundColor: '#696969' }}>
