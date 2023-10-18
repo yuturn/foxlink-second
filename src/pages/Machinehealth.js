@@ -1007,7 +1007,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
 
   const tableContainerStyle = {
     tableContainer: {
-      maxHeight: '300px', // 設置表格容器的最大高度
+      maxHeight: '380px', // 設置表格容器的最大高度
       overflowY: 'auto',  // 啟用垂直滾輪
     },
   };
