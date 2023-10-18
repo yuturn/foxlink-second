@@ -1062,7 +1062,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                           </Box>
                         </Box>
                       </Grid>
-                      <Grid xs={6}>
+                      <Grid xs={3}>
                         <Box sx={{ mt: 10 }}>
                           <PieChart
                             colors={['#C5291C', '#4CA85A']}
@@ -1083,6 +1083,68 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                             height={300}
                           />
                         </Box>
+                      </Grid>
+                      <Grid xs={6}>
+                        <TableContainer component={Paper} style={tableContainerStyle.tableContainer}>
+                          <Table>
+                            <TableHead style={{ backgroundColor: '#696969' }}>
+                              <Grid container spacing={1}>
+                                <Grid xs={1}>
+                                  <Box align="center" sx={{ height: 'auto' }}>
+                                    <TableCell align="left" ><Typography fontSize={20}>類型</Typography></TableCell>
+                                  </Box>
+                                </Grid>
+                                <Grid xs={4}>
+                                  <Box align="center" sx={{ height: 'auto' }}>
+                                    <TableCell align="left" ><Typography fontSize={20}>異常事件</Typography></TableCell>
+                                  </Box>
+                                </Grid>
+                                <Grid xs={4}>
+                                  <Box align="center" sx={{ height: 'auto' }}>
+                                    <TableCell align="left" ><Typography fontSize={20}>前次發生時間</Typography></TableCell>
+                                  </Box>
+                                </Grid>
+                                <Grid xs={2}>
+                                  <Box align="center" sx={{ height: 'auto' }}>
+                                    <TableCell align="left" ><Typography fontSize={20}>預測週期</Typography></TableCell>
+                                  </Box>
+                                </Grid>
+                              </Grid>
+                            </TableHead>
+                            <TableBody>
+                              {data[project][device].map((columns) => (
+                                <TableRow
+                                  key={columns.name}
+                                >
+                                  <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center">
+                                    <Grid container spacing={1}>
+                                      <Grid xs={1}>
+                                        <Box align="center" sx={{ bgcolor: getColor(columns.lightColor), height: 'auto' }}>
+                                          <Typography fontSize={20}>{columns.label}</Typography>
+                                        </Box>
+                                      </Grid>
+                                      <Grid xs={4}>
+                                        <Box align="center" sx={{ height: 'auto' }}>
+                                          <Typography fontSize={20}>{columns.name}</Typography>
+                                        </Box>
+                                      </Grid>
+                                      <Grid xs={4}>
+                                        <Box align="center" sx={{ height: 'auto' }}>
+                                          <Typography fontSize={20}>{columns.date}</Typography>
+                                        </Box>
+                                      </Grid>
+                                      <Grid xs={2}>
+                                        <Box align="center" sx={{ height: 'auto' }}>
+                                          <Typography fontSize={20}>{columns.frequency}</Typography>
+                                        </Box>
+                                      </Grid>
+                                    </Grid>
+                                  </TableCell>
+                                </TableRow>
+                              ))}
+                            </TableBody>
+                          </Table>
+                        </TableContainer>
                       </Grid>
                     </Grid>
                     <Divider sx={{ mt: 3, borderBottomWidth: 3 }} />
