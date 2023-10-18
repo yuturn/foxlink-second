@@ -1314,7 +1314,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
           </Grid>
         </CardContent>
       </Card>
-      {/* {createDeviceCard(columns)} */}
+      {createDeviceCard(columns)}
     </ThemeProvider>
   );
 }
