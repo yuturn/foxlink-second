@@ -1033,16 +1033,16 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
   const getComparator = (column) => {
     return (a, b) => {
       if (column === 'label') {
-        // 根据名称排序
+        // 根据标签（'label'）排序
         return a.label.localeCompare(b.label);
       } else if (column === 'frequency') {
-        // 根据frequency排序
+        // 根据频率（'frequency'）排序
         return a.frequency.localeCompare(b.frequency);
       } else if (column === 'date') {
-        // 根据date排序
-        return a.date.localeCompare(b.date);
+        // 根据日期（'date'）排序
+        return new Date(a.date) - new Date(b.date);
       }
-      // 添加更多列的排序规则
+      // 如果没有匹配的列名，返回0
       return 0;
     };
   };
