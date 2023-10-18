@@ -1012,8 +1012,8 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
-    consolo.log(order);
-    consolo.log(orderBy);
+    console.log(order);
+    console.log(orderBy);
   };
 
   const tableContainerStyle = {
