@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import { DataGrid } from '@mui/x-data-grid';
+import { borders } from '@mui/system';
 import {
   Box,
   Card,
@@ -1087,7 +1088,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                       <Grid xs={5}>
                         <TableContainer component={Paper} style={tableContainerStyle.tableContainer}>
                           <Table>
-                            <TableHead style={{ backgroundColor: '#696969' }}>
+                            <TableHead sx={{ border: 0 }} style={{ backgroundColor: '#696969' }}>
                               <Grid container spacing={1}>
                                 <Grid xs={2}>
                                   <Box align="center" sx={{ height: 'auto' }} style={{ backgroundColor: '#696969' }}>
