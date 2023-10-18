@@ -1118,12 +1118,12 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                 >
                                   <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center">
                                     <Grid container spacing={1}>
-                                      <Grid xs={1}>
+                                      <Grid xs={2}>
                                         <Box align="center" sx={{ bgcolor: getColor(columns.lightColor), height: 'auto' }}>
                                           <Typography fontSize={20}>{columns.label}</Typography>
                                         </Box>
                                       </Grid>
-                                      <Grid xs={4}>
+                                      <Grid xs={3}>
                                         <Box align="center" sx={{ height: 'auto' }}>
                                           <Typography fontSize={20}>{columns.name}</Typography>
                                         </Box>
@@ -1133,7 +1133,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                           <Typography fontSize={20}>{columns.date}</Typography>
                                         </Box>
                                       </Grid>
-                                      <Grid xs={2}>
+                                      <Grid xs={3}>
                                         <Box align="center" sx={{ height: 'auto' }}>
                                           <Typography fontSize={20}>{columns.frequency}</Typography>
                                         </Box>
