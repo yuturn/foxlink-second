@@ -48,7 +48,7 @@ const darkTheme = createTheme({
 
 export default function Machinehealth({ token, setAlert, ...rest }) {
   const [order, setOrder] = useState('asc');
-  const [orderBy, setOrderBy] = useState('');
+  const [orderBy, setOrderBy] = useState('label');
   const [isPaused, setIsPaused] = useState(false);
   const [projectName, setProjectName] = useState("");
   const [deviceName, setDeviceName] = useState("");
