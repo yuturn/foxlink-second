@@ -1126,7 +1126,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                       <TableSortLabel
                                         active={orderBy === 'label'}
                                         direction={orderBy === 'label' ? order : 'asc'}
-                                        onClick={() => handleRequestSort('label')}
+                                        onClick={() => handleSortRequest('label')}
                                       >
                                         <Typography fontSize={20}>類型</Typography>
                                       </TableSortLabel>
@@ -1144,7 +1144,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                       <TableSortLabel
                                         active={orderBy === 'date'}
                                         direction={orderBy === 'date' ? order : 'asc'}
-                                        onClick={() => handleRequestSort('date')}
+                                        onClick={() => handleSortRequest('date')}
                                       >
                                         <Typography fontSize={20}>前次發生時間</Typography>
                                       </TableSortLabel>
@@ -1157,7 +1157,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                       <TableSortLabel
                                         active={orderBy === 'frequency'}
                                         direction={orderBy === 'frequency' ? order : 'asc'}
-                                        onClick={() => handleRequestSort('frequency')}
+                                        onClick={() => handleSortRequest('frequency')}
                                       >
                                         <Typography fontSize={20}>預測週期</Typography>
                                       </TableSortLabel>
