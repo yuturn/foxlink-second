@@ -46,7 +46,7 @@ const darkTheme = createTheme({
 });
 
 const columns = [
-  { field: 'id', headerName: '專案名稱', width: 200 },
+  { field: 'project', headerName: '專案名稱', width: 200 },
   { field: 'line', headerName: '線別', width: 200 },
   { field: 'device', headerName: '機台名稱', width: 200 },
   { field: 'ename', headerName: 'ename', width: 200 },
