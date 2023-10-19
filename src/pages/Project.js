@@ -24,6 +24,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { type } from "@testing-library/user-event/dist/type";
 
 // import { apiMissionEmergency, apiMissionNeedRepair } from "../api.js";
 
@@ -73,6 +74,7 @@ const rows = [
   { "project": "d1y e77", "line": "2", "device": "Device 6", "ename": "Bushing", "cname": "Bushing組裝" },
 ];
 
+
 const empRows = [
   { id: "c001", empName: '王小明', permission: '系統管理者' },
   { id: "c002", empName: '王小美', permission: '專案管理者' },
@@ -118,7 +120,10 @@ export default function Project({ token, ...rest }) {
     apiGetProjectDevices(data)
       .then(data => {
         console.log(data.data)
+        console.log(type(projectList))
         setProjectList(data.data)
+        console.log(rows)
+        console.log(type(rows))
       }).catch(err => { console.log(err) })
   };
 
