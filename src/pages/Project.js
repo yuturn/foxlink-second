@@ -167,6 +167,7 @@ export default function Project({ token, ...rest }) {
                           paginationModel: { page: 0, pageSize: 5 },
                         },
                       }}
+                      {...console.log(rows)}
                       pageSizeOptions={[5, 10]}
                       checkboxSelection
                     />
