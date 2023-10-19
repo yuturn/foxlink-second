@@ -91,7 +91,7 @@ const empRows = [
 
 export default function Project({ token, ...rest }) {
   const [age, setAge] = useState("");
-  // const [projectName, setProjectName] = useState("");
+  const [projectName, setProjectName] = useState("");
   const [permission, setPermission] = useState("");
   const [projectDeleteOpen, setProjectDeleteOpen] = useState(false);
   const [projectList, setProjectList] = useState([]);
@@ -111,9 +111,9 @@ export default function Project({ token, ...rest }) {
 
   function handleOnClickProject() {
     console.log(document.getElementById('searchProject').value)
-    let projectName = document.getElementById('searchProject').value;
+    let search = document.getElementById('searchProject').value;
     const data = {
-      'name': projectName
+      'name': search
     }
     apiGetProjectDevices(data)
       .then(data => {
