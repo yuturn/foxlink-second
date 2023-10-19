@@ -46,7 +46,7 @@ export const apiGetProjectDevices = (data) => auth_except(baseRequest.get(`proje
   headers:
   {
     'accept': 'application/json',
-    'Content-Type': 'application/x-www-form-urlencoded'
+    'Content-Type': 'application/json'
   }
 }));
 
