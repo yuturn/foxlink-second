@@ -50,7 +50,7 @@ const columns = [
   { field: 'line', headerName: '線別', width: 200 },
   { field: 'device', headerName: '機台名稱', width: 200 },
   { field: 'ename', headerName: 'ename', width: 200 },
-  { field: 'cname', headerName: 'cname', width: 200 }
+  { field: 'cname', headerName: 'cname', width: 300 }
 ];
 
 const empColumns = [
@@ -64,13 +64,13 @@ const rows = [
   { "id": "d7x e75", "line": "1", "device": "Device 6", "ename": "Bushing", "cname": "Bushing組裝" },
   { "id": "d7x e75", "line": "1", "device": "Device 8", "ename": "Bracket", "cname": "Bracket組裝" },
   { "id": "d7x e75", "line": "2", "device": "Device 5", "ename": "Glue AOI", "cname": "防膠水檢測" },
-  { "id": "d7x e75", "line": "2", "device": "Device 5", "ename": "Bushing", "cname": "Bushing組裝" },
-  { "id": "d7x e75", "line": "2", "device": "Device 5", "ename": "Bracket", "cname": "Bracket組裝" },
+  { "id": "d7x e75", "line": "2", "device": "Device 6", "ename": "Bushing", "cname": "Bushing組裝" },
+  { "id": "d7x e75", "line": "2", "device": "Device 8", "ename": "Bracket", "cname": "Bracket組裝" },
   { "id": "d1y e77", "line": "1", "device": "Device 5", "ename": "Glue AOI", "cname": "防膠水檢測" },
-  { "id": "d1y e77", "line": "1", "device": "Device 5", "ename": "Bushing", "cname": "Bushing組裝" },
-  { "id": "d1y e77", "line": "1", "device": "Device 5", "ename": "Bracket", "cname": "Bracket組裝" },
+  { "id": "d1y e77", "line": "1", "device": "Device 6", "ename": "Bushing", "cname": "Bushing組裝" },
+  { "id": "d1y e77", "line": "1", "device": "Device 8", "ename": "Bracket", "cname": "Bracket組裝" },
   { "id": "d1y e77", "line": "2", "device": "Device 5", "ename": "Glue AOI", "cname": "防膠水檢測" },
-  { "id": "d1y e77", "line": "2", "device": "Device 5", "ename": "Bushing", "cname": "Bushing組裝" },
+  { "id": "d1y e77", "line": "2", "device": "Device 6", "ename": "Bushing", "cname": "Bushing組裝" },
 ];
 
 const empRows = [
