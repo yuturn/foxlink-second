@@ -120,8 +120,9 @@ export default function Project({ token, ...rest }) {
     apiGetProjectDevices(data)
       .then(data => {
         console.log(data.data)
-        console.log(type(projectList))
         setProjectList(data.data)
+        console.log(projectList)
+        console.log(type(projectList))
         console.log(rows)
         console.log(type(rows))
       }).catch(err => { console.log(err) })
