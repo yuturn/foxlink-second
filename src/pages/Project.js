@@ -120,7 +120,9 @@ export default function Project({ token, ...rest }) {
     apiGetProjectDevices(data)
       .then(data => {
         console.log(data.data)
-        setProjectList(data.data)
+        setProjectList((prevProjectList) => [...prevProjectList, []]);
+        // 使用 setProjectList 更新 projectList 狀態，將新資料加入到陣列中
+        setProjectList((prevProjectList) => [...prevProjectList, data.data]);
         console.log(projectList)
         console.log(type(projectList))
         console.log(rows)
