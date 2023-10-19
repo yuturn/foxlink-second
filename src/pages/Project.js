@@ -124,8 +124,8 @@ export default function Project({ token, ...rest }) {
           id: index + 1,
           machineName: machineName,
         }));
-        setProjectList(transformedData)
-        console.log(projectList)
+        setProjectList(data.data)
+        console.log(data.data)
       }).catch(err => { console.log(err) })
   };
 
