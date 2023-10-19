@@ -91,7 +91,7 @@ const empRows = [
 
 export default function Project({ token, ...rest }) {
   const [age, setAge] = useState("");
-  const [projectName, setProjectName] = useState("");
+  // const [projectName, setProjectName] = useState("");
   const [permission, setPermission] = useState("");
   const [projectDeleteOpen, setProjectDeleteOpen] = useState(false);
   const [projectList, setProjectList] = useState([]);
