@@ -17,6 +17,7 @@ const auth_except = (x) => x.catch((e) => {
 })
 
 // ============================第二期============================
+// $5$rounds=10000$F0XL1NKPWDHaSH$x7OJPMIuQs3XFigY6rsIzhYVDezZa0i3O1qZrDemcm5
 export const apiConfirmedUser = (data) => auth_except(baseRequest.post(`/users/create-user`, data, {
   headers:
   {
@@ -41,7 +42,7 @@ export const apiPostPeddingList = (data) => auth_except(baseRequest.post(`/users
   }
 }));
 
-export const apiGetProjectDevices = (data) => auth_except(baseRequest.get(`project/search-project-devices?project_id=${data['name']}`, {
+export const apiGetProjectDevices = (data) => auth_except(baseRequest.get(`project/search-project-devices?project_name=${data['name']}`, {
   headers:
   {
     'accept': 'application/json',
@@ -306,5 +307,3 @@ export const apiPostSystemEnvSettingInterval = (data) => auth_except(baseRequest
     'Authorization': `Bearer ${data['token']}`
   }
 }));
-
-// $5$rounds=10000$F0XL1NKPWDHaSH$x7OJPMIuQs3XFigY6rsIzhYVDezZa0i3O1qZrDemcm5
