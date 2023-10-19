@@ -161,7 +161,7 @@ export default function Project({ token, ...rest }) {
                 <Box display="flex" alignItems="center" pt={3} px={2}>
                   <div style={{ height: 600, width: '100%' }}>
                     <DataGrid
-                      rows={rows}
+                      rows={projectList}
                       columns={columns}
                       initialState={{
                         pagination: {
