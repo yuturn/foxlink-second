@@ -110,7 +110,8 @@ export default function Project({ token, ...rest }) {
   };
 
   function handleOnClickProject() {
-    let projectName = document.getElementById('ProjectNameSearchProject').value;
+    console.log(document.getElementById('searchProject').value)
+    let projectName = document.getElementById('searchProject').value;
     const data = {
       'name': projectName
     }
@@ -148,7 +149,7 @@ export default function Project({ token, ...rest }) {
                       專案名稱:
                     </Typography>
                     <Box mr={2}>
-                      <TextField id="ProjectNameSearchProject" type="search-staff" label="專案名稱" />
+                      <TextField id="searchProject" type="search-staff" label="專案名稱" />
                     </Box>
                     <Box ml={2}>
                       <LoadingButton variant="contained" color="info" onClick={handleOnClickProject}>
