@@ -94,7 +94,7 @@ export default function Project({ token, ...rest }) {
   const [projectName, setProjectName] = useState("");
   const [permission, setPermission] = useState("");
   const [projectDeleteOpen, setProjectDeleteOpen] = useState(false);
-  const [projectList, setProjectList] = useState();
+  const [projectList, setProjectList] = useState([]);
   const [employeeName, setEmployeeName] = useState("");
   const projectNameChange = (event) => {
     setProjectName(event.target.value);
@@ -118,14 +118,7 @@ export default function Project({ token, ...rest }) {
     apiGetProjectDevices(data)
       .then(data => {
         console.log(data.data)
-        const list = Object.keys(data.data)
-        console.log(list)
-        const transformedData = list.map((machineName, index) => ({
-          id: index + 1,
-          machineName: machineName,
-        }));
         setProjectList(data.data)
-        console.log(data.data)
       }).catch(err => { console.log(err) })
   };
 
