@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { apiGetProjectDevices } from '../api'
+import { apiGetProjectDevices, apiPostProjectDevices } from '../api'
 import {
   Box,
   Card,
@@ -50,7 +50,7 @@ const columns = [
   { field: 'project', headerName: '專案名稱', width: 200 },
   { field: 'line', headerName: '線別', width: 200 },
   { field: 'device', headerName: '機台名稱', width: 200 },
-  { field: 'ename', headerName: 'ename', width: 200 },
+  { field: 'ename', headerName: 'ename', width: 600 },
   { field: 'cname', headerName: 'cname', width: 300 }
 ];
 
@@ -91,7 +91,8 @@ const empRows = [
 
 
 
-export default function Project({ token, ...rest }) {
+export default function Project({ token, setAlert, ...rest }) {
+  const [selectedDevicesData, setSelectedDevicesData] = useState();
   const [age, setAge] = useState("");
   const [projectName, setProjectName] = useState("");
   const [permission, setPermission] = useState("");
@@ -110,7 +111,7 @@ export default function Project({ token, ...rest }) {
   const projectDeleteHandleClose = () => {
     setProjectDeleteOpen(false);
   };
-
+  //Get資料庫裡project裡面的device詳細清單
   function handleOnClickProject() {
     console.log(document.getElementById('searchProject').value)
     let search = document.getElementById('searchProject').value;
@@ -128,10 +129,32 @@ export default function Project({ token, ...rest }) {
         setProjectList(newData);
         console.log(projectList)
         console.log(type(projectList))
-        console.log(rows)
-        console.log(type(rows))
       }).catch(err => { console.log(err) })
   };
+
+  //取得datagrid裡面所有select的資料
+  const onRowsSelectionHandler = (ids) => {
+    const selectedRowsData = ids.map((id) => registerData.find((row) => row.id === id));
+    setSelectedDevicesData(selectedRowsData);
+    console.log(selectedRowsData);
+  };
+
+  function handleOnClickProjectPost() {
+    onRowsSelectionHandler()
+    console.log(selectedDevicesData)
+    apiPostProjectDevices(selectedDevicesData)
+      .then(res => {
+        if (res === null) {
+          setAlert({
+            'open': true,
+            'msg': `資料建立完成`,
+            'type': 'warning',
+            'duration': 10000
+          })
+        }
+      }).catch(err => { console.log(err) })
+  };
+  apiPostProjectDevices
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -175,6 +198,7 @@ export default function Project({ token, ...rest }) {
                       {...console.log(rows)}
                       pageSizeOptions={[5]}
                       checkboxSelection
+                      onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
                     />
                   </div>
                 </Box>
