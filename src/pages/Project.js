@@ -316,7 +316,6 @@ export default function Project({ token, setAlert, ...rest }) {
                         <LoadingButton
                           onClick={projectDelete}
                           color="error"
-                          autoFocus
                           variant="contained"
                         >
                           刪除
@@ -324,7 +323,6 @@ export default function Project({ token, setAlert, ...rest }) {
                         <LoadingButton
                           onClick={projectDeleteHandleClose}
                           color="info"
-                          autoFocus
                           variant="contained"
                         >
                           关闭
