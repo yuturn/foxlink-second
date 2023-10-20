@@ -359,7 +359,7 @@ export default function Project({ token, setAlert, ...rest }) {
                     <Typography variant="h5" fontWeight="medium" mr={2}>
                       專案名稱:
                     </Typography>
-                    <FormControl>
+                    {/* <FormControl>
                       <InputLabel id="demo-simple-select-label">專案</InputLabel>
                       <Select
                         labelId="permission-select-label"
@@ -373,7 +373,7 @@ export default function Project({ token, setAlert, ...rest }) {
                         <MenuItem value={20}>D6X</MenuItem>
                         <MenuItem value={30}>D1Y</MenuItem>
                       </Select>
-                    </FormControl>
+                    </FormControl> */}
                   </Box>
                   <Box display="flex" alignItems="center" pt={3} px={2}>
                     <Typography variant="h5" fontWeight="medium" mr={2}>
