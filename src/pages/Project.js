@@ -135,7 +135,6 @@ export default function Project({ token, setAlert, ...rest }) {
   const onRowsSelectionHandler = (ids) => {
     console.log(ids)
     console.log(projectList)
-    const arr = ids.map()
     const selectedRowsData = ids.map((id) => projectList.find((row) => row.id === id))
       .filter((item) => item !== undefined);
     const newData = selectedRowsData.map(item => {
