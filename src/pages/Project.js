@@ -121,7 +121,13 @@ export default function Project({ token, setAlert, ...rest }) {
     }
     console.log(data)
     apiDeleteProject(data)
-    // projectDeleteHandleClose()
+      .then(() => {
+        projectDeleteHandleClose(); // 请求完成后关闭对话框
+      })
+      .catch((error) => {
+        // 处理错误
+        console.error(error);
+      });
   };
 
   function handleUpdateProject() {
