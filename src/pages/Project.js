@@ -126,7 +126,7 @@ export default function Project({ token, ...rest }) {
         }));
         setProjectList((prevProjectList) => [...prevProjectList, []]);
         // 使用 setProjectList 更新 projectList 狀態，將新資料加入到陣列中
-        setProjectList((prevProjectList) => [...prevProjectList, newData]);
+        setProjectList((prevProjectList) => [...prevProjectList, ...newData]);
         console.log(projectList)
         console.log(type(projectList))
         console.log(rows)
