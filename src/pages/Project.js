@@ -94,7 +94,7 @@ const empRows = [
 export default function Project({ token, setAlert, ...rest }) {
   const [selectedDevicesData, setSelectedDevicesData] = useState();
   const [projectID, setProjectID] = useState("");
-  const [project, setage] = useState("");
+  const [project, setProject] = useState("");
   const [projectName, setProjectName] = useState("");
   const [permission, setPermission] = useState("");
   const [projectDeleteOpen, setProjectDeleteOpen] = useState(false);
