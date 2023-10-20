@@ -137,7 +137,6 @@ export default function Project({ token, setAlert, ...rest }) {
     console.log(type(ids))
     console.log(projectList)
     const selectedRowsData = ids.map((id) => projectList.find((row) => row.id === id))
-      .filter((item) => item !== undefined);
     const newData = selectedRowsData.map(item => {
       // 創建一個新物件，只包含你要保留的欄位
       const { project, line, device, ename, cname } = item;
@@ -148,7 +147,6 @@ export default function Project({ token, setAlert, ...rest }) {
   };
 
   function handleOnClickProjectPost() {
-    onRowsSelectionHandler()
     console.log(selectedDevicesData)
     const data = {
       token: token,
