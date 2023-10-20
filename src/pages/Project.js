@@ -253,11 +253,11 @@ export default function Project({ token, setAlert, ...rest }) {
                           onChange={projectNameChange}
                           style={{ minWidth: "200px", height: "45px" }}
                         >
-                          {project.map((project) => (
+                          {/* {project.map((project) => (
                             <MenuItem key={project.id} value={project.id}>
                               {project.name}
                             </MenuItem>
-                          ))}
+                          ))} */}
                         </Select>
                       </FormControl>
                     </Box>
