@@ -102,7 +102,7 @@ export default function Project({ token, setAlert, ...rest }) {
   const [employeeName, setEmployeeName] = useState("");
 
   const projectNameChange = (event) => {
-    setProjectName(event.target.value);
+    setProjectID(event.target.value);
   };
   const permissionChange = (event) => {
     setPermission(event.target.value);
