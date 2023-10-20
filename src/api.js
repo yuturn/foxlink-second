@@ -42,6 +42,14 @@ export const apiPostPeddingList = (data) => auth_except(baseRequest.post(`/users
   }
 }));
 
+export const apiGetProjectName = (token) => auth_except(baseRequest.get(`project/`, {
+  headers:
+  {
+    'accept': 'application/json',
+    'Authorization': `Bearer ${token}`
+  }
+}));
+
 export const apiGetProjectDevices = (data) => auth_except(baseRequest.get(`project/search-project-devices?project_name=${data['name']}`, {
   headers:
   {
