@@ -94,7 +94,7 @@ const empRows = [
 export default function Project({ token, setAlert, ...rest }) {
   const [selectedDevicesData, setSelectedDevicesData] = useState();
   const [projectID, setProjectID] = useState("");
-  const [project, setProject] = useState("");
+  const [project, setProject] = useState([]);
   const [projectName, setProjectName] = useState("");
   const [permission, setPermission] = useState("");
   const [projectDeleteOpen, setProjectDeleteOpen] = useState(false);
@@ -114,8 +114,7 @@ export default function Project({ token, setAlert, ...rest }) {
     setProjectDeleteOpen(false);
   };
 
-  useEffect(() => {
-    // 在这里调用你的 API 获取项目数据
+  function handleUpdateProject() {
     apiGetProjectName(token)
       .then((data) => {
         setProject(data);
@@ -124,7 +123,18 @@ export default function Project({ token, setAlert, ...rest }) {
       .catch((error) => {
         console.error('Error fetching project data:', error);
       });
-  }, []); // 空数组作为第二个参数，表示仅在组件加载时调用 useEffect
+  }
+  // useEffect(() => {
+  //   // 在这里调用你的 API 获取项目数据
+  //   apiGetProjectName(token)
+  //     .then((data) => {
+  //       setProject(data);
+  //       console.log(project)
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error fetching project data:', error);
+  //     });
+  // }, []); // 空数组作为第二个参数，表示仅在组件加载时调用 useEffect
 
   //Get資料庫裡project裡面的device詳細清單
   function handleOnClickProject() {
@@ -261,6 +271,13 @@ export default function Project({ token, setAlert, ...rest }) {
                         </Select>
                       </FormControl>
                     </Box>
+                    <LoadingButton
+                      variant="contained"
+                      color="error"
+                      onClick={projectDeleteHandleClickOpen}
+                    >
+                      更新專案
+                    </LoadingButton>
                     <LoadingButton
                       variant="contained"
                       color="error"
