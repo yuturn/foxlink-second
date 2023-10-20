@@ -50,6 +50,14 @@ export const apiGetProjectName = (token) => auth_except(baseRequest.get(`project
   }
 }));
 
+export const apiDeleteProject = (data) => auth_except(baseRequest.get(`project/?project_id=${data['projectID']}`, {
+  headers:
+  {
+    'accept': 'application/json',
+    'Authorization': `Bearer ${data['token']}`
+  }
+}));
+
 export const apiGetProjectDevices = (data) => auth_except(baseRequest.get(`project/search-project-devices?project_name=${data['name']}`, {
   headers:
   {
