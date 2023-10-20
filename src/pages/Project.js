@@ -121,8 +121,7 @@ export default function Project({ token, ...rest }) {
       .then(data => {
         console.log(data.data)
         const newData = data.data.map((item) => ({
-          ...item,
-          id: item.uniqueId, // 使用唯一的值作為 id
+          id: index + 1, // 使用唯一的值作為 id
         }));
         console.log(newData)
         setProjectList((prevProjectList) => [...prevProjectList, []]);
