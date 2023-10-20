@@ -121,7 +121,7 @@ export default function Project({ token, setAlert, ...rest }) {
     }
     console.log(data)
     apiDeleteProject(data)
-    projectDeleteHandleClose()
+    // projectDeleteHandleClose()
   };
 
   function handleUpdateProject() {
