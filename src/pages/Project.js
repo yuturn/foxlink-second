@@ -119,6 +119,7 @@ export default function Project({ token, setAlert, ...rest }) {
       token: token,
       projectID: projectID
     }
+    console.log(data)
     apiDeleteProject(data)
     projectDeleteHandleClose()
   };
