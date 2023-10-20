@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { apiGetProjectDevices, apiPostProjectDevices } from '../api'
+import { apiGetProjectDevices, apiPostProjectDevices, apiGetProjectName } from '../api'
 import {
   Box,
   Card,
@@ -93,12 +93,14 @@ const empRows = [
 
 export default function Project({ token, setAlert, ...rest }) {
   const [selectedDevicesData, setSelectedDevicesData] = useState();
-  const [age, setAge] = useState("");
+  const [projectID, setProjectID] = useState("");
+  const [project, setProject] = useState("");
   const [projectName, setProjectName] = useState("");
   const [permission, setPermission] = useState("");
   const [projectDeleteOpen, setProjectDeleteOpen] = useState(false);
   const [projectList, setProjectList] = useState([]);
   const [employeeName, setEmployeeName] = useState("");
+
   const projectNameChange = (event) => {
     setProjectName(event.target.value);
   };
@@ -111,6 +113,18 @@ export default function Project({ token, setAlert, ...rest }) {
   const projectDeleteHandleClose = () => {
     setProjectDeleteOpen(false);
   };
+
+  useEffect(() => {
+    // 在这里调用你的 API 获取项目数据
+    apiGetProjectName(token)
+      .then((data) => {
+        setProject(data);
+      })
+      .catch((error) => {
+        console.error('Error fetching project data:', error);
+      });
+  }, []); // 空数组作为第二个参数，表示仅在组件加载时调用 useEffect
+
   //Get資料庫裡project裡面的device詳細清單
   function handleOnClickProject() {
     console.log(document.getElementById('searchProject').value)
@@ -233,14 +247,16 @@ export default function Project({ token, setAlert, ...rest }) {
                         <Select
                           labelId="permission-select-label"
                           id="permission-select"
-                          value={age}
+                          value={projectID}
                           label="專案"
                           onChange={projectNameChange}
                           style={{ minWidth: "200px", height: "45px" }}
                         >
-                          <MenuItem value={10}>D7X</MenuItem>
-                          <MenuItem value={20}>D6X</MenuItem>
-                          <MenuItem value={30}>D1Y</MenuItem>
+                          {project.map((project) => (
+                            <MenuItem key={project.id} value={project.id}>
+                              {project.name}
+                            </MenuItem>
+                          ))}
                         </Select>
                       </FormControl>
                     </Box>
