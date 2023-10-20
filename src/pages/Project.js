@@ -248,6 +248,13 @@ export default function Project({ token, setAlert, ...rest }) {
                   <Typography variant="h4" fontWeight="medium" mt={3}>
                     刪除專案
                   </Typography>
+                  <LoadingButton
+                    variant="contained"
+                    color="info"
+                    onClick={handleUpdateProject}
+                  >
+                    更新專案
+                  </LoadingButton>
                   <Box display="flex" alignItems="center" pt={3} px={2}>
                     <Typography variant="h5" fontWeight="medium" mr={2}>
                       專案名稱:
@@ -271,13 +278,6 @@ export default function Project({ token, setAlert, ...rest }) {
                         </Select>
                       </FormControl>
                     </Box>
-                    <LoadingButton
-                      variant="contained"
-                      color="error"
-                      onClick={projectDeleteHandleClickOpen}
-                    >
-                      更新專案
-                    </LoadingButton>
                     <LoadingButton
                       variant="contained"
                       color="error"
