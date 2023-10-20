@@ -120,7 +120,7 @@ export default function Project({ token, setAlert, ...rest }) {
       projectID: projectID
     }
     apiDeleteProject(data)
-    projectDeleteHandleClose
+    projectDeleteHandleClose()
   };
 
   function handleUpdateProject() {
@@ -133,17 +133,17 @@ export default function Project({ token, setAlert, ...rest }) {
         console.error('Error fetching project data:', error);
       });
   }
-  // useEffect(() => {
-  //   // 在这里调用你的 API 获取项目数据
-  //   apiGetProjectName(token)
-  //     .then((data) => {
-  //       setProject(data);
-  //       console.log(project)
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error fetching project data:', error);
-  //     });
-  // }, []); // 空数组作为第二个参数，表示仅在组件加载时调用 useEffect
+  useEffect(() => {
+    // 在这里调用你的 API 获取项目数据
+    apiGetProjectName(token)
+      .then((res) => {
+        setProject(res.data);
+        console.log(project)
+      })
+      .catch((error) => {
+        console.error('Error fetching project data:', error);
+      });
+  }, []); // 空数组作为第二个参数，表示仅在组件加载时调用 useEffect
 
   //Get資料庫裡project裡面的device詳細清單
   function handleOnClickProject() {
