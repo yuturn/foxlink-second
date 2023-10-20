@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { apiGetProjectDevices, apiPostProjectDevices, apiGetProjectName } from '../api'
+import { apiGetProjectDevices, apiPostProjectDevices, apiGetProjectName, apiDeleteProject } from '../api'
 import {
   Box,
   Card,
@@ -111,6 +111,15 @@ export default function Project({ token, setAlert, ...rest }) {
     setProjectDeleteOpen(true);
   };
   const projectDeleteHandleClose = () => {
+    setProjectDeleteOpen(false);
+  };
+
+  const projectDelete = () => {
+    const data = {
+      token: token,
+      projectID: projectID
+    }
+    apiDeleteProject(data)
     setProjectDeleteOpen(false);
   };
 
@@ -298,7 +307,7 @@ export default function Project({ token, setAlert, ...rest }) {
                       </DialogContent>
                       <DialogActions>
                         <LoadingButton
-                          onClick={projectDeleteHandleClose}
+                          onClick={projectDelete}
                           color="error"
                           autoFocus
                           variant="contained"
