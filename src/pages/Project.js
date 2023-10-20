@@ -120,7 +120,7 @@ export default function Project({ token, ...rest }) {
     apiGetProjectDevices(data)
       .then(data => {
         console.log(data.data)
-        const newData = data.data.map((item) => ({
+        const newData = data.data.map((item, index) => ({
           id: index + 1, // 使用唯一的值作為 id
         }));
         console.log(newData)
