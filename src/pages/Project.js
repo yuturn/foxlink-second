@@ -229,7 +229,6 @@ export default function Project({ token, setAlert, ...rest }) {
                           paginationModel: { pageSize: 5 },
                         },
                       }}
-                      {...console.log(rows)}
                       pageSizeOptions={[5]}
                       checkboxSelection
                       onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
@@ -271,7 +270,7 @@ export default function Project({ token, setAlert, ...rest }) {
                           style={{ minWidth: "200px", height: "45px" }}
                         >
                           {project.map((projectItem) => (
-                            <MenuItem key={projectItem.id} value={projectItem.id}>
+                            <MenuItem value={projectItem.id}>
                               {projectItem.name}
                             </MenuItem>
                           ))}
