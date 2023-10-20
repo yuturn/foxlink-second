@@ -134,7 +134,7 @@ export default function Project({ token, setAlert, ...rest }) {
 
   //取得datagrid裡面所有select的資料
   const onRowsSelectionHandler = (ids) => {
-    const selectedRowsData = ids.map((id) => registerData.find((row) => row.id === id));
+    const selectedRowsData = ids.map((id) => projectList.find((row) => row.id === id));
     setSelectedDevicesData(selectedRowsData);
     console.log(selectedRowsData);
   };
@@ -154,7 +154,6 @@ export default function Project({ token, setAlert, ...rest }) {
         }
       }).catch(err => { console.log(err) })
   };
-  apiPostProjectDevices
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -204,7 +203,7 @@ export default function Project({ token, setAlert, ...rest }) {
                 </Box>
                 <Box display="flex" pt={3} px={2}>
                   <Box>
-                    <LoadingButton variant="contained" color="info">
+                    <LoadingButton variant="contained" color="info" onClick={handleOnClickProjectPost}>
                       新增專案
                     </LoadingButton>
                   </Box>
