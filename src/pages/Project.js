@@ -134,6 +134,7 @@ export default function Project({ token, setAlert, ...rest }) {
   //取得datagrid裡面所有select的資料
   const onRowsSelectionHandler = (ids) => {
     console.log(ids)
+    console.log(type(ids))
     console.log(projectList)
     const selectedRowsData = ids.map((id) => projectList.find((row) => row.id === id))
       .filter((item) => item !== undefined);
@@ -208,7 +209,7 @@ export default function Project({ token, setAlert, ...rest }) {
                       {...console.log(rows)}
                       pageSizeOptions={[5]}
                       checkboxSelection
-                      onSelectionModelChange={onRowsSelectionHandler}
+                      onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
                     />
                   </div>
                 </Box>
