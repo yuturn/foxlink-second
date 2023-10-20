@@ -134,6 +134,8 @@ export default function Project({ token, setAlert, ...rest }) {
 
   //取得datagrid裡面所有select的資料
   const onRowsSelectionHandler = (ids) => {
+    console.log(ids)
+    console.log(projectList)
     const selectedRowsData = ids.map((id) => projectList.find((row) => row.id === id));
     setSelectedDevicesData(selectedRowsData);
     console.log(selectedRowsData);
