@@ -116,8 +116,8 @@ export default function Project({ token, setAlert, ...rest }) {
 
   function handleUpdateProject() {
     apiGetProjectName(token)
-      .then((data) => {
-        setProject(data);
+      .then((res) => {
+        setProject(res.data);
         console.log(project)
       })
       .catch((error) => {
