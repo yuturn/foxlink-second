@@ -203,7 +203,7 @@ export default function Project({ token, setAlert, ...rest }) {
                       {...console.log(rows)}
                       pageSizeOptions={[5]}
                       checkboxSelection
-                      onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
+                      onSelectionModelChange={onRowsSelectionHandler}
                     />
                   </div>
                 </Box>
