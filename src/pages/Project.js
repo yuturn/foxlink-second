@@ -119,6 +119,7 @@ export default function Project({ token, setAlert, ...rest }) {
     apiGetProjectName(token)
       .then((data) => {
         setProject(data);
+        console.log(project)
       })
       .catch((error) => {
         console.error('Error fetching project data:', error);
