@@ -142,7 +142,11 @@ export default function Project({ token, setAlert, ...rest }) {
   function handleOnClickProjectPost() {
     onRowsSelectionHandler()
     console.log(selectedDevicesData)
-    apiPostProjectDevices(selectedDevicesData)
+    const data = {
+      token: token,
+      devicePostData: selectedDevicesData
+    }
+    apiPostProjectDevices(data)
       .then(res => {
         if (res === null) {
           setAlert({
