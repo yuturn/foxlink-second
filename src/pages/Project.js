@@ -128,7 +128,6 @@ export default function Project({ token, setAlert, ...rest }) {
         console.log(newData)
         setProjectList(newData);
         console.log(projectList)
-        console.log(type(projectList))
       }).catch(err => { console.log(err) })
   };
 
@@ -136,9 +135,15 @@ export default function Project({ token, setAlert, ...rest }) {
   const onRowsSelectionHandler = (ids) => {
     console.log(ids)
     console.log(projectList)
-    const selectedRowsData = ids.map((id) => projectList.find((row) => row.id === id));
-    setSelectedDevicesData(selectedRowsData);
-    console.log(selectedRowsData);
+    const selectedRowsData = ids.map((id) => projectList.find((row) => row.id === id))
+      .filter((item) => item !== undefined);
+    const newData = selectedRowsData.map(item => {
+      // 創建一個新物件，只包含你要保留的欄位
+      const { project, line, device, ename, cname } = item;
+      return { project, line, device, ename, cname };
+    });
+    setSelectedDevicesData(newData);
+    console.log(newData);
   };
 
   function handleOnClickProjectPost() {
