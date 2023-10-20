@@ -120,7 +120,7 @@ export default function Project({ token, setAlert, ...rest }) {
       projectID: projectID
     }
     apiDeleteProject(data)
-    setProjectDeleteOpen(false);
+    projectDeleteHandleClose
   };
 
   function handleUpdateProject() {
