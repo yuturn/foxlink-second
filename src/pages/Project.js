@@ -379,7 +379,7 @@ export default function Project({ token, setAlert, ...rest }) {
                     <Typography variant="h5" fontWeight="medium" mr={2}>
                       指定權限:
                     </Typography>
-                    <FormControl>
+                    {/* <FormControl>
                       <InputLabel id="demo-simple-select-label">權限</InputLabel>
                       <Select
                         labelId="permission-select-label"
@@ -394,7 +394,7 @@ export default function Project({ token, setAlert, ...rest }) {
                         <MenuItem value={30}>專案負責人</MenuItem>
                         <MenuItem value={40}>一般員工</MenuItem>
                       </Select>
-                    </FormControl>
+                    </FormControl> */}
                   </Box>
                   <Box display="flex" alignItems="center" pt={3} px={2}>
                     <Box>
@@ -414,7 +414,7 @@ export default function Project({ token, setAlert, ...rest }) {
                       專案名稱:
                     </Typography>
                     <Box mr={2}>
-                      <FormControl>
+                      {/* <FormControl>
                         <InputLabel id="demo-simple-select-label">專案</InputLabel>
                         <Select
                           labelId="permission-select-label"
@@ -428,7 +428,7 @@ export default function Project({ token, setAlert, ...rest }) {
                           <MenuItem value={20}>D6X</MenuItem>
                           <MenuItem value={30}>D1Y</MenuItem>
                         </Select>
-                      </FormControl>
+                      </FormControl> */}
                     </Box>
                   </Box>
                 </Box>
