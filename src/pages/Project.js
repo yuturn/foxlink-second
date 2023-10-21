@@ -380,9 +380,11 @@ export default function Project({ token, setAlert, ...rest }) {
                         onChange={projectNameChange}
                         style={{ minWidth: "200px", height: "45px" }}
                       >
-                        <MenuItem value={10}>D7X</MenuItem>
-                        <MenuItem value={20}>D6X</MenuItem>
-                        <MenuItem value={30}>D1Y</MenuItem>
+                        {project.map((projectItem) => (
+                          <MenuItem value={projectItem.id}>
+                            {projectItem.name}
+                          </MenuItem>
+                        ))}
                       </Select>
                     </FormControl>
                   </Box>
@@ -400,10 +402,10 @@ export default function Project({ token, setAlert, ...rest }) {
                         onChange={permissionChange}
                         style={{ minWidth: "200px", height: "45px" }}
                       >
-                        <MenuItem value={10}>系統管理者</MenuItem>
-                        <MenuItem value={20}>專案管理者</MenuItem>
-                        <MenuItem value={30}>專案負責人</MenuItem>
-                        <MenuItem value={40}>一般員工</MenuItem>
+                        <MenuItem value={1}>系統管理者</MenuItem>
+                        <MenuItem value={2}>專案管理者</MenuItem>
+                        <MenuItem value={3}>專案負責人</MenuItem>
+                        <MenuItem value={4}>一般員工</MenuItem>
                       </Select>
                     </FormControl>
                   </Box>
