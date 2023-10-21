@@ -10,7 +10,8 @@ import {
   Typography,
   TextField,
   FormControl,
-  InputLabel
+  InputLabel,
+  Button
 } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { DataGrid } from '@mui/x-data-grid';
@@ -316,7 +317,7 @@ export default function Project({ token, setAlert, ...rest }) {
                         </DialogContentText>
                       </DialogContent>
                       <DialogActions>
-                        <LoadingButton
+                        <Button
                           onClick={() => {
                             console.log("Delete button clicked 裡面的");
                             projectDelete();
@@ -325,14 +326,14 @@ export default function Project({ token, setAlert, ...rest }) {
                           variant="contained"
                         >
                           刪除
-                        </LoadingButton>
-                        <LoadingButton
+                        </Button>
+                        <Button
                           onClick={projectDeleteHandleClose}
                           color="info"
                           variant="contained"
                         >
                           关闭
-                        </LoadingButton>
+                        </Button>
                       </DialogActions>
                     </Dialog>
                   </Box>
