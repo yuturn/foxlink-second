@@ -313,13 +313,12 @@ export default function Project({ token, setAlert, ...rest }) {
                         </DialogContentText>
                       </DialogContent>
                       <DialogActions>
-                        <LoadingButton
+                        <Button
                           onClick={projectDelete}
-                          color="error"
-                          variant="contained"
+                          color="#f44336"
                         >
                           刪除
-                        </LoadingButton>
+                        </Button>
                         <LoadingButton
                           onClick={projectDeleteHandleClose}
                           color="info"
