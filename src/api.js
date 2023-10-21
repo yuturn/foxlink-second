@@ -42,7 +42,7 @@ export const apiPostPeddingList = (data) => auth_except(baseRequest.post(`/users
   }
 }));
 
-export const apiGetProjectName = (token) => auth_except(baseRequest.get(`project/`, {
+export const apiGetProjectName = (token) => auth_except(baseRequest.get(`/project/`, {
   headers:
   {
     'accept': 'application/json',
@@ -50,7 +50,7 @@ export const apiGetProjectName = (token) => auth_except(baseRequest.get(`project
   }
 }));
 
-export const apiDeleteProject = (data) => auth_except(baseRequest.get(`project/?project_id=${data['projectID']}`, {
+export const apiDeleteProject = (data) => auth_except(baseRequest.delete(`/project/?project_id=${data['projectID']}`, {
   headers:
   {
     'accept': 'application/json',
@@ -58,7 +58,7 @@ export const apiDeleteProject = (data) => auth_except(baseRequest.get(`project/?
   }
 }));
 
-export const apiGetProjectDevices = (data) => auth_except(baseRequest.get(`project/search-project-devices?project_name=${data['name']}`, {
+export const apiGetProjectDevices = (data) => auth_except(baseRequest.get(`/project/search-project-devices?project_name=${data['name']}`, {
   headers:
   {
     'accept': 'application/json',
@@ -66,7 +66,7 @@ export const apiGetProjectDevices = (data) => auth_except(baseRequest.get(`proje
   }
 }));
 
-export const apiPostProjectDevices = (data) => auth_except(baseRequest.post(`project/add-project-events`, data['devicePostData'], {
+export const apiPostProjectDevices = (data) => auth_except(baseRequest.post(`/project/add-project-events`, data['devicePostData'], {
   headers:
   {
     'accept': 'application/json',
