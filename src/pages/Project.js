@@ -51,7 +51,7 @@ const columns = [
   { field: 'project', headerName: '專案名稱', width: 200 },
   { field: 'line', headerName: '線別', width: 200 },
   { field: 'device', headerName: '機台名稱', width: 200 },
-  { field: 'ename', headerName: 'ename', width: 600 },
+  { field: 'ename', headerName: 'ename', width: 450 },
   { field: 'cname', headerName: 'cname', width: 300 }
 ];
 
@@ -124,6 +124,7 @@ export default function Project({ token, setAlert, ...rest }) {
     apiDeleteProject(data)
       .then(() => {
         console.log("delete project 成功")
+        setProject([])
         projectDeleteHandleClose(); // 请求完成后关闭对话框
       })
       .catch((error) => {
