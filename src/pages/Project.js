@@ -10,7 +10,8 @@ import {
   Typography,
   TextField,
   FormControl,
-  InputLabel
+  InputLabel,
+  Button
 } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { DataGrid } from '@mui/x-data-grid';
@@ -316,6 +317,7 @@ export default function Project({ token, setAlert, ...rest }) {
                         <Button
                           onClick={projectDelete}
                           color="#f44336"
+                          variant="contained"
                         >
                           刪除
                         </Button>
