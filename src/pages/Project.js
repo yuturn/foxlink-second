@@ -307,8 +307,8 @@ export default function Project({ token, setAlert, ...rest }) {
                     <Dialog
                       open={projectDeleteOpen}
                       onClose={projectDeleteHandleClose}
-                      aria-labelledby="alert-dialog-permission"
-                      aria-describedby="alert-dialog-permission"
+                      aria-labelledby="alert-dialog-project"
+                      aria-describedby="alert-dialog-project"
                     >
                       <DialogTitle id="alert-dialog-title">是否刪除專案?</DialogTitle>
                       <DialogContent>
@@ -317,7 +317,7 @@ export default function Project({ token, setAlert, ...rest }) {
                         </DialogContentText>
                       </DialogContent>
                       <DialogActions>
-                        <Button
+                        {/* <Button
                           onClick={() => {
                             console.log("Delete button clicked 裡面的");
                             projectDelete();
@@ -326,7 +326,7 @@ export default function Project({ token, setAlert, ...rest }) {
                           variant="contained"
                         >
                           刪除
-                        </Button>
+                        </Button> */}
                         {/* <Button
                           onClick={projectDeleteHandleClose}
                           color="info"
