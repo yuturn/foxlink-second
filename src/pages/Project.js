@@ -140,6 +140,7 @@ export default function Project({ token, setAlert, ...rest }) {
         console.log(project)
       })
       .catch((error) => {
+        setProject("");
         console.error('Error fetching project data:', error);
       });
   }
