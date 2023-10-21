@@ -317,7 +317,10 @@ export default function Project({ token, setAlert, ...rest }) {
                       </DialogContent>
                       <DialogActions>
                         <LoadingButton
-                          onClick={projectDelete}
+                          onClick={() => {
+                            console.log("Delete button clicked 裡面的");
+                            projectDelete();
+                          }}
                           color="error"
                           variant="contained"
                         >
