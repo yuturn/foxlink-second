@@ -327,13 +327,13 @@ export default function Project({ token, setAlert, ...rest }) {
                         >
                           刪除
                         </Button>
-                        <Button
+                        {/* <Button
                           onClick={projectDeleteHandleClose}
                           color="info"
                           variant="contained"
                         >
                           关闭
-                        </Button>
+                        </Button> */}
                       </DialogActions>
                     </Dialog>
                   </Box>
