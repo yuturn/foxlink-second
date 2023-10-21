@@ -296,7 +296,10 @@ export default function Project({ token, setAlert, ...rest }) {
                     <LoadingButton
                       variant="contained"
                       color="error"
-                      onClick={projectDeleteHandleClickOpen}
+                      onClick={() => {
+                        console.log("Delete button clicked");
+                        projectDeleteHandleClickOpen();
+                      }}
                     >
                       刪除專案
                     </LoadingButton>
