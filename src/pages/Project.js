@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { apiGetProjectDevices, apiPostProjectDevices, apiGetProjectName, apiDeleteProject } from '../api'
+import { apiGetProjectDevices, apiPostProjectDevices, apiGetProjectName, apiDeleteProject, apiGetProjectUsers } from '../api'
 import {
   Box,
   Card,
@@ -56,8 +56,8 @@ const columns = [
 ];
 
 const empColumns = [
-  { field: 'id', headerName: '員工編號', width: 250 },
-  { field: 'empName', headerName: '員工名稱', width: 250 },
+  { field: 'badge', headerName: '員工編號', width: 250 },
+  { field: 'username', headerName: '員工名稱', width: 250 },
   { field: 'permission', headerName: '權限', width: 250 },
 ];
 
@@ -90,6 +90,13 @@ const empRows = [
   { id: "c0011", empName: '何美美', permission: '一般員工' },
 ];
 
+const permissionMap = {
+  1: "系統管理者",
+  2: "專案管理者",
+  3: "專案負責人",
+  4: "一般員工"
+};
+
 
 
 export default function Project({ token, setAlert, ...rest }) {
@@ -99,22 +106,35 @@ export default function Project({ token, setAlert, ...rest }) {
   const [projectName, setProjectName] = useState("");
   const [permission, setPermission] = useState("");
   const [projectDeleteOpen, setProjectDeleteOpen] = useState(false);
+  const [workerDeleteOpen, setWorkerDeleteOpen] = useState(false);
   const [projectList, setProjectList] = useState([]);
   const [employeeName, setEmployeeName] = useState("");
+  const [projectUsers, setProjectUsers] = useState([]);
 
   const projectNameChange = (event) => {
     setProjectID(event.target.value);
+    handleUpdateProjectUser()
   };
   const permissionChange = (event) => {
     setPermission(event.target.value);
   };
+  //打開刪除project Dialog的function
   const projectDeleteHandleClickOpen = () => {
     setProjectDeleteOpen(true);
   };
+  //關閉刪除project Dialog的function
   const projectDeleteHandleClose = () => {
     setProjectDeleteOpen(false);
   };
-
+  //打開刪除project worker Dialog的function
+  const workerDeleteHandleClickOpen = () => {
+    setWorkerDeleteOpen(true);
+  };
+  //關閉刪除project worker Dialog的function
+  const workerDeleteHandleClose = () => {
+    setWorkerDeleteOpen(false);
+  };
+  //刪除project的function
   const projectDelete = () => {
     const data = {
       token: token,
@@ -133,7 +153,7 @@ export default function Project({ token, setAlert, ...rest }) {
         console.error(error);
       });
   };
-
+  //更新目前的project，看還有哪些
   function handleUpdateProject() {
     apiGetProjectName(token)
       .then((res) => {
@@ -145,8 +165,29 @@ export default function Project({ token, setAlert, ...rest }) {
         console.error('Error fetching project data:', error);
       });
   }
+  //此function是用來取的project的Users
+  function handleUpdateProjectUser() {
+    const data = {
+      token: token,
+      projectID: projectID
+    }
+    apiGetProjectUsers(data)
+      .then((res) => {
+        const newData = res.data.map((item, index) => ({
+          ...item,
+          id: index + 1, // 使用唯一的值作為 id
+          role: permissionMap[item.permission]
+        }));
+
+        setProjectUsers(newData)
+      })
+      .catch((error) => {
+        console.error('Error fetching project data:', error);
+      });
+  }
+
   useEffect(() => {
-    // 在这里调用你的 API 获取项目数据
+    // 在这里调用你的 API 获取项目数据(project的名稱)
     apiGetProjectName(token)
       .then((res) => {
         setProject(res.data);
@@ -167,6 +208,7 @@ export default function Project({ token, setAlert, ...rest }) {
     apiGetProjectDevices(data)
       .then(data => {
         console.log(data.data)
+        //因為Mui dataGrid這個套件要有一個id的欄位當作基準，但是api回傳資料沒有，所以這邊做一個id的欄位讓dataGrid可以順利渲染
         const newData = data.data.map((item, index) => ({
           ...item,
           id: index + 1, // 使用唯一的值作為 id
@@ -191,7 +233,7 @@ export default function Project({ token, setAlert, ...rest }) {
     setSelectedDevicesData(newData);
     console.log(newData);
   };
-
+  //依照所選擇的device去建立資料
   function handleOnClickProjectPost() {
     console.log(selectedDevicesData)
     const data = {
@@ -432,14 +474,16 @@ export default function Project({ token, setAlert, ...rest }) {
                         <Select
                           labelId="permission-select-label"
                           id="permission-select"
-                          value={project}
+                          value={projectName}
                           label="專案"
                           onChange={projectNameChange}
                           style={{ minWidth: "200px", height: "45px" }}
                         >
-                          <MenuItem value={10}>D7X</MenuItem>
-                          <MenuItem value={20}>D6X</MenuItem>
-                          <MenuItem value={30}>D1Y</MenuItem>
+                          {project.map((projectItem) => (
+                            <MenuItem value={projectItem.id}>
+                              {projectItem.name}
+                            </MenuItem>
+                          ))}
                         </Select>
                       </FormControl>
                     </Box>
@@ -449,7 +493,7 @@ export default function Project({ token, setAlert, ...rest }) {
                   <div style={{ height: 400, width: '100%' }}>
                     <DataGrid
                       rows={empRows}
-                      columns={empColumns}
+                      columns={projectUsers}
                       initialState={{
                         pagination: {
                           paginationModel: { page: 0, pageSize: 5 },
@@ -461,7 +505,7 @@ export default function Project({ token, setAlert, ...rest }) {
                   </div>
                 </Box>
                 <Box display="flex" pt={3} px={2}>
-                  {/* <Box>
+                  <Box>
                     <LoadingButton
                       variant="contained"
                       color="error"
@@ -469,7 +513,7 @@ export default function Project({ token, setAlert, ...rest }) {
                     >
                       刪除
                     </LoadingButton>
-                    <Dialog
+                    {/* <Dialog
                       open={projectDeleteOpen}
                       onClose={projectDeleteHandleClose}
                       aria-labelledby="alert-dialog-permission"
@@ -499,8 +543,8 @@ export default function Project({ token, setAlert, ...rest }) {
                           关闭
                         </LoadingButton>
                       </DialogActions>
-                    </Dialog>
-                  </Box> */}
+                    </Dialog> */}
+                  </Box>
                 </Box>
               </Box>
             </Grid>
