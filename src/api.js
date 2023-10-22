@@ -83,7 +83,7 @@ export const apiGetProjectUsers = (data) => auth_except(baseRequest.get(`/projec
   }
 }));
 
-export const apiPostProjectUser = (data) => auth_except(baseRequest.post(`/project/add-project-worker?project_id=${data['projectID']}&user_id=${data['userID']}&permission=${data['permission']}`, {
+export const apiPostProjectUser = (data) => auth_except(baseRequest.post(`/project/add-project-worker`, data, {
   headers:
   {
     'accept': 'application/json',

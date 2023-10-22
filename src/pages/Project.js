@@ -272,11 +272,10 @@ export default function Project({ token, setAlert, ...rest }) {
   function handleOnClickAddUserToProject() {
     const data = {
       token: token,
-      projectID: projectID,
-      userID: document.getElementById('userID').value,
+      project_id: projectID,
+      user_id: document.getElementById('userID').value,
       permission: permission
     }
-    console.log(data)
     apiPostProjectUser(data)
       .then(res => {
         if (res === null) {
