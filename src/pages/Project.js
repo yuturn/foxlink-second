@@ -111,7 +111,7 @@ export default function Project({ token, setAlert, ...rest }) {
   const [projectList, setProjectList] = useState([]);
   const [employeeName, setEmployeeName] = useState("");
   const [projectUsers, setProjectUsers] = useState([]);
-  const [selectionModel, setSelectionModel] = useState([]);
+  const [selectedRow, setSelectedRow] = useState(null);
   const projectNameChange = (event) => {
     console.log("有更改projectID")
     setProjectID(event.target.value);
@@ -244,6 +244,11 @@ export default function Project({ token, setAlert, ...rest }) {
   };
   //取得datagrid裡面所有select的資料(project userID)
   const onRowsSelectionHandlerUser = (ids) => {
+    if (ids.length === 0) {
+      setSelectedRow(null); // 没有选中行
+    } else {
+      setSelectedRow(ids[0]); // 只保留第一个选中的行
+    }
     const selectedRowsData = ids.map((id) => projectUsers.find((row) => row.id === id))
     setSelectedDevicesDataUser(selectedRowsData);
   };
@@ -559,15 +564,9 @@ export default function Project({ token, setAlert, ...rest }) {
                       pageSizeOptions={[5, 10]}
                       checkboxSelection
                       hideFooterSelectedRowCount
-                      selectionModel={selectionModel}
-                      onSelectionModelChange={(ids, selection) => {
-                        if (selection.length > 1) {
-                          // 如果选择了多行，只保留最后一行
-                          setSelectionModel([ids[ids.length - 1]]);
-                        } else {
-                          setSelectionModel(selection);
-                        }
-                        onRowsSelectionHandlerUser(ids); // 这里使用 selection
+                      selectionModel={selectedRow ? [selectedRow] : []} // 通过 selectedRow 控制选中状态
+                      onSelectionModelChange={(ids) => {
+                        onRowsSelectionHandlerUser(ids);
                       }}
                     />
                   </div>
