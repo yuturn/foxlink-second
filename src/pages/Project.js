@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { apiGetProjectDevices, apiPostProjectDevices, apiGetProjectName, apiDeleteProject, apiGetProjectUsers } from '../api'
+import { apiGetProjectDevices, apiPostProjectDevices, apiGetProjectName, apiDeleteProject, apiGetProjectUsers, apiPostProjectUser } from '../api'
 import {
   Box,
   Card,
@@ -263,6 +263,27 @@ export default function Project({ token, setAlert, ...rest }) {
         }
       }).catch(err => { console.log(err) })
   };
+  //新增user到專案
+  function handleOnClickAddUserToProject() {
+    const data = {
+      token: token,
+      projectID: projectID,
+      userID: document.getElementById('userID').value,
+      permission: permission
+    }
+    console.log(data)
+    apiPostProjectUser(data)
+      .then(res => {
+        if (res === null) {
+          setAlert({
+            'open': true,
+            'msg': `資料建立完成`,
+            'type': 'warning',
+            'duration': 10000
+          })
+        }
+      }).catch(err => { console.log(err) })
+  };
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -405,7 +426,7 @@ export default function Project({ token, setAlert, ...rest }) {
                       員工ID:
                     </Typography>
                     <Box mr={2}>
-                      <TextField type="search-staff" label="請輸入員工ID" />
+                      <TextField id="userID" type="search-staff" label="請輸入員工ID" />
                     </Box>
                     <LoadingButton variant="contained" color="info">
                       查詢
@@ -464,7 +485,7 @@ export default function Project({ token, setAlert, ...rest }) {
                   </Box>
                   <Box display="flex" alignItems="center" pt={3} px={2}>
                     <Box>
-                      <LoadingButton variant="contained" color="info">
+                      <LoadingButton variant="contained" color="info" onClick={handleOnClickAddUserToProject}>
                         新增
                       </LoadingButton>
                     </Box>
