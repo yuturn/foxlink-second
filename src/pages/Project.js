@@ -181,14 +181,12 @@ export default function Project({ token, setAlert, ...rest }) {
     }
     apiGetProjectUsers(data)
       .then((res) => {
-        console.log(res)
         const newData = res.data.map((item, index) => ({
           ...item,
           id: index + 1,
           role: permissionMap[item.permission]
         }));
         console.log(newData)
-        setProjectUsers(newData)
       })
       .catch((error) => {
         console.error('Error fetching project data:', error);
@@ -247,18 +245,12 @@ export default function Project({ token, setAlert, ...rest }) {
   const onRowsSelectionHandlerUser = (ids) => {
     console.log(ids)
     const selectedRowsData = ids.map((id) => projectUsers.find((row) => row.id === id))
-    const newData = selectedRowsData.map(item => {
-      // 創建一個新物件，只包含你要保留的欄位
-      const { badge } = item;
-      return { badge };
-    });
-    setSelectedDevicesDataUser(newData);
-    console.log(newData);
+    setSelectedDevicesDataUser(selectedRowsData);
+    console.log(selectedRowsData);
     console.log(selectedDevicesDataUser)
   };
   //依照所選擇的device去建立資料
   function handleOnClickProjectPost() {
-    console.log(selectedDevicesData)
     const data = {
       token: token,
       devicePostData: selectedDevicesData
@@ -298,7 +290,7 @@ export default function Project({ token, setAlert, ...rest }) {
   };
 
   //刪除project user
-  function handleOnClickDeleteProjectUser() {
+  function deleteProjectUser() {
     const data = {
       token: token,
       projectID: projectID,
@@ -595,9 +587,8 @@ export default function Project({ token, setAlert, ...rest }) {
                       </DialogContent>
                       <DialogActions>
                         <LoadingButton
-                          onClick={handleOnClickDeleteProjectUser}
+                          onClick={deleteProjectUser}
                           color="error"
-                          autoFocus
                           variant="contained"
                         >
                           刪除
@@ -605,7 +596,6 @@ export default function Project({ token, setAlert, ...rest }) {
                         <LoadingButton
                           onClick={userDeleteHandleClose}
                           color="info"
-                          autoFocus
                           variant="contained"
                         >
                           关闭
