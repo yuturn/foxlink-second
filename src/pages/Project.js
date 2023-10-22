@@ -562,14 +562,12 @@ export default function Project({ token, setAlert, ...rest }) {
                       selectionModel={selectionModel}
                       onSelectionModelChange={(ids, selection) => {
                         if (selection.length > 1) {
-                          const selectionSet = new Set(selectionModel);
-                          const result = selection.filter((s) => !selectionSet.has(s));
-                          setSelectionModel(result);
-                          onRowsSelectionHandlerUser(result);
+                          // 如果选择了多行，只保留最后一行
+                          setSelectionModel([ids[ids.length - 1]]);
                         } else {
-                          setSelectionModel(ids);
-                          onRowsSelectionHandlerUser(ids);
+                          setSelectionModel(selection);
                         }
+                        onRowsSelectionHandlerUser(selection); // 这里使用 selection
                       }}
                     />
                   </div>
