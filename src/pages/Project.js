@@ -114,6 +114,7 @@ export default function Project({ token, setAlert, ...rest }) {
   const projectNameChange = (event) => {
     console.log("有更改projectID")
     setProjectID(event.target.value);
+    console.log(projectID)
     handleUpdateProjectUser()
   };
   const permissionChange = (event) => {
@@ -159,6 +160,7 @@ export default function Project({ token, setAlert, ...rest }) {
     apiGetProjectName(token)
       .then((res) => {
         setProject(res.data);
+        console.log(res.data)
       })
       .catch((error) => {
         setProject([]);
