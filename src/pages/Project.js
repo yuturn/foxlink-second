@@ -244,11 +244,8 @@ export default function Project({ token, setAlert, ...rest }) {
   };
   //取得datagrid裡面所有select的資料(project userID)
   const onRowsSelectionHandlerUser = (ids) => {
-    console.log(ids)
     const selectedRowsData = ids.map((id) => projectUsers.find((row) => row.id === id))
     setSelectedDevicesDataUser(selectedRowsData);
-    console.log(selectedRowsData);
-    console.log(selectedDevicesDataUser)
   };
   //依照所選擇的device去建立資料
   function handleOnClickProjectPost() {
@@ -568,9 +565,9 @@ export default function Project({ token, setAlert, ...rest }) {
                           const selectionSet = new Set(selectionModel);
                           const result = selection.filter((s) => !selectionSet.has(s));
                           setSelectionModel(result);
-                          onRowsSelectionHandlerUser(ids);
+                          onRowsSelectionHandlerUser(result);
                         } else {
-                          setSelectionModel(selection);
+                          setSelectionModel(ids);
                           onRowsSelectionHandlerUser(ids);
                         }
                       }}
