@@ -295,7 +295,7 @@ export default function Project({ token, setAlert, ...rest }) {
     const data = {
       token: token,
       projectID: projectID,
-      userID: selectedDevicesDataUser['badge']
+      userID: selectedDevicesDataUser[0]['badge']
     }
     console.log(data)
     apiPostProjectUser(data)
