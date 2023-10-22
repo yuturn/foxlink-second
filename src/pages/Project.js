@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { apiGetProjectDevices, apiPostProjectDevices, apiGetProjectName, apiDeleteProject, apiGetProjectUsers, apiPostProjectUser } from '../api'
+import { apiGetProjectDevices, apiPostProjectDevices, apiGetProjectName, apiDeleteProject, apiGetProjectUsers, apiPostProjectUser, apiDeleteProjectUser } from '../api'
 import {
   Box,
   Card,
@@ -101,12 +101,13 @@ const permissionMap = {
 
 export default function Project({ token, setAlert, ...rest }) {
   const [selectedDevicesData, setSelectedDevicesData] = useState();
+  const [selectedDevicesDataUser, setSelectedDevicesDataUser] = useState();
   const [projectID, setProjectID] = useState("");
   const [project, setProject] = useState([]);
   const [projectName, setProjectName] = useState("");
   const [permission, setPermission] = useState("");
   const [projectDeleteOpen, setProjectDeleteOpen] = useState(false);
-  const [workerDeleteOpen, setWorkerDeleteOpen] = useState(false);
+  const [userDeleteOpen, setUserDeleteOpen] = useState(false);
   const [projectList, setProjectList] = useState([]);
   const [employeeName, setEmployeeName] = useState("");
   const [projectUsers, setProjectUsers] = useState([]);
@@ -130,12 +131,12 @@ export default function Project({ token, setAlert, ...rest }) {
     setProjectDeleteOpen(false);
   };
   //打開刪除project worker Dialog的function
-  const workerDeleteHandleClickOpen = () => {
-    setWorkerDeleteOpen(true);
+  const userDeleteHandleClickOpen = () => {
+    setUserDeleteOpen(true);
   };
   //關閉刪除project worker Dialog的function
-  const workerDeleteHandleClose = () => {
-    setWorkerDeleteOpen(false);
+  const userDeleteHandleClose = () => {
+    setUserDeleteOpen(false);
   };
   //刪除project的function
   const projectDelete = () => {
@@ -174,12 +175,10 @@ export default function Project({ token, setAlert, ...rest }) {
     if (!projectID) {
       return;
     }
-
     const data = {
       token: token,
       projectID: projectID
     }
-
     apiGetProjectUsers(data)
       .then((res) => {
         console.log(res)
@@ -230,7 +229,7 @@ export default function Project({ token, setAlert, ...rest }) {
       }).catch(err => { console.log(err) })
   };
 
-  //取得datagrid裡面所有select的資料
+  //取得datagrid裡面所有select的資料(device)
   const onRowsSelectionHandler = (ids) => {
     console.log(ids)
     console.log(type(ids))
@@ -242,6 +241,19 @@ export default function Project({ token, setAlert, ...rest }) {
       return { project, line, device, ename, cname };
     });
     setSelectedDevicesData(newData);
+    console.log(newData);
+  };
+  //取得datagrid裡面所有select的資料(project userID)
+  const onRowsSelectionHandlerUser = (ids) => {
+    console.log(ids)
+    console.log(projectList)
+    const selectedRowsData = ids.map((id) => projectList.find((row) => row.id === id))
+    const newData = selectedRowsData.map(item => {
+      // 創建一個新物件，只包含你要保留的欄位
+      const { badge } = item;
+      return { badge };
+    });
+    setSelectedDevicesDataUser(newData);
     console.log(newData);
   };
   //依照所選擇的device去建立資料
@@ -274,6 +286,28 @@ export default function Project({ token, setAlert, ...rest }) {
     console.log(data)
     apiPostProjectUser(data)
       .then(res => {
+        if (res === null) {
+          setAlert({
+            'open': true,
+            'msg': `資料建立完成`,
+            'type': 'warning',
+            'duration': 10000
+          })
+        }
+      }).catch(err => { console.log(err) })
+  };
+
+  //刪除project user
+  function handleOnClickDeleteProjectUser() {
+    const data = {
+      token: token,
+      projectID: projectID,
+      userID: selectedDevicesDataUser['badge']
+    }
+    console.log(data)
+    apiPostProjectUser(data)
+      .then(res => {
+        console.log('刪除user成功')
         if (res === null) {
           setAlert({
             'open': true,
@@ -533,6 +567,7 @@ export default function Project({ token, setAlert, ...rest }) {
                       }}
                       pageSizeOptions={[5, 10]}
                       checkboxSelection
+                      onSelectionModelChange={(ids) => onRowsSelectionHandlerUser(ids)}
                     />
                   </div>
                 </Box>
@@ -541,13 +576,13 @@ export default function Project({ token, setAlert, ...rest }) {
                     <LoadingButton
                       variant="contained"
                       color="error"
-                      onClick={projectDeleteHandleClickOpen}
+                      onClick={userDeleteHandleClickOpen}
                     >
                       刪除
                     </LoadingButton>
-                    {/* <Dialog
-                      open={projectDeleteOpen}
-                      onClose={projectDeleteHandleClose}
+                    <Dialog
+                      open={userDeleteOpen}
+                      onClose={userDeleteHandleClose}
                       aria-labelledby="alert-dialog-permission"
                       aria-describedby="alert-dialog-permission"
                     >
@@ -575,7 +610,7 @@ export default function Project({ token, setAlert, ...rest }) {
                           关闭
                         </LoadingButton>
                       </DialogActions>
-                    </Dialog> */}
+                    </Dialog>
                   </Box>
                 </Box>
               </Box>
