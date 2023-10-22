@@ -561,6 +561,8 @@ export default function Project({ token, setAlert, ...rest }) {
                       }}
                       pageSizeOptions={[5, 10]}
                       checkboxSelection
+                      hideFooterSelectedRowCount
+                      selectionModel={selectionModel}
                       onSelectionModelChange={(ids, selection) => {
                         if (selection.length > 1) {
                           const selectionSet = new Set(selectionModel);
