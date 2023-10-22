@@ -111,7 +111,7 @@ export default function Project({ token, setAlert, ...rest }) {
   const [projectList, setProjectList] = useState([]);
   const [employeeName, setEmployeeName] = useState("");
   const [projectUsers, setProjectUsers] = useState([]);
-  const [selectionModel, setSelectionModel] = React.useState < GridRowId[] > ([]);
+
   const projectNameChange = (event) => {
     console.log("有更改projectID")
     setProjectID(event.target.value);
@@ -560,19 +560,9 @@ export default function Project({ token, setAlert, ...rest }) {
                         },
                       }}
                       pageSizeOptions={[5, 10]}
-                      checkboxSelection
-                      onSelectionModelChange={(ids, selection) => {
-                        if (selection.length > 1) {
-                          const selectionSet = new Set(selectionModel);
-                          const result = selection.filter((s) => !selectionSet.has(s));
-
-                          setSelectionModel(result);
-                          onRowsSelectionHandlerUser(ids)
-                        } else {
-                          setSelectionModel(selection);
-                          onRowsSelectionHandlerUser(ids)
-                        }
-                      }}
+                      checkboxSelection={true}
+                      maxSelected={1} // can select only one, no top select all box
+                      onSelectionModelChange={(ids) => { onRowsSelectionHandlerUser(ids) }}
                     />
                   </div>
                 </Box>
