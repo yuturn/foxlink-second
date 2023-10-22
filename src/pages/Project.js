@@ -101,7 +101,7 @@ const permissionMap = {
 
 export default function Project({ token, setAlert, ...rest }) {
   const [selectedDevicesData, setSelectedDevicesData] = useState();
-  const [selectedDevicesDataUser, setSelectedDevicesDataUser] = useState([]);
+  const [selectedDevicesDataUser, setSelectedDevicesDataUser] = useState();
   const [projectID, setProjectID] = useState("");
   const [project, setProject] = useState([]);
   const [projectName, setProjectName] = useState("");
@@ -206,7 +206,7 @@ export default function Project({ token, setAlert, ...rest }) {
         console.error('Error fetching project data:', error);
       });
     handleUpdateProjectUser();
-  }, [projectID]); // 空数组作为第二个参数，表示仅在组件加载时调用 useEffect
+  }, [projectID, selectedDevicesDataUser]); // 空数组作为第二个参数，表示仅在组件加载时调用 useEffect
 
   //Get資料庫裡project裡面的device詳細清單
   function handleOnClickProject() {
