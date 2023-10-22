@@ -111,7 +111,7 @@ export default function Project({ token, setAlert, ...rest }) {
   const [projectList, setProjectList] = useState([]);
   const [employeeName, setEmployeeName] = useState("");
   const [projectUsers, setProjectUsers] = useState([]);
-  const [selectedRow, setSelectedRow] = useState(null);
+  const [selectionModel, setSelectionModel] = useState([]);
   const projectNameChange = (event) => {
     console.log("有更改projectID")
     setProjectID(event.target.value);
@@ -244,13 +244,11 @@ export default function Project({ token, setAlert, ...rest }) {
   };
   //取得datagrid裡面所有select的資料(project userID)
   const onRowsSelectionHandlerUser = (ids) => {
+    console.log(ids)
     const selectedRowsData = ids.map((id) => projectUsers.find((row) => row.id === id))
     setSelectedDevicesDataUser(selectedRowsData);
-    const selectedId = ids[0];
-    if (selectedId) {
-      const selectedData = rows.find((row) => row.id === selectedId);
-      setSelectedRow(selectedData);
-    }
+    console.log(selectedRowsData);
+    console.log(selectedDevicesDataUser)
   };
   //依照所選擇的device去建立資料
   function handleOnClickProjectPost() {
@@ -563,24 +561,18 @@ export default function Project({ token, setAlert, ...rest }) {
                       }}
                       pageSizeOptions={[5, 10]}
                       checkboxSelection
-                      onSelectionModelChange={(ids) => {
-                        const firstSelectedId = ids[0];
-                        if (firstSelectedId) {
-                          // 只處理第一個選中的元素，忽略其他
-                          onRowsSelectionHandlerUser([firstSelectedId]);
+                      onSelectionModelChange={(ids, selection) => {
+                        if (selection.length > 1) {
+                          const selectionSet = new Set(selectionModel);
+                          const result = selection.filter((s) => !selectionSet.has(s));
+                          setSelectionModel(result);
+                          onRowsSelectionHandlerUser(ids);
+                        } else {
+                          setSelectionModel(selection);
+                          onRowsSelectionHandlerUser(ids);
                         }
                       }}
                     />
-                    <div>
-                      <h2>Selected Row</h2>
-                      {selectedRow && (
-                        <div>
-                          <p>ID: {selectedRow.id}</p>
-                          <p>Other Data: {selectedRow.someField}</p>
-                          {/* 显示其他选中行的数据 */}
-                        </div>
-                      )}
-                    </div>
                   </div>
                 </Box>
                 <Box display="flex" pt={3} px={2}>
