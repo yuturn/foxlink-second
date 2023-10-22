@@ -567,7 +567,7 @@ export default function Project({ token, setAlert, ...rest }) {
                         } else {
                           setSelectionModel(selection);
                         }
-                        onRowsSelectionHandlerUser(selection); // 这里使用 selection
+                        onRowsSelectionHandlerUser(ids); // 这里使用 selection
                       }}
                     />
                   </div>
