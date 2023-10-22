@@ -246,7 +246,7 @@ export default function Project({ token, setAlert, ...rest }) {
   //取得datagrid裡面所有select的資料(project userID)
   const onRowsSelectionHandlerUser = (ids) => {
     console.log(ids)
-    const selectedRowsData = ids.map((id) => projectList.find((row) => row.id === id))
+    const selectedRowsData = ids.map((id) => projectUsers.find((row) => row.id === id))
     console.log(selectedRowsData)
     const newData = selectedRowsData.map(item => {
       // 創建一個新物件，只包含你要保留的欄位
@@ -603,7 +603,7 @@ export default function Project({ token, setAlert, ...rest }) {
                           刪除
                         </LoadingButton>
                         <LoadingButton
-                          onClick={projectDeleteHandleClose}
+                          onClick={userDeleteHandleClose}
                           color="info"
                           autoFocus
                           variant="contained"
