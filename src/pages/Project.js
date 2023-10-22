@@ -158,7 +158,6 @@ export default function Project({ token, setAlert, ...rest }) {
     apiGetProjectName(token)
       .then((res) => {
         setProject(res.data);
-        console.log(project)
       })
       .catch((error) => {
         setProject([]);
@@ -173,12 +172,13 @@ export default function Project({ token, setAlert, ...rest }) {
     }
     apiGetProjectUsers(data)
       .then((res) => {
+        console.log(res)
         const newData = res.data.map((item, index) => ({
           ...item,
           id: index + 1, // 使用唯一的值作為 id
           role: permissionMap[item.permission]
         }));
-
+        console.log(newData)
         setProjectUsers(newData)
       })
       .catch((error) => {
@@ -417,7 +417,7 @@ export default function Project({ token, setAlert, ...rest }) {
                       <Select
                         labelId="permission-select-label"
                         id="permission-select"
-                        value={projectName}
+                        value={projectID}
                         label="專案"
                         onChange={projectNameChange}
                         style={{ minWidth: "200px", height: "45px" }}
@@ -474,7 +474,7 @@ export default function Project({ token, setAlert, ...rest }) {
                         <Select
                           labelId="permission-select-label"
                           id="permission-select"
-                          value={projectName}
+                          value={projectID}
                           label="專案"
                           onChange={projectNameChange}
                           style={{ minWidth: "200px", height: "45px" }}
