@@ -90,6 +90,14 @@ export const apiPostProjectUser = (data) => auth_except(baseRequest.post(`/proje
     'Authorization': `Bearer ${data['token']}`
   }
 }));
+
+export const apiDeleteProjectUser = (data) => auth_except(baseRequest.delete(`/project/remove-project-worker?project_id=${data['projectID']}&user_id=${data['userID']}`, {
+  headers:
+  {
+    'accept': 'application/json',
+    'Authorization': `Bearer ${data['token']}`
+  }
+}));
 // ============================第二期============================
 
 export const apiSystemSpace = (token) => auth_except(baseRequest.get('/system/space', {
