@@ -255,6 +255,7 @@ export default function Project({ token, setAlert, ...rest }) {
     });
     setSelectedDevicesDataUser(newData);
     console.log(newData);
+    console.log(selectedDevicesDataUser)
   };
   //依照所選擇的device去建立資料
   function handleOnClickProjectPost() {
