@@ -503,8 +503,8 @@ export default function Project({ token, setAlert, ...rest }) {
                 <Box display="flex" alignItems="center" pt={3} px={2}>
                   <div style={{ height: 400, width: '100%' }}>
                     <DataGrid
-                      rows={empRows}
-                      columns={projectUsers}
+                      rows={projectUsers}
+                      columns={empColumns}
                       initialState={{
                         pagination: {
                           paginationModel: { page: 0, pageSize: 5 },
