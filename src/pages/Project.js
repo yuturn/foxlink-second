@@ -114,6 +114,7 @@ export default function Project({ token, setAlert, ...rest }) {
   const projectNameChange = (event) => {
     console.log("有更改projectID")
     setProjectID(event.target.value);
+    console.log(event.target.value)
     console.log(projectID)
     handleUpdateProjectUser()
   };
