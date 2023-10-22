@@ -170,16 +170,22 @@ export default function Project({ token, setAlert, ...rest }) {
   }
   //此function是用來取的project的Users
   function handleUpdateProjectUser() {
+    // 检查 projectID 是否有效
+    if (!projectID) {
+      return;
+    }
+
     const data = {
       token: token,
       projectID: projectID
     }
+
     apiGetProjectUsers(data)
       .then((res) => {
         console.log(res)
         const newData = res.data.map((item, index) => ({
           ...item,
-          id: index + 1, // 使用唯一的值作為 id
+          id: index + 1,
           role: permissionMap[item.permission]
         }));
         console.log(newData)
@@ -200,7 +206,8 @@ export default function Project({ token, setAlert, ...rest }) {
       .catch((error) => {
         console.error('Error fetching project data:', error);
       });
-  }, []); // 空数组作为第二个参数，表示仅在组件加载时调用 useEffect
+    handleUpdateProjectUser();
+  }, [projectID]); // 空数组作为第二个参数，表示仅在组件加载时调用 useEffect
 
   //Get資料庫裡project裡面的device詳細清單
   function handleOnClickProject() {
