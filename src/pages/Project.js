@@ -206,7 +206,7 @@ export default function Project({ token, setAlert, ...rest }) {
       });
     handleUpdateProjectUser();
   }, [projectID, selectedDevicesDataUser]); // 空数组作为第二个参数，表示仅在组件加载时调用 useEffect
-
+  console.log(selectedDevicesDataUser);
   //Get資料庫裡project裡面的device詳細清單
   function handleOnClickProject() {
     console.log(document.getElementById('searchProject').value)
