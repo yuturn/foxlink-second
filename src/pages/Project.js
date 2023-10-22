@@ -187,6 +187,7 @@ export default function Project({ token, setAlert, ...rest }) {
           role: permissionMap[item.permission]
         }));
         console.log(newData)
+        setProjectUsers(newData)
       })
       .catch((error) => {
         console.error('Error fetching project data:', error);
