@@ -246,8 +246,8 @@ export default function Project({ token, setAlert, ...rest }) {
   //取得datagrid裡面所有select的資料(project userID)
   const onRowsSelectionHandlerUser = (ids) => {
     console.log(ids)
-    console.log(projectList)
     const selectedRowsData = ids.map((id) => projectList.find((row) => row.id === id))
+    console.log(selectedRowsData)
     const newData = selectedRowsData.map(item => {
       // 創建一個新物件，只包含你要保留的欄位
       const { badge } = item;
@@ -316,6 +316,7 @@ export default function Project({ token, setAlert, ...rest }) {
             'duration': 10000
           })
         }
+        userDeleteHandleClose()
       }).catch(err => { console.log(err) })
   };
 
@@ -594,7 +595,7 @@ export default function Project({ token, setAlert, ...rest }) {
                       </DialogContent>
                       <DialogActions>
                         <LoadingButton
-                          onClick={projectDeleteHandleClose}
+                          onClick={handleOnClickDeleteProjectUser}
                           color="error"
                           autoFocus
                           variant="contained"
