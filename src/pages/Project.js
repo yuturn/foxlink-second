@@ -298,7 +298,7 @@ export default function Project({ token, setAlert, ...rest }) {
       userID: selectedDevicesDataUser[0]['badge']
     }
     console.log(data)
-    apiPostProjectUser(data)
+    apiDeleteProjectUser(data)
       .then(res => {
         console.log('刪除user成功')
         if (res === null) {
