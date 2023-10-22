@@ -101,7 +101,7 @@ const permissionMap = {
 
 export default function Project({ token, setAlert, ...rest }) {
   const [selectedDevicesData, setSelectedDevicesData] = useState();
-  const [selectedDevicesDataUser, setSelectedDevicesDataUser] = useState();
+  const [selectedDevicesDataUser, setSelectedDevicesDataUser] = useState([]);
   const [projectID, setProjectID] = useState("");
   const [project, setProject] = useState([]);
   const [projectName, setProjectName] = useState("");
@@ -247,7 +247,6 @@ export default function Project({ token, setAlert, ...rest }) {
   const onRowsSelectionHandlerUser = (ids) => {
     console.log(ids)
     const selectedRowsData = ids.map((id) => projectUsers.find((row) => row.id === id))
-    console.log(selectedRowsData)
     const newData = selectedRowsData.map(item => {
       // 創建一個新物件，只包含你要保留的欄位
       const { badge } = item;
