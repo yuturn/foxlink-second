@@ -278,6 +278,7 @@ export default function Project({ token, setAlert, ...rest }) {
     }
     apiPostProjectUser(data)
       .then(res => {
+        console.log('新增user成功')
         if (res === null) {
           setAlert({
             'open': true,
