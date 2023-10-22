@@ -74,6 +74,14 @@ export const apiPostProjectDevices = (data) => auth_except(baseRequest.post(`/pr
     'Content-Type': 'application/json'
   }
 }));
+
+export const apiGetProjectUsers = (data) => auth_except(baseRequest.get(`/project/users?project_id=${data['projectID']}`, {
+  headers:
+  {
+    'accept': 'application/json',
+    'Authorization': `Bearer ${data['token']}`,
+  }
+}));
 // ============================第二期============================
 
 export const apiSystemSpace = (token) => auth_except(baseRequest.get('/system/space', {
