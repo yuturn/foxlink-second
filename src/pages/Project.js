@@ -111,7 +111,7 @@ export default function Project({ token, setAlert, ...rest }) {
   const [projectList, setProjectList] = useState([]);
   const [employeeName, setEmployeeName] = useState("");
   const [projectUsers, setProjectUsers] = useState([]);
-
+  const [selectedRow, setSelectedRow] = useState(null);
   const projectNameChange = (event) => {
     console.log("有更改projectID")
     setProjectID(event.target.value);
@@ -244,11 +244,13 @@ export default function Project({ token, setAlert, ...rest }) {
   };
   //取得datagrid裡面所有select的資料(project userID)
   const onRowsSelectionHandlerUser = (ids) => {
-    console.log(ids)
     const selectedRowsData = ids.map((id) => projectUsers.find((row) => row.id === id))
     setSelectedDevicesDataUser(selectedRowsData);
-    console.log(selectedRowsData);
-    console.log(selectedDevicesDataUser)
+    const selectedId = ids[0];
+    if (selectedId) {
+      const selectedData = rows.find((row) => row.id === selectedId);
+      setSelectedRow(selectedData);
+    }
   };
   //依照所選擇的device去建立資料
   function handleOnClickProjectPost() {
@@ -569,6 +571,16 @@ export default function Project({ token, setAlert, ...rest }) {
                         }
                       }}
                     />
+                    <div>
+                      <h2>Selected Row</h2>
+                      {selectedRow && (
+                        <div>
+                          <p>ID: {selectedRow.id}</p>
+                          <p>Other Data: {selectedRow.someField}</p>
+                          {/* 显示其他选中行的数据 */}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </Box>
                 <Box display="flex" pt={3} px={2}>
