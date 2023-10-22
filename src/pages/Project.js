@@ -560,9 +560,14 @@ export default function Project({ token, setAlert, ...rest }) {
                         },
                       }}
                       pageSizeOptions={[5, 10]}
-                      checkboxSelection={true}
-                      maxSelected={1} // can select only one, no top select all box
-                      onSelectionModelChange={(ids) => { onRowsSelectionHandlerUser(ids) }}
+                      checkboxSelection
+                      onSelectionModelChange={(ids) => {
+                        const firstSelectedId = ids[0];
+                        if (firstSelectedId) {
+                          // 只處理第一個選中的元素，忽略其他
+                          onRowsSelectionHandlerUser([firstSelectedId]);
+                        }
+                      }}
                     />
                   </div>
                 </Box>
