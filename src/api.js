@@ -82,7 +82,7 @@ export const apiGetProjectUsers = (data) => auth_except(baseRequest.get(`/projec
     'Authorization': `Bearer ${data['token']}`,
   }
 }));
-
+// update
 export const apiPostProjectUser = (data) => auth_except(baseRequest.post(`/project/add-project-worker`, data, {
   headers:
   {
