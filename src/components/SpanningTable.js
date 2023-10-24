@@ -121,7 +121,7 @@ import { Grid } from "@mui/material";
 
 export default function SpanningTable({ data }) {
     return (
-        <Grid xs={3}>
+        <Grid xs={6}>
             <div>
                 {Object.keys(data).map((equipment) => (
                     <div key={equipment}>

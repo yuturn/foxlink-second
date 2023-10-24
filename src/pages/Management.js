@@ -189,22 +189,26 @@ export default function Management({ token, ...rest }) {
             <Card>
 
                 <CardContent>
-                    <FormControl>
-                        <InputLabel id="demo-simple-select-label">專案</InputLabel>
-                        <Select
-                            labelId="permission-select-label"
-                            id="permission-select"
-                            value={projectID}
-                            label="專案"
-                            onChange={projectNameChange}
-                            style={{ minWidth: "200px", height: "45px" }}
-                        >
-                            <MenuItem value={1}>d7x</MenuItem>
-                        </Select>
-                    </FormControl>
-                    <Grid container spacing={10}>
-                        <SpanningTable data={rows1} />
-                    </Grid>
+                    <Box>
+                        <FormControl>
+                            <InputLabel id="demo-simple-select-label">專案</InputLabel>
+                            <Select
+                                labelId="permission-select-label"
+                                id="permission-select"
+                                value={projectID}
+                                label="專案"
+                                onChange={projectNameChange}
+                                style={{ minWidth: "200px", height: "45px" }}
+                            >
+                                <MenuItem value={1}>d7x</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Box>
+                    <Box>
+                        <Grid container spacing={10}>
+                            <SpanningTable data={rows1} />
+                        </Grid>
+                    </Box>
                 </CardContent>
             </Card>
         </ThemeProvider>
