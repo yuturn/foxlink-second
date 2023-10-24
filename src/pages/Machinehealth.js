@@ -1125,7 +1125,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                 </Grid>
                                 <Grid xs={4}>
                                   <Box align="center" sx={{ height: 'auto' }}>
-                                    <TableCell align="left" >
+                                    <TableCell align="left" sx={{ borderBottom: 0 }}>
                                       <TableSortLabel
                                         active={orderBy === 'date'}
                                         direction={orderBy === 'date' ? order : 'asc'}
@@ -1138,7 +1138,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                 </Grid>
                                 <Grid xs={3}>
                                   <Box align="center" sx={{ height: 'auto' }}>
-                                    <TableCell align="left" >
+                                    <TableCell align="left" sx={{ borderBottom: 0 }}>
                                       <TableSortLabel
                                         active={orderBy === 'frequency'}
                                         direction={orderBy === 'frequency' ? order : 'asc'}
