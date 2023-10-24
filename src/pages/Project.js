@@ -318,7 +318,7 @@ export default function Project({ token, setAlert, ...rest }) {
         console.log('刪除user成功')
         // 删除成功后更新用户数据
         const updatedUsers = projectUsers.filter(user => user.id !== selectedDevicesDataUser[0]['badge']);
-        setProjectUsers([...updatedUsers]);
+        setProjectUsers(updatedUsers);
 
         // 关闭对话框
         userDeleteHandleClose();
@@ -334,7 +334,15 @@ export default function Project({ token, setAlert, ...rest }) {
         <Divider sx={{ borderBottomWidth: 3 }} />
         <CardContent>
           <Grid container spacing={1}>
-            <Snackbar open={alertOpen} autoHideDuration={5000} onClose={handleClose}>
+            <Snackbar
+              open={alertOpen}
+              autoHideDuration={5000}
+              onClose={handleClose}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'center'
+              }}
+            >
               <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
                 {message}
               </Alert>
@@ -569,7 +577,6 @@ export default function Project({ token, setAlert, ...rest }) {
                 <Box display="flex" alignItems="center" pt={3} px={2}>
                   <div style={{ height: 400, width: '100%' }}>
                     <DataGrid
-                      key={projectUsers.length}
                       rows={projectUsers}
                       columns={empColumns}
                       initialState={{
