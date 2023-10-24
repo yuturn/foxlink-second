@@ -333,12 +333,12 @@ export default function Project({ token, setAlert, ...rest }) {
         </Box>
         <Divider sx={{ borderBottomWidth: 3 }} />
         <CardContent>
-          <Snackbar open={alertOpen} autoHideDuration={5000} onClose={handleClose}>
-            <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-              {message}
-            </Alert>
-          </Snackbar>
           <Grid container spacing={1}>
+            <Snackbar open={alertOpen} autoHideDuration={5000} onClose={handleClose}>
+              <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                {message}
+              </Alert>
+            </Snackbar>
             <Grid item xs={12} md={12}>
               <Box>
                 <Box component="form" role="form" mb={3}>
@@ -569,6 +569,7 @@ export default function Project({ token, setAlert, ...rest }) {
                 <Box display="flex" alignItems="center" pt={3} px={2}>
                   <div style={{ height: 400, width: '100%' }}>
                     <DataGrid
+                      key={projectUsers.length}
                       rows={projectUsers}
                       columns={empColumns}
                       initialState={{
