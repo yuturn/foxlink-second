@@ -205,9 +205,7 @@ export default function Management({ token, ...rest }) {
                         </FormControl>
                     </Box>
                     <Box>
-                        <Grid container spacing={10}>
-                            <SpanningTable data={rows1} />
-                        </Grid>
+                        <SpanningTable data={rows1} />
                     </Box>
                 </CardContent>
             </Card>

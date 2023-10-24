@@ -121,140 +121,142 @@ import { Grid } from "@mui/material";
 
 export default function SpanningTable({ data }) {
     return (
-        <Grid xs={6}>
-            <div>
-                {Object.keys(data).map((equipment) => (
-                    <div key={equipment}>
-                        {data[equipment].map((info, index) => (
-                            <TableContainer key={index} component={Paper}>
-                                <Table sx={{ minWidth: 700 }} aria-label="spanning table">
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell
-                                                align="center"
-                                                colSpan={5}
-                                                sx={{
-                                                    backgroundColor: "#b3e5fc",
-                                                    border: "1px solid black"
-                                                }}
-                                            >
-                                                {equipment}
-                                            </TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        <TableRow>
-                                            <TableCell colSpan={2} sx={{ border: "1px solid black" }}>
-                                                設備需求
-                                            </TableCell>
-                                            <TableCell
-                                                align="left"
-                                                colSpan={3}
-                                                sx={{ border: "1px solid black" }}
-                                            >
-                                                {info.require}
-                                            </TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell
-                                                colSpan={2}
-                                                sx={{
-                                                    backgroundColor: "orange",
-                                                    border: "1px solid black"
-                                                }}
-                                            >
-                                                預計下周更換時間
-                                            </TableCell>
-                                            <TableCell
-                                                align="left"
-                                                sx={{
-                                                    backgroundColor: "orange",
-                                                    border: "1px solid black"
-                                                }}
-                                                colSpan={3}
-                                            >
-                                                {info.prechangtime}
-                                            </TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell colSpan={1} sx={{ border: "1px solid black" }}>
-                                                更換原因
-                                            </TableCell>
-                                            <TableCell colSpan={1} sx={{ border: "1px solid black" }}>
-                                                更換時間
-                                            </TableCell>
-                                            <TableCell colSpan={1} sx={{ border: "1px solid black" }}>
-                                                本次使用次數
-                                            </TableCell>
-                                            <TableCell colSpan={1} sx={{ border: "1px solid black" }}>
-                                                累計更換次數
-                                            </TableCell>
-                                            <TableCell colSpan={1} sx={{ border: "1px solid black" }}>
-                                                平均使用次數
-                                            </TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell colSpan={1} sx={{ border: "1px solid black" }}>
-                                                壽命更換
-                                            </TableCell>
-                                            <TableCell colSpan={1} sx={{ border: "1px solid black" }}>
-                                                {info.lifechangetime}
-                                            </TableCell>
-                                            <TableCell colSpan={1} sx={{ border: "1px solid black" }}>
-                                                {info.lifeusedcount}
-                                            </TableCell>
-                                            <TableCell colSpan={1} sx={{ border: "1px solid black" }}>
-                                                {info.lifechangecount}
-                                            </TableCell>
-                                            <TableCell colSpan={1} sx={{ border: "1px solid black" }}>
-                                                {info.lifechangeaveragecount}
-                                            </TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell sx={{ border: "1px solid black" }}>
-                                                不良更換
-                                            </TableCell>
-                                            <TableCell sx={{ border: "1px solid black" }}>
-                                                {info.brokenchangetime}
-                                            </TableCell>
-                                            <TableCell sx={{ border: "1px solid black" }}>
-                                                {info.brokenusedcount}
-                                            </TableCell>
-                                            <TableCell sx={{ border: "1px solid black" }}>
-                                                {info.brokenchangecount}
-                                            </TableCell>
-                                            <TableCell sx={{ border: "1px solid black" }}>
-                                                {info.brokenchangeaveragecount}
-                                            </TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell
-                                                align="center"
-                                                colSpan={3}
-                                                sx={{
-                                                    backgroundColor: "#c8e6c9",
-                                                    border: "1px solid black"
-                                                }}
-                                            >
-                                                總計
-                                            </TableCell>
-                                            <TableCell
-                                                colSpan={2}
-                                                sx={{
-                                                    backgroundColor: "#c8e6c9",
-                                                    border: "1px solid black"
-                                                }}
-                                            >
-                                                {info.total}
-                                            </TableCell>
-                                        </TableRow>
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                        ))}
-                    </div>
-                ))}
-            </div>
+        <Grid>
+            <Grid xs={6}>
+                <div>
+                    {Object.keys(data).map((equipment) => (
+                        <div key={equipment}>
+                            {data[equipment].map((info, index) => (
+                                <TableContainer key={index} component={Paper}>
+                                    <Table sx={{ minWidth: 700 }} aria-label="spanning table">
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableCell
+                                                    align="center"
+                                                    colSpan={5}
+                                                    sx={{
+                                                        backgroundColor: "#b3e5fc",
+                                                        border: "1px solid black"
+                                                    }}
+                                                >
+                                                    {equipment}
+                                                </TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            <TableRow>
+                                                <TableCell colSpan={2} sx={{ border: "1px solid black" }}>
+                                                    設備需求
+                                                </TableCell>
+                                                <TableCell
+                                                    align="left"
+                                                    colSpan={3}
+                                                    sx={{ border: "1px solid black" }}
+                                                >
+                                                    {info.require}
+                                                </TableCell>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableCell
+                                                    colSpan={2}
+                                                    sx={{
+                                                        backgroundColor: "orange",
+                                                        border: "1px solid black"
+                                                    }}
+                                                >
+                                                    預計下周更換時間
+                                                </TableCell>
+                                                <TableCell
+                                                    align="left"
+                                                    sx={{
+                                                        backgroundColor: "orange",
+                                                        border: "1px solid black"
+                                                    }}
+                                                    colSpan={3}
+                                                >
+                                                    {info.prechangtime}
+                                                </TableCell>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableCell colSpan={1} sx={{ border: "1px solid black" }}>
+                                                    更換原因
+                                                </TableCell>
+                                                <TableCell colSpan={1} sx={{ border: "1px solid black" }}>
+                                                    更換時間
+                                                </TableCell>
+                                                <TableCell colSpan={1} sx={{ border: "1px solid black" }}>
+                                                    本次使用次數
+                                                </TableCell>
+                                                <TableCell colSpan={1} sx={{ border: "1px solid black" }}>
+                                                    累計更換次數
+                                                </TableCell>
+                                                <TableCell colSpan={1} sx={{ border: "1px solid black" }}>
+                                                    平均使用次數
+                                                </TableCell>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableCell colSpan={1} sx={{ border: "1px solid black" }}>
+                                                    壽命更換
+                                                </TableCell>
+                                                <TableCell colSpan={1} sx={{ border: "1px solid black" }}>
+                                                    {info.lifechangetime}
+                                                </TableCell>
+                                                <TableCell colSpan={1} sx={{ border: "1px solid black" }}>
+                                                    {info.lifeusedcount}
+                                                </TableCell>
+                                                <TableCell colSpan={1} sx={{ border: "1px solid black" }}>
+                                                    {info.lifechangecount}
+                                                </TableCell>
+                                                <TableCell colSpan={1} sx={{ border: "1px solid black" }}>
+                                                    {info.lifechangeaveragecount}
+                                                </TableCell>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableCell sx={{ border: "1px solid black" }}>
+                                                    不良更換
+                                                </TableCell>
+                                                <TableCell sx={{ border: "1px solid black" }}>
+                                                    {info.brokenchangetime}
+                                                </TableCell>
+                                                <TableCell sx={{ border: "1px solid black" }}>
+                                                    {info.brokenusedcount}
+                                                </TableCell>
+                                                <TableCell sx={{ border: "1px solid black" }}>
+                                                    {info.brokenchangecount}
+                                                </TableCell>
+                                                <TableCell sx={{ border: "1px solid black" }}>
+                                                    {info.brokenchangeaveragecount}
+                                                </TableCell>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableCell
+                                                    align="center"
+                                                    colSpan={3}
+                                                    sx={{
+                                                        backgroundColor: "#c8e6c9",
+                                                        border: "1px solid black"
+                                                    }}
+                                                >
+                                                    總計
+                                                </TableCell>
+                                                <TableCell
+                                                    colSpan={2}
+                                                    sx={{
+                                                        backgroundColor: "#c8e6c9",
+                                                        border: "1px solid black"
+                                                    }}
+                                                >
+                                                    {info.total}
+                                                </TableCell>
+                                            </TableRow>
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
+                            ))}
+                        </div>
+                    ))}
+                </div>
+            </Grid>
         </Grid>
     );
 }
