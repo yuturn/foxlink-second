@@ -115,6 +115,7 @@ export default function Project({ token, setAlert, ...rest }) {
   const [employeeName, setEmployeeName] = useState("");
   const [projectUsers, setProjectUsers] = useState([]);
   const [selectedRow, setSelectedRow] = useState(null);
+  const [alertStatus, setAlertStatus] = useState("success");
 
 
   const projectNameChange = (event) => {
@@ -315,13 +316,16 @@ export default function Project({ token, setAlert, ...rest }) {
     console.log(data)
     apiDeleteProjectUser(data)
       .then(res => {
-        console.log('刪除user成功')
-        // 删除成功后更新用户数据
-        const updatedUsers = projectUsers.filter(user => user.id !== selectedDevicesDataUser[0]['badge']);
-        setProjectUsers(updatedUsers);
-
-        // 关闭对话框
-        userDeleteHandleClose();
+        if (res === null) {
+          setAlertStatus("success")
+          handleOpen('成功刪除User')
+          // 关闭对话框
+          userDeleteHandleClose();
+        }
+        else {
+          setAlertStatus("error")
+          handleOpen('刪除User失敗')
+        }
       }).catch(err => { console.log(err) })
   };
 
@@ -333,20 +337,21 @@ export default function Project({ token, setAlert, ...rest }) {
         </Box>
         <Divider sx={{ borderBottomWidth: 3 }} />
         <CardContent>
+          <Snackbar
+            open={alertOpen}
+            autoHideDuration={5000}
+            onClose={handleClose}
+            variant="filled"
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'center'
+            }}
+          >
+            <Alert onClose={handleClose} severity={alertStatus} sx={{ width: '100%' }}>
+              {message}
+            </Alert>
+          </Snackbar>
           <Grid container spacing={1}>
-            <Snackbar
-              open={alertOpen}
-              autoHideDuration={5000}
-              onClose={handleClose}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'center'
-              }}
-            >
-              <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                {message}
-              </Alert>
-            </Snackbar>
             <Grid item xs={12} md={12}>
               <Box>
                 <Box component="form" role="form" mb={3}>
@@ -617,7 +622,7 @@ export default function Project({ token, setAlert, ...rest }) {
                       </DialogContent>
                       <DialogActions>
                         <LoadingButton
-                          onClick={() => { deleteProjectUser(); handleOpen('成功刪除User') }}
+                          onClick={() => { deleteProjectUser(); }}
                           color="error"
                           variant="contained"
                         >
