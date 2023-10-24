@@ -1104,7 +1104,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                         <TableContainer component={Paper} style={tableContainerStyle.tableContainer}>
                           <Table>
                             <TableHead sx={{ border: 0 }} style={{ backgroundColor: '#696969' }}>
-                              <Grid container spacing={1}>
+                              <Grid container spacing={1} sx={{ borderBottom: 0 }}>
                                 <Grid xs={2}>
                                   <Box align="center" sx={{ height: 'auto', border: 0 }}>
                                     <TableCell align="left" >
