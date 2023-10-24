@@ -164,7 +164,12 @@ const rows1 = {
 
 export default function SpanningTable({ data }) {
     // 将所有表格数据展平为一个数组
-    const flattenedData = Object.values(rows1).reduce((acc, data) => [...acc, ...data], []);
+    const flattenedData = [];
+    Object.keys(rows1).forEach((equipment) => {
+        rows1[equipment].forEach((info) => {
+            flattenedData.push({ equipment, ...info });
+        });
+    });
 
     return (
         <div>
@@ -183,7 +188,7 @@ export default function SpanningTable({ data }) {
                                                 border: "1px solid black"
                                             }}
                                         >
-                                            {info.require}
+                                            {info.equipment}
                                         </TableCell>
                                     </TableRow>
                                 </TableHead>
