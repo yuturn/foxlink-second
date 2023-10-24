@@ -181,7 +181,7 @@ export default function Project({ token, setAlert, ...rest }) {
       }).catch((error) => {
         // 处理错误
         console.error(error);
-        handleErrorOpen("刪除專案失敗");
+        handleErrorOpen("刪除專案失敗" + error);
       });
   };
   //更新目前的project，看還有哪些
@@ -280,6 +280,7 @@ export default function Project({ token, setAlert, ...rest }) {
     const selectedRowsData = ids.map((id) => projectUsers.find((row) => row.id === id))
     setSelectedDevicesDataUser(selectedRowsData);
   };
+
   //依照所選擇的device去建立資料
   function handleOnClickProjectPost() {
     const data = {
@@ -289,7 +290,7 @@ export default function Project({ token, setAlert, ...rest }) {
     apiPostProjectDevices(data)
       .then(res => {
         handleOpen("新增專案成功");
-      }).catch(err => { console.log(err); handleErrorOpen("新增專案失敗") })
+      }).catch(err => { console.log(err); handleErrorOpen("新增專案失敗" + err) })
   };
   //新增user到專案
   function handleOnClickAddUserToProject() {
