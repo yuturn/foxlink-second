@@ -312,12 +312,7 @@ export default function Project({ token, setAlert, ...rest }) {
     apiPostProjectUser(data)
       .then(res => {
         console.log('新增user成功')
-        if (res === null) {
-          handleOpen("新增user成功");
-        }
-        else {
-          handleErrorOpen("新增user失敗");
-        }
+        handleOpen("新增user成功");
       }).catch(err => { console.log(err); handleErrorOpen("新增user失敗"); })
   };
 
@@ -331,15 +326,10 @@ export default function Project({ token, setAlert, ...rest }) {
     console.log(data)
     apiDeleteProjectUser(data)
       .then(res => {
-        if (res === null) {
-          handleOpen('成功刪除User')
-          // 关闭对话框
-          userDeleteHandleClose();
-        }
-        else {
-          handleErrorOpen('刪除User失敗')
-        }
-      }).catch(err => { console.log(err) })
+        handleOpen('成功刪除User: ' + data.userID)
+        // 关闭对话框
+        userDeleteHandleClose();
+      }).catch(err => { console.log(err); handleErrorOpen('刪除User失敗') })
   };
 
   return (
