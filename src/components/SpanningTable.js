@@ -116,6 +116,49 @@ const rows1 = {
             "brokenchangeaveragecount": 65000,
             "total": 15
         }
+    ],
+    "刮刀1": [
+        {
+            "require": "Device_1(尺寸,外觀)",
+            "prechangtime": "2023-08-13 12:51:18",
+            "lifechangetime": "2023-06-09 13:18:10",
+            "lifeusedcount": 70000,
+            "lifechangecount": 10,
+            "lifechangeaveragecount": 65000,
+            "brokenchangetime": "2023-05-23 11:42:19",
+            "brokenusedcount": 70000,
+            "brokenchangecount": 10,
+            "brokenchangeaveragecount": 65000,
+            "total": 15
+        },
+        {
+            "require": "Device_4(尺寸,外觀)",
+            "prechangtime": "2023-08-13 12:51:18",
+            "lifechangetime": "2023-06-09 13:18:10",
+            "lifeusedcount": 70000,
+            "lifechangecount": 10,
+            "lifechangeaveragecount": 65000,
+            "brokenchangetime": "2023-05-23 11:42:19",
+            "brokenusedcount": 70000,
+            "brokenchangecount": 10,
+            "brokenchangeaveragecount": 65000,
+            "total": 15
+        }
+    ],
+    "刮刀2": [
+        {
+            "require": "Device_1(尺寸,外觀)",
+            "prechangtime": "2023-08-13 12:51:18",
+            "lifechangetime": "2023-06-09 13:18:10",
+            "lifeusedcount": 70000,
+            "lifechangecount": 10,
+            "lifechangeaveragecount": 65000,
+            "brokenchangetime": "2023-05-23 11:42:19",
+            "brokenusedcount": 70000,
+            "brokenchangecount": 10,
+            "brokenchangeaveragecount": 65000,
+            "total": 15
+        }
     ]
 };
 
@@ -124,7 +167,7 @@ export default function SpanningTable({ data }) {
         <div>
             <Grid container spacing={10}>
                 {Object.keys(rows1).map((equipment) => (
-                    <Grid item key={equipment} xs={12} sm={6} md={6} lg={4}>
+                    <Grid item key={equipment} xs={12} sm={6} md={4} lg={4}>
                         {rows1[equipment].map((info) => (
                             <TableContainer key={info.require} component={Paper} sx={{ maxWidth: '100%' }}>
                                 <Table aria-label="spanning table">
