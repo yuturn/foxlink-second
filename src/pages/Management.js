@@ -180,7 +180,6 @@ const rows1 = {
 
 
 export default function Management({ token, ...rest }) {
-
     return (
         <ThemeProvider theme={darkTheme}>
             <Grid container spacing={10}>

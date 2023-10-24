@@ -8,116 +8,116 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Grid } from "@mui/material";
 
-const rows1 = {
-    "Latch裁切定刀": [
-        {
-            "require": "Device_1(尺寸,外觀)",
-            "prechangtime": "2023-08-13 12:51:18",
-            "lifechangetime": "2023-06-09 13:18:10",
-            "lifeusedcount": 70000,
-            "lifechangecount": 10,
-            "lifechangeaveragecount": 65000,
-            "brokenchangetime": "2023-05-23 11:42:19",
-            "brokenusedcount": 70000,
-            "brokenchangecount": 10,
-            "brokenchangeaveragecount": 65000,
-            "total": 15
-        },
-        {
-            "require": "Device_4(尺寸,外觀)",
-            "prechangtime": "2023-08-13 12:51:18",
-            "lifechangetime": "2023-06-09 13:18:10",
-            "lifeusedcount": 70000,
-            "lifechangecount": 10,
-            "lifechangeaveragecount": 65000,
-            "brokenchangetime": "2023-05-23 11:42:19",
-            "brokenusedcount": 70000,
-            "brokenchangecount": 10,
-            "brokenchangeaveragecount": 65000,
-            "total": 15
-        },
-        {
-            "require": "Device_6(尺寸,外觀)",
-            "prechangtime": "2023-08-13 12:51:18",
-            "lifechangetime": "2023-06-09 13:18:10",
-            "lifeusedcount": 70000,
-            "lifechangecount": 10,
-            "lifechangeaveragecount": 65000,
-            "brokenchangetime": "2023-05-23 11:42:19",
-            "brokenusedcount": 70000,
-            "brokenchangecount": 10,
-            "brokenchangeaveragecount": 65000,
-            "total": 15
-        }
-    ],
-    "刮刀": [
-        {
-            "require": "Device_1(尺寸,外觀)",
-            "prechangtime": "2023-08-13 12:51:18",
-            "lifechangetime": "2023-06-09 13:18:10",
-            "lifeusedcount": 70000,
-            "lifechangecount": 10,
-            "lifechangeaveragecount": 65000,
-            "brokenchangetime": "2023-05-23 11:42:19",
-            "brokenusedcount": 70000,
-            "brokenchangecount": 10,
-            "brokenchangeaveragecount": 65000,
-            "total": 15
-        },
-        {
-            "require": "Device_4(尺寸,外觀)",
-            "prechangtime": "2023-08-13 12:51:18",
-            "lifechangetime": "2023-06-09 13:18:10",
-            "lifeusedcount": 70000,
-            "lifechangecount": 10,
-            "lifechangeaveragecount": 65000,
-            "brokenchangetime": "2023-05-23 11:42:19",
-            "brokenusedcount": 70000,
-            "brokenchangecount": 10,
-            "brokenchangeaveragecount": 65000,
-            "total": 15
-        },
-        {
-            "require": "Device_6(尺寸,外觀)",
-            "prechangtime": "2023-08-13 12:51:18",
-            "lifechangetime": "2023-06-09 13:18:10",
-            "lifeusedcount": 70000,
-            "lifechangecount": 10,
-            "lifechangeaveragecount": 65000,
-            "brokenchangetime": "2023-05-23 11:42:19",
-            "brokenusedcount": 70000,
-            "brokenchangecount": 10,
-            "brokenchangeaveragecount": 65000,
-            "total": 15
-        },
-        {
-            "require": "Device_10(尺寸,外觀)",
-            "prechangtime": "2023-08-13 12:51:18",
-            "lifechangetime": "2023-06-09 13:18:10",
-            "lifeusedcount": 70000,
-            "lifechangecount": 10,
-            "lifechangeaveragecount": 65000,
-            "brokenchangetime": "2023-05-23 11:42:19",
-            "brokenusedcount": 70000,
-            "brokenchangecount": 10,
-            "brokenchangeaveragecount": 65000,
-            "total": 15
-        },
-        {
-            "require": "Device_11(尺寸,外觀)",
-            "prechangtime": "2023-08-13 12:51:18",
-            "lifechangetime": "2023-06-09 13:18:10",
-            "lifeusedcount": 70000,
-            "lifechangecount": 10,
-            "lifechangeaveragecount": 65000,
-            "brokenchangetime": "2023-05-23 11:42:19",
-            "brokenusedcount": 70000,
-            "brokenchangecount": 10,
-            "brokenchangeaveragecount": 65000,
-            "total": 15
-        }
-    ]
-};
+// const rows1 = {
+//     "Latch裁切定刀": [
+//         {
+//             "require": "Device_1(尺寸,外觀)",
+//             "prechangtime": "2023-08-13 12:51:18",
+//             "lifechangetime": "2023-06-09 13:18:10",
+//             "lifeusedcount": 70000,
+//             "lifechangecount": 10,
+//             "lifechangeaveragecount": 65000,
+//             "brokenchangetime": "2023-05-23 11:42:19",
+//             "brokenusedcount": 70000,
+//             "brokenchangecount": 10,
+//             "brokenchangeaveragecount": 65000,
+//             "total": 15
+//         },
+//         {
+//             "require": "Device_4(尺寸,外觀)",
+//             "prechangtime": "2023-08-13 12:51:18",
+//             "lifechangetime": "2023-06-09 13:18:10",
+//             "lifeusedcount": 70000,
+//             "lifechangecount": 10,
+//             "lifechangeaveragecount": 65000,
+//             "brokenchangetime": "2023-05-23 11:42:19",
+//             "brokenusedcount": 70000,
+//             "brokenchangecount": 10,
+//             "brokenchangeaveragecount": 65000,
+//             "total": 15
+//         },
+//         {
+//             "require": "Device_6(尺寸,外觀)",
+//             "prechangtime": "2023-08-13 12:51:18",
+//             "lifechangetime": "2023-06-09 13:18:10",
+//             "lifeusedcount": 70000,
+//             "lifechangecount": 10,
+//             "lifechangeaveragecount": 65000,
+//             "brokenchangetime": "2023-05-23 11:42:19",
+//             "brokenusedcount": 70000,
+//             "brokenchangecount": 10,
+//             "brokenchangeaveragecount": 65000,
+//             "total": 15
+//         }
+//     ],
+//     "刮刀": [
+//         {
+//             "require": "Device_1(尺寸,外觀)",
+//             "prechangtime": "2023-08-13 12:51:18",
+//             "lifechangetime": "2023-06-09 13:18:10",
+//             "lifeusedcount": 70000,
+//             "lifechangecount": 10,
+//             "lifechangeaveragecount": 65000,
+//             "brokenchangetime": "2023-05-23 11:42:19",
+//             "brokenusedcount": 70000,
+//             "brokenchangecount": 10,
+//             "brokenchangeaveragecount": 65000,
+//             "total": 15
+//         },
+//         {
+//             "require": "Device_4(尺寸,外觀)",
+//             "prechangtime": "2023-08-13 12:51:18",
+//             "lifechangetime": "2023-06-09 13:18:10",
+//             "lifeusedcount": 70000,
+//             "lifechangecount": 10,
+//             "lifechangeaveragecount": 65000,
+//             "brokenchangetime": "2023-05-23 11:42:19",
+//             "brokenusedcount": 70000,
+//             "brokenchangecount": 10,
+//             "brokenchangeaveragecount": 65000,
+//             "total": 15
+//         },
+//         {
+//             "require": "Device_6(尺寸,外觀)",
+//             "prechangtime": "2023-08-13 12:51:18",
+//             "lifechangetime": "2023-06-09 13:18:10",
+//             "lifeusedcount": 70000,
+//             "lifechangecount": 10,
+//             "lifechangeaveragecount": 65000,
+//             "brokenchangetime": "2023-05-23 11:42:19",
+//             "brokenusedcount": 70000,
+//             "brokenchangecount": 10,
+//             "brokenchangeaveragecount": 65000,
+//             "total": 15
+//         },
+//         {
+//             "require": "Device_10(尺寸,外觀)",
+//             "prechangtime": "2023-08-13 12:51:18",
+//             "lifechangetime": "2023-06-09 13:18:10",
+//             "lifeusedcount": 70000,
+//             "lifechangecount": 10,
+//             "lifechangeaveragecount": 65000,
+//             "brokenchangetime": "2023-05-23 11:42:19",
+//             "brokenusedcount": 70000,
+//             "brokenchangecount": 10,
+//             "brokenchangeaveragecount": 65000,
+//             "total": 15
+//         },
+//         {
+//             "require": "Device_11(尺寸,外觀)",
+//             "prechangtime": "2023-08-13 12:51:18",
+//             "lifechangetime": "2023-06-09 13:18:10",
+//             "lifeusedcount": 70000,
+//             "lifechangecount": 10,
+//             "lifechangeaveragecount": 65000,
+//             "brokenchangetime": "2023-05-23 11:42:19",
+//             "brokenusedcount": 70000,
+//             "brokenchangecount": 10,
+//             "brokenchangeaveragecount": 65000,
+//             "total": 15
+//         }
+//     ]
+// };
 
 export default function SpanningTable({ data }) {
     return (
