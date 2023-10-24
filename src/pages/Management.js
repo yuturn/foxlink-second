@@ -9,19 +9,18 @@ import {
     Typography,
     Grid,
     CardHeader,
+    CardContent,
     createTheme,
     ThemeProvider,
+    FormControl,
+    InputLabel
 } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { AlertComponent } from "../components/alert-component";
 
-// import { apiGetWhiteList, apiGetDeviceNameById, apiWorkShopList, apiGetDeviceRecommend, apiGetWorkersByDevice, apiPostAddWorkersWhitelist, apiDeleteWorkersWhitelist } from "../api.js";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
 
 const darkTheme = createTheme({
     palette: {
@@ -180,11 +179,34 @@ const rows1 = {
 
 
 export default function Management({ token, ...rest }) {
+    const [projectID, setProjectID] = useState('')
+    const projectNameChange = (event) => {
+        setProjectID(event.target.value);
+        console.log(event.target.value)
+    };
     return (
         <ThemeProvider theme={darkTheme}>
-            <Grid container spacing={10}>
-                <SpanningTable data={rows1} />
-            </Grid>
+            <Card>
+
+                <CardContent>
+                    <FormControl>
+                        <InputLabel id="demo-simple-select-label">專案</InputLabel>
+                        <Select
+                            labelId="permission-select-label"
+                            id="permission-select"
+                            value={projectID}
+                            label="專案"
+                            onChange={projectNameChange}
+                            style={{ minWidth: "200px", height: "45px" }}
+                        >
+                            <MenuItem value={1}>d7x</MenuItem>
+                        </Select>
+                    </FormControl>
+                    <Grid container spacing={10}>
+                        <SpanningTable data={rows1} />
+                    </Grid>
+                </CardContent>
+            </Card>
         </ThemeProvider>
     );
 }
