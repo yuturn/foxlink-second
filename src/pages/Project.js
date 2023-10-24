@@ -160,11 +160,11 @@ export default function Project({ token, setAlert, ...rest }) {
   const [errorAlertOpen, setErrorAlertOpen] = React.useState(false);
   const [errorMessage, setErrorMessage] = useState(''); // 状态来存储消息内容
   const handleErrorOpen = (message) => {
-    setMessage(message); // 设置消息内容
-    setAlertOpen(true);
+    setErrorMessage(message); // 设置消息内容
+    setErrorAlertOpen(true);
   };
   const handleErrorClose = (event, reason) => {
-    setAlertOpen(false);
+    setErrorAlertOpen(false);
   };
 
 
@@ -313,12 +313,10 @@ export default function Project({ token, setAlert, ...rest }) {
       .then(res => {
         console.log('新增user成功')
         if (res === null) {
-          if (res === null) {
-            handleOpen("新增專案成功");
-          }
-          else {
-            handleErrorOpen("新增專案失敗");
-          }
+          handleOpen("新增專案成功");
+        }
+        else {
+          handleErrorOpen("新增專案失敗");
         }
       }).catch(err => { console.log(err) })
   };
