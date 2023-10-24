@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { apiGetPeddingList, apiConfirmedUser } from '../api'
-import { SpanningTable } from '../components/SpanningTable'
+import SpanningTable from '../components/SpanningTable'
 import {
     Box,
     Card,
