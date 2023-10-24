@@ -316,15 +316,12 @@ export default function Project({ token, setAlert, ...rest }) {
     apiDeleteProjectUser(data)
       .then(res => {
         console.log('刪除user成功')
-        if (res === null) {
-          setAlert({
-            'open': true,
-            'msg': `資料建立完成`,
-            'type': 'warning',
-            'duration': 10000
-          })
-        }
-        userDeleteHandleClose()
+        // 删除成功后更新用户数据
+        const updatedUsers = projectUsers.filter(user => user.id !== selectedDevicesDataUser[0]['badge']);
+        setProjectUsers(updatedUsers);
+
+        // 关闭对话框
+        userDeleteHandleClose();
       }).catch(err => { console.log(err) })
   };
 
@@ -612,7 +609,7 @@ export default function Project({ token, setAlert, ...rest }) {
                       </DialogContent>
                       <DialogActions>
                         <LoadingButton
-                          onClick={deleteProjectUser}
+                          onClick={() => { deleteProjectUser(); handleOpen('成功刪除User') }}
                           color="error"
                           variant="contained"
                         >
