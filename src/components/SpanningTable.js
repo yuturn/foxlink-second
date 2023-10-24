@@ -120,16 +120,11 @@ const rows1 = {
 };
 
 export default function SpanningTable({ data }) {
-    // 计算所有设备数据数组的总长度
-    const totalLength = Object.values(rows1).reduce((acc, data) => acc + data.length, 0);
-
-    // 根据总长度设置 spacing
-    const spacing = totalLength <= 4 ? 4 : 10;
     return (
         <div>
-            <Grid container spacing={spacing}>
+            <Grid container spacing={10}>
                 {Object.keys(rows1).map((equipment) => (
-                    <Grid item key={equipment} xs={12} sm={6} md={4} lg={2}>
+                    <Grid item key={equipment} xs={12} sm={6} md={6} lg={4}>
                         {rows1[equipment].map((info) => (
                             <TableContainer key={info.require} component={Paper} sx={{ maxWidth: '100%' }}>
                                 <Table sx={{ minWidth: 700 }} aria-label="spanning table">
