@@ -21,6 +21,9 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
+import Snackbar from '@mui/material/Snackbar';
 
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
@@ -112,6 +115,8 @@ export default function Project({ token, setAlert, ...rest }) {
   const [employeeName, setEmployeeName] = useState("");
   const [projectUsers, setProjectUsers] = useState([]);
   const [selectedRow, setSelectedRow] = useState(null);
+
+
   const projectNameChange = (event) => {
     console.log("有更改projectID")
     setProjectID(event.target.value);
@@ -138,6 +143,19 @@ export default function Project({ token, setAlert, ...rest }) {
   const userDeleteHandleClose = () => {
     setUserDeleteOpen(false);
   };
+
+  //新增專案alert
+  const [alertOpen, setAlertOpen] = React.useState(false);
+  const [message, setMessage] = useState(''); // 状态来存储消息内容
+  const handleOpen = (message) => {
+    setMessage(message); // 设置消息内容
+    setAlertOpen(true);
+  };
+  const handleClose = (event, reason) => {
+    setAlertOpen(false);
+  };
+
+
   //刪除project的function
   const projectDelete = () => {
     const data = {
@@ -261,12 +279,7 @@ export default function Project({ token, setAlert, ...rest }) {
     apiPostProjectDevices(data)
       .then(res => {
         if (res === null) {
-          setAlert({
-            'open': true,
-            'msg': `資料建立完成`,
-            'type': 'warning',
-            'duration': 10000
-          })
+          handleOpen()
         }
       }).catch(err => { console.log(err) })
   };
@@ -323,6 +336,11 @@ export default function Project({ token, setAlert, ...rest }) {
         </Box>
         <Divider sx={{ borderBottomWidth: 3 }} />
         <CardContent>
+          <Snackbar open={alertOpen} autoHideDuration={5000} onClose={handleClose}>
+            <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+              {message}
+            </Alert>
+          </Snackbar>
           <Grid container spacing={1}>
             <Grid item xs={12} md={12}>
               <Box>
@@ -362,7 +380,7 @@ export default function Project({ token, setAlert, ...rest }) {
                 </Box>
                 <Box display="flex" pt={3} px={2}>
                   <Box>
-                    <LoadingButton variant="contained" color="info" onClick={handleOnClickProjectPost}>
+                    <LoadingButton variant="contained" color="info" onClick={() => { handleOnClickProjectPost(); handleOpen(); }}>
                       新增專案
                     </LoadingButton>
                   </Box>
