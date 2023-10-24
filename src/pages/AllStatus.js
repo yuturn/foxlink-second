@@ -1096,29 +1096,24 @@ export default function Statistics({ token, setAlert, ...rest }) {
                                         </Grid>
                                         <Divider sx={{ mt: 3, borderBottomWidth: 3 }} />
                                         <Grid container spacing={2} mt={1}>
-                                            <Grid item xs={12} md={12}>
+                                            <Grid item xs={6} md={6}>
                                                 <TableContainer component={Paper} style={tableContainerStyle.tableContainer}>
                                                     <Table>
                                                         <TableHead style={{ backgroundColor: '#696969' }}>
                                                             <Grid container spacing={1}>
                                                                 <Grid xs={1}>
                                                                     <Box align="center" sx={{ height: 'auto' }}>
-                                                                        <TableCell align="left" sx={{ height: 'auto' }}><Typography fontSize={20}>類型</Typography></TableCell>
+                                                                        <TableCell align="left" sx={{ height: 'auto', borderBottom: 0 }}><Typography fontSize={20}>類型</Typography></TableCell>
                                                                     </Box>
                                                                 </Grid>
-                                                                <Grid xs={4}>
+                                                                <Grid xs={6}>
                                                                     <Box align="center" sx={{ height: 'auto' }}>
-                                                                        <TableCell align="left" sx={{ height: 'auto' }}><Typography fontSize={20}>異常事件</Typography></TableCell>
+                                                                        <TableCell align="left" sx={{ height: 'auto', borderBottom: 0 }}><Typography fontSize={20}>異常事件</Typography></TableCell>
                                                                     </Box>
                                                                 </Grid>
-                                                                <Grid xs={4}>
+                                                                <Grid xs={5}>
                                                                     <Box align="center" sx={{ height: 'auto' }}>
-                                                                        <TableCell align="left" sx={{ height: 'auto' }}><Typography fontSize={20}>前次發生時間</Typography></TableCell>
-                                                                    </Box>
-                                                                </Grid>
-                                                                <Grid xs={2}>
-                                                                    <Box align="center" sx={{ height: 'auto' }}>
-                                                                        <TableCell align="left" sx={{ height: 'auto' }}><Typography fontSize={20}>預測週期</Typography></TableCell>
+                                                                        <TableCell align="left" sx={{ height: 'auto', borderBottom: 0 }}><Typography fontSize={20}>前次發生時間</Typography></TableCell>
                                                                     </Box>
                                                                 </Grid>
                                                             </Grid>
@@ -1135,19 +1130,64 @@ export default function Statistics({ token, setAlert, ...rest }) {
                                                                                     <Typography fontSize={20}>{columns.label}</Typography>
                                                                                 </Box>
                                                                             </Grid>
-                                                                            <Grid xs={4}>
+                                                                            <Grid xs={6}>
                                                                                 <Box align="center" sx={{ height: 'auto' }}>
                                                                                     <Typography fontSize={20}>{columns.name}</Typography>
                                                                                 </Box>
                                                                             </Grid>
-                                                                            <Grid xs={4}>
+                                                                            <Grid xs={5}>
                                                                                 <Box align="center" sx={{ height: 'auto' }}>
                                                                                     <Typography fontSize={20}>{columns.date}</Typography>
                                                                                 </Box>
                                                                             </Grid>
-                                                                            <Grid xs={2}>
+                                                                        </Grid>
+                                                                    </TableCell>
+                                                                </TableRow>
+                                                            ))}
+                                                        </TableBody>
+                                                    </Table>
+                                                </TableContainer>
+                                                <TableContainer component={Paper} style={tableContainerStyle.tableContainer}>
+                                                    <Table>
+                                                        <TableHead style={{ backgroundColor: '#696969' }}>
+                                                            <Grid container spacing={1}>
+                                                                <Grid xs={1}>
+                                                                    <Box align="center" sx={{ height: 'auto' }}>
+                                                                        <TableCell align="left" sx={{ height: 'auto', borderBottom: 0 }}><Typography fontSize={20}>類型</Typography></TableCell>
+                                                                    </Box>
+                                                                </Grid>
+                                                                <Grid xs={6}>
+                                                                    <Box align="center" sx={{ height: 'auto' }}>
+                                                                        <TableCell align="left" sx={{ height: 'auto', borderBottom: 0 }}><Typography fontSize={20}>異常事件</Typography></TableCell>
+                                                                    </Box>
+                                                                </Grid>
+                                                                <Grid xs={5}>
+                                                                    <Box align="center" sx={{ height: 'auto' }}>
+                                                                        <TableCell align="left" sx={{ height: 'auto', borderBottom: 0 }}><Typography fontSize={20}>前次發生時間</Typography></TableCell>
+                                                                    </Box>
+                                                                </Grid>
+                                                            </Grid>
+                                                        </TableHead>
+                                                        <TableBody>
+                                                            {data[project][device].map((columns) => (
+                                                                <TableRow
+                                                                    key={columns.name}
+                                                                >
+                                                                    <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center">
+                                                                        <Grid container spacing={1}>
+                                                                            <Grid xs={1}>
+                                                                                <Box align="center" sx={{ bgcolor: getColor(columns.lightColor), height: 'auto' }}>
+                                                                                    <Typography fontSize={20}>{columns.label}</Typography>
+                                                                                </Box>
+                                                                            </Grid>
+                                                                            <Grid xs={6}>
                                                                                 <Box align="center" sx={{ height: 'auto' }}>
-                                                                                    <Typography fontSize={20}>{columns.frequency}</Typography>
+                                                                                    <Typography fontSize={20}>{columns.name}</Typography>
+                                                                                </Box>
+                                                                            </Grid>
+                                                                            <Grid xs={5}>
+                                                                                <Box align="center" sx={{ height: 'auto' }}>
+                                                                                    <Typography fontSize={20}>{columns.date}</Typography>
                                                                                 </Box>
                                                                             </Grid>
                                                                         </Grid>
