@@ -172,7 +172,7 @@ export default function SpanningTable({ data }) {
                 {flattenedData.map((info, index) => (
                     <Grid item key={info.require} xs={3}>
                         <TableContainer component={Paper} sx={{ maxWidth: '100%' }}>
-                            <Table sx={{ minWidth: 700 }} aria-label="spanning table">
+                            <Table aria-label="spanning table">
                                 <TableHead>
                                     <TableRow>
                                         <TableCell
