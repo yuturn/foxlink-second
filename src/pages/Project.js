@@ -94,10 +94,10 @@ const empRows = [
 ];
 
 const permissionMap = {
-  1: "系統管理者",
-  2: "專案管理者",
-  3: "專案負責人",
-  4: "一般員工"
+  5: "系統管理者",
+  4: "專案管理者",
+  2: "專案負責人",
+  1: "一般員工"
 };
 
 
@@ -177,17 +177,11 @@ export default function Project({ token, setAlert, ...rest }) {
     console.log(data)
     apiDeleteProject(data)
       .then((res) => {
-        if (res === null) {
-          handleOpen("新增專案成功");
-        }
-        else {
-          handleErrorOpen("新增專案失敗");
-        }
-      })
-      .catch((error) => {
+        handleOpen("新增專案成功");
+      }).catch((error) => {
         // 处理错误
-        console.error("失敗");
         console.error(error);
+        handleErrorOpen("刪除專案失敗");
       });
   };
   //更新目前的project，看還有哪些
@@ -258,7 +252,8 @@ export default function Project({ token, setAlert, ...rest }) {
         console.log(newData)
         setProjectList(newData);
         console.log(projectList)
-      }).catch(err => { console.log(err) })
+        handleOpen("查詢專案成功");
+      }).catch(err => { console.log(err); handleErrorOpen("查詢專案失敗: " + err); })
   };
 
   //取得datagrid裡面所有select的資料(device)
@@ -546,10 +541,10 @@ export default function Project({ token, setAlert, ...rest }) {
                         onChange={permissionChange}
                         style={{ minWidth: "200px", height: "45px" }}
                       >
-                        <MenuItem value={1}>系統管理者</MenuItem>
-                        <MenuItem value={2}>專案管理者</MenuItem>
-                        <MenuItem value={3}>專案負責人</MenuItem>
-                        <MenuItem value={4}>一般員工</MenuItem>
+                        <MenuItem value={5}>系統管理者</MenuItem>
+                        <MenuItem value={4}>專案管理者</MenuItem>
+                        <MenuItem value={2}>專案負責人</MenuItem>
+                        <MenuItem value={1}>一般員工</MenuItem>
                       </Select>
                     </FormControl>
                   </Box>

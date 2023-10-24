@@ -1103,22 +1103,22 @@ export default function Statistics({ token, setAlert, ...rest }) {
                                                             <Grid container spacing={1}>
                                                                 <Grid xs={1}>
                                                                     <Box align="center" sx={{ height: 'auto' }}>
-                                                                        <TableCell align="left" ><Typography fontSize={20}>類型</Typography></TableCell>
+                                                                        <TableCell align="left" sx={{ height: 'auto' }}><Typography fontSize={20}>類型</Typography></TableCell>
                                                                     </Box>
                                                                 </Grid>
                                                                 <Grid xs={4}>
                                                                     <Box align="center" sx={{ height: 'auto' }}>
-                                                                        <TableCell align="left" ><Typography fontSize={20}>異常事件</Typography></TableCell>
+                                                                        <TableCell align="left" sx={{ height: 'auto' }}><Typography fontSize={20}>異常事件</Typography></TableCell>
                                                                     </Box>
                                                                 </Grid>
                                                                 <Grid xs={4}>
                                                                     <Box align="center" sx={{ height: 'auto' }}>
-                                                                        <TableCell align="left" ><Typography fontSize={20}>前次發生時間</Typography></TableCell>
+                                                                        <TableCell align="left" sx={{ height: 'auto' }}><Typography fontSize={20}>前次發生時間</Typography></TableCell>
                                                                     </Box>
                                                                 </Grid>
                                                                 <Grid xs={2}>
                                                                     <Box align="center" sx={{ height: 'auto' }}>
-                                                                        <TableCell align="left" ><Typography fontSize={20}>預測週期</Typography></TableCell>
+                                                                        <TableCell align="left" sx={{ height: 'auto' }}><Typography fontSize={20}>預測週期</Typography></TableCell>
                                                                     </Box>
                                                                 </Grid>
                                                             </Grid>
