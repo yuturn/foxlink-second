@@ -293,13 +293,8 @@ export default function Project({ token, setAlert, ...rest }) {
     }
     apiPostProjectDevices(data)
       .then(res => {
-        if (res === null) {
-          handleOpen("新增專案成功");
-        }
-        else {
-          handleErrorOpen("新增專案失敗");
-        }
-      }).catch(err => { console.log(err) })
+        handleOpen("新增專案成功");
+      }).catch(err => { console.log(err); handleErrorOpen("新增專案失敗") })
   };
   //新增user到專案
   function handleOnClickAddUserToProject() {
