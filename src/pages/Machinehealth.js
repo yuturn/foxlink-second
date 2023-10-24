@@ -1104,10 +1104,10 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                         <TableContainer component={Paper} style={tableContainerStyle.tableContainer}>
                           <Table>
                             <TableHead sx={{ border: 0 }} style={{ backgroundColor: '#696969' }}>
-                              <Grid container spacing={1} sx={{ borderBottom: 0 }}>
+                              <Grid container spacing={1}>
                                 <Grid xs={2}>
                                   <Box align="center" sx={{ height: 'auto', border: 0 }}>
-                                    <TableCell align="left" >
+                                    <TableCell align="left" sx={{ borderBottom: 0 }}>
                                       <TableSortLabel
                                         active={orderBy === 'label'}
                                         direction={orderBy === 'label' ? order : 'asc'}
@@ -1120,7 +1120,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                 </Grid>
                                 <Grid xs={3}>
                                   <Box align="center" sx={{ height: 'auto' }}>
-                                    <TableCell align="left" ><Typography fontSize={20}>異常事件</Typography></TableCell>
+                                    <TableCell align="left" sx={{ borderBottom: 0 }}><Typography fontSize={20}>異常事件</Typography></TableCell>
                                   </Box>
                                 </Grid>
                                 <Grid xs={4}>
