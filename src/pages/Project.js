@@ -313,12 +313,12 @@ export default function Project({ token, setAlert, ...rest }) {
       .then(res => {
         console.log('新增user成功')
         if (res === null) {
-          handleOpen("新增專案成功");
+          handleOpen("新增user成功");
         }
         else {
-          handleErrorOpen("新增專案失敗");
+          handleErrorOpen("新增user失敗");
         }
-      }).catch(err => { console.log(err) })
+      }).catch(err => { console.log(err); handleErrorOpen("新增user失敗"); })
   };
 
   //刪除project user
