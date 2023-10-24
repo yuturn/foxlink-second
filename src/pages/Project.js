@@ -145,7 +145,7 @@ export default function Project({ token, setAlert, ...rest }) {
     setUserDeleteOpen(false);
   };
 
-  //新增專案alert
+  //success alert
   const [alertOpen, setAlertOpen] = React.useState(false);
   const [message, setMessage] = useState(''); // 状态来存储消息内容
   const handleOpen = (message) => {
@@ -153,6 +153,17 @@ export default function Project({ token, setAlert, ...rest }) {
     setAlertOpen(true);
   };
   const handleClose = (event, reason) => {
+    setAlertOpen(false);
+  };
+
+  //error alert
+  const [errorAlertOpen, setErrorAlertOpen] = React.useState(false);
+  const [errorMessage, setErrorMessage] = useState(''); // 状态来存储消息内容
+  const handleErrorOpen = (message) => {
+    setMessage(message); // 设置消息内容
+    setAlertOpen(true);
+  };
+  const handleErrorClose = (event, reason) => {
     setAlertOpen(false);
   };
 
@@ -165,10 +176,13 @@ export default function Project({ token, setAlert, ...rest }) {
     }
     console.log(data)
     apiDeleteProject(data)
-      .then(() => {
-        console.log("delete project 成功")
-        setProject([])
-        projectDeleteHandleClose(); // 请求完成后关闭对话框
+      .then((res) => {
+        if (res === null) {
+          handleOpen("新增專案成功");
+        }
+        else {
+          handleErrorOpen("新增專案失敗");
+        }
       })
       .catch((error) => {
         // 处理错误
@@ -280,7 +294,10 @@ export default function Project({ token, setAlert, ...rest }) {
     apiPostProjectDevices(data)
       .then(res => {
         if (res === null) {
-          handleOpen()
+          handleOpen("新增專案成功");
+        }
+        else {
+          handleErrorOpen("新增專案失敗");
         }
       }).catch(err => { console.log(err) })
   };
@@ -296,12 +313,12 @@ export default function Project({ token, setAlert, ...rest }) {
       .then(res => {
         console.log('新增user成功')
         if (res === null) {
-          setAlert({
-            'open': true,
-            'msg': `資料建立完成`,
-            'type': 'warning',
-            'duration': 10000
-          })
+          if (res === null) {
+            handleOpen("新增專案成功");
+          }
+          else {
+            handleErrorOpen("新增專案失敗");
+          }
         }
       }).catch(err => { console.log(err) })
   };
@@ -317,14 +334,12 @@ export default function Project({ token, setAlert, ...rest }) {
     apiDeleteProjectUser(data)
       .then(res => {
         if (res === null) {
-          setAlertStatus("success")
           handleOpen('成功刪除User')
           // 关闭对话框
           userDeleteHandleClose();
         }
         else {
-          setAlertStatus("error")
-          handleOpen('刪除User失敗')
+          handleErrorOpen('刪除User失敗')
         }
       }).catch(err => { console.log(err) })
   };
@@ -347,8 +362,22 @@ export default function Project({ token, setAlert, ...rest }) {
               horizontal: 'center'
             }}
           >
-            <Alert onClose={handleClose} severity={alertStatus} sx={{ width: '100%' }}>
+            <Alert onClose={handleClose} severity='success' sx={{ width: '100%' }}>
               {message}
+            </Alert>
+          </Snackbar>
+          <Snackbar
+            open={errorAlertOpen}
+            autoHideDuration={5000}
+            onClose={handleErrorClose}
+            variant="filled"
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'center'
+            }}
+          >
+            <Alert onClose={handleErrorClose} severity='error' sx={{ width: '100%' }}>
+              {errorMessage}
             </Alert>
           </Snackbar>
           <Grid container spacing={1}>
@@ -390,7 +419,7 @@ export default function Project({ token, setAlert, ...rest }) {
                 </Box>
                 <Box display="flex" pt={3} px={2}>
                   <Box>
-                    <LoadingButton variant="contained" color="info" onClick={() => { handleOnClickProjectPost(); handleOpen(); }}>
+                    <LoadingButton variant="contained" color="info" onClick={() => { handleOnClickProjectPost(); }}>
                       新增專案
                     </LoadingButton>
                   </Box>
