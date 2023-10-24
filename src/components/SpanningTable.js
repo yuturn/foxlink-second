@@ -129,9 +129,9 @@ export default function SpanningTable({ data }) {
         <div>
             <Grid container spacing={spacing}>
                 {Object.keys(rows1).map((equipment) => (
-                    <Grid item key={equipment} xs={12} md={4} lg={4}>
+                    <Grid item key={equipment} xs={12} sm={6} md={4} lg={2}>
                         {rows1[equipment].map((info) => (
-                            <TableContainer key={info.require} component={Paper}>
+                            <TableContainer key={info.require} component={Paper} sx={{ maxWidth: '100%' }}>
                                 <Table sx={{ minWidth: 700 }} aria-label="spanning table">
                                     <TableHead>
                                         <TableRow>
