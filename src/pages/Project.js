@@ -318,7 +318,7 @@ export default function Project({ token, setAlert, ...rest }) {
         console.log('刪除user成功')
         // 删除成功后更新用户数据
         const updatedUsers = projectUsers.filter(user => user.id !== selectedDevicesDataUser[0]['badge']);
-        setProjectUsers(updatedUsers);
+        setProjectUsers([...updatedUsers]);
 
         // 关闭对话框
         userDeleteHandleClose();
