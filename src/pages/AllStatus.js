@@ -1096,7 +1096,7 @@ export default function Statistics({ token, setAlert, ...rest }) {
                                         </Grid>
                                         <Divider sx={{ mt: 3, borderBottomWidth: 3 }} />
                                         <Grid container spacing={2} mt={1}>
-                                            <Grid item xs={6} md={6}>
+                                            <Grid item xs={6} md={6} lg={6}>
                                                 <TableContainer component={Paper} style={tableContainerStyle.tableContainer}>
                                                     <Table>
                                                         <TableHead style={{ backgroundColor: '#696969' }}>
@@ -1147,6 +1147,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                                                         </TableBody>
                                                     </Table>
                                                 </TableContainer>
+                                            </Grid>
+                                            <Grid item xs={6} md={6} lg={6}>
                                                 <TableContainer component={Paper} style={tableContainerStyle.tableContainer}>
                                                     <Table>
                                                         <TableHead style={{ backgroundColor: '#696969' }}>
