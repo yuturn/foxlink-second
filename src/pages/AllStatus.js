@@ -1101,22 +1101,22 @@ export default function Statistics({ token, setAlert, ...rest }) {
                                                     <Table>
                                                         <TableHead style={{ backgroundColor: '#696969' }}>
                                                             <TableRow>
-                                                                <TableCell align="center" sx={{ height: 'auto', borderBottom: 0 }} colSpan={3}><Typography fontSize={20}>週預測</Typography></TableCell>
+                                                                <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={3}><Typography fontSize={20}>週預測</Typography></TableCell>
                                                             </TableRow>
                                                             <Grid container spacing={1}>
                                                                 <Grid xs={2}>
                                                                     <Box align="center" sx={{ height: 'auto' }}>
-                                                                        <TableCell align="left" sx={{ height: 'auto', borderBottom: 0 }}><Typography fontSize={20}>類型</Typography></TableCell>
+                                                                        <TableCell align="left" sx={{ height: 'auto', border: "1px solid black" }}><Typography fontSize={20}>類型</Typography></TableCell>
                                                                     </Box>
                                                                 </Grid>
                                                                 <Grid xs={5}>
                                                                     <Box align="center" sx={{ height: 'auto' }}>
-                                                                        <TableCell align="left" sx={{ height: 'auto', borderBottom: 0 }}><Typography fontSize={20}>異常事件</Typography></TableCell>
+                                                                        <TableCell align="left" sx={{ height: 'auto', border: "1px solid black" }}><Typography fontSize={20}>異常事件</Typography></TableCell>
                                                                     </Box>
                                                                 </Grid>
                                                                 <Grid xs={5}>
                                                                     <Box align="center" sx={{ height: 'auto' }}>
-                                                                        <TableCell align="left" sx={{ height: 'auto', borderBottom: 0 }}><Typography fontSize={20}>前次發生時間</Typography></TableCell>
+                                                                        <TableCell align="left" sx={{ height: 'auto', border: "1px solid black" }}><Typography fontSize={20}>前次發生時間</Typography></TableCell>
                                                                     </Box>
                                                                 </Grid>
                                                             </Grid>
@@ -1156,22 +1156,22 @@ export default function Statistics({ token, setAlert, ...rest }) {
                                                     <Table>
                                                         <TableHead style={{ backgroundColor: '#696969' }}>
                                                             <TableRow>
-                                                                <TableCell align="center" sx={{ height: 'auto', borderBottom: 0 }} colSpan={3}><Typography fontSize={20}>日預測</Typography></TableCell>
+                                                                <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={3}><Typography fontSize={20}>日預測</Typography></TableCell>
                                                             </TableRow>
                                                             <Grid container spacing={1}>
                                                                 <Grid xs={2}>
                                                                     <Box align="center" sx={{ height: 'auto' }}>
-                                                                        <TableCell align="left" sx={{ height: 'auto', borderBottom: 0 }}><Typography fontSize={20}>類型</Typography></TableCell>
+                                                                        <TableCell align="left" sx={{ height: 'auto', border: "1px solid black" }}><Typography fontSize={20}>類型</Typography></TableCell>
                                                                     </Box>
                                                                 </Grid>
                                                                 <Grid xs={5}>
                                                                     <Box align="center" sx={{ height: 'auto' }}>
-                                                                        <TableCell align="left" sx={{ height: 'auto', borderBottom: 0 }}><Typography fontSize={20}>異常事件</Typography></TableCell>
+                                                                        <TableCell align="left" sx={{ height: 'auto', border: "1px solid black" }}><Typography fontSize={20}>異常事件</Typography></TableCell>
                                                                     </Box>
                                                                 </Grid>
                                                                 <Grid xs={5}>
                                                                     <Box align="center" sx={{ height: 'auto' }}>
-                                                                        <TableCell align="left" sx={{ height: 'auto', borderBottom: 0 }}><Typography fontSize={20}>前次發生時間</Typography></TableCell>
+                                                                        <TableCell align="left" sx={{ height: 'auto', border: "1px solid black" }}><Typography fontSize={20}>前次發生時間</Typography></TableCell>
                                                                     </Box>
                                                                 </Grid>
                                                             </Grid>

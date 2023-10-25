@@ -187,7 +187,6 @@ export default function Management({ token, ...rest }) {
     return (
         <ThemeProvider theme={darkTheme}>
             <Card>
-
                 <CardContent>
                     <Box>
                         <FormControl>
