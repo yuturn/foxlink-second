@@ -1100,7 +1100,9 @@ export default function Statistics({ token, setAlert, ...rest }) {
                                                 <TableContainer component={Paper} style={tableContainerStyle.tableContainer}>
                                                     <Table>
                                                         <TableHead style={{ backgroundColor: '#696969' }}>
-                                                            <TableCell align="center" sx={{ height: 'auto', borderBottom: 0 }}><Typography fontSize={20}>週預測</Typography></TableCell>
+                                                            <TableRow>
+                                                                <TableCell align="center" sx={{ height: 'auto', borderBottom: 0 }} colSpan={3}><Typography fontSize={20}>週預測</Typography></TableCell>
+                                                            </TableRow>
                                                             <Grid container spacing={1}>
                                                                 <Grid xs={2}>
                                                                     <Box align="center" sx={{ height: 'auto' }}>
