@@ -16,7 +16,7 @@ import Backup from "./Backup";
 import DevicesUpload from "./DevicesUpload";
 import WorkerinfoUpload from "./WorkinfoUpload";
 import MapUpload from "./MapUpload";
-import Management from "./Management";
+import Consumables from "./Consumables";
 import Project from "./Project";
 import SignUp from "./Signup"
 import { NotFound } from "./404";
@@ -53,7 +53,7 @@ export default function App() {
                         <Route element={<LOG token={authUser.token} />} path={'/LOG'}></Route>
                         <Route element={<Backup setAlert={setAlert} token={authUser.token} />} path={'/backup'}></Route>
                         <Route element={<MapUpload token={authUser.token} />} path={'/map-upload'}></Route>
-                        <Route element={<Management token={authUser.token} />} path={'/management'}></Route>
+                        <Route element={<Consumables token={authUser.token} />} path={'/consumables'}></Route>
                         <Route element={<Project token={authUser.token} />} path={'/Project'}></Route>
                     </Route>
                     <Route

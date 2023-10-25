@@ -178,7 +178,7 @@ const rows1 = {
 
 
 
-export default function Management({ token, ...rest }) {
+export default function Consumables({ token, ...rest }) {
     const [projectID, setProjectID] = useState('')
     const projectNameChange = (event) => {
         setProjectID(event.target.value);

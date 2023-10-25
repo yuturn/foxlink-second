@@ -36,9 +36,9 @@ export const DashboardSidebar = ({ idx, setIdx }) => {
       active: false
     },
     {
-      url: '/management',
+      url: '/consumables',
       icon: (<SummarizeIcon fontSize="small" />),
-      title: '人員控管',
+      title: '耗材預測頁面',
       active: false
     },
     {
