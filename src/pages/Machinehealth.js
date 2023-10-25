@@ -1103,82 +1103,56 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                       <Grid xs={5}>
                         <TableContainer component={Paper} style={tableContainerStyle.tableContainer}>
                           <Table>
-                            <TableHead sx={{ border: 0 }} style={{ backgroundColor: '#696969' }}>
-                              <Grid container spacing={1}>
-                                <Grid xs={2}>
-                                  <Box align="center" sx={{ height: 'auto', border: 0 }}>
-                                    <TableCell align="left" sx={{ borderBottom: 0 }}>
-                                      <TableSortLabel
-                                        active={orderBy === 'label'}
-                                        direction={orderBy === 'label' ? order : 'asc'}
-                                        onClick={() => handleSortRequest('label')}
-                                      >
-                                        <Typography fontSize={20}>類型</Typography>
-                                      </TableSortLabel>
-                                    </TableCell>
-                                  </Box>
-                                </Grid>
-                                <Grid xs={3}>
-                                  <Box align="center" sx={{ height: 'auto' }}>
-                                    <TableCell align="left" sx={{ borderBottom: 0 }}><Typography fontSize={20}>異常事件</Typography></TableCell>
-                                  </Box>
-                                </Grid>
-                                <Grid xs={4}>
-                                  <Box align="center" sx={{ height: 'auto' }}>
-                                    <TableCell align="left" sx={{ borderBottom: 0 }}>
-                                      <TableSortLabel
-                                        active={orderBy === 'date'}
-                                        direction={orderBy === 'date' ? order : 'asc'}
-                                        onClick={() => handleSortRequest('date')}
-                                      >
-                                        <Typography fontSize={20}>前次發生時間</Typography>
-                                      </TableSortLabel>
-                                    </TableCell>
-                                  </Box>
-                                </Grid>
-                                <Grid xs={3}>
-                                  <Box align="center" sx={{ height: 'auto' }}>
-                                    <TableCell align="left" sx={{ borderBottom: 0 }}>
-                                      <TableSortLabel
-                                        active={orderBy === 'frequency'}
-                                        direction={orderBy === 'frequency' ? order : 'asc'}
-                                        onClick={() => handleSortRequest('frequency')}
-                                      >
-                                        <Typography fontSize={20}>預測週期</Typography>
-                                      </TableSortLabel>
-                                    </TableCell>
-                                  </Box>
-                                </Grid>
-                              </Grid>
+                            <TableHead style={{ backgroundColor: '#696969' }}>
+                              <TableRow>
+                                <TableCell align="left" sx={{ borderBottom: 0 }}>
+                                  <TableSortLabel
+                                    active={orderBy === 'label'}
+                                    direction={orderBy === 'label' ? order : 'asc'}
+                                    onClick={() => handleSortRequest('label')}
+                                  >
+                                    <Typography fontSize={20}>類型</Typography>
+                                  </TableSortLabel>
+                                </TableCell>
+                                <TableCell align="left" sx={{ borderBottom: 0 }}>
+                                  <Typography fontSize={20}>異常事件</Typography>
+                                </TableCell>
+                                <TableCell align="left" sx={{ borderBottom: 0 }}>
+                                  <TableSortLabel
+                                    active={orderBy === 'date'}
+                                    direction={orderBy === 'date' ? order : 'asc'}
+                                    onClick={() => handleSortRequest('date')}
+                                  >
+                                    <Typography fontSize={20}>前次發生時間</Typography>
+                                  </TableSortLabel>
+                                </TableCell>
+                                <TableCell align="left" sx={{ borderBottom: 0 }}>
+                                  <TableSortLabel
+                                    active={orderBy === 'frequency'}
+                                    direction={orderBy === 'frequency' ? order : 'asc'}
+                                    onClick={() => handleSortRequest('frequency')}
+                                  >
+                                    <Typography fontSize={20}>預測週期</Typography>
+                                  </TableSortLabel>
+                                </TableCell>
+                              </TableRow>
                             </TableHead>
                             <TableBody>
                               {data[project][device].sort(getComparator(order)).map((columns) => (
-                                <TableRow
-                                  key={columns.name}
-                                >
-                                  <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center">
-                                    <Grid container spacing={1}>
-                                      <Grid xs={2}>
-                                        <Box align="center" sx={{ bgcolor: getColor(columns.lightColor), height: 'auto' }}>
-                                          <Typography fontSize={20}>{columns.label}</Typography>
-                                        </Box>
-                                      </Grid>
-                                      <Grid xs={3}>
-                                        <Box align="center" sx={{ height: 'auto' }}>
-                                          <Typography fontSize={20}>{columns.name}</Typography>
-                                        </Box>
-                                      </Grid>
-                                      <Grid xs={4}>
-                                        <Box align="center" sx={{ height: 'auto' }}>
-                                          <Typography fontSize={20}>{columns.date}</Typography>
-                                        </Box>
-                                      </Grid>
-                                      <Grid xs={3}>
-                                        <Box align="center" sx={{ height: 'auto' }}>
-                                          <Typography fontSize={20}>{columns.frequency}</Typography>
-                                        </Box>
-                                      </Grid>
-                                    </Grid>
+                                <TableRow key={columns.name}>
+                                  <TableCell style={tableCellStyle.extendedCell} align="center" sx={{ bgcolor: getColor(columns.lightColor) }}>
+                                    <Typography fontSize={20}>
+                                      {columns.label}
+                                    </Typography>
+                                  </TableCell>
+                                  <TableCell align="center">
+                                    <Typography fontSize={20}>{columns.name}</Typography>
+                                  </TableCell>
+                                  <TableCell align="center">
+                                    <Typography fontSize={20}>{columns.date}</Typography>
+                                  </TableCell>
+                                  <TableCell align="center">
+                                    <Typography fontSize={20}>{columns.frequency}</Typography>
                                   </TableCell>
                                 </TableRow>
                               ))}
