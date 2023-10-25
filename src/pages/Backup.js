@@ -169,7 +169,7 @@ export default function Backup({ token, setAlert, ...rest }) {
                                     <Typography variant="h5" fontWeight="medium" mr={2}>
                                         備份目的地1:
                                     </Typography>
-                                    <TextField type="number" label="請輸入IP位址" />
+                                    <TextField type="text" label="請輸入IP位址" />
                                     <Box ml={2}>
                                         <LoadingButton variant="contained"
                                             size="large"
@@ -190,7 +190,7 @@ export default function Backup({ token, setAlert, ...rest }) {
                                     <Typography variant="h5" fontWeight="medium" mr={2}>
                                         備份目的地2:
                                     </Typography>
-                                    <TextField type="number" label="請輸入IP位址" />
+                                    <TextField type="text" label="請輸入IP位址" />
                                     <Box ml={2}>
                                         <LoadingButton variant="contained"
                                             size="large"
