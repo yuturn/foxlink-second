@@ -1100,13 +1100,14 @@ export default function Statistics({ token, setAlert, ...rest }) {
                                                 <TableContainer component={Paper} style={tableContainerStyle.tableContainer}>
                                                     <Table>
                                                         <TableHead style={{ backgroundColor: '#696969' }}>
+                                                            <TableCell align="center" sx={{ height: 'auto', borderBottom: 0 }}><Typography fontSize={20}>週預測</Typography></TableCell>
                                                             <Grid container spacing={1}>
-                                                                <Grid xs={1}>
+                                                                <Grid xs={2}>
                                                                     <Box align="center" sx={{ height: 'auto' }}>
                                                                         <TableCell align="left" sx={{ height: 'auto', borderBottom: 0 }}><Typography fontSize={20}>類型</Typography></TableCell>
                                                                     </Box>
                                                                 </Grid>
-                                                                <Grid xs={6}>
+                                                                <Grid xs={5}>
                                                                     <Box align="center" sx={{ height: 'auto' }}>
                                                                         <TableCell align="left" sx={{ height: 'auto', borderBottom: 0 }}><Typography fontSize={20}>異常事件</Typography></TableCell>
                                                                     </Box>
@@ -1125,12 +1126,12 @@ export default function Statistics({ token, setAlert, ...rest }) {
                                                                 >
                                                                     <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center">
                                                                         <Grid container spacing={1}>
-                                                                            <Grid xs={1}>
+                                                                            <Grid xs={2}>
                                                                                 <Box align="center" sx={{ bgcolor: getColor(columns.lightColor), height: 'auto' }}>
                                                                                     <Typography fontSize={20}>{columns.label}</Typography>
                                                                                 </Box>
                                                                             </Grid>
-                                                                            <Grid xs={6}>
+                                                                            <Grid xs={5}>
                                                                                 <Box align="center" sx={{ height: 'auto' }}>
                                                                                     <Typography fontSize={20}>{columns.name}</Typography>
                                                                                 </Box>
@@ -1152,13 +1153,14 @@ export default function Statistics({ token, setAlert, ...rest }) {
                                                 <TableContainer component={Paper} style={tableContainerStyle.tableContainer}>
                                                     <Table>
                                                         <TableHead style={{ backgroundColor: '#696969' }}>
+                                                            <TableCell align="center" sx={{ height: 'auto', borderBottom: 0 }}><Typography fontSize={20}>日預測</Typography></TableCell>
                                                             <Grid container spacing={1}>
-                                                                <Grid xs={1}>
+                                                                <Grid xs={2}>
                                                                     <Box align="center" sx={{ height: 'auto' }}>
                                                                         <TableCell align="left" sx={{ height: 'auto', borderBottom: 0 }}><Typography fontSize={20}>類型</Typography></TableCell>
                                                                     </Box>
                                                                 </Grid>
-                                                                <Grid xs={6}>
+                                                                <Grid xs={5}>
                                                                     <Box align="center" sx={{ height: 'auto' }}>
                                                                         <TableCell align="left" sx={{ height: 'auto', borderBottom: 0 }}><Typography fontSize={20}>異常事件</Typography></TableCell>
                                                                     </Box>
@@ -1177,12 +1179,12 @@ export default function Statistics({ token, setAlert, ...rest }) {
                                                                 >
                                                                     <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center">
                                                                         <Grid container spacing={1}>
-                                                                            <Grid xs={1}>
+                                                                            <Grid xs={2}>
                                                                                 <Box align="center" sx={{ bgcolor: getColor(columns.lightColor), height: 'auto' }}>
                                                                                     <Typography fontSize={20}>{columns.label}</Typography>
                                                                                 </Box>
                                                                             </Grid>
-                                                                            <Grid xs={6}>
+                                                                            <Grid xs={5}>
                                                                                 <Box align="center" sx={{ height: 'auto' }}>
                                                                                     <Typography fontSize={20}>{columns.name}</Typography>
                                                                                 </Box>
