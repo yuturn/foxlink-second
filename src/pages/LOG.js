@@ -177,8 +177,8 @@ export default function LOG({ token, ...rest }) {
                                 </Box>
                                 <Box sx={{ mt: 1, ml: 4 }} display="flex" component="form" role="form">
                                     <Box>
-                                        <Typography variant="h5" fontWeight="medium" mr={2}>
-                                            員工ID :
+                                        <Typography variant="h5" fontWeight="medium" mr={5}>
+                                            員工ID:
                                         </Typography>
                                     </Box>
                                     <Box>
