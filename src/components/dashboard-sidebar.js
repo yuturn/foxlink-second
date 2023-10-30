@@ -6,7 +6,8 @@ import { Box, Divider, Drawer } from '@mui/material';
 import { ChartBar as StatusIcon } from '../icons/chart-bar';
 import { Layout as LayoutIcon } from '../icons/layout';
 import { QRCode as QRCodeIcon } from '../icons/qrcode';
-import { Info as InfoIcon } from '../icons/info';
+import { Info as Info } from '../icons/info';
+import { Search as Search } from '../icons/search';
 
 import SummarizeIcon from '@mui/icons-material/Summarize';
 import MapIcon from '@mui/icons-material/Map';
@@ -19,8 +20,14 @@ export const DashboardSidebar = ({ idx, setIdx }) => {
   const items = [
     {
       url: '/machinehealth',
-      icon: (<StatusIcon fontSize="small" />),
+      icon: (<Search fontSize="small" />),
       title: '机況查詢',
+      active: false
+    },
+    {
+      url: '/comparison',
+      icon: (<Search fontSize="small" />),
+      title: '預測與結果比對查詢',
       active: false
     },
     {
@@ -43,7 +50,7 @@ export const DashboardSidebar = ({ idx, setIdx }) => {
     },
     {
       url: '/LOG',
-      icon: (<QRCodeIcon fontSize="small" />),
+      icon: (<Info fontSize="small" />),
       title: 'LOG頁面',
       active: false
     },

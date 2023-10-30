@@ -10,15 +10,14 @@ import Login from './LoginPage';
 import FoxlinkPages from './homepage';
 import SnackbarAlert from "./Snackbar";
 import Status from "./AllStatus";
-import Health from "./Machinehealth";
+import Statistics from "./Statistics";
+import Machinehealth from "./Machinehealth";
 import LOG from "./LOG";
 import Backup from "./Backup";
-import DevicesUpload from "./DevicesUpload";
-import WorkerinfoUpload from "./WorkinfoUpload";
-import MapUpload from "./MapUpload";
 import Consumables from "./Consumables";
 import Project from "./Project";
 import SignUp from "./Signup"
+import Comparison from "./Comparison"
 import { NotFound } from "./404";
 
 export default function App() {
@@ -42,19 +41,15 @@ export default function App() {
             <SnackbarAlert open={alert.open} message={alert.msg} type={alert.type} setAlert={setAlert} duration={alert.duration} />
             <Router>
                 <Routes>
-                    <Route element={<Login setAlert={setAlert} setUser={setAuthUser} />} path={'/login'}>
-                        <Route element={<SignUp setAlert={setAlert} setUser={setAuthUser} />} path={'/login/signup'}></Route>
-                    </Route>
+                    <Route element={<Login setAlert={setAlert} setUser={setAuthUser} />} path={'/login'} />
                     <Route element={<FoxlinkPages authUser={authUser} />} path={'/'}>
                         <Route element={<Status token={authUser.token} setAlert={setAlert} />} path={'/all-status'}></Route>
-                        <Route element={<WorkerinfoUpload setAlert={setAlert} token={authUser.token} />} path={'/worker-info-upload'}></Route>
-                        <Route element={<DevicesUpload token={authUser.token} />} path={'/devices-upload'}></Route>
-                        <Route element={<Health token={authUser.token} setAlert={setAlert} />} path={'/machinehealth'}></Route>
+                        <Route element={<Machinehealth token={authUser.token} setAlert={setAlert} />} path={'/machinehealth'}></Route>
+                        <Route element={<Consumables token={authUser.token} />} path={'/consumables'}></Route>
                         <Route element={<LOG token={authUser.token} />} path={'/LOG'}></Route>
                         <Route element={<Backup setAlert={setAlert} token={authUser.token} />} path={'/backup'}></Route>
-                        <Route element={<MapUpload token={authUser.token} />} path={'/map-upload'}></Route>
-                        <Route element={<Consumables token={authUser.token} />} path={'/consumables'}></Route>
                         <Route element={<Project token={authUser.token} />} path={'/Project'}></Route>
+                        <Route element={<Comparison token={authUser.token} />} path={'/comparison'}></Route>
                     </Route>
                     <Route
                         path='*'

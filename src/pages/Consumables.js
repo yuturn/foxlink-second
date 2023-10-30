@@ -179,9 +179,11 @@ const rows1 = {
 
 
 export default function Consumables({ token, ...rest }) {
-    const [projectID, setProjectID] = useState('')
+    // const [projectID, setProjectID] = useState('')
+    const [project, setProject] = useState('')
     const projectNameChange = (event) => {
-        setProjectID(event.target.value);
+        // setProjectID(event.target.value);
+        setProject(event.target.value);
         console.log(event.target.value)
     };
     return (
@@ -194,17 +196,36 @@ export default function Consumables({ token, ...rest }) {
                             <Select
                                 labelId="permission-select-label"
                                 id="permission-select"
-                                value={projectID}
+                                value={project}
                                 label="專案"
                                 onChange={projectNameChange}
                                 style={{ minWidth: "200px", height: "45px" }}
                             >
-                                <MenuItem value={1}>d7x</MenuItem>
+                                <MenuItem value="d7x">d7x</MenuItem>
                             </Select>
                         </FormControl>
                     </Box>
                     <Box>
-                        <SpanningTable data={rows1} />
+                        <Grid container spacing={1}>
+                            <Grid xs={4}>
+                                <Typography variant="h4" fontWeight="medium" mt={3} mb={3}>
+                                    設備耗材預測
+                                </Typography>
+                            </Grid>
+                            <Grid xs={4}>
+                                <Typography variant="h4" fontWeight="medium" mt={3} mb={3} mr={3}>
+                                    專案:{project}
+                                </Typography>
+                            </Grid>
+                            <Grid xs={4}>
+                                <Typography variant="h4" fontWeight="medium" mt={3} mb={3} mr={3}>
+                                    線號:M6L-39
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                    </Box>
+                    <Box>
+                        <SpanningTable data={rows1} mt={3} />
                     </Box>
                 </CardContent>
             </Card>
