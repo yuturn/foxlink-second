@@ -66,23 +66,17 @@ export default function Statistics({ token, setAlert, ...rest }) {
 
     function getColor(lightColor) {
         if (lightColor === 1) {
-            return "#C5291C";
+            return "#ff2600";
         } else if (lightColor === 2) {
-            return "#4CA85A";
+            return "#008f00";
         } else {
             return null; // 或者返回一个默认的图标
         }
     }
 
-    function getPie(device) {
-        if (device === "Device5") {
-            return pieData;
-        } else if (device === "Device6") {
-            return pieData2;
-        } else if (device === "Device8") {
-            return pieData3;
-        } else if (device === "Device15") {
-            return pieData3;
+    function infoColor(happenLastTime) {
+        if (happenLastTime === true) {
+            return "#ffc107";
         } else {
             return null; // 或者返回一个默认的图标
         }
@@ -107,7 +101,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 2,
                     label: '異常',
                     date: '2022/09/26 10:30',
-                    frequency: '週預測'
+                    frequency: '週預測',
+                    happenLastTime: true
                 },
                 {
                     id: 3,
@@ -145,7 +140,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 7,
                     label: '異常',
                     date: '2022/01/02 15:00',
-                    frequency: '日預測'
+                    frequency: '日預測',
+                    happenLastTime: true
                 },
                 {
                     id: 3,
@@ -190,7 +186,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 7,
                     label: '異常',
                     date: '2022/02/05 18:00',
-                    frequency: '週預測'
+                    frequency: '週預測',
+                    happenLastTime: true
                 },
                 {
                     id: 8,
@@ -235,7 +232,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 7,
                     label: '異常',
                     date: '2022/02/05 18:00',
-                    frequency: '週預測'
+                    frequency: '週預測',
+                    happenLastTime: true
                 },
                 {
                     id: 13,
@@ -280,7 +278,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 7,
                     label: '異常',
                     date: '2022/02/05 18:00',
-                    frequency: '週預測'
+                    frequency: '週預測',
+                    happenLastTime: true
                 }
             ],
             "Device8": [
@@ -309,7 +308,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 7,
                     label: '非異常',
                     date: '2022/04/24 06:00',
-                    frequency: '日預測'
+                    frequency: '日預測',
+                    happenLastTime: true
                 },
                 {
                     id: 4,
@@ -336,7 +336,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 2,
                     label: '異常',
                     date: '2022/02/05 18:00',
-                    frequency: '週預測'
+                    frequency: '週預測',
+                    happenLastTime: true
                 },
                 {
                     id: 7,
@@ -372,7 +373,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 7,
                     label: '異常',
                     date: '2022/04/24 06:00',
-                    frequency: '日預測'
+                    frequency: '日預測',
+                    happenLastTime: true
                 },
                 {
                     id: 11,
@@ -408,7 +410,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 7,
                     label: '非異常',
                     date: '2022/04/24 06:00',
-                    frequency: '日預測'
+                    frequency: '日預測',
+                    happenLastTime: true
                 },
                 {
                     id: 15,
@@ -439,7 +442,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 10,
                     label: '異常',
                     date: '2022/09/26 10:30',
-                    frequency: '週預測'
+                    frequency: '週預測',
+                    happenLastTime: true
                 },
                 {
                     id: 3,
@@ -468,7 +472,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 7,
                     label: '非異常',
                     date: '2022/11/15 22:30',
-                    frequency: '週預測'
+                    frequency: '週預測',
+                    happenLastTime: true
                 },
                 {
                     id: 2,
@@ -495,7 +500,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 2,
                     label: '異常',
                     date: '2022/04/02 14:00',
-                    frequency: '日預測'
+                    frequency: '日預測',
+                    happenLastTime: true
                 },
                 {
                     id: 5,
@@ -549,7 +555,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 7,
                     label: '異常',
                     date: '2022/02/05 18:00',
-                    frequency: '週預測'
+                    frequency: '週預測',
+                    happenLastTime: true
                 },
                 {
                     id: 11,
@@ -567,7 +574,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 7,
                     label: '異常',
                     date: '2022/02/05 18:00',
-                    frequency: '週預測'
+                    frequency: '週預測',
+                    happenLastTime: true
                 },
                 {
                     id: 13,
@@ -585,7 +593,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 7,
                     label: '非異常',
                     date: '2022/02/05 18:00',
-                    frequency: '週預測'
+                    frequency: '週預測',
+                    happenLastTime: true
                 },
                 {
                     id: 15,
@@ -632,7 +641,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 7,
                     label: '異常',
                     date: '2022/02/05 18:00',
-                    frequency: '週預測'
+                    frequency: '週預測',
+                    happenLastTime: true
                 },
                 {
                     id: 3,
@@ -650,7 +660,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 7,
                     label: '非異常',
                     date: '2022/02/05 18:00',
-                    frequency: '週預測'
+                    frequency: '週預測',
+                    happenLastTime: true
                 },
                 {
                     id: 5,
@@ -677,7 +688,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 7,
                     label: '異常',
                     date: '2022/02/05 18:00',
-                    frequency: '週預測'
+                    frequency: '週預測',
+                    happenLastTime: true
                 },
                 {
                     id: 8,
@@ -695,7 +707,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 7,
                     label: '非異常',
                     date: '2022/02/05 18:00',
-                    frequency: '週預測'
+                    frequency: '週預測',
+                    happenLastTime: true
                 },
                 {
                     id: 10,
@@ -740,7 +753,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 7,
                     label: '非異常',
                     date: '2022/04/24 06:00',
-                    frequency: '日預測'
+                    frequency: '日預測',
+                    happenLastTime: true
                 },
                 {
                     id: 15,
@@ -760,7 +774,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 7,
                     label: '非異常',
                     date: '2022/11/15 22:30',
-                    frequency: '週預測'
+                    frequency: '週預測',
+                    happenLastTime: true
                 },
                 {
                     id: 2,
@@ -796,7 +811,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 7,
                     label: '異常',
                     date: '2022/05/23 15:00',
-                    frequency: '日預測'
+                    frequency: '日預測',
+                    happenLastTime: true
                 },
                 {
                     id: 6,
@@ -823,7 +839,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 7,
                     label: '非異常',
                     date: '2022/08/17 08:30',
-                    frequency: '週預測'
+                    frequency: '週預測',
+                    happenLastTime: true
                 },
                 {
                     id: 9,
@@ -859,7 +876,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 7,
                     label: '異常',
                     date: '2022/02/05 18:00',
-                    frequency: '週預測'
+                    frequency: '週預測',
+                    happenLastTime: true
                 },
                 {
                     id: 13,
@@ -886,7 +904,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 7,
                     label: '異常',
                     date: '2022/02/05 18:00',
-                    frequency: '週預測'
+                    frequency: '週預測',
+                    happenLastTime: true
                 },
                 {
                     id: 16,
@@ -920,7 +939,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 10,
                     label: '異常',
                     date: '2022/01/02 15:00',
-                    frequency: '週預測'
+                    frequency: '週預測',
+                    happenLastTime: true
                 },
                 {
                     id: 2,
@@ -967,7 +987,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 7,
                     label: '異常',
                     date: '2022/01/02 15:00',
-                    frequency: '日預測'
+                    frequency: '日預測',
+                    happenLastTime: true
                 },
                 {
                     id: 3,
@@ -1003,7 +1024,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 7,
                     label: '非異常',
                     date: '2022/11/15 22:30',
-                    frequency: '週預測'
+                    frequency: '週預測',
+                    happenLastTime: true
                 },
                 {
                     id: 7,
@@ -1030,7 +1052,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 7,
                     label: '非異常',
                     date: '2022/02/05 18:00',
-                    frequency: '週預測'
+                    frequency: '週預測',
+                    happenLastTime: true
                 },
                 {
                     id: 10,
@@ -1048,7 +1071,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 7,
                     label: '非異常',
                     date: '2022/02/05 18:00',
-                    frequency: '週預測'
+                    frequency: '週預測',
+                    happenLastTime: true
                 },
                 {
                     id: 12,
@@ -1066,7 +1090,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 1,
                     label: '非異常',
                     date: '2022/12/13 18:12',
-                    frequency: '週預測'
+                    frequency: '週預測',
+                    happenLastTime: true
                 },
                 {
                     id: 14,
@@ -1093,7 +1118,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 7,
                     label: '非異常',
                     date: '2022/02/05 18:00',
-                    frequency: '週預測'
+                    frequency: '週預測',
+                    happenLastTime: true
                 },
                 {
                     id: 17,
@@ -1122,7 +1148,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 7,
                     label: '異常',
                     date: '2022/02/05 18:00',
-                    frequency: '週預測'
+                    frequency: '週預測',
+                    happenLastTime: true
                 },
                 {
                     id: 3,
@@ -1149,7 +1176,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 1,
                     label: '非異常',
                     date: '2022/02/05 18:00',
-                    frequency: '週預測'
+                    frequency: '週預測',
+                    happenLastTime: true
                 },
                 {
                     id: 6,
@@ -1194,7 +1222,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 7,
                     label: '異常',
                     date: '2022/04/24 06:00',
-                    frequency: '日預測'
+                    frequency: '日預測',
+                    happenLastTime: true
                 },
                 {
                     id: 11,
@@ -1221,7 +1250,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 7,
                     label: '非異常',
                     date: '2022/10/10 10:00',
-                    frequency: '週預測'
+                    frequency: '週預測',
+                    happenLastTime: true
                 },
                 {
                     id: 14,
@@ -1252,7 +1282,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 10,
                     label: '異常',
                     date: '2022/01/02 15:00',
-                    frequency: '週預測'
+                    frequency: '週預測',
+                    happenLastTime: true
                 },
                 {
                     id: 2,
@@ -1290,7 +1321,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 7,
                     label: '非異常',
                     date: '2022/11/15 22:30',
-                    frequency: '週預測'
+                    frequency: '週預測',
+                    happenLastTime: true
                 },
                 {
                     id: 2,
@@ -1317,7 +1349,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 2,
                     label: '異常',
                     date: '2022/04/02 14:00',
-                    frequency: '日預測'
+                    frequency: '日預測',
+                    happenLastTime: true
                 },
                 {
                     id: 5,
@@ -1335,7 +1368,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 7,
                     label: '非異常',
                     date: '2022/11/15 22:30',
-                    frequency: '週預測'
+                    frequency: '週預測',
+                    happenLastTime: true
                 },
                 {
                     id: 7,
@@ -1362,7 +1396,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 7,
                     label: '非異常',
                     date: '2022/02/05 18:00',
-                    frequency: '週預測'
+                    frequency: '週預測',
+                    happenLastTime: true
                 },
                 {
                     id: 10,
@@ -1389,7 +1424,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 7,
                     label: '異常',
                     date: '2022/02/05 18:00',
-                    frequency: '週預測'
+                    frequency: '週預測',
+                    happenLastTime: true
                 },
                 {
                     id: 13,
@@ -1416,7 +1452,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 7,
                     label: '異常',
                     date: '2022/02/05 18:00',
-                    frequency: '週預測'
+                    frequency: '週預測',
+                    happenLastTime: true
                 },
                 {
                     id: 16,
@@ -1454,7 +1491,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 7,
                     label: '異常',
                     date: '2022/02/05 18:00',
-                    frequency: '週預測'
+                    frequency: '週預測',
+                    happenLastTime: true
                 },
                 {
                     id: 3,
@@ -1490,7 +1528,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 2,
                     label: '異常',
                     date: '2022/02/05 18:00',
-                    frequency: '週預測'
+                    frequency: '週預測',
+                    happenLastTime: true
                 },
                 {
                     id: 7,
@@ -1508,7 +1547,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 7,
                     label: '非異常',
                     date: '2022/02/05 18:00',
-                    frequency: '週預測'
+                    frequency: '週預測',
+                    happenLastTime: true
                 },
                 {
                     id: 9,
@@ -1535,7 +1575,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 2,
                     label: '異常',
                     date: '2022/02/05 18:00',
-                    frequency: '週預測'
+                    frequency: '週預測',
+                    happenLastTime: true
                 },
                 {
                     id: 12,
@@ -1571,7 +1612,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 1,
                     label: '非異常',
                     date: '2022/02/15 12:15',
-                    frequency: '週預測'
+                    frequency: '週預測',
+                    happenLastTime: true
                 }
             ],
             "Device15": [
@@ -1609,7 +1651,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 2,
                     label: '異常',
                     date: '2022/04/02 14:00',
-                    frequency: '日預測'
+                    frequency: '日預測',
+                    happenLastTime: true
                 },
                 {
                     id: 5,
@@ -1627,7 +1670,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 7,
                     label: '非異常',
                     date: '2022/11/15 22:30',
-                    frequency: '週預測'
+                    frequency: '週預測',
+                    happenLastTime: true
                 },
                 {
                     id: 7,
@@ -1663,7 +1707,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 7,
                     label: '異常',
                     date: '2022/02/05 18:00',
-                    frequency: '週預測'
+                    frequency: '週預測',
+                    happenLastTime: true
                 },
                 {
                     id: 11,
@@ -1681,7 +1726,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 7,
                     label: '異常',
                     date: '2022/02/05 18:00',
-                    frequency: '週預測'
+                    frequency: '週預測',
+                    happenLastTime: true
                 },
                 {
                     id: 13,
@@ -1708,7 +1754,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
                     value: 7,
                     label: '異常',
                     date: '2022/02/05 18:00',
-                    frequency: '週預測'
+                    frequency: '週預測',
+                    happenLastTime: true
                 },
                 {
                     id: 16,
@@ -1731,23 +1778,6 @@ export default function Statistics({ token, setAlert, ...rest }) {
             ],
         },
     }
-
-    const pieData = [
-        { value: 2, label: '異常' },
-        { value: 2, label: '非異常' },
-    ];
-    const pieData2 = [
-        { value: 11, label: '異常' },
-        { value: 8, label: '非異常' },
-    ];
-    const pieData3 = [
-        { value: 6, label: '異常' },
-        { value: 10, label: '非異常' },
-    ];
-    const size = {
-        width: 400,
-        height: 200,
-    };
 
     const [selectedSlide, setSelectedSlide] = useState(0);
 
@@ -1862,13 +1892,13 @@ export default function Statistics({ token, setAlert, ...rest }) {
                                                 <Grid xs={3} sx={{ mt: 4 }}>
                                                     <Box border={1} sx={{ mt: 4, ml: 6, width: 120, height: 'auto' }}>
                                                         <Typography align="center" fontSize={25}>異常</Typography>
-                                                        <Box sx={{ bgcolor: '#C5291C', width: 'auto', height: 'auto' }}>
+                                                        <Box sx={{ bgcolor: '#ff2600', width: 'auto', height: 'auto' }}>
                                                             <Typography align="center" fontSize={20}>{abnormalCount}</Typography>
                                                         </Box>
                                                     </Box>
-                                                    <Box sx={{ mt: 6 }}>
+                                                    <Box sx={{ mt: 6, ml: 2 }}>
                                                         <PieChart
-                                                            colors={['#C5291C', '#4CA85A']}
+                                                            colors={['#ff2600', '#008f00']}
                                                             series={[
                                                                 {
                                                                     arcLabel: (item) => `${item.label} (${item.value})`,
@@ -1890,7 +1920,7 @@ export default function Statistics({ token, setAlert, ...rest }) {
                                                 <Grid xs={3} sx={{ mt: 4 }}>
                                                     <Box border={1} sx={{ mt: 4, ml: 6, width: 118, height: 'auto' }}>
                                                         <Typography align="center" fontSize={25}>非異常</Typography>
-                                                        <Box sx={{ bgcolor: '#4CA85A', width: 'auto', height: 'auto' }}>
+                                                        <Box sx={{ bgcolor: '#008f00', width: 'auto', height: 'auto' }}>
                                                             <Typography align="center" fontSize={20}>{nonAbnormalCount}</Typography>
                                                         </Box>
                                                     </Box>
@@ -1918,7 +1948,13 @@ export default function Statistics({ token, setAlert, ...rest }) {
                                                                         <Typography fontSize={20}>異常事件</Typography>
                                                                     </TableCell>
                                                                     <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
-                                                                        <Typography fontSize={20}>前次發生時間</Typography>
+                                                                        <TableSortLabel
+                                                                            active={weekOrderBy === 'date'}
+                                                                            direction={weekOrderBy === 'date' ? orderWeek : 'asc'}
+                                                                            onClick={() => handleSortRequest('date')}
+                                                                        >
+                                                                            <Typography fontSize={20}>前次發生時間</Typography>
+                                                                        </TableSortLabel>
                                                                     </TableCell>
                                                                 </TableRow>
                                                             </TableHead>
@@ -1928,10 +1964,10 @@ export default function Statistics({ token, setAlert, ...rest }) {
                                                                         <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.lightColor) }}>
                                                                             <Typography fontSize={20}>{columns.label}</Typography>
                                                                         </TableCell>
-                                                                        <TableCell align="center" sx={{ height: 'auto' }}>
+                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
                                                                             <Typography fontSize={20}>{columns.name}</Typography>
                                                                         </TableCell>
-                                                                        <TableCell align="center" sx={{ height: 'auto' }}>
+                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
                                                                             <Typography fontSize={20}>{columns.date}</Typography>
                                                                         </TableCell>
                                                                     </TableRow>
@@ -1961,7 +1997,13 @@ export default function Statistics({ token, setAlert, ...rest }) {
                                                                         <Typography fontSize={20}>異常事件</Typography>
                                                                     </TableCell>
                                                                     <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
-                                                                        <Typography fontSize={20}>前次發生時間</Typography>
+                                                                        <TableSortLabel
+                                                                            active={dateOrderBy === 'date'}
+                                                                            direction={dateOrderBy === 'date' ? orderDate : 'asc'}
+                                                                            onClick={() => handleSortRequestDate('date')}
+                                                                        >
+                                                                            <Typography fontSize={20}>前次發生時間</Typography>
+                                                                        </TableSortLabel>
                                                                     </TableCell>
                                                                 </TableRow>
                                                             </TableHead>
@@ -1971,10 +2013,10 @@ export default function Statistics({ token, setAlert, ...rest }) {
                                                                         <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.lightColor) }}>
                                                                             <Typography fontSize={20}>{columns.label}</Typography>
                                                                         </TableCell>
-                                                                        <TableCell align="center" sx={{ height: 'auto' }}>
+                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
                                                                             <Typography fontSize={20}>{columns.name}</Typography>
                                                                         </TableCell>
-                                                                        <TableCell align="center" sx={{ height: 'auto' }}>
+                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
                                                                             <Typography fontSize={20}>{columns.date}</Typography>
                                                                         </TableCell>
                                                                     </TableRow>
@@ -1995,14 +2037,8 @@ export default function Statistics({ token, setAlert, ...rest }) {
         );
     };
 
-    const [nav1, setNav1] = useState();
-    const [nav2, setNav2] = useState();
-    const slider1 = useRef();
-    const slider2 = useRef();
-
     return (
         <ThemeProvider theme={darkTheme}>
-
             {createDeviceCard(columns, columns2)}
         </ThemeProvider>
     );

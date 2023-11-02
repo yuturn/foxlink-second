@@ -179,8 +179,8 @@ const columns2 = {
 export default function Project({ token, ...rest }) {
   const [projectID, setProjectID] = useState("");
   const [line, setLine] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
   const [accuracyOpen, setAccuracyOpen] = useState(false);
   const [detailOpen, setDetailOpen] = useState(false);
   const [dialogProjectName, setDialogProjectName] = useState('D7X E75');
