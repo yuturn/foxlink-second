@@ -232,9 +232,9 @@ export default function Project({ token, ...rest }) {
 
   function getColor(lightColor) {
     if (lightColor === 1) {
-      return "#C5291C";
+      return "#ff2600";
     } else if (lightColor === 2) {
-      return "#4CA85A";
+      return "#008f00";
     } else {
       return null; // 或者返回一个默认的图标
     }

@@ -82,6 +82,15 @@ export const apiGetProjectUsers = (data) => auth_except(baseRequest.get(`/projec
     'Authorization': `Bearer ${data['token']}`,
   }
 }));
+
+export const apiGetUserName = (data) => auth_except(baseRequest.get(`/users/foxlink?user_id=${data['userID']}&system_id=${data['systemID']}`, {
+  headers:
+  {
+    'accept': 'application/json',
+    // 'Authorization': `Bearer ${data['token']}`,
+  }
+}));
+
 // update
 export const apiPostProjectUser = (data) => auth_except(baseRequest.post(`/project/add-project-worker`, data, {
   headers:
@@ -96,6 +105,30 @@ export const apiDeleteProjectUser = (data) => auth_except(baseRequest.delete(`/p
   {
     'accept': 'application/json',
     'Authorization': `Bearer ${data['token']}`
+  }
+}));
+
+export const apiGetStatistics = (token) => auth_except(baseRequest.get(`/statistics/`, {
+  headers:
+  {
+    'accept': 'application/json',
+    'Authorization': `Bearer ${token}`,
+  }
+}));
+
+export const apiGetStatisticsDetails = (data) => auth_except(baseRequest.get(`statistics/predict_result`, {
+  headers:
+  {
+    'accept': 'application/json',
+    'Authorization': `Bearer ${data['token']}`,
+  }
+}));
+
+export const apiGetStatisticsDetailsFilter = (data) => auth_except(baseRequest.get(`statistics/predict_result${data.projectName === undefined || null ? "" : "?project_name=" + data.projectName}${(data.deviceName === undefined || null ? "" : "&device_name=" + data.deviceName)}`, {
+  headers:
+  {
+    'accept': 'application/json',
+    'Authorization': `Bearer ${data['token']}`,
   }
 }));
 // ============================第二期============================
@@ -129,6 +162,8 @@ export const apiStatisticsWithDate = (data) => auth_except(baseRequest.get(`/sta
     'Content-Type': 'application/x-www-form-urlencoded'
   }
 }));
+
+
 
 
 // export const apiStatisticsWithDate = (data) => auth_except(baseRequest.get(`/stats/?workshop_name=${data['workshop']}&start_date=${data['start']}&end_date=${data['end']}`, {

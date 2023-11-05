@@ -1,6 +1,7 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { DataGrid } from '@mui/x-data-grid';
 import { borders } from '@mui/system';
+import { apiGetStatistics, apiGetStatisticsDetails, apiGetStatisticsDetailsFilter } from '../api'
 import {
   Box,
   Card,
@@ -48,8 +49,10 @@ const darkTheme = createTheme({
 
 export default function Machinehealth({ token, setAlert, ...rest }) {
   const [isPaused, setIsPaused] = useState(false);
-  const [projectName, setProjectName] = useState("");
-  const [deviceName, setDeviceName] = useState("");
+  const [projectNameList, setProjectNameList] = useState([]);
+  const [projectName, setProjectName] = useState();
+  const [deviceName, setDeviceName] = useState();
+  const [deviceNameList, setDeviceNameList] = useState([]);
 
   const [orderWeek, setOrderWeek] = useState('asc');
   const [weekOrderBy, setWeekOrderBy] = useState('label');
@@ -57,10 +60,13 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
   const [orderDate, setOrder] = useState('asc');
   const [dateOrderBy, setDateOrderBy] = useState('label');
 
+  const [dateData, setDateData] = useState({});
+
   const projectNameChange = (event) => {
     setProjectName(event.target.value);
   };
   const deviceNameChange = (event) => {
+    console.log('deviceName有執行到')
     setDeviceName(event.target.value);
   };
   const togglePause = () => {
@@ -123,15 +129,57 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
   };
 
   function getColor(lightColor) {
+    // 1 是異常
     if (lightColor === 1) {
       return "#ff2600";
-    } else if (lightColor === 2) {
+      // 0 是穩定
+    } else if (lightColor === 0) {
       return "#008f00";
     } else {
       return null; // 或者返回一个默认的图标
     }
   }
 
+
+  // 使用另一个useEffect监听statisticDevices的变化
+  useEffect(() => {
+    getProjectName()
+  }, []);
+
+  const getProjectName = () => {
+    apiGetStatistics(token)
+      .then((res) => {
+        console.log(res)
+        const list = res.data.map((project) => project.project_name)
+        setProjectNameList(list)
+        const devicesList = res.data.map((project) => project)
+        setDeviceNameList(devicesList)
+      })
+    getProjectDetails()
+  }
+  const getProjectDetails = () => {
+    const data = {
+      token: token,
+    }
+    apiGetStatisticsDetails(data)
+      .then((res) => {
+        console.log(res)
+        setDateData(res.data)
+      })
+  }
+
+  const getProjectDetailsFilter = () => {
+    const data = {
+      token: token,
+      projectName: projectName,
+      deviceName: deviceName
+    }
+    apiGetStatisticsDetailsFilter(data)
+      .then((res) => {
+        console.log(res)
+        setDateData(res.data)
+      })
+  }
 
   const columns = {
     "d7x": {
@@ -1830,6 +1878,8 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
     },
   }
 
+
+
   function infoColor(happenLastTime) {
     if (happenLastTime === true) {
       return "#ffc107";
@@ -1925,21 +1975,22 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
               interval={3000}
             >
               {Object.keys(data[project]).map((device) => {
-                // Initialize counters for '異常' and '非異常'
+                // Initialize counters for '異常' and '穩定'
                 let abnormalCount = 0;
                 let nonAbnormalCount = 0;
 
-                // Loop through the data for the current device to count '異常' and '非異常'
+                // Loop through the data for the current device to count '異常' and '穩定'
                 data[project][device].forEach((item) => {
-                  if (item.label === '異常') {
+                  if (item.lightColor === 1) {
                     abnormalCount++;
-                  } else if (item.label === '非異常') {
+                  } else if (item.lightColor === 0) {
                     nonAbnormalCount++;
                   }
                 });
+                console.log(abnormalCount, nonAbnormalCount)
                 let pieData = [
+                  { value: nonAbnormalCount, label: '穩定' },
                   { value: abnormalCount, label: '異常' },
-                  { value: nonAbnormalCount, label: '非異常' },
                 ];
 
                 return (
@@ -1958,7 +2009,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                           </Box>
                           <Box sx={{ mt: 6, ml: 2 }}>
                             <PieChart
-                              colors={['#ff2600', '#008f00']}
+                              colors={['#008f00', '#ff2600']}
                               series={[
                                 {
                                   arcLabel: (item) => `${item.label} (${item.value})`,
@@ -1979,7 +2030,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                         </Grid>
                         <Grid xs={3} sx={{ mt: 4 }}>
                           <Box border={1} sx={{ mt: 4, ml: 6, width: 118, height: 'auto' }}>
-                            <Typography align="center" fontSize={25}>非異常</Typography>
+                            <Typography align="center" fontSize={25}>穩定</Typography>
                             <Box sx={{ bgcolor: '#008f00', width: 'auto', height: 'auto' }}>
                               <Typography align="center" fontSize={20}>{nonAbnormalCount}</Typography>
                             </Box>
@@ -1988,7 +2039,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                         <Grid item xs={6} md={6} lg={6}>
                           <TableContainer component={Paper} style={tableContainerStyle.tableContainer}>
                             <Table>
-                              <TableHead style={{ backgroundColor: '#696969' }}>
+                              <TableHead style={{ backgroundColor: '#bfbfbf' }}>
                                 <TableRow>
                                   <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={3}>
                                     <Typography fontSize={20}>週預測(10/30-11/03)</Typography>
@@ -2022,7 +2073,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                 {data[project][device].sort(getComparator(orderWeek)).map((columns) => (
                                   <TableRow key={columns.name}>
                                     <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.lightColor) }}>
-                                      <Typography fontSize={20}>{columns.label}</Typography>
+                                      <Typography fontSize={20}>{columns.lightColor === 0 ? "異常" : "穩定"}</Typography>
                                     </TableCell>
                                     <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
                                       <Typography fontSize={20}>{columns.name}</Typography>
@@ -2040,7 +2091,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                               <TableHead style={{ backgroundColor: '#696969' }}>
                                 <TableRow>
                                   <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={3}>
-                                    <Typography fontSize={20}>日預測(10/26)</Typography>
+                                    <Typography fontSize={20} color="common.white">日預測(10/26)</Typography>
                                   </TableCell>
                                 </TableRow>
                                 <TableRow>
@@ -2050,11 +2101,11 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                       direction={dateOrderBy === 'label' ? orderDate : 'asc'}
                                       onClick={() => handleSortRequestDate('label')}
                                     >
-                                      <Typography fontSize={20}>類型</Typography>
+                                      <Typography fontSize={20} color="common.white">類型</Typography>
                                     </TableSortLabel>
                                   </TableCell>
                                   <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
-                                    <Typography fontSize={20}>異常事件</Typography>
+                                    <Typography fontSize={20} color="common.white">異常事件</Typography>
                                   </TableCell>
                                   <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
                                     <TableSortLabel
@@ -2062,7 +2113,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                       direction={dateOrderBy === 'date' ? orderDate : 'asc'}
                                       onClick={() => handleSortRequestDate('date')}
                                     >
-                                      <Typography fontSize={20}>前次發生時間</Typography>
+                                      <Typography fontSize={20} color="common.white">前次發生時間</Typography>
                                     </TableSortLabel>
                                   </TableCell>
                                 </TableRow>
@@ -2071,7 +2122,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                 {data2[project][device].sort(getComparatorDate(orderDate)).map((columns) => (
                                   <TableRow key={columns.name}>
                                     <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.lightColor) }}>
-                                      <Typography fontSize={20}>{columns.label}</Typography>
+                                      <Typography fontSize={20}>{columns.lightColor === 0 ? "異常" : "穩定"}</Typography>
                                     </TableCell>
                                     <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
                                       <Typography fontSize={20}>{columns.name}</Typography>
@@ -2128,9 +2179,12 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                         onChange={projectNameChange}
                         style={{ minWidth: "271px", height: "56px" }}
                       >
-                        <MenuItem value={1}>D7X</MenuItem>
-                        <MenuItem value={2}>D6Y</MenuItem>
-                        <MenuItem value={3}>D1Y</MenuItem>
+                        <MenuItem value={null}></MenuItem>
+                        {projectNameList.map((projectItem) => (
+                          <MenuItem value={projectItem}>
+                            {projectItem}
+                          </MenuItem>
+                        ))}
                       </Select>
                     </FormControl>
                   </Box>
@@ -2152,12 +2206,16 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                         onChange={deviceNameChange}
                         style={{ minWidth: "271px", height: "56px" }}
                       >
-                        <MenuItem value={1}>Device1</MenuItem>
-                        <MenuItem value={2}>Device2</MenuItem>
-                        <MenuItem value={3}>Device3</MenuItem>
-                        <MenuItem value={4}>Device4</MenuItem>
-                        <MenuItem value={5}>Device5</MenuItem>
-                        <MenuItem value={6}>Device6</MenuItem>
+                        <MenuItem value={null}></MenuItem>
+                        {deviceNameList.map((object) => {
+                          if (object.project_name === projectName) {
+                            return object.devices.map((device) => (
+                              <MenuItem key={device} value={device}>
+                                {device}
+                              </MenuItem>
+                            ));
+                          }
+                        })}
                       </Select>
                     </FormControl>
                   </Box>
@@ -2173,6 +2231,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                       letterSpacing: 3,
                       mt: 3
                     }}
+                    onClick={getProjectDetailsFilter}
                   >
                     查詢
                   </LoadingButton>
@@ -2182,7 +2241,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
           </Grid>
         </CardContent>
       </Card>
-      {createDeviceCard(columns, columns2)}
+      {createDeviceCard(dateData, dateData)}
     </ThemeProvider>
   );
 }
