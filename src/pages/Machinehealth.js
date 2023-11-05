@@ -143,19 +143,25 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
 
   // 使用另一个useEffect监听statisticDevices的变化
   useEffect(() => {
-    getProjectName()
+    getProjectName(token)
   }, []);
 
-  const getProjectName = () => {
+  const getProjectName = (token) => {
+    if (!token) {
+      // 没有token，不执行操作
+      return;
+    }
+
     apiGetStatistics(token)
       .then((res) => {
-        console.log(res)
-        const list = res.data.map((project) => project.project_name)
-        setProjectNameList(list)
-        const devicesList = res.data.map((project) => project)
-        setDeviceNameList(devicesList)
-      })
-    getProjectDetails()
+        console.log(res);
+        const list = res.data.map((project) => project.project_name);
+        setProjectNameList(list);
+        const devicesList = res.data.map((project) => project);
+        setDeviceNameList(devicesList);
+      });
+
+    getProjectDetails(token);
   }
   const getProjectDetails = () => {
     const data = {
@@ -2073,7 +2079,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                 {data[project][device].sort(getComparator(orderWeek)).map((columns) => (
                                   <TableRow key={columns.name}>
                                     <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.lightColor) }}>
-                                      <Typography fontSize={20}>{columns.lightColor === 0 ? "異常" : "穩定"}</Typography>
+                                      <Typography fontSize={20}>{columns.lightColor === 0 ? "穩定" : "異常"}</Typography>
                                     </TableCell>
                                     <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
                                       <Typography fontSize={20}>{columns.name}</Typography>
