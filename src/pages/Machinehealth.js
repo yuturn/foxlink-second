@@ -30,6 +30,9 @@ import { PieChart, pieArcLabelClasses } from '@mui/x-charts';
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from 'react-responsive-carousel';
 
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
+
 const darkTheme = createTheme({
   palette: {
     mode: 'light',
@@ -63,11 +66,18 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
   const [dateData, setDateData] = useState({});
 
   const projectNameChange = (event) => {
-    setProjectName(event.target.value);
+    if (event.target.value == 'null') {
+      setProjectName(null);
+    } else {
+      setProjectName(event.target.value);
+    }
   };
   const deviceNameChange = (event) => {
-    console.log('deviceName有執行到')
-    setDeviceName(event.target.value);
+    if (event.target.value == 'null') {
+      setDeviceName(null);
+    } else {
+      setDeviceName(event.target.value);
+    }
   };
   const togglePause = () => {
     setIsPaused(!isPaused);
@@ -128,6 +138,8 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
     slidesToScroll: 1,
   };
 
+
+
   function getColor(lightColor) {
     // 1 是異常
     if (lightColor === 1) {
@@ -180,12 +192,39 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
       projectName: projectName,
       deviceName: deviceName
     }
+    console.log(projectName)
+    console.log(typeof (projectName))
+    console.log(deviceName)
+    console.log(typeof (projectName))
     apiGetStatisticsDetailsFilter(data)
       .then((res) => {
         console.log(res)
         setDateData(res.data)
-      })
+        handleOpen("查詢成功")
+      }).catch(err => { console.log(err); handleErrorOpen("查詢失敗" + err); })
   }
+
+  //success alert
+  const [alertOpen, setAlertOpen] = React.useState(false);
+  const [message, setMessage] = useState(''); // 状态来存储消息内容
+  const handleOpen = (message) => {
+    setMessage(message); // 设置消息内容
+    setAlertOpen(true);
+  };
+  const handleClose = (event, reason) => {
+    setAlertOpen(false);
+  };
+
+  //error alert
+  const [errorAlertOpen, setErrorAlertOpen] = React.useState(false);
+  const [errorMessage, setErrorMessage] = useState(''); // 状态来存储消息内容
+  const handleErrorOpen = (message) => {
+    setErrorMessage(message); // 设置消息内容
+    setErrorAlertOpen(true);
+  };
+  const handleErrorClose = (event, reason) => {
+    setErrorAlertOpen(false);
+  };
 
   const columns = {
     "d7x": {
@@ -2162,6 +2201,34 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
         </Box>
         <Divider sx={{ borderBottomWidth: 3 }} />
         <CardContent>
+          <Snackbar
+            open={alertOpen}
+            autoHideDuration={5000}
+            onClose={handleClose}
+            variant="filled"
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'center'
+            }}
+          >
+            <Alert onClose={handleClose} severity='success' sx={{ width: '100%' }}>
+              {message}
+            </Alert>
+          </Snackbar>
+          <Snackbar
+            open={errorAlertOpen}
+            autoHideDuration={5000}
+            onClose={handleErrorClose}
+            variant="filled"
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'center'
+            }}
+          >
+            <Alert onClose={handleErrorClose} severity='error' sx={{ width: '100%' }}>
+              {errorMessage}
+            </Alert>
+          </Snackbar>
           <Grid container spacing={1}>
             <Grid item xs={12} md={12}>
               <Typography variant="h4" fontWeight="medium" mr={2}>
@@ -2185,7 +2252,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                         onChange={projectNameChange}
                         style={{ minWidth: "271px", height: "56px" }}
                       >
-                        <MenuItem value={null}></MenuItem>
+                        <MenuItem value='null'></MenuItem>
                         {projectNameList.map((projectItem) => (
                           <MenuItem value={projectItem}>
                             {projectItem}
@@ -2212,7 +2279,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                         onChange={deviceNameChange}
                         style={{ minWidth: "271px", height: "56px" }}
                       >
-                        <MenuItem value={null}></MenuItem>
+                        <MenuItem value='null'></MenuItem>
                         {deviceNameList.map((object) => {
                           if (object.project_name === projectName) {
                             return object.devices.map((device) => (
