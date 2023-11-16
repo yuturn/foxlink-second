@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { DataGrid } from '@mui/x-data-grid';
+import { apiGetStatisticsDetails } from '../api'
 import {
     Box,
     Card,
@@ -65,9 +66,11 @@ export default function Statistics({ token, setAlert, ...rest }) {
     };
 
     function getColor(lightColor) {
+        // 1 是異常
         if (lightColor === 1) {
             return "#ff2600";
-        } else if (lightColor === 2) {
+            // 0 是穩定
+        } else if (lightColor === 0) {
             return "#008f00";
         } else {
             return null; // 或者返回一个默认的图标
@@ -80,6 +83,27 @@ export default function Statistics({ token, setAlert, ...rest }) {
         } else {
             return null; // 或者返回一个默认的图标
         }
+    }
+
+    // 使用另一个useEffect监听statisticDevices的变化
+    useEffect(() => {
+        getProjectDetails(token)
+    }, []);
+
+    const [dateData, setDateData] = useState({});
+    const getProjectDetails = (token) => {
+        if (!token) {
+            // 没有token，不执行操作
+            return;
+        }
+        const data = {
+            token: token,
+        }
+        apiGetStatisticsDetails(data)
+            .then((res) => {
+                console.log(res)
+                setDateData(res.data)
+            })
     }
 
     const columns = {
@@ -1865,21 +1889,22 @@ export default function Statistics({ token, setAlert, ...rest }) {
                             interval={3000}
                         >
                             {Object.keys(data[project]).map((device) => {
-                                // Initialize counters for '異常' and '非異常'
+                                // Initialize counters for '異常' and '穩定'
                                 let abnormalCount = 0;
                                 let nonAbnormalCount = 0;
 
-                                // Loop through the data for the current device to count '異常' and '非異常'
+                                // Loop through the data for the current device to count '異常' and '穩定'
                                 data[project][device].forEach((item) => {
-                                    if (item.label === '異常') {
+                                    if (item.lightColor === 1) {
                                         abnormalCount++;
-                                    } else if (item.label === '非異常') {
+                                    } else if (item.lightColor === 0) {
                                         nonAbnormalCount++;
                                     }
                                 });
+                                console.log(abnormalCount, nonAbnormalCount)
                                 let pieData = [
+                                    { value: nonAbnormalCount, label: '穩定' },
                                     { value: abnormalCount, label: '異常' },
-                                    { value: nonAbnormalCount, label: '非異常' },
                                 ];
 
                                 return (
@@ -1898,7 +1923,7 @@ export default function Statistics({ token, setAlert, ...rest }) {
                                                     </Box>
                                                     <Box sx={{ mt: 6, ml: 2 }}>
                                                         <PieChart
-                                                            colors={['#ff2600', '#008f00']}
+                                                            colors={['#008f00', '#ff2600']}
                                                             series={[
                                                                 {
                                                                     arcLabel: (item) => `${item.label} (${item.value})`,
@@ -1919,7 +1944,7 @@ export default function Statistics({ token, setAlert, ...rest }) {
                                                 </Grid>
                                                 <Grid xs={3} sx={{ mt: 4 }}>
                                                     <Box border={1} sx={{ mt: 4, ml: 6, width: 118, height: 'auto' }}>
-                                                        <Typography align="center" fontSize={25}>非異常</Typography>
+                                                        <Typography align="center" fontSize={25}>穩定</Typography>
                                                         <Box sx={{ bgcolor: '#008f00', width: 'auto', height: 'auto' }}>
                                                             <Typography align="center" fontSize={20}>{nonAbnormalCount}</Typography>
                                                         </Box>
@@ -1931,7 +1956,7 @@ export default function Statistics({ token, setAlert, ...rest }) {
                                                             <TableHead style={{ backgroundColor: '#bfbfbf' }}>
                                                                 <TableRow>
                                                                     <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={3}>
-                                                                        <Typography fontSize={20}>週預測(10/30-11/03)</Typography>
+                                                                        <Typography fontSize={20}>週預測</Typography>
                                                                     </TableCell>
                                                                 </TableRow>
                                                                 <TableRow>
@@ -1959,10 +1984,10 @@ export default function Statistics({ token, setAlert, ...rest }) {
                                                                 </TableRow>
                                                             </TableHead>
                                                             <TableBody>
-                                                                {data[project][device].sort(getComparator(orderWeek)).map((columns) => (
+                                                                {data[project][device].filter(columns => columns.frequency === "週預測").sort(getComparator(orderWeek)).map((columns) => (
                                                                     <TableRow key={columns.name}>
                                                                         <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.lightColor) }}>
-                                                                            <Typography fontSize={20}>{columns.label}</Typography>
+                                                                            <Typography fontSize={20}>{columns.lightColor === 0 ? "穩定" : "異常"}</Typography>
                                                                         </TableCell>
                                                                         <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
                                                                             <Typography fontSize={20}>{columns.name}</Typography>
@@ -1977,10 +2002,10 @@ export default function Statistics({ token, setAlert, ...rest }) {
                                                     </TableContainer>
                                                     <TableContainer component={Paper} style={tableContainerStyle.tableContainer}>
                                                         <Table>
-                                                            <TableHead style={{ backgroundColor: '#696969' }}>
+                                                            <TableHead style={{ backgroundColor: '#bfbfbf' }}>
                                                                 <TableRow>
                                                                     <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={3}>
-                                                                        <Typography fontSize={20} color="common.white">日預測(10/26)</Typography>
+                                                                        <Typography fontSize={20} >日預測</Typography>
                                                                     </TableCell>
                                                                 </TableRow>
                                                                 <TableRow>
@@ -1990,11 +2015,11 @@ export default function Statistics({ token, setAlert, ...rest }) {
                                                                             direction={dateOrderBy === 'label' ? orderDate : 'asc'}
                                                                             onClick={() => handleSortRequestDate('label')}
                                                                         >
-                                                                            <Typography fontSize={20} color="common.white">類型</Typography>
+                                                                            <Typography fontSize={20} >類型</Typography>
                                                                         </TableSortLabel>
                                                                     </TableCell>
                                                                     <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
-                                                                        <Typography fontSize={20} color="common.white">異常事件</Typography>
+                                                                        <Typography fontSize={20} >異常事件</Typography>
                                                                     </TableCell>
                                                                     <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
                                                                         <TableSortLabel
@@ -2002,16 +2027,16 @@ export default function Statistics({ token, setAlert, ...rest }) {
                                                                             direction={dateOrderBy === 'date' ? orderDate : 'asc'}
                                                                             onClick={() => handleSortRequestDate('date')}
                                                                         >
-                                                                            <Typography fontSize={20} color="common.white">前次發生時間</Typography>
+                                                                            <Typography fontSize={20} >前次發生時間</Typography>
                                                                         </TableSortLabel>
                                                                     </TableCell>
                                                                 </TableRow>
                                                             </TableHead>
                                                             <TableBody>
-                                                                {data2[project][device].sort(getComparatorDate(orderDate)).map((columns) => (
+                                                                {data2[project][device].filter(columns => columns.frequency === "日預測").sort(getComparatorDate(orderDate)).map((columns) => (
                                                                     <TableRow key={columns.name}>
                                                                         <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.lightColor) }}>
-                                                                            <Typography fontSize={20}>{columns.label}</Typography>
+                                                                            <Typography fontSize={20}>{columns.lightColor === 0 ? "異常" : "穩定"}</Typography>
                                                                         </TableCell>
                                                                         <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
                                                                             <Typography fontSize={20}>{columns.name}</Typography>
@@ -2039,7 +2064,7 @@ export default function Statistics({ token, setAlert, ...rest }) {
 
     return (
         <ThemeProvider theme={darkTheme}>
-            {createDeviceCard(columns, columns2)}
+            {createDeviceCard(dateData, dateData)}
         </ThemeProvider>
     );
 }

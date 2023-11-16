@@ -2087,7 +2087,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                               <TableHead style={{ backgroundColor: '#bfbfbf' }}>
                                 <TableRow>
                                   <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={3}>
-                                    <Typography fontSize={20}>週預測(10/30-11/03)</Typography>
+                                    <Typography fontSize={20}>週預測</Typography>
                                   </TableCell>
                                 </TableRow>
                                 <TableRow>
@@ -2115,7 +2115,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                 </TableRow>
                               </TableHead>
                               <TableBody>
-                                {data[project][device].sort(getComparator(orderWeek)).map((columns) => (
+                                {data[project][device].filter(columns => columns.frequency === "週預測").sort(getComparator(orderWeek)).map((columns) => (
                                   <TableRow key={columns.name}>
                                     <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.lightColor) }}>
                                       <Typography fontSize={20}>{columns.lightColor === 0 ? "穩定" : "異常"}</Typography>
@@ -2133,10 +2133,10 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                           </TableContainer>
                           <TableContainer component={Paper} style={tableContainerStyle.tableContainer}>
                             <Table>
-                              <TableHead style={{ backgroundColor: '#696969' }}>
+                              <TableHead style={{ backgroundColor: '#bfbfbf' }}>
                                 <TableRow>
                                   <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={3}>
-                                    <Typography fontSize={20} color="common.white">日預測(10/26)</Typography>
+                                    <Typography fontSize={20} >日預測</Typography>
                                   </TableCell>
                                 </TableRow>
                                 <TableRow>
@@ -2146,11 +2146,11 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                       direction={dateOrderBy === 'label' ? orderDate : 'asc'}
                                       onClick={() => handleSortRequestDate('label')}
                                     >
-                                      <Typography fontSize={20} color="common.white">類型</Typography>
+                                      <Typography fontSize={20} >類型</Typography>
                                     </TableSortLabel>
                                   </TableCell>
                                   <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
-                                    <Typography fontSize={20} color="common.white">異常事件</Typography>
+                                    <Typography fontSize={20} >異常事件</Typography>
                                   </TableCell>
                                   <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
                                     <TableSortLabel
@@ -2158,13 +2158,13 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                       direction={dateOrderBy === 'date' ? orderDate : 'asc'}
                                       onClick={() => handleSortRequestDate('date')}
                                     >
-                                      <Typography fontSize={20} color="common.white">前次發生時間</Typography>
+                                      <Typography fontSize={20} >前次發生時間</Typography>
                                     </TableSortLabel>
                                   </TableCell>
                                 </TableRow>
                               </TableHead>
                               <TableBody>
-                                {data2[project][device].sort(getComparatorDate(orderDate)).map((columns) => (
+                                {data2[project][device].filter(columns => columns.frequency === "日預測").sort(getComparatorDate(orderDate)).map((columns) => (
                                   <TableRow key={columns.name}>
                                     <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.lightColor) }}>
                                       <Typography fontSize={20}>{columns.lightColor === 0 ? "異常" : "穩定"}</Typography>
