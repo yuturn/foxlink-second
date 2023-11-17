@@ -38,28 +38,8 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
 // import { LineChart } from '@mui/x-charts/LineChart';
-// import { Line } from 'react-chartjs-2';
-// import {
-//   Chart as ChartJS,
-//   CategoryScale,
-//   LinearScale,
-//   PointElement,
-//   LineElement,
-//   Title,
-//   Tooltip,
-//   Legend,
-// } from 'chart.js';
-// ChartJS.register(
-//   CategoryScale,
-//   LinearScale,
-//   PointElement,
-//   LineElement,
-//   Title,
-//   Tooltip,
-//   Legend
-// );
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 const darkTheme = createTheme({
   palette: {
@@ -93,14 +73,37 @@ const data = [
   { id: 6, projectName: 'X61 E75', line: '3', date: '2023/12/29', accuracy: '47.54%', trend: '查看' },
 ];
 
-const linechart = {
-  xData: [
-    '10 / 21', '10 / 22', '10 / 23', '10 / 24', '10 / 25', '10/26', '10/27'
-  ],
-  yData: [
-    59.25, 84.79, 34.08, 42.85, 59.63, 100.00, 0
-  ]
-}
+const data6 = [
+  {
+    name: '10/15',
+    value: 65.85,
+  },
+  {
+    name: '10/16',
+    value: 78.56,
+  },
+  {
+    name: '10/17',
+    value: 30.67,
+  },
+  {
+    name: '10/18',
+    value: 44.44,
+  },
+  {
+    name: '10/19',
+    value: 59.25,
+  },
+  {
+    name: '10/20',
+    value: 84.79,
+  },
+  {
+    name: '10/21',
+    value: 34.08,
+  },
+];
+
 
 const detailData = [
   { id: 1, device: 'device1', deviceName: 'deviceName1', accuracy: '75.66%' },
@@ -176,6 +179,7 @@ const columns2 = {
   }
 }
 
+
 export default function Project({ token, ...rest }) {
   const [projectID, setProjectID] = useState("");
   const [line, setLine] = useState("");
@@ -185,6 +189,36 @@ export default function Project({ token, ...rest }) {
   const [detailOpen, setDetailOpen] = useState(false);
   const [dialogProjectName, setDialogProjectName] = useState('D7X E75');
   const [xAxisData, setXAxisData] = useState([]);
+
+  const LineChartExample = () => {
+    return (
+      <ResponsiveContainer width="100%" height="100%">
+        <LineChart
+          width={1000}
+          height={500}
+          data={data6}
+          margin={{
+            top: 5,
+            right: 30,
+            left: 20,
+            bottom: 5,
+          }}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="name" />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <Line type="monotone" dataKey="value" stroke="#82ca9d" />
+        </LineChart>
+      </ResponsiveContainer>
+    );
+  };
+
+  useEffect(() => {
+    console.log(startDate)
+    console.log(startDate.$y + '/' + startDate.$M + 1 + '/' + startDate.$D)
+  }, [console.log(startDate), console.log(new Date(startDate).toISOString())]);
 
   //一開始的table
   const [order, setOrder] = useState('asc');
@@ -431,29 +465,6 @@ export default function Project({ token, ...rest }) {
                   </TableHead>
                   <TableBody>
                     {data.sort(getComparator(order)).map((info) => {
-                      const options = {
-                        responsive: true,
-                        plugins: {
-                          legend: {
-                            position: 'top',
-                          },
-                          title: {
-                            display: true,
-                            text: dialogProjectName + '的趨勢圖',
-                          },
-                        },
-                      };
-                      const lineChartData = {
-                        labels: linechart.xData,
-                        datasets: [
-                          {
-                            label: dialogProjectName,
-                            data: linechart.yData,
-                            borderColor: 'rgb(53, 162, 235)',
-                            backgroundColor: 'rgba(53, 162, 235, 0.5)',
-                          }
-                        ]
-                      };
                       return (
                         <TableRow key={info.name}>
                           <TableCell align="center">
@@ -488,7 +499,7 @@ export default function Project({ token, ...rest }) {
                               <DialogTitle id="alert-dialog-title-accuracy" sx={{ backgroundColor: "#696969" }}>{dialogProjectName}</DialogTitle>
                               <DialogContent>
                                 <div style={{ width: '1000px', height: '550px' }}>
-                                  {/* <Line options={options} data={lineChartData} /> */}
+                                  {LineChartExample()}
                                 </div>
                               </DialogContent>
                               <DialogActions>
