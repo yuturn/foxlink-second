@@ -264,89 +264,6 @@ const detailData1 = [
   ]
 ];
 
-const testData = [
-  {
-    "project_name": "D7X E75",
-    "devices": {
-      "Device_5": [1, 2, 3],
-      "Device_6": [1, 2]
-    }
-  },
-  {
-    "project_name": "B402 USB-C",
-    "devices": {
-      "Device_5": [1, 2],
-      "Device_6": [1, 2, 3, 4]
-    }
-  }
-]
-
-const getAve = () => {
-  let count = 0
-  let total = 0
-  detailData1.map((num) => (
-    count++,
-    total = total + num.accuracy
-  )
-  )
-  return total / count
-}
-
-const columns = {
-  "D7X E75": {
-    "device1": [
-      {
-        name: "料盤取材上下氣缸故障",
-        true: 2,
-        predict: 1,
-      },
-      {
-        name: "tray盤站故障",
-        true: 2,
-        predict: 2,
-      },
-      {
-        name: "UV檢測站故障",
-        true: 1,
-        predict: 1,
-      },
-    ]
-  }
-}
-
-const columns2 = {
-  "D7X E75": {
-    "device1": [
-      {
-        name: "壓入檢測站故障",
-        true: 2,
-        predict: 1,
-      },
-      {
-        name: "Glue異常",
-        true: 2,
-        predict: 1,
-      },
-      {
-        name: "出料撥料氣缸氣缸故障",
-        true: 1,
-        predict: 1,
-      },
-      {
-        name: "撥料上下2氣缸故障",
-        true: 2,
-        predict: 2,
-      },
-      {
-        name: "NG排料氣缸故障",
-        true: 1,
-        predict: 1,
-      },
-    ]
-  }
-}
-
-
 export default function Project({ token, ...rest }) {
   const [projectName, setProjectName] = useState("");
   const [device, setDevice] = useState("");
@@ -365,6 +282,7 @@ export default function Project({ token, ...rest }) {
   const [compareListData, setCompareListData] = useState([]);
   const [searchDateData, setSearchDateData] = useState([]);
   const [currentAccuracyInfo, setCurrentAccuracyInfo] = useState(null);
+  const [currentLineInfo, setCurrentLineInfo] = useState(null);
   const [detailData, setDetailData] = useState({});
   const LineChartExample = () => {
     return (
@@ -523,7 +441,6 @@ export default function Project({ token, ...rest }) {
   const accuracyHandleClickClose = () => {
     setAccuracyOpen(false);
   };
-  const [dialogAccuracy, setDialogAccuracy] = useState(null);
   const detailHandleClickOpen = (projectName, line, date) => {
     setDetailOpen(true);
     setDialogProjectName(projectName);
@@ -540,6 +457,7 @@ export default function Project({ token, ...rest }) {
       .then((res) => {
         console.log(res.data);
         setCurrentAccuracyInfo(res.data[0]['accuracyDate']);
+        setCurrentLineInfo(res.data[0]['line']);
         console.log(res.data[0]['devices']);
         setDetailData(res.data[0]['devices'])
       });
@@ -817,7 +735,7 @@ export default function Project({ token, ...rest }) {
                                             <Typography fontSize={20}>線號</Typography>
                                           </TableCell>
                                           <TableCell align="center" sx={{ border: "1px solid black" }} colSpan={2}>
-                                            <Typography fontSize={20}>1</Typography>
+                                            <Typography fontSize={20}>{currentLineInfo}</Typography>
                                           </TableCell>
                                           <TableCell align="center" sx={{ border: "1px solid black" }}>
                                             <Typography fontSize={20}>總計</Typography>
@@ -1194,7 +1112,7 @@ export default function Project({ token, ...rest }) {
                                             <Typography fontSize={20}>線號</Typography>
                                           </TableCell>
                                           <TableCell align="center" sx={{ border: "1px solid black" }} colSpan={2}>
-                                            <Typography fontSize={20}>1</Typography>
+                                            <Typography fontSize={20}>{currentLineInfo}</Typography>
                                           </TableCell>
                                           <TableCell align="center" sx={{ border: "1px solid black" }}>
                                             <Typography fontSize={20}>總計</Typography>
