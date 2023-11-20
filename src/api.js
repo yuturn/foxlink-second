@@ -131,6 +131,30 @@ export const apiGetStatisticsDetailsFilter = (data) => auth_except(baseRequest.g
     'Authorization': `Bearer ${data['token']}`,
   }
 }));
+
+export const apiGetCompareList = (token) => auth_except(baseRequest.get(`/statistics/predict-compare-list`, {
+  headers:
+  {
+    'accept': 'application/json',
+    'Authorization': `Bearer ${token}`,
+  }
+}));
+
+export const apiGetCompareSearch = (data) => auth_except(baseRequest.get(`/statistics/predict-compare-search?start_time=${data['startDate']}&end_time=${data['endDate']}&select_type=${data['type']}&project_name=${data['project_name']}&line=${data['line']}`, {
+  headers:
+  {
+    'accept': 'application/json',
+    'Authorization': `Bearer ${data['token']}`,
+  }
+}));
+
+export const apiGetCompareDetail = (data) => auth_except(baseRequest.get(`statistics/predict-compare-detail?project_name=${data['project_name']}&device_name=${data['device_name']}&line=${data['line']}&date=${data['date']}&select_type=${data['type']}`, {
+  headers:
+  {
+    'accept': 'application/json',
+    'Authorization': `Bearer ${data['token']}`,
+  }
+}));
 // ============================第二期============================
 
 export const apiSystemSpace = (token) => auth_except(baseRequest.get('/system/space', {
