@@ -140,7 +140,7 @@ export const apiGetCompareList = (token) => auth_except(baseRequest.get(`/statis
   }
 }));
 
-export const apiGetCompareSearch = (data) => auth_except(baseRequest.get(`/statistics/predict-compare-search?start_time=${data['startDate']}&end_time=${data['endDate']}&select_type=${data['type']}&project_name=${data['project_name']}&line=${data['line']}`, {
+export const apiGetCompareSearch = (data) => auth_except(baseRequest.get(`/statistics/predict-compare-search?start_time=${data['startDate']}&end_time=${data['endDate']}&select_type=${data['type']}${data['project_name'] == undefined || null || 'null' ? "" : "&project_name=" + data['project_name']}${data['line'] == undefined || null || 'null' ? "" : "&line=" + data['line']}`, {
   headers:
   {
     'accept': 'application/json',

@@ -265,9 +265,9 @@ const detailData1 = [
 ];
 
 export default function Project({ token, ...rest }) {
-  const [projectName, setProjectName] = useState("");
-  const [device, setDevice] = useState("");
-  const [line, setLine] = useState("");
+  const [projectName, setProjectName] = useState();
+  const [line, setLine] = useState();
+  const [type, setType] = useState();
   const today = new Date();
   const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0);
   const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59);
@@ -277,7 +277,6 @@ export default function Project({ token, ...rest }) {
   const [detailOpen, setDetailOpen] = useState(false);
   const [dialogProjectName, setDialogProjectName] = useState('D7X E75');
   const [projectNameList, setProjectNameList] = useState([]);
-  const [deviceList, setDeviceList] = useState([]);
   const [lineList, setLineList] = useState([]);
   const [compareListData, setCompareListData] = useState([]);
   const [searchDateData, setSearchDateData] = useState([]);
@@ -410,15 +409,20 @@ export default function Project({ token, ...rest }) {
     setLine(event.target.value);
   };
 
+  const handleChangeType = (event) => {
+    setType(event.target.value);
+  };
+
   const handleChangeSearch = () => {
     const data = {
       startDate: new Date(startDate).toISOString().split('T')[0] + ' ' + new Date(startDate).toTimeString().split(' ')[0].replace(/:/g, '%3A'),
       endDate: new Date(endDate).toISOString().split('T')[0] + ' ' + new Date(endDate).toTimeString().split(' ')[0].replace(/:/g, '%3A'),
-      type: showFirstCard ? 'day' : 'week',
+      type: currentPage === 1 ? 'day' : 'week',
       project_name: projectName,
       line: line,
       token: token
     }
+    console.log(data)
     apiGetCompareSearch(data)
       .then((res) => {
         setSearchDateData(res.data)
@@ -429,11 +433,10 @@ export default function Project({ token, ...rest }) {
     setDialogProjectName(projectName);
     const data = {
       project_name: projectName,
-      device_name: device,
       line: line,
       date: new Date(date).toISOString().split('T')[0] + '%2000%3A00%3A00',
       accuracy: accuracy,
-      type: showFirstCard ? 'day' : 'week',
+      type: currentPage === 1 ? 'day' : 'week',
     };
 
     setCurrentAccuracyInfo(data);
@@ -449,7 +452,7 @@ export default function Project({ token, ...rest }) {
       line: line,
       startDate: new Date(date).toISOString().split('T')[0] + '%2000%3A00%3A00',
       endDate: new Date(date).toISOString().split('T')[0] + '%2000%3A00%3A00',
-      type: showFirstCard ? 'day' : 'week',
+      type: currentPage === 1 ? 'day' : 'week',
       token: token
     };
     console.log(data)
@@ -466,16 +469,22 @@ export default function Project({ token, ...rest }) {
     setDetailOpen(false);
   };
 
-  const [showFirstCard, setShowFirstCard] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const handleShowFirstCard = () => {
-    setShowFirstCard(true);
+    setCurrentPage(1);
     setSearchDateData([]);
   };
 
   const handleShowSecondCard = () => {
-    setShowFirstCard(false);
+    setCurrentPage(2);
     setSearchDateData([]);
+  };
+
+  const handleShowThirdCard = () => {
+    setCurrentPage(3);
+    setSearchDateData([]);
+    // 可以根据需要添加其他逻辑
   };
 
   return (
@@ -487,12 +496,17 @@ export default function Project({ token, ...rest }) {
           </LoadingButton>
         </Box>
         <Box>
-          <LoadingButton variant="contained" color="info" onClick={handleShowSecondCard}>
+          <LoadingButton variant="contained" color="info" onClick={handleShowSecondCard} sx={{ mr: 1 }}>
             週預測
           </LoadingButton>
         </Box>
+        <Box>
+          <LoadingButton variant="contained" color="info" onClick={handleShowThirdCard}>
+            準確率圖表
+          </LoadingButton>
+        </Box>
       </Box>
-      {showFirstCard ? (
+      {currentPage === 1 ? (
         <Card>
           <Box sx={{ bgcolor: '#696969' }}>
             <CardHeader title="日預測" color="#696969" />
@@ -520,6 +534,7 @@ export default function Project({ token, ...rest }) {
                             onChange={handleChangeProject}
                             style={{ minWidth: "150px", height: "45px" }}
                           >
+                            <MenuItem value='null'></MenuItem>
                             {projectNameList.map((projectItem) => (
                               <MenuItem value={projectItem}>
                                 {projectItem}
@@ -550,6 +565,7 @@ export default function Project({ token, ...rest }) {
                             onChange={handleChangeLine}
                             style={{ minWidth: "150px", height: "45px" }}
                           >
+                            <MenuItem value='null'></MenuItem>
                             {lineList.map((lineItem) => (
                               <MenuItem value={lineItem}>
                                 {lineItem}
@@ -734,11 +750,8 @@ export default function Project({ token, ...rest }) {
                                           <TableCell align="center" sx={{ border: "1px solid black" }}>
                                             <Typography fontSize={20}>線號</Typography>
                                           </TableCell>
-                                          <TableCell align="center" sx={{ border: "1px solid black" }} colSpan={2}>
-                                            <Typography fontSize={20}>{currentLineInfo}</Typography>
-                                          </TableCell>
                                           <TableCell align="center" sx={{ border: "1px solid black" }}>
-                                            <Typography fontSize={20}>總計</Typography>
+                                            <Typography fontSize={20}>{currentLineInfo}</Typography>
                                           </TableCell>
                                         </TableRow>
                                         <TableRow>
@@ -751,7 +764,7 @@ export default function Project({ token, ...rest }) {
                                             </TableCell>
                                           ))}
                                           <TableCell align="center" sx={{ border: "1px solid black" }}>
-                                            <Typography fontSize={20}></Typography>
+                                            <Typography fontSize={20}>總計</Typography>
                                           </TableCell>
                                         </TableRow>
                                         <TableRow>
@@ -778,7 +791,7 @@ export default function Project({ token, ...rest }) {
                                             <TableHead style={{ backgroundColor: '#696969' }}>
                                               <TableRow>
                                                 <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={4}>
-                                                  <Typography fontSize={20}>{device.cname} 日預測(10/26)</Typography>
+                                                  <Typography fontSize={20}>{device.cname} 日預測</Typography>
                                                 </TableCell>
                                               </TableRow>
                                               <TableRow>
@@ -869,7 +882,7 @@ export default function Project({ token, ...rest }) {
             </Grid>
           </CardContent>
         </Card>
-      ) : (
+      ) : currentPage === 2 ? (
         <Card>
           <Box sx={{ bgcolor: '#696969' }}>
             <CardHeader title="週預測" color="#696969" />
@@ -1053,7 +1066,7 @@ export default function Project({ token, ...rest }) {
                             <TableCell align="center">
                               <Typography fontSize={20}>
                                 <LoadingButton variant="contained" color="info" align="center" onClick={() => accuracyHandleClickOpen(info.projectName, info.date, info.accuracyDate)}>
-                                  {(info.accuracyDate * 100).toFixed(2)}%
+                                  {(info.accuracyWeek * 100).toFixed(2)}%
                                 </LoadingButton>
                               </Typography>
                               <Dialog
@@ -1244,6 +1257,161 @@ export default function Project({ token, ...rest }) {
                 </TableContainer>
               </Grid>
             </Grid>
+          </CardContent>
+        </Card>
+      ) : (
+        <Card>
+          <Box sx={{ bgcolor: '#696969' }}>
+            <CardHeader title="週預測" color="#696969" />
+          </Box>
+          <CardContent>
+            <Typography variant="h4" fontWeight="medium" mt={3}>
+              預測與實際結果比對查詢
+            </Typography>
+            <Grid container spacing={1}>
+              <Grid item xs={2}>
+                <Box>
+                  <Box component="form" role="form">
+                    <Box display="flex" alignItems="center" pt={3} >
+                      <Typography variant="h6" fontWeight="medium" mr={2}>
+                        專案:
+                      </Typography>
+                      <Box mr={2}>
+                        <FormControl>
+                          <InputLabel id="demo-simple-select-label">專案</InputLabel>
+                          <Select
+                            labelId="permission-select-label"
+                            id="permission-select"
+                            value={projectName}
+                            label="專案"
+                            onChange={handleChangeProject}
+                            style={{ minWidth: "150px", height: "45px" }}
+                          >
+                            {projectNameList.map((projectItem) => (
+                              <MenuItem value={projectItem}>
+                                {projectItem}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
+                      </Box>
+                    </Box>
+                  </Box>
+                </Box>
+              </Grid>
+              <Grid item xs={2}>
+                <Box>
+                  <Box component="form" role="form">
+                    <Box display="flex" alignItems="center" pt={3} >
+                      <Typography variant="h6" fontWeight="medium" mr={2}>
+                        線號:
+                      </Typography>
+                      <Box>
+                        <FormControl>
+                          <InputLabel id="demo-simple-select-label">專案</InputLabel>
+                          <Select
+                            labelId="permission-select-label"
+                            id="permission-select"
+                            value={line}
+                            label="線號"
+                            onChange={handleChangeLine}
+                            style={{ minWidth: "150px", height: "45px" }}
+                          >
+                            {lineList.map((lineItem) => (
+                              <MenuItem value={lineItem}>
+                                {lineItem}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
+                      </Box>
+                    </Box>
+                  </Box>
+                </Box>
+              </Grid>
+              <Grid item xs={2}>
+                <Box>
+                  <Box component="form" role="form">
+                    <Box display="flex" alignItems="center" pt={3} >
+                      <Typography variant="h6" fontWeight="medium" mr={2}>
+                        類別:
+                      </Typography>
+                      <Box>
+                        <FormControl>
+                          <InputLabel id="demo-simple-select-label">專案</InputLabel>
+                          <Select
+                            labelId="permission-select-label"
+                            id="permission-select"
+                            value={line}
+                            label="類別"
+                            onChange={handleChangeType}
+                            style={{ minWidth: "150px", height: "45px" }}
+                          >
+                            <MenuItem value='day'>
+                              day
+                            </MenuItem>
+                            <MenuItem value='week'>
+                              week
+                            </MenuItem>
+                          </Select>
+                        </FormControl>
+                      </Box>
+                    </Box>
+                  </Box>
+                </Box>
+              </Grid>
+              <Grid item xs={3}>
+                <Box component="form" role="form">
+                  <Box display="flex" alignItems="center" pt={3} >
+                    <Typography variant="h6" fontWeight="medium" mr={2}>
+                      開始:
+                    </Typography>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DatePicker
+                        label="選擇日期"
+                        value={startDate}
+                        onChange={(newValue) => {
+                          setStartDate(newValue);
+                        }}
+                        renderInput={(params) => <TextField size="medium" {...params} />}
+                      />
+                    </LocalizationProvider>
+                  </Box>
+                </Box>
+              </Grid>
+              <Grid item xs={3}>
+                <Box component="form" role="form">
+                  <Box display="flex" alignItems="center" pt={3} >
+                    <Typography variant="h6" fontWeight="medium" mr={2}>
+                      結束:
+                    </Typography>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DatePicker
+                        label="選擇日期"
+                        value={endDate}
+                        onChange={(newValue) => {
+                          setEndDate(newValue);
+                        }}
+                        renderInput={(params) => <TextField size="medium" {...params} />}
+                      />
+                    </LocalizationProvider>
+                  </Box>
+                </Box>
+              </Grid>
+            </Grid>
+            <Grid container spacing={1}>
+              <Grid item xs={12}>
+                <Box display="flex" alignItems="center" justifyContent="center" pt={3} >
+                  <LoadingButton variant="contained" color="info" align="center" onClick={handleChangeSearch} style={{ width: '150px' }}>
+                    查詢
+                  </LoadingButton>
+                </Box>
+              </Grid>
+            </Grid>
+            <Divider sx={{ borderBottomWidth: 3, mt: 4 }} />
+            <div style={{ width: '1150px', height: '700px' }}>
+              {LineChartExample()}
+            </div>
           </CardContent>
         </Card>
       )}
