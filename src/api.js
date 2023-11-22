@@ -124,7 +124,7 @@ export const apiGetStatisticsDetails = (data) => auth_except(baseRequest.get(`st
   }
 }));
 
-export const apiGetStatisticsDetailsFilter = (data) => auth_except(baseRequest.get(`statistics/predict_result${data.projectName == undefined || null ? "" : "?project_name=" + data.projectName}${(data.deviceName == undefined || null ? "" : "&device_name=" + data.deviceName)}`, {
+export const apiGetStatisticsDetailsFilter = (data) => auth_except(baseRequest.get(`statistics/predict_result${data.projectName ? "?project_name=" + data.projectName : ""}${data.deviceName ? "&device_name=" + data.deviceName : ""}`, {
   headers:
   {
     'accept': 'application/json',
@@ -139,8 +139,8 @@ export const apiGetCompareList = (token) => auth_except(baseRequest.get(`/statis
     'Authorization': `Bearer ${token}`,
   }
 }));
-
-export const apiGetCompareSearch = (data) => auth_except(baseRequest.get(`/statistics/predict-compare-search?start_time=${data['startDate']}&end_time=${data['endDate']}&select_type=${data['type']}${data['project_name'] == undefined || null || 'null' ? "" : "&project_name=" + data['project_name']}${data['line'] == undefined || null || 'null' ? "" : "&line=" + data['line']}`, {
+//data['line'] ? 判定的逻辑是如果 data['line'] 存在且不为 null、undefined 或空字符串，则返回 true；否则，返回 false。
+export const apiGetCompareSearch = (data) => auth_except(baseRequest.get(`/statistics/predict-compare-search?start_time=${data['startDate']}&end_time=${data['endDate']}&select_type=${data['type']}${data['project_name'] ? "&project_name=" + data['project_name'] : ""}${data['line'] ? "&line=" + data['line'] : ""}`, {
   headers:
   {
     'accept': 'application/json',
@@ -331,40 +331,6 @@ export const apiWorkerAll = (data) => auth_except(baseRequest.get(`/users/overvi
       'Authorization': `Bearer ${data['token']}`
     }
   }));
-
-// white list
-export const apiGetWhiteList = (workshop_name) => auth_except(baseRequest.get(`/device/whitelist?workshop_name=${workshop_name}`, {
-  headers: {
-    'accept': 'application/json',
-  }
-}));
-export const apiGetDeviceRecommend = (workshop_name) => auth_except(baseRequest.get(`/device/whitelist/recommend?workshop_name=${workshop_name}`, {
-  headers: {
-    'accept': 'application/json',
-  }
-}));
-export const apiGetDeviceNameById = (data) => auth_except(baseRequest.get(`/device/${data['device_id']}`, {
-  headers:
-  {
-    'accept': 'application/json',
-    'Authorization': `Bearer ${data['token']}`
-  }
-}));
-export const apiGetWorkersByDevice = (data) => auth_except(baseRequest.get(`/device/${data['device_id']}/workers?shift_type=${data['shift']}`, {
-  headers: {
-    'accept': 'application/json',
-  }
-}));
-export const apiPostAddWorkersWhitelist = (data) => auth_except(baseRequest.post(`/device/${data['device_id']}/whitelist?username=${data['username']}`, {
-  headers: {
-    'accept': 'application/json',
-  }
-}));
-export const apiDeleteWorkersWhitelist = (data) => auth_except(baseRequest.delete(`/device/${data['device_id']}/whitelist?username=${data['username']}`, {
-  headers: {
-    'accept': 'application/json',
-  }
-}));
 
 export const apiGetSystemEnvSetting = (data) => auth_except(baseRequest.get(`/system/env-get-settings/${data['key']}`, {
   headers:

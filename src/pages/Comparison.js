@@ -39,6 +39,8 @@ import MenuItem from "@mui/material/MenuItem";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 // import { LineChart } from '@mui/x-charts/LineChart';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
 
 const darkTheme = createTheme({
   palette: {
@@ -425,9 +427,20 @@ export default function Project({ token, ...rest }) {
     console.log(data)
     apiGetCompareSearch(data)
       .then((res) => {
-        setSearchDateData(res.data)
+        if (res.data && res.data.length > 0) {
+          setSearchDateData(res.data)
+          handleOpen("查詢成功")
+        } else {
+          setSearchDateData([])
+          handleErrorOpen("查詢失敗:沒有資料")
+        }
+      }).catch((error) => {
+        console.error("API 请求失败", error);
+        setSearchDateData([]);
+        handleErrorOpen("查詢失敗:API請求失敗");
       });
   };
+  //準確率按鈕
   const accuracyHandleClickOpen = (projectName, date, accuracy) => {
     setAccuracyOpen(true);
     setDialogProjectName(projectName);
@@ -444,6 +457,7 @@ export default function Project({ token, ...rest }) {
   const accuracyHandleClickClose = () => {
     setAccuracyOpen(false);
   };
+  //查看按鈕
   const detailHandleClickOpen = (projectName, line, date) => {
     setDetailOpen(true);
     setDialogProjectName(projectName);
@@ -487,6 +501,28 @@ export default function Project({ token, ...rest }) {
     // 可以根据需要添加其他逻辑
   };
 
+  //success alert
+  const [alertOpen, setAlertOpen] = React.useState(false);
+  const [message, setMessage] = useState(''); // 状态来存储消息内容
+  const handleOpen = (message) => {
+    setMessage(message); // 设置消息内容
+    setAlertOpen(true);
+  };
+  const handleClose = (event, reason) => {
+    setAlertOpen(false);
+  };
+
+  //error alert
+  const [errorAlertOpen, setErrorAlertOpen] = React.useState(false);
+  const [errorMessage, setErrorMessage] = useState(''); // 状态来存储消息内容
+  const handleErrorOpen = (message) => {
+    setErrorMessage(message); // 设置消息内容
+    setErrorAlertOpen(true);
+  };
+  const handleErrorClose = (event, reason) => {
+    setErrorAlertOpen(false);
+  };
+
   return (
     <ThemeProvider theme={darkTheme}>
       <Box display="flex">
@@ -506,6 +542,34 @@ export default function Project({ token, ...rest }) {
           </LoadingButton>
         </Box>
       </Box>
+      <Snackbar
+        open={alertOpen}
+        autoHideDuration={5000}
+        onClose={handleClose}
+        variant="filled"
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center'
+        }}
+      >
+        <Alert onClose={handleClose} severity='success' sx={{ width: '100%' }}>
+          {message}
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={errorAlertOpen}
+        autoHideDuration={5000}
+        onClose={handleErrorClose}
+        variant="filled"
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center'
+        }}
+      >
+        <Alert onClose={handleErrorClose} severity='error' sx={{ width: '100%' }}>
+          {errorMessage}
+        </Alert>
+      </Snackbar>
       {currentPage === 1 ? (
         <Card>
           <Box sx={{ bgcolor: '#696969' }}>
@@ -1262,7 +1326,7 @@ export default function Project({ token, ...rest }) {
       ) : (
         <Card>
           <Box sx={{ bgcolor: '#696969' }}>
-            <CardHeader title="週預測" color="#696969" />
+            <CardHeader title="準確率圖表" color="#696969" />
           </Box>
           <CardContent>
             <Typography variant="h4" fontWeight="medium" mt={3}>
@@ -1348,10 +1412,10 @@ export default function Project({ token, ...rest }) {
                             style={{ minWidth: "150px", height: "45px" }}
                           >
                             <MenuItem value='day'>
-                              day
+                              日預測
                             </MenuItem>
                             <MenuItem value='week'>
-                              week
+                              週預測
                             </MenuItem>
                           </Select>
                         </FormControl>
@@ -1409,9 +1473,11 @@ export default function Project({ token, ...rest }) {
               </Grid>
             </Grid>
             <Divider sx={{ borderBottomWidth: 3, mt: 4 }} />
-            <div style={{ width: '1150px', height: '700px' }}>
-              {LineChartExample()}
-            </div>
+            <Box display="flex" alignItems="center" justifyContent="center" pt={3} >
+              <div style={{ width: '1150px', height: '700px' }}>
+                {LineChartExample()}
+              </div>
+            </Box>
           </CardContent>
         </Card>
       )}
