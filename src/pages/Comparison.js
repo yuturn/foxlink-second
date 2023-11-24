@@ -373,10 +373,18 @@ export default function Project({ token, ...rest }) {
     setDateOrder(isAsc ? 'desc' : 'asc');
     setDateOrderBy(property);
   };
-  const getComparatorDate = (orderDate) => {
-    return orderDate === 'desc'
-      ? (a, b) => (a[dateOrderBy] > b[dateOrderBy] ? -1 : 1)
-      : (a, b) => (a[dateOrderBy] > b[dateOrderBy] ? 1 : -1);
+  const getComparatorDevice = (orderDevice) => {
+    return (a, b) => {
+      // 假设设备名称的格式为 "Device_X"
+      const deviceNumberA = parseInt(a.cname.split('_')[1]);
+      const deviceNumberB = parseInt(b.cname.split('_')[1]);
+
+      if (order === 'desc') {
+        return deviceNumberB - deviceNumberA; // 降序排列
+      } else {
+        return deviceNumberA - deviceNumberB; // 升序排列
+      }
+    };
   };
 
   function getColor(lightColor) {
@@ -473,7 +481,11 @@ export default function Project({ token, ...rest }) {
     apiGetCompareSearch(data)
       .then((res) => {
         console.log(res.data);
-        setCurrentAccuracyInfo(res.data[0]['accuracyDate']);
+        if (data.type == 'day') {
+          setCurrentAccuracyInfo(res.data[0]['accuracyDate']);
+        } else {
+          setCurrentAccuracyInfo(res.data[0]['accuracyWeek']);
+        }
         setCurrentLineInfo(res.data[0]['line']);
         console.log(res.data[0]['devices']);
         setDetailData(res.data[0]['devices'])
@@ -805,18 +817,20 @@ export default function Project({ token, ...rest }) {
                                   },
                                 }}
                               >
-                                <DialogTitle id="alert-dialog-title-accuracy" sx={{ backgroundColor: "#696969" }}>設備預測明細</DialogTitle>
+                                <DialogTitle id="alert-dialog-title-accuracy" sx={{ backgroundColor: "#bfbfbf" }}>設備預測明細</DialogTitle>
                                 <DialogContent sx={{ marginTop: '1px', marginBottom: '1px' }} >
                                   <TableContainer style={tableContainerStyle.tableContainer} sx={{ mt: 3 }}>
                                     <Table>
                                       <TableHead>
                                         <TableRow>
                                           <TableCell align="center" sx={{ border: "1px solid black" }}>
-                                            <Typography fontSize={20}>線號</Typography>
+                                            <Typography fontSize={20}>設備編號</Typography>
                                           </TableCell>
-                                          <TableCell align="center" sx={{ border: "1px solid black" }}>
-                                            <Typography fontSize={20}>{currentLineInfo}</Typography>
-                                          </TableCell>
+                                          {Object.keys(detailData).map((detailTitle) => (
+                                            <TableCell align="center" sx={{ border: "1px solid black" }}>
+                                              <Typography fontSize={20}>{detailTitle}</Typography>
+                                            </TableCell>
+                                          ))}
                                         </TableRow>
                                         <TableRow>
                                           <TableCell align="center" sx={{ border: "1px solid black" }}>
@@ -854,8 +868,8 @@ export default function Project({ token, ...rest }) {
                                           <Table>
                                             <TableHead style={{ backgroundColor: '#696969' }}>
                                               <TableRow>
-                                                <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={4}>
-                                                  <Typography fontSize={20}>{device.cname} 日預測</Typography>
+                                                <TableCell align="center" sx={{ height: 'auto', border: "1px solid black", backgroundColor: "#bfbfbf" }} colSpan={3}>
+                                                  <Typography fontSize={20}>{device.cname}</Typography>
                                                 </TableCell>
                                               </TableRow>
                                               <TableRow>
@@ -880,7 +894,7 @@ export default function Project({ token, ...rest }) {
                                                     <Typography fontSize={20}>預測</Typography>
                                                   </TableSortLabel>
                                                 </TableCell>
-                                                <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
+                                                {/* <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
                                                   <TableSortLabel
                                                     active={dateOrderBy === 'accuracy'}
                                                     direction={dateOrderBy === 'accuracy' ? orderDate : 'asc'}
@@ -888,7 +902,7 @@ export default function Project({ token, ...rest }) {
                                                   >
                                                     <Typography fontSize={20}>準確率</Typography>
                                                   </TableSortLabel>
-                                                </TableCell>
+                                                </TableCell> */}
                                               </TableRow>
                                             </TableHead>
                                             <TableBody>
@@ -903,26 +917,12 @@ export default function Project({ token, ...rest }) {
                                                   <TableCell align="center" sx={{ bgcolor: getColor(columns.predict), height: 'auto', border: "1px solid black" }}>
                                                     <Typography fontSize={20}>{columns.predict == 0 ? '穩定' : '異常'}</Typography>
                                                   </TableCell>
-                                                  <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
+                                                  {/* <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
                                                     <Typography fontSize={20}>{columns.accuracy === 1 ? '100%' : '0%'}</Typography>
-                                                  </TableCell>
+                                                  </TableCell> */}
                                                 </TableRow>
                                               ))}
                                             </TableBody>
-                                          </Table>
-                                        </TableContainer>
-                                        <TableContainer style={tableContainerStyle.tableContainer}>
-                                          <Table>
-                                            <TableHead style={{ backgroundColor: '#696969' }}>
-                                              <TableRow>
-                                                <TableCell align="center" sx={{ bgcolor: '#bfbfbf', height: 'auto', border: "1px solid black" }} colSpan={3}>
-                                                  <Typography fontSize={20}>準確率總計</Typography>
-                                                </TableCell>
-                                                <TableCell align="center" sx={{ bgcolor: '#bfbfbf', height: 'auto', border: "1px solid black" }} colSpan={2}>
-                                                  <Typography fontSize={20}>{(device.device_accuracy * 100).toFixed(2)}%</Typography>
-                                                </TableCell>
-                                              </TableRow>
-                                            </TableHead>
                                           </Table>
                                         </TableContainer>
                                       </Grid>
@@ -1107,11 +1107,6 @@ export default function Project({ token, ...rest }) {
                             <Typography fontSize={20}>預測準確率</Typography>
                           </TableSortLabel>
                         </TableCell>
-                        <TableCell align="center" sx={{ borderBottom: 0 }}>
-                          <TableSortLabel>
-                            <Typography fontSize={20}>預測趨勢</Typography>
-                          </TableSortLabel>
-                        </TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -1128,41 +1123,8 @@ export default function Project({ token, ...rest }) {
                               <Typography fontSize={20}>{info.date}</Typography>
                             </TableCell>
                             <TableCell align="center">
-                              <Typography fontSize={20}>
-                                <LoadingButton variant="contained" color="info" align="center" onClick={() => accuracyHandleClickOpen(info.projectName, info.date, info.accuracyDate)}>
-                                  {(info.accuracyWeek * 100).toFixed(2)}%
-                                </LoadingButton>
-                              </Typography>
-                              <Dialog
-                                open={accuracyOpen}
-                                onClose={accuracyHandleClickClose}
-                                aria-labelledby="alert-dialog-accuracy"
-                                aria-describedby="alert-dialog-accuracy"
-                                sx={{
-                                  "& .MuiDialog-container": {
-                                    "& .MuiPaper-root": {
-                                      width: "100%",
-                                      minWidth: "1100px",  // Set your width here
-                                    },
-                                  },
-                                }}
-                              >
-                                <DialogTitle id="alert-dialog-title-accuracy" sx={{ backgroundColor: "#696969" }}>{dialogProjectName}</DialogTitle>
-                                <DialogContent>
-                                  <div style={{ width: '1000px', height: '550px' }}>
-                                    {LineChartExample()}
-                                  </div>
-                                </DialogContent>
-                                <DialogActions>
-                                  <LoadingButton onClick={accuracyHandleClickClose} autoFocus variant="contained">
-                                    关闭
-                                  </LoadingButton>
-                                </DialogActions>
-                              </Dialog>
-                            </TableCell>
-                            <TableCell align="center">
                               <LoadingButton variant="contained" color="info" align="center" onClick={() => detailHandleClickOpen(info.projectName, info.line, info.date)}>
-                                {info.trend}
+                                {(info.accuracyWeek * 100).toFixed(2)}%
                               </LoadingButton>
                               <Dialog
                                 open={detailOpen}
@@ -1186,14 +1148,13 @@ export default function Project({ token, ...rest }) {
                                       <TableHead>
                                         <TableRow>
                                           <TableCell align="center" sx={{ border: "1px solid black" }}>
-                                            <Typography fontSize={20}>線號</Typography>
+                                            <Typography fontSize={20}>設備編號</Typography>
                                           </TableCell>
-                                          <TableCell align="center" sx={{ border: "1px solid black" }} colSpan={2}>
-                                            <Typography fontSize={20}>{currentLineInfo}</Typography>
-                                          </TableCell>
-                                          <TableCell align="center" sx={{ border: "1px solid black" }}>
-                                            <Typography fontSize={20}>總計</Typography>
-                                          </TableCell>
+                                          {Object.keys(detailData).map((detailTitle) => (
+                                            <TableCell align="center" sx={{ border: "1px solid black" }}>
+                                              <Typography fontSize={20}>{detailTitle}</Typography>
+                                            </TableCell>
+                                          ))}
                                         </TableRow>
                                         <TableRow>
                                           <TableCell align="center" sx={{ border: "1px solid black" }}>
@@ -1205,7 +1166,7 @@ export default function Project({ token, ...rest }) {
                                             </TableCell>
                                           ))}
                                           <TableCell align="center" sx={{ border: "1px solid black" }}>
-                                            <Typography fontSize={20}></Typography>
+                                            <Typography fontSize={20}>總計</Typography>
                                           </TableCell>
                                         </TableRow>
                                         <TableRow>
@@ -1225,14 +1186,14 @@ export default function Project({ token, ...rest }) {
                                     </Table>
                                   </TableContainer>
                                   <Grid container spacing={1} sx={{ mt: 2 }}>
-                                    {Object.values(detailData).sort(getComparator(order)).map((device) => (
-                                      <Grid item xs={6} key={device.cname}>
+                                    {Object.entries(detailData).sort(getComparator(order)).map(([deviceKey, device]) => (
+                                      <Grid item xs={6} key={deviceKey}>
                                         <TableContainer style={tableContainerDialogStyle.tableContainer}>
                                           <Table>
                                             <TableHead style={{ backgroundColor: '#696969' }}>
                                               <TableRow>
                                                 <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={4}>
-                                                  <Typography fontSize={20}>{device.cname} 週預測(10/26)</Typography>
+                                                  <Typography fontSize={20}>{`${deviceKey} - ${device.cname} 週預測(10/26)`}</Typography>
                                                 </TableCell>
                                               </TableRow>
                                               <TableRow>
@@ -1257,7 +1218,7 @@ export default function Project({ token, ...rest }) {
                                                     <Typography fontSize={20}>預測</Typography>
                                                   </TableSortLabel>
                                                 </TableCell>
-                                                <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
+                                                {/* <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
                                                   <TableSortLabel
                                                     active={dateOrderBy === 'accuracy'}
                                                     direction={dateOrderBy === 'accuracy' ? orderDate : 'asc'}
@@ -1265,7 +1226,7 @@ export default function Project({ token, ...rest }) {
                                                   >
                                                     <Typography fontSize={20}>準確率</Typography>
                                                   </TableSortLabel>
-                                                </TableCell>
+                                                  </TableCell> */}
                                               </TableRow>
                                             </TableHead>
                                             <TableBody>
@@ -1280,15 +1241,15 @@ export default function Project({ token, ...rest }) {
                                                   <TableCell align="center" sx={{ bgcolor: getColor(columns.predict), height: 'auto', border: "1px solid black" }}>
                                                     <Typography fontSize={20}>{columns.predict == 0 ? '穩定' : '異常'}</Typography>
                                                   </TableCell>
-                                                  <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
+                                                  {/* <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
                                                     <Typography fontSize={20}>{columns.accuracy === 1 ? '100%' : '0%'}</Typography>
-                                                  </TableCell>
+                                                  </TableCell> */}
                                                 </TableRow>
                                               ))}
                                             </TableBody>
                                           </Table>
                                         </TableContainer>
-                                        <TableContainer style={tableContainerStyle.tableContainer}>
+                                        {/* <TableContainer style={tableContainerStyle.tableContainer}>
                                           <Table>
                                             <TableHead style={{ backgroundColor: '#696969' }}>
                                               <TableRow>
@@ -1301,7 +1262,7 @@ export default function Project({ token, ...rest }) {
                                               </TableRow>
                                             </TableHead>
                                           </Table>
-                                        </TableContainer>
+                                        </TableContainer> */}
                                       </Grid>
                                     ))}
                                   </Grid>
@@ -1406,7 +1367,7 @@ export default function Project({ token, ...rest }) {
                           <Select
                             labelId="permission-select-label"
                             id="permission-select"
-                            value={line}
+                            value={type}
                             label="類別"
                             onChange={handleChangeType}
                             style={{ minWidth: "150px", height: "45px" }}
