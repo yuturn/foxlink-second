@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { saveAs } from 'file-saver';
+import { apiGetLOG } from '../api'
 
 import { Box, Card, CardContent, CardHeader, Divider, Typography, createTheme, ThemeProvider, TextField, Grid, Select, FormControl, InputLabel, MenuItem, } from '@mui/material';
 
@@ -19,6 +19,9 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
 
 const darkTheme = createTheme({
     palette: {
@@ -51,162 +54,254 @@ const rows = [
 
 
 export default function LOG({ token, ...rest }) {
-    const [sDate, setSDate] = useState(new Date());
-    const [eDate, setEDate] = useState(new Date());
-    const [operationType, setOperationType] = useState("");
-    useEffect(() => {
-        const data = {
-            token: token,
-            start: new Date(sDate).toISOString(),
-            end: new Date(eDate).toISOString()
-        }
-    })
+    const today = new Date();
+    const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59);
+    const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59);
+    const [startDate, setStartDate] = useState(startOfDay);
+    const [endDate, setEndDate] = useState(endOfDay);
+    const [operationType, setOperationType] = useState();
+    const [logData, setLogData] = useState([]);
+
+    //操作類型改變時
     const operationTypeChange = (event) => {
         setOperationType(event.target.value);
     };
+
+
+
+    //這邊是查詢LOG的按鈕
+    const handleClickChartSearch = () => {
+        let badge = document.getElementById('employeeID').value;
+        const data = {
+            startDate: new Date(startDate).toISOString().split('T')[0] + ' 00%3A00%3A00',
+            endDate: new Date(endDate).toISOString().split('T')[0] + ' 00%3A00%3A00',
+            action: operationType,
+            badge: badge,
+            token: token
+        }
+        console.log(data)
+        apiGetLOG(data)
+            .then((res) => {
+                console.log(res.data.logs)
+                if (res.data.logs && res.data.logs.length > 0) {
+                    setLogData(res.data.logs)
+                    handleOpen("查詢成功")
+                } else {
+                    setLogData([])
+                    handleErrorOpen("查詢失敗:沒有資料")
+                }
+            }).catch((error) => {
+                console.error("API 请求失败", error);
+                setLogData([])
+                handleErrorOpen("查詢失敗:API請求失敗");
+            });
+    };
+
+    //success alert
+    const [alertOpen, setAlertOpen] = React.useState(false);
+    const [message, setMessage] = useState(''); // 状态来存储消息内容
+    const handleOpen = (message) => {
+        setMessage(message); // 设置消息内容
+        setAlertOpen(true);
+    };
+    const handleClose = (event, reason) => {
+        setAlertOpen(false);
+    };
+    //error alert
+    const [errorAlertOpen, setErrorAlertOpen] = React.useState(false);
+    const [errorMessage, setErrorMessage] = useState(''); // 状态来存储消息内容
+    const handleErrorOpen = (message) => {
+        setErrorMessage(message); // 设置消息内容
+        setErrorAlertOpen(true);
+    };
+    const handleErrorClose = (event, reason) => {
+        setErrorAlertOpen(false);
+    };
     return (
         <ThemeProvider theme={darkTheme}>
+            <Snackbar
+                open={alertOpen}
+                autoHideDuration={5000}
+                onClose={handleClose}
+                variant="filled"
+                anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'center'
+                }}
+            >
+                <Alert onClose={handleClose} severity='success' sx={{ width: '100%' }}>
+                    {message}
+                </Alert>
+            </Snackbar>
+            <Snackbar
+                open={errorAlertOpen}
+                autoHideDuration={5000}
+                onClose={handleErrorClose}
+                variant="filled"
+                anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'center'
+                }}
+            >
+                <Alert onClose={handleErrorClose} severity='error' sx={{ width: '100%' }}>
+                    {errorMessage}
+                </Alert>
+            </Snackbar>
             <Card >
                 <Box sx={{ bgcolor: '#696969' }}>
                     <CardHeader title="LOG頁面:" color="#62aaf4" />
                 </Box>
                 <Divider sx={{ borderBottomWidth: 3 }} />
                 <CardContent>
-                    <Grid container spacing={1}>
-                        <Grid item xs={12} md={12}>
-                            <Typography variant="h4" fontWeight="medium" mr={2}>
-                                條件篩選:
+                    <Grid container spacing={1} mt={1}>
+                        <Grid container alignItems="center" justifyContent="left" item xs={2}>
+                            <Typography variant="h4" fontWeight="medium">
+                                條件篩選
                             </Typography>
-                            <Box>
-                                <Box sx={{ mt: 2, ml: 4 }} display="flex" component="form" role="form" >
-                                    <Box align="center" display="flex">
-                                        <Typography variant="h5" fontWeight="medium" mr={2}>
-                                            操作時間:
-                                        </Typography>
-                                    </Box>
-                                    <Box align="center" display="flex" sx={{ mr: 2 }}>
-                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                            <DatePicker
-                                                label="开始日期"
-                                                value={sDate}
-                                                onChange={(newValue) => {
-                                                    setSDate(newValue);
-                                                    //console.log(newValue);
-                                                }}
-                                                renderInput={(params) => <TextField {...params} />}
-                                            />
-                                        </LocalizationProvider>
-                                    </Box>
-                                    <Box align="center" display="flex">
-                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                            <DatePicker
-                                                label="结束日期"
-                                                value={eDate}
-                                                onChange={(newValue) => {
-                                                    setEDate(newValue);
-                                                    //console.log(newValue);
-                                                }}
-                                                renderInput={(params) => <TextField {...params} />}
-                                            />
-                                        </LocalizationProvider>
-                                    </Box>
-                                </Box>
-                                <Box sx={{ mt: 1, ml: 4 }} display="flex" component="form" role="form">
-                                    <Box align="center" display="flex">
-                                        <Typography variant="h5" fontWeight="medium" mr={2}>
-                                            操作類型:
-                                        </Typography>
-                                    </Box>
-                                    <Box>
-                                        <FormControl>
-                                            <InputLabel id="operation-type-select-label">操作類型</InputLabel>
-                                            <Select
-                                                labelId="permission-select-label"
-                                                id="permission-select"
-                                                value={operationType}
-                                                label="操作類型"
-                                                onChange={operationTypeChange}
-                                                style={{ minWidth: "271px", height: "56px" }}
-                                            >
-                                                <MenuItem value={1}>模型訓練</MenuItem>
-                                                <MenuItem value={2}>模型預測</MenuItem>
-                                                <MenuItem value={3}>差異備份路徑更改</MenuItem>
-                                                <MenuItem value={4}>完整備份路徑更改</MenuItem>
-                                                <MenuItem value={5}>差異備份時間更改</MenuItem>
-                                                <MenuItem value={6}>完整備份時間更改</MenuItem>
-                                                <MenuItem value={7}>差異備份執行</MenuItem>
-                                                <MenuItem value={8}>完整備份執行</MenuItem>
-                                                <MenuItem value={9}>還原</MenuItem>
-                                            </Select>
-                                        </FormControl>
-                                    </Box>
-                                </Box>
-                                <Box sx={{ mt: 1, ml: 4 }} display="flex" component="form" role="form">
-                                    <Box align="center" display="flex">
-                                        <Typography align="center" variant="h5" mr={2}>
-                                            專案名稱:
-                                        </Typography>
-                                    </Box>
-                                    <Box>
-                                        <TextField
-                                            fullWidth
-                                            label="專案名稱"
-                                            margin="none"
-                                            name="projectName"
-                                            id="projectName"
-                                            variant="outlined"
+                        </Grid>
+                    </Grid>
+                    <Grid container spacing={1} mt={2}>
+                        <Grid container alignItems="center" justifyContent="left" item xs={3}>
+                            <Box component="form" role="form">
+                                <Box display="flex" alignItems="center" pt={2} >
+                                    <Typography variant="h6" fontWeight="medium" alignItems="center" justifyContent="center" mr={2}>
+                                        開始時間:
+                                    </Typography>
+                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                        <DatePicker
+                                            label="選擇日期"
+                                            value={startDate}
+                                            onChange={(newValue) => {
+                                                setStartDate(newValue);
+                                            }}
+                                            renderInput={(params) => <TextField size="medium" {...params} />}
                                         />
-                                    </Box>
+                                    </LocalizationProvider>
                                 </Box>
-                                <Box sx={{ mt: 1, ml: 4 }} display="flex" component="form" role="form">
-                                    <Box>
-                                        <Typography variant="h5" fontWeight="medium" mr={2}>
-                                            員工姓名:
-                                        </Typography>
-                                    </Box>
-                                    <Box>
-                                        <TextField
-                                            fullWidth
-                                            label="員工姓名"
-                                            margin="none"
-                                            name="employeeID"
-                                            id="employeeID"
-                                            variant="outlined"
+                            </Box>
+                        </Grid>
+                        <Grid container alignItems="center" justifyContent="left" item xs={3}>
+                            <Box component="form" role="form">
+                                <Box display="flex" alignItems="center" pt={2} >
+                                    <Typography variant="h6" fontWeight="medium" alignItems="center" justifyContent="center" mr={2}>
+                                        結束時間:
+                                    </Typography>
+                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                        <DatePicker
+                                            label="選擇日期"
+                                            value={endDate}
+                                            onChange={(newValue) => {
+                                                console.log('Selected Start Date:', newValue);
+                                                setEndDate(newValue);
+                                            }}
+                                            renderInput={(params) => <TextField size="medium" {...params} />}
                                         />
-                                    </Box>
+                                    </LocalizationProvider>
                                 </Box>
-                                <Box sx={{ mt: 1, ml: 4 }} display="flex" component="form" role="form">
-                                    <Box>
-                                        <Typography variant="h5" fontWeight="medium" mr={5}>
-                                            員工ID:
-                                        </Typography>
-                                    </Box>
-                                    <Box>
-                                        <TextField
-                                            fullWidth
-                                            label="員工ID"
-                                            margin="none"
-                                            name="employeeID"
-                                            id="employeeID"
-                                            variant="outlined"
-                                        />
-                                    </Box>
-                                </Box>
-                                <Box sx={{ ml: 4 }} display="flex">
-                                    <LoadingButton variant="contained"
-                                        size="large"
-                                        component="span"
-                                        color="info"
-                                        sx={{
-                                            borderRadius: 4,
-                                            justifyContent: 'center',
-                                            letterSpacing: 3,
-                                            mt: 3
-                                        }}
+                            </Box>
+                        </Grid>
+                    </Grid>
+                    <Grid container spacing={1} sx={{ mt: 1 }}>
+                        <Grid container alignItems="center" justifyContent="left" item xs={3}>
+                            <Typography variant="h6" fontWeight="medium" alignItems="center" justifyContent="center" mr={2}>
+                                操作類型:
+                            </Typography>
+                            <Box component="form" role="form">
+                                <FormControl>
+                                    <InputLabel id="operation-type-select-label">操作類型</InputLabel>
+                                    <Select
+                                        labelId="permission-select-label"
+                                        id="permission-select"
+                                        value={operationType}
+                                        label="操作類型"
+                                        onChange={operationTypeChange}
+                                        style={{ minWidth: "271px", height: "56px" }}
                                     >
-                                        查詢
-                                    </LoadingButton>
-                                </Box>
+                                        <MenuItem value="">清空欄位</MenuItem>
+                                        <MenuItem value="USER_LOGIN">登入</MenuItem>
+                                        <MenuItem value="USER_LOGOUT">登出</MenuItem>
+                                        <MenuItem value="DATA_PREPROCESSING_STARTED">DATA_PREPROCESSING_STARTED</MenuItem>
+                                        <MenuItem value="DATA_PREPROCESSING_SUCCESS">DATA_PREPROCESSING_SUCCESS</MenuItem>
+                                        <MenuItem value="DATA_PREPROCESSING_FAILED">DATA_PREPROCESSING_FAILED</MenuItem>
+                                        <MenuItem value="DAILY_PREPROCESSING_STARTED">DAILY_PREPROCESSING_STARTED</MenuItem>
+                                        <MenuItem value="DAILY_PREPROCESSING_SUCCESS">DAILY_PREPROCESSING_SUCCESS</MenuItem>
+                                        <MenuItem value="DAILY_PREPROCESSING_FAILED">DAILY_PREPROCESSING_FAILED</MenuItem>
+                                        <MenuItem value="FULL_BACKUP">完整備份</MenuItem>
+                                        <MenuItem value="BACKUP_RESTORE">BACKUP_RESTORE</MenuItem>
+                                        <MenuItem value="ADD_NEW_PROJECT">ADD_NEW_PROJECT</MenuItem>
+                                        <MenuItem value="ADD_PROJECT_WORKER">ADD_PROJECT_WORKER</MenuItem>
+                                        <MenuItem value="ADD_PROJECT_WORKER">ADD_PROJECT_WORKER</MenuItem>
+                                        <MenuItem value="DELETE_PROJECT">DELETE_PROJECT</MenuItem>
+                                        <MenuItem value="DELETE_PROJECT_WORKER">DELETE_PROJECT_WORKER</MenuItem>
+                                        <MenuItem value="TRAINING_SUCCEEDED">TRAINING_SUCCEEDED</MenuItem>
+                                        <MenuItem value="TRAINING_FAILED">TRAINING_FAILED</MenuItem>
+                                        <MenuItem value="PREDICT_SUCCEEDED">PREDICT_SUCCEEDED</MenuItem>
+                                        <MenuItem value="PREDICT_FAILED">PREDICT_FAILED</MenuItem>
+                                        <MenuItem value={1}>模型訓練</MenuItem>
+                                        <MenuItem value={2}>模型預測</MenuItem>
+                                        <MenuItem value={3}>差異備份路徑更改</MenuItem>
+                                        <MenuItem value={4}>完整備份路徑更改</MenuItem>
+                                        <MenuItem value={5}>差異備份時間更改</MenuItem>
+                                        <MenuItem value={6}>完整備份時間更改</MenuItem>
+                                        <MenuItem value={7}>差異備份執行</MenuItem>
+                                        <MenuItem value={8}>完整備份執行</MenuItem>
+                                        <MenuItem value={9}>還原</MenuItem>
+                                    </Select>
+                                </FormControl>
+                            </Box>
+                        </Grid>
+                        <Grid container alignItems="center" justifyContent="left" item xs={3}>
+                            <Typography variant="h6" fontWeight="medium" alignItems="center" justifyContent="center" mr={2}>
+                                專案名稱:
+                            </Typography>
+                            <Box component="form" role="form" >
+                                <TextField
+                                    fullWidth
+                                    label="專案名稱"
+                                    margin="none"
+                                    name="projectName"
+                                    id="projectName"
+                                    variant="outlined"
+                                />
+                            </Box>
+                        </Grid>
+                        <Grid container alignItems="center" justifyContent="left" item xs={3}>
+                            <Typography variant="h6" fontWeight="medium" alignItems="center" justifyContent="center" mr={2}>
+                                員工姓名:
+                            </Typography>
+                            <Box component="form" role="form" sx={{ ml: 2 }}>
+                                <TextField
+                                    fullWidth
+                                    label="員工姓名"
+                                    margin="none"
+                                    name="employeeName"
+                                    id="employeeName"
+                                    variant="outlined"
+                                />
+                            </Box>
+                        </Grid>
+                        <Grid container alignItems="center" justifyContent="left" item xs={3}>
+                            <Typography variant="h6" fontWeight="medium" alignItems="center" justifyContent="center" mr={2}>
+                                員工ID:
+                            </Typography>
+                            <Box component="form" role="form" sx={{ ml: 2 }}>
+                                <TextField
+                                    fullWidth
+                                    label="員工ID"
+                                    margin="none"
+                                    name="employeeID"
+                                    id="employeeID"
+                                    variant="outlined"
+                                />
+                            </Box>
+                        </Grid>
+                    </Grid>
+                    <Grid container spacing={1}>
+                        <Grid item xs={12}>
+                            <Box display="flex" alignItems="center" justifyContent="center" pt={3} >
+                                <LoadingButton variant="contained" color="info" align="center" onClick={handleClickChartSearch} style={{ width: '150px' }}>
+                                    查詢
+                                </LoadingButton>
                             </Box>
                         </Grid>
                     </Grid>
@@ -215,26 +310,26 @@ export default function LOG({ token, ...rest }) {
                             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell align="center">操作時間</TableCell>
-                                        <TableCell align="center">操作類型</TableCell>
-                                        <TableCell align="center">專案名稱</TableCell>
-                                        <TableCell align="center">員工ID</TableCell>
-                                        <TableCell align="center">員工姓名</TableCell>
+                                        <TableCell align="center" sx={{ backgroundColor: "#bfbfbf" }}>操作時間</TableCell>
+                                        <TableCell align="center" sx={{ backgroundColor: "#bfbfbf" }}>操作類型</TableCell>
+                                        <TableCell align="center" sx={{ backgroundColor: "#bfbfbf" }}>專案名稱</TableCell>
+                                        <TableCell align="center" sx={{ backgroundColor: "#bfbfbf" }}>員工ID</TableCell>
+                                        <TableCell align="center" sx={{ backgroundColor: "#bfbfbf" }}>員工姓名</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {rows.map((row) => (
+                                    {logData.map((row) => (
                                         <TableRow
                                             key={row.name}
                                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                         >
-                                            <TableCell align="center">{row.date}</TableCell>
-                                            <TableCell align="center">{row.behavior}</TableCell>
+                                            <TableCell align="center">{row.created_date}</TableCell>
+                                            <TableCell align="center">{row.action}</TableCell>
                                             <TableCell align="center">{row.project}</TableCell>
                                             <TableCell component="th" scope="row" align="center">
-                                                {row.id}
+                                                {row.badge}
                                             </TableCell>
-                                            <TableCell align="center">{row.name}</TableCell>
+                                            <TableCell align="center">{row.username}</TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>

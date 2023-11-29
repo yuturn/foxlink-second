@@ -155,6 +155,31 @@ export const apiGetCompareDetail = (data) => auth_except(baseRequest.get(`statis
     'Authorization': `Bearer ${data['token']}`,
   }
 }));
+
+export const apiGetCompareAnalysis = (data) => auth_except(baseRequest.get(`statistics/predict-compare-analysis?project_name=${data['project_name']}&line=${data['line']}&select_type=${data['type']}&start_date=${data['startDate']}&end_date=${data['endDate']}`, {
+  headers:
+  {
+    'accept': 'application/json',
+    // 'Authorization': `Bearer ${data['token']}`,
+  }
+}));
+
+export const apiGetLOG = (data) => auth_except(baseRequest.get(`logs/?${data['action'] ? "action=" + data['action'] + "&" : ""}${data['limit'] ? "limit=" + data['limit'] + "&" : ""}${data['page'] ? "page=" + data['page'] + "&" : ""}${data['startDate'] ? "start_date=" + data['startDate'] + "&" : ""}${data['badge'] ? "badge=" + data['badge'] + "&" : ""}${data['endDate'] ? "end_date=" + data['endDate'] : ""}`, {
+  headers:
+  {
+    'accept': 'application/json',
+    'Authorization': `Bearer ${data['token']}`,
+  }
+}));
+
+export const apiPostFullBackUp = (data) => auth_except(baseRequest.post(`/backup/?path=${data['path']}`, data, {
+  headers:
+  {
+    'accept': 'application/json',
+    'Authorization': `Bearer ${data['token']}`
+  }
+}));
+// $5$rounds=10000$F0XL1NKPWDHaSH$x7OJPMIuQs3XFigY6rsIzhYVDezZa0i3O1qZrDemcm5
 // ============================第二期============================
 
 export const apiSystemSpace = (token) => auth_except(baseRequest.get('/system/space', {

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { apiPostFullBackUp } from "../api.js";
 
 // import DashboardNavbar from "../examples/Navbars/DashboardNavbar";
 
@@ -18,6 +19,9 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
 
 const darkTheme = createTheme({
     palette: {
@@ -67,8 +71,82 @@ export default function Backup({ token, setAlert, ...rest }) {
         }
     })
 
+    //success alert
+    const [alertOpen, setAlertOpen] = React.useState(false);
+    const [message, setMessage] = useState(''); // 状态来存储消息内容
+    const handleOpen = (message) => {
+        setMessage(message); // 设置消息内容
+        setAlertOpen(true);
+    };
+    const handleClose = (event, reason) => {
+        setAlertOpen(false);
+    };
+    //error alert
+    const [errorAlertOpen, setErrorAlertOpen] = React.useState(false);
+    const [errorMessage, setErrorMessage] = useState(''); // 状态来存储消息内容
+    const handleErrorOpen = (message) => {
+        setErrorMessage(message); // 设置消息内容
+        setErrorAlertOpen(true);
+    };
+    const handleErrorClose = (event, reason) => {
+        setErrorAlertOpen(false);
+    };
+
+    //這邊是完整備份按鈕(dialog裡面的)
+    const handleClickFullBackUp = () => {
+        let path = document.getElementById('fullBackUpPath').value;
+        const data = {
+            path: path,
+            token: token
+        }
+        console.log(data)
+        apiPostFullBackUp(data)
+            .then((res) => {
+                console.log(res)
+                if (res.status == 200) {
+                    handleOpen("備份成功" + res.data.message)
+                    manualHandleClose()
+                } else {
+                    handleErrorOpen("查詢失敗:沒有資料")
+                    manualHandleClose()
+                }
+            }).catch((error) => {
+                console.error("API 请求失败", error);
+                handleErrorOpen("查詢失敗:API請求失敗");
+                manualHandleClose()
+            });
+    };
+
     return (
         <ThemeProvider theme={darkTheme}>
+            <Snackbar
+                open={alertOpen}
+                autoHideDuration={5000}
+                onClose={handleClose}
+                variant="filled"
+                anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'center'
+                }}
+            >
+                <Alert onClose={handleClose} severity='success' sx={{ width: '100%' }}>
+                    {message}
+                </Alert>
+            </Snackbar>
+            <Snackbar
+                open={errorAlertOpen}
+                autoHideDuration={5000}
+                onClose={handleErrorClose}
+                variant="filled"
+                anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'center'
+                }}
+            >
+                <Alert onClose={handleErrorClose} severity='error' sx={{ width: '100%' }}>
+                    {errorMessage}
+                </Alert>
+            </Snackbar>
             <Card>
                 <Box sx={{ bgcolor: '#696969' }}>
                     <CardHeader title="備份頁面" color="#62aaf4" />
@@ -216,81 +294,79 @@ export default function Backup({ token, setAlert, ...rest }) {
                         <Box sx={{ bgcolor: '#696969' }}>
                             <CardHeader title="手動備份" color="#62aaf4" />
                         </Box>
-                        <Box pt={4} pb={3} px={3}>
-                            <Box>
-                                <LoadingButton variant="contained"
-                                    size="large"
-                                    component="span"
-                                    color="info"
-                                    sx={{
-                                        borderRadius: 4,
-                                        justifyContent: 'center',
-                                        letterSpacing: 3,
-                                        mt: 2
-                                    }}
-                                    onClick={manualHandleClickOpen}
-                                >
-                                    手動完整備份
-                                </LoadingButton>
-                                <Dialog
-                                    open={manualOpen}
-                                    onClose={manualHandleClose}
-                                    aria-labelledby="alert-dialog-manual"
-                                    aria-describedby="alert-dialog-manual"
-                                >
-                                    <DialogTitle id="alert-dialog-title">是否手動備份?</DialogTitle>
-                                    <DialogContent>
-                                        <DialogContentText id="alert-dialog-manual">
-                                            按下確認按鈕後將會進行手動備份
-                                        </DialogContentText>
-                                    </DialogContent>
-                                    <DialogActions>
-                                        <LoadingButton onClick={manualHandleClose} autoFocus variant="contained">
-                                            確認
-                                        </LoadingButton>
-                                        <LoadingButton onClick={manualHandleClose} autoFocus variant="contained">
-                                            关闭
-                                        </LoadingButton>
-                                    </DialogActions>
-                                </Dialog>
-                                <Box pt={3} px={2}>
-                                    <Typography variant="h5" fontWeight="medium" mr={2}>
-                                        完整備份路徑:
-                                    </Typography>
-                                    <TextField type="password" label="請輸入IP位址" />
-                                </Box>
-                                <Box pt={3} px={2}>
-                                    <Typography variant="h5" fontWeight="medium" mr={2}>
-                                        差異備份路徑:
-                                    </Typography>
-                                    <TextField type="password" label="請輸入IP位址" />
-                                </Box>
-                                <Box pt={3} px={2}>
-                                    <LoadingButton variant="contained" color="info" onClick={backupHandleClickOpen}>
-                                        還原
+                        <Box>
+                            <Box display="flex" alignItems="center" pt={3} px={2}>
+                                <Typography variant="h5" fontWeight="medium" mr={3}>
+                                    完整備份路徑:
+                                </Typography>
+                                <TextField type="text" id="fullBackUpPath" label="請輸入IP位址" />
+                                <Box ml={2}>
+                                    <LoadingButton variant="contained"
+                                        size="large"
+                                        color="info"
+                                        sx={{
+                                            borderRadius: 4,
+                                            justifyContent: 'center',
+                                            letterSpacing: 3,
+                                        }}
+                                        onClick={manualHandleClickOpen}
+                                    >
+                                        手動完整備份
                                     </LoadingButton>
                                     <Dialog
-                                        open={backupOpen}
-                                        onClose={backupHandleClose}
-                                        aria-labelledby="alert-dialog-title"
-                                        aria-describedby="alert-dialog-description"
+                                        open={manualOpen}
+                                        onClose={manualHandleClose}
+                                        aria-labelledby="alert-dialog-manual"
+                                        aria-describedby="alert-dialog-manual"
                                     >
-                                        <DialogTitle id="alert-dialog-title">是否進行還原?</DialogTitle>
+                                        <DialogTitle id="alert-dialog-title">是否手動備份?</DialogTitle>
                                         <DialogContent>
-                                            <DialogContentText id="alert-dialog-description">
-                                                按下確認按鈕後將會進行還原
+                                            <DialogContentText id="alert-dialog-manual">
+                                                按下確認按鈕後將會進行手動備份
                                             </DialogContentText>
                                         </DialogContent>
                                         <DialogActions>
-                                            <LoadingButton onClick={backupHandleClose} autoFocus variant="contained">
+                                            <LoadingButton onClick={handleClickFullBackUp} autoFocus variant="contained">
                                                 確認
                                             </LoadingButton>
-                                            <LoadingButton onClick={backupHandleClose} autoFocus variant="contained">
+                                            <LoadingButton onClick={manualHandleClose} autoFocus variant="contained">
                                                 关闭
                                             </LoadingButton>
                                         </DialogActions>
                                     </Dialog>
                                 </Box>
+                            </Box>
+                        </Box>
+                        <Box display="flex" alignItems="center" pt={3} px={2} mb={2}>
+                            <Typography variant="h5" fontWeight="medium" mr={3}>
+                                差異備份路徑:
+                            </Typography>
+                            <TextField type="text" label="請輸入IP位址" />
+                            <Box ml={2}>
+                                <LoadingButton variant="contained" color="info" onClick={backupHandleClickOpen}>
+                                    還原
+                                </LoadingButton>
+                                <Dialog
+                                    open={backupOpen}
+                                    onClose={backupHandleClose}
+                                    aria-labelledby="alert-dialog-title"
+                                    aria-describedby="alert-dialog-description"
+                                >
+                                    <DialogTitle id="alert-dialog-title">是否進行還原?</DialogTitle>
+                                    <DialogContent>
+                                        <DialogContentText id="alert-dialog-description">
+                                            按下確認按鈕後將會進行還原
+                                        </DialogContentText>
+                                    </DialogContent>
+                                    <DialogActions>
+                                        <LoadingButton onClick={backupHandleClose} autoFocus variant="contained">
+                                            確認
+                                        </LoadingButton>
+                                        <LoadingButton onClick={backupHandleClose} autoFocus variant="contained">
+                                            关闭
+                                        </LoadingButton>
+                                    </DialogActions>
+                                </Dialog>
                             </Box>
                         </Box>
                     </Card>
