@@ -61,6 +61,9 @@ export default function LOG({ token, ...rest }) {
     const [endDate, setEndDate] = useState(endOfDay);
     const [operationType, setOperationType] = useState();
     const [logData, setLogData] = useState([]);
+    const [currentPage, setCurrentPage] = useState();
+    const [totalPage, setTotalPage] = useState();
+    const [totalData, setTotalData] = useState();
 
     //操作類型改變時
     const operationTypeChange = (event) => {
@@ -68,15 +71,18 @@ export default function LOG({ token, ...rest }) {
     };
 
 
-
     //這邊是查詢LOG的按鈕
     const handleClickChartSearch = () => {
         let badge = document.getElementById('employeeID').value;
+        let page = document.getElementById('Page').value;
+        let pageDataCount = document.getElementById('pageDataCount').value;
         const data = {
             startDate: new Date(startDate).toISOString().split('T')[0] + ' 00%3A00%3A00',
             endDate: new Date(endDate).toISOString().split('T')[0] + ' 00%3A00%3A00',
             action: operationType,
             badge: badge,
+            page: page,
+            limit: pageDataCount,
             token: token
         }
         console.log(data)
@@ -85,16 +91,41 @@ export default function LOG({ token, ...rest }) {
                 console.log(res.data.logs)
                 if (res.data.logs && res.data.logs.length > 0) {
                     setLogData(res.data.logs)
+                    setCurrentPage(res.data.page)
+                    setTotalData(res.data.total)
+                    if (res.data.total % res.data.limit == 0) {
+                        setTotalPage(res.data.total / res.data.limit)
+                    } else {
+                        setTotalPage(Math.floor(res.data.total / res.data.limit) + 1)
+                    }
                     handleOpen("查詢成功")
                 } else {
                     setLogData([])
+                    setCurrentPage()
+                    setTotalData()
+                    setTotalPage()
                     handleErrorOpen("查詢失敗:沒有資料")
                 }
             }).catch((error) => {
                 console.error("API 请求失败", error);
                 setLogData([])
+                setCurrentPage()
+                setTotalData()
+                setTotalPage()
                 handleErrorOpen("查詢失敗:API請求失敗");
             });
+    };
+
+    const [pageDataCount, setPageDataCount] = useState(10);
+    const [pageNumber, setPageNumber] = useState(1);
+
+    // 定义处理函数来更新状态
+    const handlePageDataCountChange = (event) => {
+        setPageDataCount(event.target.value);
+    };
+
+    const handlePageNumberChange = (event) => {
+        setPageNumber(event.target.value);
     };
 
     //success alert
@@ -200,6 +231,40 @@ export default function LOG({ token, ...rest }) {
                                 </Box>
                             </Box>
                         </Grid>
+                        <Grid container alignItems="center" justifyContent="left" item xs={3}>
+                            <Typography variant="h6" fontWeight="medium" alignItems="center" justifyContent="center" mr={2}>
+                                顯示筆數:
+                            </Typography>
+                            <Box component="form" role="form">
+                                <TextField
+                                    fullWidth
+                                    label="顯示筆數"
+                                    margin="none"
+                                    name="pageDataCount"
+                                    id="pageDataCount"
+                                    variant="outlined"
+                                    value={pageDataCount}
+                                    onChange={handlePageDataCountChange}
+                                />
+                            </Box>
+                        </Grid>
+                        <Grid container alignItems="center" justifyContent="left" item xs={3}>
+                            <Typography variant="h6" fontWeight="medium" alignItems="center" justifyContent="center" mr={2}>
+                                查看頁數:
+                            </Typography>
+                            <Box component="form" role="form" sx={{ ml: 2 }}>
+                                <TextField
+                                    fullWidth
+                                    label="查看頁數"
+                                    margin="none"
+                                    name="Page"
+                                    id="Page"
+                                    variant="outlined"
+                                    value={pageNumber}
+                                    onChange={handlePageNumberChange}
+                                />
+                            </Box>
+                        </Grid>
                     </Grid>
                     <Grid container spacing={1} sx={{ mt: 1 }}>
                         <Grid container alignItems="center" justifyContent="left" item xs={3}>
@@ -218,15 +283,15 @@ export default function LOG({ token, ...rest }) {
                                         style={{ minWidth: "271px", height: "56px" }}
                                     >
                                         <MenuItem value="">清空欄位</MenuItem>
-                                        <MenuItem value="USER_LOGIN">登入</MenuItem>
-                                        <MenuItem value="USER_LOGOUT">登出</MenuItem>
+                                        <MenuItem value="USER_LOGIN">USER_LOGIN</MenuItem>
+                                        <MenuItem value="USER_LOGOUT">USER_LOGOUT</MenuItem>
                                         <MenuItem value="DATA_PREPROCESSING_STARTED">DATA_PREPROCESSING_STARTED</MenuItem>
                                         <MenuItem value="DATA_PREPROCESSING_SUCCESS">DATA_PREPROCESSING_SUCCESS</MenuItem>
                                         <MenuItem value="DATA_PREPROCESSING_FAILED">DATA_PREPROCESSING_FAILED</MenuItem>
                                         <MenuItem value="DAILY_PREPROCESSING_STARTED">DAILY_PREPROCESSING_STARTED</MenuItem>
                                         <MenuItem value="DAILY_PREPROCESSING_SUCCESS">DAILY_PREPROCESSING_SUCCESS</MenuItem>
                                         <MenuItem value="DAILY_PREPROCESSING_FAILED">DAILY_PREPROCESSING_FAILED</MenuItem>
-                                        <MenuItem value="FULL_BACKUP">完整備份</MenuItem>
+                                        <MenuItem value="FULL_BACKUP">FULL_BACKUP</MenuItem>
                                         <MenuItem value="BACKUP_RESTORE">BACKUP_RESTORE</MenuItem>
                                         <MenuItem value="ADD_NEW_PROJECT">ADD_NEW_PROJECT</MenuItem>
                                         <MenuItem value="ADD_PROJECT_WORKER">ADD_PROJECT_WORKER</MenuItem>
@@ -237,7 +302,7 @@ export default function LOG({ token, ...rest }) {
                                         <MenuItem value="TRAINING_FAILED">TRAINING_FAILED</MenuItem>
                                         <MenuItem value="PREDICT_SUCCEEDED">PREDICT_SUCCEEDED</MenuItem>
                                         <MenuItem value="PREDICT_FAILED">PREDICT_FAILED</MenuItem>
-                                        <MenuItem value={1}>模型訓練</MenuItem>
+                                        {/* <MenuItem value={1}>模型訓練</MenuItem>
                                         <MenuItem value={2}>模型預測</MenuItem>
                                         <MenuItem value={3}>差異備份路徑更改</MenuItem>
                                         <MenuItem value={4}>完整備份路徑更改</MenuItem>
@@ -245,7 +310,7 @@ export default function LOG({ token, ...rest }) {
                                         <MenuItem value={6}>完整備份時間更改</MenuItem>
                                         <MenuItem value={7}>差異備份執行</MenuItem>
                                         <MenuItem value={8}>完整備份執行</MenuItem>
-                                        <MenuItem value={9}>還原</MenuItem>
+                                        <MenuItem value={9}>還原</MenuItem> */}
                                     </Select>
                                 </FormControl>
                             </Box>
@@ -312,9 +377,9 @@ export default function LOG({ token, ...rest }) {
                                     <TableRow>
                                         <TableCell align="center" sx={{ backgroundColor: "#bfbfbf" }}>操作時間</TableCell>
                                         <TableCell align="center" sx={{ backgroundColor: "#bfbfbf" }}>操作類型</TableCell>
-                                        <TableCell align="center" sx={{ backgroundColor: "#bfbfbf" }}>專案名稱</TableCell>
                                         <TableCell align="center" sx={{ backgroundColor: "#bfbfbf" }}>員工ID</TableCell>
                                         <TableCell align="center" sx={{ backgroundColor: "#bfbfbf" }}>員工姓名</TableCell>
+                                        <TableCell align="center" sx={{ backgroundColor: "#bfbfbf" }}>說明</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -325,16 +390,36 @@ export default function LOG({ token, ...rest }) {
                                         >
                                             <TableCell align="center">{row.created_date}</TableCell>
                                             <TableCell align="center">{row.action}</TableCell>
-                                            <TableCell align="center">{row.project}</TableCell>
-                                            <TableCell component="th" scope="row" align="center">
-                                                {row.badge}
-                                            </TableCell>
+                                            <TableCell component="th" scope="row" align="center">{row.badge}</TableCell>
                                             <TableCell align="center">{row.username}</TableCell>
+                                            <TableCell align="center">{row.description}</TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
                             </Table>
                         </TableContainer>
+                    </Grid>
+                    <Grid container spacing={1}>
+                        <Grid container alignItems="center" justifyContent="left" item xs={4}>
+                        </Grid>
+                        <Grid container alignItems="center" justifyContent="center" item xs={4}>
+                            <Box component="form" role="form">
+                                <Box display="flex" alignItems="center" pt={2} >
+                                    <Typography variant="h6" fontWeight="medium" alignItems="center" justifyContent="center" mr={2}>
+                                        當前頁數 {currentPage}/{totalPage} 總共頁數
+                                    </Typography>
+                                </Box>
+                            </Box>
+                        </Grid>
+                        <Grid container alignItems="center" justifyContent="right" item xs={4}>
+                            <Box component="form" role="form">
+                                <Box display="flex" alignItems="center" pt={2} >
+                                    <Typography variant="h6" fontWeight="medium" alignItems="center" justifyContent="center" mr={2}>
+                                        總資料筆數:{totalData}
+                                    </Typography>
+                                </Box>
+                            </Box>
+                        </Grid>
                     </Grid>
                 </CardContent>
             </Card>

@@ -160,11 +160,11 @@ export const apiGetCompareAnalysis = (data) => auth_except(baseRequest.get(`stat
   headers:
   {
     'accept': 'application/json',
-    // 'Authorization': `Bearer ${data['token']}`,
+    'Authorization': `Bearer ${data['token']}`,
   }
 }));
 
-export const apiGetLOG = (data) => auth_except(baseRequest.get(`logs/?${data['action'] ? "action=" + data['action'] + "&" : ""}${data['limit'] ? "limit=" + data['limit'] + "&" : ""}${data['page'] ? "page=" + data['page'] + "&" : ""}${data['startDate'] ? "start_date=" + data['startDate'] + "&" : ""}${data['badge'] ? "badge=" + data['badge'] + "&" : ""}${data['endDate'] ? "end_date=" + data['endDate'] : ""}`, {
+export const apiGetLOG = (data) => auth_except(baseRequest.get(`logs/?${data['action'] ? "action=" + data['action'] + "&" : ""}${data['limit'] ? "limit=" + data['limit'] + "&" : ""}${data['page'] ? "page=" + data['page'] + "&" : ""}${data['page'] ? "page=" + data['page'] + "&" : ""}${data['startDate'] ? "start_date=" + data['startDate'] + "&" : ""}${data['badge'] ? "badge=" + data['badge'] + "&" : ""}${data['endDate'] ? "end_date=" + data['endDate'] : ""}`, {
   headers:
   {
     'accept': 'application/json',
@@ -172,11 +172,59 @@ export const apiGetLOG = (data) => auth_except(baseRequest.get(`logs/?${data['ac
   }
 }));
 
-export const apiPostFullBackUp = (data) => auth_except(baseRequest.post(`/backup/?path=${data['path']}`, data, {
+export const apiPostFullBackUp = (data) => auth_except(baseRequest.post(`/backup/${data['path'] ? "?path=" + data['path'] : ""}`, data, {
   headers:
   {
     'accept': 'application/json',
     'Authorization': `Bearer ${data['token']}`
+  }
+}));
+
+export const apiGetSystemEnvSetting = (data) => auth_except(baseRequest.get(`/system/env-settings?key=${data['key']}`, {
+  headers:
+  {
+    'accept': 'application/json',
+    'Authorization': `Bearer ${data['token']}`,
+  }
+}));
+
+export const apiPostUpdateSetting = (data) => auth_except(baseRequest.post(`/system/update-settings?key=${data['key']}&value=${data['path']}`, data, {
+  headers:
+  {
+    'accept': 'application/json',
+    'Authorization': `Bearer ${data['token']}`
+  }
+}));
+
+export const apiPostSchedulerDate = (data) => auth_except(baseRequest.post(`/scheduler/date?time=${data['time']}`, data, {
+  headers:
+  {
+    'accept': 'application/json',
+    // 'Authorization': `Bearer ${data['token']}`
+  }
+}));
+
+export const apiPostSchedulerCron = (data) => auth_except(baseRequest.post(`/scheduler/cron?time=${data['time']}&select_type=${data['select_type']}&description=${data['description']}`, data, {
+  headers:
+  {
+    'accept': 'application/json',
+    // 'Authorization': `Bearer ${data['token']}`
+  }
+}));
+
+export const apiPostRestoreBackUp = (data) => auth_except(baseRequest.post(`/backup/restore-backup?path=${data['path']}`, data, {
+  headers:
+  {
+    'accept': 'application/json',
+    'Authorization': `Bearer ${data['token']}`
+  }
+}));
+
+export const apiGetBackUpStatistics = (data) => auth_except(baseRequest.get(`/backup/statistics`, {
+  headers:
+  {
+    'accept': 'application/json',
+    'Authorization': `Bearer ${data['token']}`,
   }
 }));
 // $5$rounds=10000$F0XL1NKPWDHaSH$x7OJPMIuQs3XFigY6rsIzhYVDezZa0i3O1qZrDemcm5
@@ -357,13 +405,13 @@ export const apiWorkerAll = (data) => auth_except(baseRequest.get(`/users/overvi
     }
   }));
 
-export const apiGetSystemEnvSetting = (data) => auth_except(baseRequest.get(`/system/env-get-settings/${data['key']}`, {
-  headers:
-  {
-    'accept': 'application/json',
-    'Authorization': `Bearer ${data['token']}`
-  }
-}));
+// export const apiGetSystemEnvSetting = (data) => auth_except(baseRequest.get(`/system/env-get-settings/${data['key']}`, {
+//   headers:
+//   {
+//     'accept': 'application/json',
+//     'Authorization': `Bearer ${data['token']}`
+//   }
+// }));
 
 export const apiPostSystemEnvSetting = (data) => auth_except(baseRequest.post(`/system/env-update-settings/${data['key']}?value=${data['value']}`, data, {
   headers:

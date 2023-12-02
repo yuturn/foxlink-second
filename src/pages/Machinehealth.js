@@ -2252,7 +2252,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                         onChange={projectNameChange}
                         style={{ minWidth: "271px", height: "56px" }}
                       >
-                        <MenuItem value='null'></MenuItem>
+                        <MenuItem value="">清空欄位</MenuItem>
                         {projectNameList.map((projectItem) => (
                           <MenuItem value={projectItem}>
                             {projectItem}
@@ -2279,7 +2279,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                         onChange={deviceNameChange}
                         style={{ minWidth: "271px", height: "56px" }}
                       >
-                        <MenuItem value='null'></MenuItem>
+                        <MenuItem value="">清空欄位</MenuItem>
                         {deviceNameList.map((object) => {
                           if (object.project_name === projectName) {
                             return object.devices.map((device) => (
@@ -2298,12 +2298,6 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                     size="large"
                     component="span"
                     color="info"
-                    sx={{
-                      borderRadius: 4,
-                      justifyContent: 'center',
-                      letterSpacing: 3,
-                      mt: 3
-                    }}
                     onClick={getProjectDetailsFilter}
                   >
                     查詢

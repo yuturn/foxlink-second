@@ -118,6 +118,8 @@ export default function Project({ token, ...rest }) {
   const [currentAccuracyInfo, setCurrentAccuracyInfo] = useState(null);
   const [detailData, setDetailData] = useState({});
   const [chartData, setChartData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
 
   //折線圖function
   const LineChartExample = () => {
@@ -248,6 +250,7 @@ export default function Project({ token, ...rest }) {
   };
   //這邊是查詢專案線號的按鈕
   const handleClickProjectSearch = () => {
+    setLoading(true)
     const data = {
       startDate: new Date(startDate).toISOString().split('T')[0] + ' ' + new Date(startDate).toTimeString().split(' ')[0].replace(/:/g, '%3A'),
       endDate: new Date(endDate).toISOString().split('T')[0] + ' ' + new Date(endDate).toTimeString().split(' ')[0].replace(/:/g, '%3A'),
@@ -262,21 +265,25 @@ export default function Project({ token, ...rest }) {
         if (res.data && res.data.length > 0) {
           setSearchDateData(res.data)
           handleOpen("查詢成功")
+          setLoading(false)
         } else {
           setSearchDateData([])
           handleErrorOpen("查詢失敗:沒有資料")
+          setLoading(false)
         }
       }).catch((error) => {
         console.error("API 请求失败", error);
         setSearchDateData([]);
         handleErrorOpen("查詢失敗:API請求失敗");
+        setLoading(false)
       });
   };
   //這邊是查詢折線圖的按鈕
   const handleClickChartSearch = () => {
+    setLoading(true)
     const data = {
-      startDate: new Date(startDate).toISOString().split('T')[0] + ' 00:00:00',
-      endDate: new Date(endDate).toISOString().split('T')[0] + ' 00:00:00',
+      startDate: new Date(startDate).toISOString().split('T')[0] + ' 00%3A00%3A00',
+      endDate: new Date(endDate).toISOString().split('T')[0] + ' 00%3A00%3A00',
       type: type,
       project_name: projectName,
       line: line,
@@ -288,14 +295,17 @@ export default function Project({ token, ...rest }) {
         if (res.data && res.data.length > 0) {
           setChartData(res.data)
           handleOpen("查詢成功")
+          setLoading(false)
         } else {
           setChartData([])
           handleErrorOpen("查詢失敗:沒有資料")
+          setLoading(false)
         }
       }).catch((error) => {
         console.error("API 请求失败", error);
         setChartData([]);
         handleErrorOpen("查詢失敗:API請求失敗");
+        setLoading(false)
       });
   };
   //查看按鈕(detail table)
@@ -438,7 +448,7 @@ export default function Project({ token, ...rest }) {
                             onChange={handleChangeProject}
                             style={{ minWidth: "150px", height: "45px" }}
                           >
-                            <MenuItem value='null'></MenuItem>
+                            <MenuItem value="">清空欄位</MenuItem>
                             {projectNameList.map((projectItem) => (
                               <MenuItem value={projectItem}>
                                 {projectItem}
@@ -469,7 +479,7 @@ export default function Project({ token, ...rest }) {
                             onChange={handleChangeLine}
                             style={{ minWidth: "150px", height: "45px" }}
                           >
-                            <MenuItem value='null'></MenuItem>
+                            <MenuItem value="">清空欄位</MenuItem>
                             {lineList.map((lineItem) => (
                               <MenuItem value={lineItem}>
                                 {lineItem}
@@ -524,7 +534,7 @@ export default function Project({ token, ...rest }) {
             <Grid container spacing={1}>
               <Grid item xs={12}>
                 <Box display="flex" alignItems="center" justifyContent="center" pt={3} >
-                  <LoadingButton variant="contained" color="info" align="center" onClick={handleClickProjectSearch} style={{ width: '150px' }}>
+                  <LoadingButton loading={loading} variant="contained" color="info" align="center" onClick={handleClickProjectSearch} style={{ width: '150px' }}>
                     查詢
                   </LoadingButton>
                 </Box>
@@ -535,7 +545,7 @@ export default function Project({ token, ...rest }) {
               <Grid xs={12}>
                 <TableContainer component={Paper} style={tableContainerStyle.tableContainer}>
                   <Table>
-                    <TableHead style={{ backgroundColor: '#696969' }}>
+                    <TableHead style={{ backgroundColor: '#bfbfbf' }}>
                       <TableRow>
                         <TableCell align="center" sx={{ borderBottom: 0 }}>
                           <TableSortLabel
@@ -752,6 +762,7 @@ export default function Project({ token, ...rest }) {
                             onChange={handleChangeProject}
                             style={{ minWidth: "150px", height: "45px" }}
                           >
+                            <MenuItem value="">清空欄位</MenuItem>
                             {projectNameList.map((projectItem) => (
                               <MenuItem value={projectItem}>
                                 {projectItem}
@@ -782,6 +793,7 @@ export default function Project({ token, ...rest }) {
                             onChange={handleChangeLine}
                             style={{ minWidth: "150px", height: "45px" }}
                           >
+                            <MenuItem value="">清空欄位</MenuItem>
                             {lineList.map((lineItem) => (
                               <MenuItem value={lineItem}>
                                 {lineItem}
@@ -836,7 +848,7 @@ export default function Project({ token, ...rest }) {
             <Grid container spacing={1}>
               <Grid item xs={12}>
                 <Box display="flex" alignItems="center" justifyContent="center" pt={3} >
-                  <LoadingButton variant="contained" color="info" align="center" onClick={handleClickProjectSearch} style={{ width: '150px' }}>
+                  <LoadingButton loading={loading} variant="contained" color="info" align="center" onClick={handleClickProjectSearch} style={{ width: '150px' }}>
                     查詢
                   </LoadingButton>
                 </Box>
@@ -847,7 +859,7 @@ export default function Project({ token, ...rest }) {
               <Grid xs={12}>
                 <TableContainer component={Paper} style={tableContainerStyle.tableContainer}>
                   <Table>
-                    <TableHead style={{ backgroundColor: '#696969' }}>
+                    <TableHead style={{ backgroundColor: '#bfbfbf' }}>
                       <TableRow>
                         <TableCell align="center" sx={{ borderBottom: 0 }}>
                           <TableSortLabel
@@ -1181,7 +1193,7 @@ export default function Project({ token, ...rest }) {
             <Grid container spacing={1}>
               <Grid item xs={12}>
                 <Box display="flex" alignItems="center" justifyContent="center" pt={3} >
-                  <LoadingButton variant="contained" color="info" align="center" onClick={handleClickChartSearch} style={{ width: '150px' }}>
+                  <LoadingButton loading={loading} variant="contained" color="info" align="center" onClick={handleClickChartSearch} style={{ width: '150px' }}>
                     查詢
                   </LoadingButton>
                 </Box>
