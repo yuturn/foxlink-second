@@ -24,6 +24,7 @@ import Paper from '@mui/material/Paper';
 import { PieChart, pieArcLabelClasses } from '@mui/x-charts';
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from 'react-responsive-carousel';
+import PanToolIcon from '@mui/icons-material/PanTool';
 
 const darkTheme = createTheme({
   palette: {
@@ -417,24 +418,6 @@ export default function Statistics({ token, setAlert, ...rest }) {
     height: 200,
   };
 
-  // 自定義上一頁按鈕
-  const renderCustomPrevButton = (onClickHandler, hasPrev, label) => {
-    return (
-      <LoadingButton onClick={onClickHandler} variant="contained" color="info" className="my-custom-prev-button">
-        上一頁
-      </LoadingButton>
-    );
-  };
-
-  // 自定義下一頁按鈕
-  const renderCustomNextButton = (onClickHandler, hasNext, label) => {
-    return (
-      <LoadingButton onClick={onClickHandler} variant="contained" color="info" className="my-custom-next-button">
-        下一頁
-      </LoadingButton>
-    );
-  };
-
   const [selectedSlide, setSelectedSlide] = useState(0);
 
   const handleSelectSlide = (index) => {
@@ -490,8 +473,6 @@ export default function Statistics({ token, setAlert, ...rest }) {
         <Carousel
           showArrows={false}
           renderIndicator={customRenderIndicator}
-          // renderArrowPrev={renderCustomPrevButton}
-          // renderArrowNext={renderCustomNextButton}
           infiniteLoop={true}
           autoPlay={!isPaused}
           stopOnHover={true}
@@ -599,11 +580,6 @@ export default function Statistics({ token, setAlert, ...rest }) {
       </div >
     )
   };
-
-  const [nav1, setNav1] = useState();
-  const [nav2, setNav2] = useState();
-  const slider1 = useRef();
-  const slider2 = useRef();
 
   return (
     <ThemeProvider theme={darkTheme}>

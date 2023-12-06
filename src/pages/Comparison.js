@@ -41,6 +41,13 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+
+import ShowChartIcon from '@mui/icons-material/ShowChart';
+import StackedLineChartIcon from '@mui/icons-material/StackedLineChart';
+import TimelineIcon from '@mui/icons-material/Timeline';
+
 const darkTheme = createTheme({
   palette: {
     mode: 'light',
@@ -141,7 +148,7 @@ export default function Project({ token, ...rest }) {
           <YAxis />
           <Tooltip />
           <Legend />
-          <Line type="monotone" dataKey="value" stroke="#82ca9d" />
+          <Line type="monotone" dataKey="準確率" stroke="#82ca9d" />
         </LineChart>
       </ResponsiveContainer>
     );
@@ -338,19 +345,31 @@ export default function Project({ token, ...rest }) {
 
   //這邊的變數決定哪一個頁面
   const [currentPage, setCurrentPage] = useState(1);
-  const handleShowFirstCard = () => {
-    setCurrentPage(1);
-    setSearchDateData([]);
+  // 舊版控制頁面按鈕
+  // const handleShowFirstCard = () => {
+  //   setCurrentPage(1);
+  //   setSearchDateData([]);
+  // };
+  // const handleShowSecondCard = () => {
+  //   setCurrentPage(2);
+  //   setSearchDateData([]);
+  // };
+  // const handleShowThirdCard = () => {
+  //   setCurrentPage(3);
+  //   setSearchDateData([]);
+  //   // 可以根据需要添加其他逻辑
+  // };
+  //這邊使用ToggleButton控制顯示頁面
+  const handleChange = (event, newValue) => {
+    if (newValue != null) {
+      setCurrentPage(newValue);
+    }
   };
-  const handleShowSecondCard = () => {
-    setCurrentPage(2);
+
+  useEffect(() => {
     setSearchDateData([]);
-  };
-  const handleShowThirdCard = () => {
-    setCurrentPage(3);
-    setSearchDateData([]);
-    // 可以根据需要添加其他逻辑
-  };
+    // 这里可以根据新的 currentPage 做一些其他的操作
+  }, [currentPage]);
 
   //success alert
   const [alertOpen, setAlertOpen] = React.useState(false);
@@ -376,7 +395,18 @@ export default function Project({ token, ...rest }) {
   return (
     <ThemeProvider theme={darkTheme}>
       <Box display="flex">
-        <Box>
+        <ToggleButtonGroup
+          color="info"
+          value={currentPage}
+          exclusive
+          onChange={handleChange}
+          aria-label="Platform"
+        >
+          <ToggleButton value={1}><ShowChartIcon sx={{ mr: 2 }} />日預測</ToggleButton>
+          <ToggleButton value={2}><StackedLineChartIcon sx={{ mr: 2 }} />週預測</ToggleButton>
+          <ToggleButton value={3}><TimelineIcon sx={{ mr: 2 }} />準確率圖表</ToggleButton>
+        </ToggleButtonGroup>
+        {/* <Box>
           <LoadingButton variant="contained" color="info" onClick={handleShowFirstCard} sx={{ mr: 1 }}>
             日預測
           </LoadingButton>
@@ -390,7 +420,7 @@ export default function Project({ token, ...rest }) {
           <LoadingButton variant="contained" color="info" onClick={handleShowThirdCard}>
             準確率圖表
           </LoadingButton>
-        </Box>
+        </Box> */}
       </Box>
       <Snackbar
         open={alertOpen}

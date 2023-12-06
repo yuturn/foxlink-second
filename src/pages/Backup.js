@@ -444,7 +444,7 @@ export default function Backup({ token, setAlert, ...rest }) {
                                         </LoadingButton>
                                     </Box>
                                 </Box>
-                                <Box display="flex" alignItems="center" pt={3} px={2}>
+                                {/* <Box display="flex" alignItems="center" pt={3} px={2}>
                                     <Typography variant="h5" fontWeight="medium" mr={2}>
                                         備份目的地1:
                                     </Typography>
@@ -473,7 +473,7 @@ export default function Backup({ token, setAlert, ...rest }) {
                                             更改
                                         </LoadingButton>
                                     </Box>
-                                </Box>
+                                </Box> */}
                             </Box>
                         </Box>
                     </Card>
@@ -493,7 +493,7 @@ export default function Backup({ token, setAlert, ...rest }) {
                                 <Typography variant="h5" fontWeight="medium" mr={3}>
                                     完整備份路徑:
                                 </Typography>
-                                <TextField type="text" id="fullBackUpPath" label="請輸入IP位址" />
+                                <TextField type="text" id="fullBackUpPath" label="請輸入本地路徑位址" />
                                 <Box ml={2}>
                                     <LoadingButton variant="contained"
                                         size="large"
@@ -530,7 +530,7 @@ export default function Backup({ token, setAlert, ...rest }) {
                             <Typography variant="h5" fontWeight="medium" mr={3}>
                                 差異備份路徑:
                             </Typography>
-                            <TextField type="text" id="diffBackUpPath" label="請輸入IP位址" />
+                            <TextField type="text" id="diffBackUpPath" label="請輸入本地路徑位址" />
                             <Box ml={2}>
                                 <LoadingButton size="large" variant="contained" color="info" onClick={handleClickUpdatediffBackUpPath}>
                                     修改
@@ -541,7 +541,7 @@ export default function Backup({ token, setAlert, ...rest }) {
                             <Typography variant="h5" fontWeight="medium" mr={3}>
                                 還原路徑:
                             </Typography>
-                            <TextField type="text" id="backUpRestroe" label="請輸入IP位址" />
+                            <TextField type="text" id="backUpRestroe" label="請輸入本地路徑位址" />
                             <Box ml={2}>
                                 <LoadingButton size="large" variant="contained" color="info" onClick={backUpRestroeHandleClickOpen}>
                                     還原

@@ -65,6 +65,7 @@ export default function LOG({ token, ...rest }) {
     const [totalPage, setTotalPage] = useState();
     const [totalData, setTotalData] = useState();
 
+
     //操作類型改變時
     const operationTypeChange = (event) => {
         setOperationType(event.target.value);
@@ -74,14 +75,13 @@ export default function LOG({ token, ...rest }) {
     //這邊是查詢LOG的按鈕
     const handleClickChartSearch = () => {
         let badge = document.getElementById('employeeID').value;
-        let page = document.getElementById('Page').value;
         let pageDataCount = document.getElementById('pageDataCount').value;
         const data = {
             startDate: new Date(startDate).toISOString().split('T')[0] + ' 00%3A00%3A00',
             endDate: new Date(endDate).toISOString().split('T')[0] + ' 00%3A00%3A00',
             action: operationType,
             badge: badge,
-            page: page,
+            page: 1,
             limit: pageDataCount,
             token: token
         }
@@ -114,6 +114,102 @@ export default function LOG({ token, ...rest }) {
                 setTotalPage()
                 handleErrorOpen("查詢失敗:API請求失敗");
             });
+    };
+
+    //這邊是上一頁的按鈕
+    const handleClickLastPage = () => {
+        let badge = document.getElementById('employeeID').value;
+        let pageDataCount = document.getElementById('pageDataCount').value;
+        if (currentPage > 1) {
+            const data = {
+                startDate: new Date(startDate).toISOString().split('T')[0] + ' 00%3A00%3A00',
+                endDate: new Date(endDate).toISOString().split('T')[0] + ' 00%3A00%3A00',
+                action: operationType,
+                badge: badge,
+                page: currentPage - 1,
+                limit: pageDataCount,
+                token: token
+            }
+            console.log(data)
+            apiGetLOG(data)
+                .then((res) => {
+                    console.log(res.data.logs)
+                    if (res.data.logs && res.data.logs.length > 0) {
+                        setLogData(res.data.logs)
+                        setCurrentPage(res.data.page)
+                        setTotalData(res.data.total)
+                        if (res.data.total % res.data.limit == 0) {
+                            setTotalPage(res.data.total / res.data.limit)
+                        } else {
+                            setTotalPage(Math.floor(res.data.total / res.data.limit) + 1)
+                        }
+                        handleOpen("查詢成功")
+                    } else {
+                        setLogData([])
+                        setCurrentPage()
+                        setTotalData()
+                        setTotalPage()
+                        handleErrorOpen("查詢失敗:沒有資料")
+                    }
+                }).catch((error) => {
+                    console.error("API 请求失败", error);
+                    setLogData([])
+                    setCurrentPage()
+                    setTotalData()
+                    setTotalPage()
+                    handleErrorOpen("查詢失敗:API請求失敗");
+                });
+        } else {
+            handleErrorOpen("沒有上一頁")
+        }
+    };
+
+    //這邊是下一頁的按鈕
+    const handleClickNextPage = () => {
+        let badge = document.getElementById('employeeID').value;
+        let pageDataCount = document.getElementById('pageDataCount').value;
+        if (currentPage < totalPage) {
+            const data = {
+                startDate: new Date(startDate).toISOString().split('T')[0] + ' 00%3A00%3A00',
+                endDate: new Date(endDate).toISOString().split('T')[0] + ' 00%3A00%3A00',
+                action: operationType,
+                badge: badge,
+                page: currentPage + 1,
+                limit: pageDataCount,
+                token: token
+            }
+            console.log(data)
+            apiGetLOG(data)
+                .then((res) => {
+                    console.log(res.data.logs)
+                    if (res.data.logs && res.data.logs.length > 0) {
+                        setLogData(res.data.logs)
+                        setCurrentPage(res.data.page)
+                        setTotalData(res.data.total)
+                        if (res.data.total % res.data.limit == 0) {
+                            setTotalPage(res.data.total / res.data.limit)
+                        } else {
+                            setTotalPage(Math.floor(res.data.total / res.data.limit) + 1)
+                        }
+                        handleOpen("查詢成功")
+                    } else {
+                        setLogData([])
+                        setCurrentPage()
+                        setTotalData()
+                        setTotalPage()
+                        handleErrorOpen("查詢失敗:沒有資料")
+                    }
+                }).catch((error) => {
+                    console.error("API 请求失败", error);
+                    setLogData([])
+                    setCurrentPage()
+                    setTotalData()
+                    setTotalPage()
+                    handleErrorOpen("查詢失敗:API請求失敗");
+                });
+        } else {
+            handleErrorOpen("沒有下一頁")
+        }
     };
 
     const [pageDataCount, setPageDataCount] = useState(10);
@@ -248,23 +344,6 @@ export default function LOG({ token, ...rest }) {
                                 />
                             </Box>
                         </Grid>
-                        <Grid container alignItems="center" justifyContent="left" item xs={3}>
-                            <Typography variant="h6" fontWeight="medium" alignItems="center" justifyContent="center" mr={2}>
-                                查看頁數:
-                            </Typography>
-                            <Box component="form" role="form" sx={{ ml: 2 }}>
-                                <TextField
-                                    fullWidth
-                                    label="查看頁數"
-                                    margin="none"
-                                    name="Page"
-                                    id="Page"
-                                    variant="outlined"
-                                    value={pageNumber}
-                                    onChange={handlePageNumberChange}
-                                />
-                            </Box>
-                        </Grid>
                     </Grid>
                     <Grid container spacing={1} sx={{ mt: 1 }}>
                         <Grid container alignItems="center" justifyContent="left" item xs={3}>
@@ -294,7 +373,6 @@ export default function LOG({ token, ...rest }) {
                                         <MenuItem value="FULL_BACKUP">FULL_BACKUP</MenuItem>
                                         <MenuItem value="BACKUP_RESTORE">BACKUP_RESTORE</MenuItem>
                                         <MenuItem value="ADD_NEW_PROJECT">ADD_NEW_PROJECT</MenuItem>
-                                        <MenuItem value="ADD_PROJECT_WORKER">ADD_PROJECT_WORKER</MenuItem>
                                         <MenuItem value="ADD_PROJECT_WORKER">ADD_PROJECT_WORKER</MenuItem>
                                         <MenuItem value="DELETE_PROJECT">DELETE_PROJECT</MenuItem>
                                         <MenuItem value="DELETE_PROJECT_WORKER">DELETE_PROJECT_WORKER</MenuItem>
@@ -405,9 +483,15 @@ export default function LOG({ token, ...rest }) {
                         <Grid container alignItems="center" justifyContent="center" item xs={4}>
                             <Box component="form" role="form">
                                 <Box display="flex" alignItems="center" pt={2} >
-                                    <Typography variant="h6" fontWeight="medium" alignItems="center" justifyContent="center" mr={2}>
+                                    <LoadingButton variant="contained" color="info" align="center" onClick={handleClickLastPage} style={{ width: '100px' }}>
+                                        上一頁
+                                    </LoadingButton>
+                                    <Typography variant="h6" fontWeight="medium" alignItems="center" justifyContent="center" ml={2} mr={2}>
                                         當前頁數 {currentPage}/{totalPage} 總共頁數
                                     </Typography>
+                                    <LoadingButton variant="contained" color="info" align="center" onClick={handleClickNextPage} style={{ width: '100px' }}>
+                                        下一頁
+                                    </LoadingButton>
                                 </Box>
                             </Box>
                         </Grid>

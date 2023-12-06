@@ -32,6 +32,7 @@ import { Carousel } from 'react-responsive-carousel';
 
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
+import PanToolIcon from '@mui/icons-material/PanTool';
 
 const darkTheme = createTheme({
   palette: {

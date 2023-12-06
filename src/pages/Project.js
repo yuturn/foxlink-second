@@ -33,6 +33,9 @@ import { type } from "@testing-library/user-event/dist/type";
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import FolderCopyIcon from '@mui/icons-material/FolderCopy';
 
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+
 // import { apiMissionEmergency, apiMissionNeedRepair } from "../api.js";
 
 
@@ -342,20 +345,41 @@ export default function Project({ token, setAlert, ...rest }) {
       }).catch(err => { console.log(err); handleErrorOpen('刪除User失敗') })
   };
 
-  const [showFirstCard, setShowFirstCard] = useState(true);
-
-  const handleShowFirstCard = () => {
-    setShowFirstCard(true);
+  //這邊的變數決定哪一個頁面
+  const [currentPage, setCurrentPage] = useState(1);
+  //這邊使用ToggleButton控制顯示頁面
+  const handleChange = (event, newValue) => {
+    if (newValue != null) {
+      setCurrentPage(newValue);
+    }
   };
 
-  const handleShowSecondCard = () => {
-    setShowFirstCard(false);
-  };
+  useEffect(() => {
+    // 这里可以根据新的 currentPage 做一些其他的操作
+  }, [currentPage]);
+
+  // const handleShowFirstCard = () => {
+  //   setShowFirstCard(true);
+  // };
+
+  // const handleShowSecondCard = () => {
+  //   setShowFirstCard(false);
+  // };
 
   return (
     <ThemeProvider theme={darkTheme}>
       <Box display="flex">
-        <Box>
+        <ToggleButtonGroup
+          color="info"
+          value={currentPage}
+          exclusive
+          onChange={handleChange}
+          aria-label="Platform"
+        >
+          <ToggleButton value={1}><FolderCopyIcon sx={{ mr: 2 }} />專案管理</ToggleButton>
+          <ToggleButton value={2}><AccountBoxIcon sx={{ mr: 2 }} />人員管理</ToggleButton>
+        </ToggleButtonGroup>
+        {/* <Box>
           <LoadingButton variant="contained" color="info" onClick={handleShowFirstCard} sx={{ mr: 1 }}>
             <FolderCopyIcon sx={{ mr: 2 }} />
             專案管理
@@ -366,9 +390,9 @@ export default function Project({ token, setAlert, ...rest }) {
             <AccountBoxIcon sx={{ mr: 2 }} />
             人員管理
           </LoadingButton>
-        </Box>
+        </Box> */}
       </Box>
-      {showFirstCard ? (
+      {currentPage === 1 ? (
         <Card>
           <Box sx={{ bgcolor: '#696969' }}>
             <CardHeader title="專案" color="#696969" />

@@ -15,6 +15,9 @@ import { Logo } from './logo';
 import { DashboardNavbar } from './dashboard-navbar';
 import { NavItem } from './nav-item';
 import { Link } from "react-router-dom";
+import BackupIcon from '@mui/icons-material/Backup';
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import AssessmentIcon from '@mui/icons-material/Assessment';
 
 export const DashboardSidebar = ({ idx, setIdx }) => {
   const items = [
@@ -26,19 +29,19 @@ export const DashboardSidebar = ({ idx, setIdx }) => {
     },
     {
       url: '/comparison',
-      icon: (<Search fontSize="small" />),
+      icon: (<AssessmentIcon fontSize="small" />),
       title: '預測與結果比對查詢',
       active: false
     },
     {
       url: '/Project',
-      icon: (<StatusIcon fontSize="small" />),
+      icon: (<AssignmentIcon fontSize="small" />),
       title: '專案頁面',
       active: false
     },
     {
       url: '/backup',
-      icon: (<MapIcon fontSize="small" />),
+      icon: (<BackupIcon fontSize="small" />),
       title: '備份頁面',
       active: false
     },
