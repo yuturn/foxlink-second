@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { apiGetCompareList, apiGetCompareSearch } from '../api'
+import { apiGetCompareList, apiGetCompareSearch, apiGetCompareAnalysis } from '../api'
 import {
   Box,
   Card,
@@ -106,7 +106,7 @@ export default function Project({ token, ...rest }) {
   const [line, setLine] = useState();
   const [type, setType] = useState();
   const today = new Date();
-  const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0);
+  const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59);
   const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59);
   const [startDate, setStartDate] = useState(startOfDay);
   const [endDate, setEndDate] = useState(endOfDay);
@@ -117,6 +117,7 @@ export default function Project({ token, ...rest }) {
   const [searchDateData, setSearchDateData] = useState([]);
   const [currentAccuracyInfo, setCurrentAccuracyInfo] = useState(null);
   const [detailData, setDetailData] = useState({});
+  const [chartData, setChartData] = useState([]);
 
   //折線圖function
   const LineChartExample = () => {
@@ -125,7 +126,7 @@ export default function Project({ token, ...rest }) {
         <LineChart
           width={1000}
           height={500}
-          data={data6}
+          data={chartData}
           margin={{
             top: 5,
             right: 30,
@@ -134,7 +135,7 @@ export default function Project({ token, ...rest }) {
           }}
         >
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
+          <XAxis dataKey="date" />
           <YAxis />
           <Tooltip />
           <Legend />
@@ -246,7 +247,7 @@ export default function Project({ token, ...rest }) {
     setType(event.target.value);
   };
   //這邊是查詢專案線號的按鈕
-  const handleChangeSearch = () => {
+  const handleClickProjectSearch = () => {
     const data = {
       startDate: new Date(startDate).toISOString().split('T')[0] + ' ' + new Date(startDate).toTimeString().split(' ')[0].replace(/:/g, '%3A'),
       endDate: new Date(endDate).toISOString().split('T')[0] + ' ' + new Date(endDate).toTimeString().split(' ')[0].replace(/:/g, '%3A'),
@@ -268,6 +269,32 @@ export default function Project({ token, ...rest }) {
       }).catch((error) => {
         console.error("API 请求失败", error);
         setSearchDateData([]);
+        handleErrorOpen("查詢失敗:API請求失敗");
+      });
+  };
+  //這邊是查詢折線圖的按鈕
+  const handleClickChartSearch = () => {
+    const data = {
+      startDate: new Date(startDate).toISOString().split('T')[0] + ' 00:00:00',
+      endDate: new Date(endDate).toISOString().split('T')[0] + ' 00:00:00',
+      type: type,
+      project_name: projectName,
+      line: line,
+      token: token
+    }
+    console.log(data)
+    apiGetCompareAnalysis(data)
+      .then((res) => {
+        if (res.data && res.data.length > 0) {
+          setChartData(res.data)
+          handleOpen("查詢成功")
+        } else {
+          setChartData([])
+          handleErrorOpen("查詢失敗:沒有資料")
+        }
+      }).catch((error) => {
+        console.error("API 请求失败", error);
+        setChartData([]);
         handleErrorOpen("查詢失敗:API請求失敗");
       });
   };
@@ -497,7 +524,7 @@ export default function Project({ token, ...rest }) {
             <Grid container spacing={1}>
               <Grid item xs={12}>
                 <Box display="flex" alignItems="center" justifyContent="center" pt={3} >
-                  <LoadingButton variant="contained" color="info" align="center" onClick={handleChangeSearch} style={{ width: '150px' }}>
+                  <LoadingButton variant="contained" color="info" align="center" onClick={handleClickProjectSearch} style={{ width: '150px' }}>
                     查詢
                   </LoadingButton>
                 </Box>
@@ -809,7 +836,7 @@ export default function Project({ token, ...rest }) {
             <Grid container spacing={1}>
               <Grid item xs={12}>
                 <Box display="flex" alignItems="center" justifyContent="center" pt={3} >
-                  <LoadingButton variant="contained" color="info" align="center" onClick={handleChangeSearch} style={{ width: '150px' }}>
+                  <LoadingButton variant="contained" color="info" align="center" onClick={handleClickProjectSearch} style={{ width: '150px' }}>
                     查詢
                   </LoadingButton>
                 </Box>
@@ -1121,6 +1148,7 @@ export default function Project({ token, ...rest }) {
                         label="選擇日期"
                         value={startDate}
                         onChange={(newValue) => {
+                          console.log('Selected Start Date:', newValue);
                           setStartDate(newValue);
                         }}
                         renderInput={(params) => <TextField size="medium" {...params} />}
@@ -1140,6 +1168,7 @@ export default function Project({ token, ...rest }) {
                         label="選擇日期"
                         value={endDate}
                         onChange={(newValue) => {
+                          console.log('Selected Start Date:', newValue);
                           setEndDate(newValue);
                         }}
                         renderInput={(params) => <TextField size="medium" {...params} />}
@@ -1152,7 +1181,7 @@ export default function Project({ token, ...rest }) {
             <Grid container spacing={1}>
               <Grid item xs={12}>
                 <Box display="flex" alignItems="center" justifyContent="center" pt={3} >
-                  <LoadingButton variant="contained" color="info" align="center" onClick={handleChangeSearch} style={{ width: '150px' }}>
+                  <LoadingButton variant="contained" color="info" align="center" onClick={handleClickChartSearch} style={{ width: '150px' }}>
                     查詢
                   </LoadingButton>
                 </Box>
