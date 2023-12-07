@@ -291,7 +291,6 @@ export default function Project({ token, ...rest }) {
         } else {
           setCurrentAccuracyInfo(res.data[0]['accuracyWeek']);
         }
-        setCurrentLineInfo(res.data[0]['line']);
         console.log(res.data[0]['devices']);
         setDetailData(res.data[0]['devices'])
       });
