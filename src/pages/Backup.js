@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { apiPostFullBackUp, apiGetSystemEnvSetting, apiPostSchedulerDate, apiPostSchedulerCron, apiPostUpdateSetting, apiPostRestoreBackUp, apiGetBackUpStatistics } from "../api.js";
-
+import { GlobalContext } from '../components/GlobalContext';
 // import DashboardNavbar from "../examples/Navbars/DashboardNavbar";
 
 import { Box, Card, Grid, Typography, Divider, CardContent, CardHeader, ThemeProvider, createTheme, FormControl, InputLabel } from '@mui/material';
@@ -59,6 +59,8 @@ export default function Backup({ token, setAlert, ...rest }) {
     const [fullDate, setFullDateDate] = useState(new Date());
     const [diffDate, setDiffDateDate] = useState(new Date());
     const [differentBackUp, setDifferentBackUp] = useState("month");
+
+    const { globalVariable, updateGlobalVariable } = useContext(GlobalContext);
 
     //手動完整備份Dialog
     const manualHandleClickOpen = () => {
@@ -286,292 +288,874 @@ export default function Backup({ token, setAlert, ...rest }) {
                     {errorMessage}
                 </Alert>
             </Snackbar>
-            <Card>
-                <Box sx={{ bgcolor: '#696969' }}>
-                    <CardHeader title="備份頁面" color="#62aaf4" />
-                </Box>
-                <Divider sx={{ borderBottomWidth: 3 }} />
-                <CardContent>
-                    <Grid container spacing={1} mt={1}>
-                        <Grid xs={6}>
-                            <TableContainer component={Paper}>
-                                <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell
-                                                align="center"
-                                                colSpan={2}
-                                                sx={{
-                                                    backgroundColor: "#bfbfbf",
-                                                    border: "1px solid black"
-                                                }}
-                                            >
-                                                <Typography variant="h5" fontWeight="medium">
-                                                    前次備份時間
-                                                </Typography>
-                                            </TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell align="center" sx={{ border: "1px solid black" }}>完整備份時間</TableCell>
-                                            <TableCell align="center" sx={{ border: "1px solid black" }}>{completedBackupTime}</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell align="center" sx={{ border: "1px solid black" }}>差異備份時間</TableCell>
-                                            <TableCell align="center" sx={{ border: "1px solid black" }}>{differentBackupTime}</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell align="center" sx={{ border: "1px solid black" }}>手動備份時間</TableCell>
-                                            <TableCell align="center" sx={{ border: "1px solid black" }}>{manualBackupTime}</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                </Table>
-                            </TableContainer>
-                        </Grid>
-                        <Grid xs={6}>
-                            <TableContainer component={Paper}>
-                                <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell
-                                                align="center"
-                                                colSpan={2}
-                                                sx={{
-                                                    backgroundColor: "#bfbfbf",
-                                                    border: "1px solid black"
-                                                }}
-                                            >
-                                                <Typography variant="h5" fontWeight="medium">
-                                                    前次備份路徑
-                                                </Typography>
-                                            </TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell align="center" sx={{ border: "1px solid black" }}>完整備份路徑</TableCell>
-                                            <TableCell align="center" sx={{ border: "1px solid black" }}>{backUpPath}</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell align="center" sx={{ border: "1px solid black" }}>差異備份路徑</TableCell>
-                                            <TableCell align="center" sx={{ border: "1px solid black" }}>{diffBackUpPath}</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                </Table>
-                            </TableContainer>
-                        </Grid>
-                    </Grid>
-                    <Grid container spacing={1}>
-                        <Grid item xs={12}>
-                            <Box display="flex" alignItems="center" justifyContent="center" pt={3} >
-                                <LoadingButton variant="contained" color="info" align="center" onClick={handleClickUpdateEnvSetting} style={{ width: '150px' }}>
-                                    更新資料
-                                </LoadingButton>
-                            </Box>
-                        </Grid>
-                    </Grid>
-                </CardContent>
-            </Card>
-            <Grid container spacing={2} mt={1}>
-                <Grid item xs={12} md={6}>
+            {globalVariable == "zh-tw" ? (
+                <>
                     <Card>
                         <Box sx={{ bgcolor: '#696969' }}>
-                            <CardHeader title="設定" color="#62aaf4" />
+                            <CardHeader title="備份頁面" color="#62aaf4" />
                         </Box>
-                        <Box pt={4} pb={3} px={3}>
-                            <Box>
-                                <Box display="flex" alignItems="center" pt={3} px={2}>
-                                    <Typography variant="h5" fontWeight="medium" mr={2}>
-                                        完整備份時間:
-                                    </Typography>
-                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                        <DateTimePicker
-                                            label="請輸入完整備份時間"
-                                            value={fullDate}
-                                            onChange={(newValue) => {
-                                                setFullDateDate(newValue);
-                                            }}
-                                            renderInput={(params) => <TextField {...params} />}
-                                        />
-                                    </LocalizationProvider>
-                                    <Box ml={2}>
-                                        <LoadingButton variant="contained"
-                                            size="large"
-                                            component="span"
-                                            color="info"
-                                            onClick={handleClickUpdateBackUpTime}
-                                        >
-                                            更改
+                        <Divider sx={{ borderBottomWidth: 3 }} />
+                        <CardContent>
+                            <Grid container spacing={1} mt={1}>
+                                <Grid xs={6}>
+                                    <TableContainer component={Paper}>
+                                        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                                            <TableHead>
+                                                <TableRow>
+                                                    <TableCell
+                                                        align="center"
+                                                        colSpan={2}
+                                                        sx={{
+                                                            backgroundColor: "#bfbfbf",
+                                                            border: "1px solid black"
+                                                        }}
+                                                    >
+                                                        <Typography variant="h5" fontWeight="medium">
+                                                            前次備份時間
+                                                        </Typography>
+                                                    </TableCell>
+                                                </TableRow>
+                                                <TableRow>
+                                                    <TableCell align="center" sx={{ border: "1px solid black" }}>完整備份時間</TableCell>
+                                                    <TableCell align="center" sx={{ border: "1px solid black" }}>{completedBackupTime}</TableCell>
+                                                </TableRow>
+                                                <TableRow>
+                                                    <TableCell align="center" sx={{ border: "1px solid black" }}>差異備份時間</TableCell>
+                                                    <TableCell align="center" sx={{ border: "1px solid black" }}>{differentBackupTime}</TableCell>
+                                                </TableRow>
+                                                <TableRow>
+                                                    <TableCell align="center" sx={{ border: "1px solid black" }}>手動備份時間</TableCell>
+                                                    <TableCell align="center" sx={{ border: "1px solid black" }}>{manualBackupTime}</TableCell>
+                                                </TableRow>
+                                            </TableHead>
+                                        </Table>
+                                    </TableContainer>
+                                </Grid>
+                                <Grid xs={6}>
+                                    <TableContainer component={Paper}>
+                                        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                                            <TableHead>
+                                                <TableRow>
+                                                    <TableCell
+                                                        align="center"
+                                                        colSpan={2}
+                                                        sx={{
+                                                            backgroundColor: "#bfbfbf",
+                                                            border: "1px solid black"
+                                                        }}
+                                                    >
+                                                        <Typography variant="h5" fontWeight="medium">
+                                                            前次備份路徑
+                                                        </Typography>
+                                                    </TableCell>
+                                                </TableRow>
+                                                <TableRow>
+                                                    <TableCell align="center" sx={{ border: "1px solid black" }}>完整備份路徑</TableCell>
+                                                    <TableCell align="center" sx={{ border: "1px solid black" }}>{backUpPath}</TableCell>
+                                                </TableRow>
+                                                <TableRow>
+                                                    <TableCell align="center" sx={{ border: "1px solid black" }}>差異備份路徑</TableCell>
+                                                    <TableCell align="center" sx={{ border: "1px solid black" }}>{diffBackUpPath}</TableCell>
+                                                </TableRow>
+                                            </TableHead>
+                                        </Table>
+                                    </TableContainer>
+                                </Grid>
+                            </Grid>
+                            <Grid container spacing={1}>
+                                <Grid item xs={12}>
+                                    <Box display="flex" alignItems="center" justifyContent="center" pt={3} >
+                                        <LoadingButton variant="contained" color="info" align="center" onClick={handleClickUpdateEnvSetting} style={{ width: '150px' }}>
+                                            更新資料
                                         </LoadingButton>
                                     </Box>
-                                </Box>
-                                <Box display="flex" alignItems="center" pt={3} px={2}>
-                                    <Typography variant="h5" fontWeight="medium" mr={2}>
-                                        差異備份時間:
-                                    </Typography>
-                                    <Box mr={2}>
-                                        <FormControl>
-                                            <InputLabel id="demo-simple-select-label">差異備份週期</InputLabel>
-                                            <Select
-                                                labelId="permission-select-label"
-                                                id="permission-select"
-                                                value={differentBackUp}
-                                                label="差異備份週期"
-                                                onChange={handleChangeDifferentBackUp}
-                                                style={{ minWidth: "150px", height: "45px" }}
-                                            >
-                                                <MenuItem value="Monthly">月</MenuItem>
-                                                <MenuItem value="Weekly">週</MenuItem>
-                                                <MenuItem value="Daily">日</MenuItem>
-                                            </Select>
-                                        </FormControl>
-                                    </Box>
-                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                        <DateTimePicker
-                                            label="請輸入差異備份時間"
-                                            value={diffDate}
-                                            onChange={(newValue) => {
-                                                setDiffDateDate(newValue);
-                                            }}
-                                            renderInput={(params) => <TextField {...params} />}
-                                        />
-                                    </LocalizationProvider>
-                                    <Box ml={2}>
-                                        <LoadingButton variant="contained"
-                                            size="large"
-                                            component="span"
-                                            color="info"
-                                            onClick={handleClickUpdateDiffBackUpTime}
-                                        >
-                                            更改
-                                        </LoadingButton>
-                                    </Box>
-                                </Box>
-                                <Box display="flex" alignItems="center" pt={3} px={2}>
-                                    <Typography variant="h5" fontWeight="medium" mr={2}>
-                                        備份目的地1:
-                                    </Typography>
-                                    <TextField type="text" label="請輸入IP位址" />
-                                    <Box ml={2}>
-                                        <LoadingButton variant="contained"
-                                            size="large"
-                                            component="span"
-                                            color="info"
-                                        >
-                                            更改
-                                        </LoadingButton>
-                                    </Box>
-                                </Box>
-                                <Box display="flex" alignItems="center" pt={3} px={2}>
-                                    <Typography variant="h5" fontWeight="medium" mr={2}>
-                                        備份目的地2:
-                                    </Typography>
-                                    <TextField type="text" label="請輸入IP位址" />
-                                    <Box ml={2}>
-                                        <LoadingButton variant="contained"
-                                            size="large"
-                                            component="span"
-                                            color="info"
-                                        >
-                                            更改
-                                        </LoadingButton>
-                                    </Box>
-                                </Box>
-                            </Box>
-                        </Box>
+                                </Grid>
+                            </Grid>
+                        </CardContent>
                     </Card>
-                </Grid>
-                <Grid item xs={12} md={6}>
+                    <Grid container spacing={2} mt={1}>
+                        <Grid item xs={12} md={6}>
+                            <Card>
+                                <Box sx={{ bgcolor: '#696969' }}>
+                                    <CardHeader title="設定" color="#62aaf4" />
+                                </Box>
+                                <Box pt={4} pb={3} px={3}>
+                                    <Box>
+                                        <Box display="flex" alignItems="center" pt={3} px={2}>
+                                            <Typography variant="h5" fontWeight="medium" mr={2}>
+                                                完整備份時間:
+                                            </Typography>
+                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                <DateTimePicker
+                                                    label="請輸入完整備份時間"
+                                                    value={fullDate}
+                                                    onChange={(newValue) => {
+                                                        setFullDateDate(newValue);
+                                                    }}
+                                                    renderInput={(params) => <TextField {...params} />}
+                                                />
+                                            </LocalizationProvider>
+                                            <Box ml={2}>
+                                                <LoadingButton variant="contained"
+                                                    size="large"
+                                                    component="span"
+                                                    color="info"
+                                                    onClick={handleClickUpdateBackUpTime}
+                                                >
+                                                    更改
+                                                </LoadingButton>
+                                            </Box>
+                                        </Box>
+                                        <Box display="flex" alignItems="center" pt={3} px={2}>
+                                            <Typography variant="h5" fontWeight="medium" mr={2}>
+                                                差異備份時間:
+                                            </Typography>
+                                            <Box mr={2}>
+                                                <FormControl>
+                                                    <InputLabel id="demo-simple-select-label">差異備份週期</InputLabel>
+                                                    <Select
+                                                        labelId="permission-select-label"
+                                                        id="permission-select"
+                                                        value={differentBackUp}
+                                                        label="差異備份週期"
+                                                        onChange={handleChangeDifferentBackUp}
+                                                        style={{ minWidth: "150px", height: "45px" }}
+                                                    >
+                                                        <MenuItem value="Monthly">月</MenuItem>
+                                                        <MenuItem value="Weekly">週</MenuItem>
+                                                        <MenuItem value="Daily">日</MenuItem>
+                                                    </Select>
+                                                </FormControl>
+                                            </Box>
+                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                <DateTimePicker
+                                                    label="請輸入差異備份時間"
+                                                    value={diffDate}
+                                                    onChange={(newValue) => {
+                                                        setDiffDateDate(newValue);
+                                                    }}
+                                                    renderInput={(params) => <TextField {...params} />}
+                                                />
+                                            </LocalizationProvider>
+                                            <Box ml={2}>
+                                                <LoadingButton variant="contained"
+                                                    size="large"
+                                                    component="span"
+                                                    color="info"
+                                                    onClick={handleClickUpdateDiffBackUpTime}
+                                                >
+                                                    更改
+                                                </LoadingButton>
+                                            </Box>
+                                        </Box>
+                                        <Box display="flex" alignItems="center" pt={3} px={2}>
+                                            <Typography variant="h5" fontWeight="medium" mr={2}>
+                                                備份目的地1:
+                                            </Typography>
+                                            <TextField type="text" label="請輸入IP位址" />
+                                            <Box ml={2}>
+                                                <LoadingButton variant="contained"
+                                                    size="large"
+                                                    component="span"
+                                                    color="info"
+                                                >
+                                                    更改
+                                                </LoadingButton>
+                                            </Box>
+                                        </Box>
+                                        <Box display="flex" alignItems="center" pt={3} px={2}>
+                                            <Typography variant="h5" fontWeight="medium" mr={2}>
+                                                備份目的地2:
+                                            </Typography>
+                                            <TextField type="text" label="請輸入IP位址" />
+                                            <Box ml={2}>
+                                                <LoadingButton variant="contained"
+                                                    size="large"
+                                                    component="span"
+                                                    color="info"
+                                                >
+                                                    更改
+                                                </LoadingButton>
+                                            </Box>
+                                        </Box>
+                                    </Box>
+                                </Box>
+                            </Card>
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <Card>
+                                <Box sx={{ bgcolor: '#696969' }}>
+                                    <CardHeader title="手動備份" color="#62aaf4" />
+                                </Box>
+                                <Box>
+                                    <Typography variant="h6" color="gray" fontWeight="medium" ml={2} mt={2}>
+                                        IP位置範例:/app/backup-2023-12-02.sql
+                                    </Typography>
+                                </Box>
+                                <Box>
+                                    <Box display="flex" alignItems="center" pt={3} px={2}>
+                                        <Typography variant="h5" fontWeight="medium" mr={3}>
+                                            完整備份路徑:
+                                        </Typography>
+                                        <TextField type="text" id="fullBackUpPath" label="請輸入IP位址" />
+                                        <Box ml={2}>
+                                            <LoadingButton variant="contained"
+                                                size="large"
+                                                color="info"
+                                                onClick={manualHandleClickOpen}
+                                            >
+                                                手動完整備份
+                                            </LoadingButton>
+                                            <Dialog
+                                                open={manualOpen}
+                                                onClose={manualHandleClose}
+                                                aria-labelledby="alert-dialog-manual"
+                                                aria-describedby="alert-dialog-manual"
+                                            >
+                                                <DialogTitle id="alert-dialog-title">是否手動備份?</DialogTitle>
+                                                <DialogContent>
+                                                    <DialogContentText id="alert-dialog-manual">
+                                                        按下確認按鈕後將會進行手動備份
+                                                    </DialogContentText>
+                                                </DialogContent>
+                                                <DialogActions>
+                                                    <LoadingButton color="info" onClick={handleClickFullBackUp} autoFocus variant="contained">
+                                                        確認
+                                                    </LoadingButton>
+                                                    <LoadingButton color="info" onClick={manualHandleClose} autoFocus variant="contained">
+                                                        关闭
+                                                    </LoadingButton>
+                                                </DialogActions>
+                                            </Dialog>
+                                        </Box>
+                                    </Box>
+                                </Box>
+                                <Box display="flex" alignItems="center" pt={3} px={2}>
+                                    <Typography variant="h5" fontWeight="medium" mr={3}>
+                                        差異備份路徑:
+                                    </Typography>
+                                    <TextField type="text" id="diffBackUpPath" label="請輸入IP位址" />
+                                    <Box ml={2}>
+                                        <LoadingButton size="large" variant="contained" color="info" onClick={handleClickUpdatediffBackUpPath}>
+                                            修改
+                                        </LoadingButton>
+                                    </Box>
+                                </Box>
+                                <Box display="flex" alignItems="center" pt={3} px={2} mb={2}>
+                                    <Typography variant="h5" fontWeight="medium" mr={3}>
+                                        還原路徑:
+                                    </Typography>
+                                    <TextField type="text" id="backUpRestroe" label="請輸入IP位址" />
+                                    <Box ml={2}>
+                                        <LoadingButton size="large" variant="contained" color="info" onClick={backUpRestroeHandleClickOpen}>
+                                            還原
+                                        </LoadingButton>
+                                        <Dialog
+                                            open={backUpRestroeOpen}
+                                            onClose={backUpRestroeHandleClickClose}
+                                            aria-labelledby="alert-dialog-title"
+                                            aria-describedby="alert-dialog-description"
+                                        >
+                                            <DialogTitle id="alert-dialog-title">是否進行還原?</DialogTitle>
+                                            <DialogContent>
+                                                <DialogContentText id="alert-dialog-description">
+                                                    按下確認按鈕後將會進行還原
+                                                </DialogContentText>
+                                            </DialogContent>
+                                            <DialogActions>
+                                                <LoadingButton onClick={handleClickUBackUpRestore} color="info" variant="contained">
+                                                    確認
+                                                </LoadingButton>
+                                                <LoadingButton onClick={backUpRestroeHandleClickClose} color="info" variant="contained">
+                                                    关闭
+                                                </LoadingButton>
+                                            </DialogActions>
+                                        </Dialog>
+                                    </Box>
+                                </Box>
+                            </Card>
+                        </Grid>
+                    </Grid>
+                </>
+            ) : globalVariable == "zh-cn" ? (
+                <>
                     <Card>
                         <Box sx={{ bgcolor: '#696969' }}>
-                            <CardHeader title="手動備份" color="#62aaf4" />
+                            <CardHeader title="备份页面" color="#62aaf4" />
                         </Box>
-                        <Box>
-                            <Typography variant="h6" color="gray" fontWeight="medium" ml={2} mt={2}>
-                                IP位置範例:/app/backup-2023-12-02.sql
-                            </Typography>
-                        </Box>
-                        <Box>
-                            <Box display="flex" alignItems="center" pt={3} px={2}>
-                                <Typography variant="h5" fontWeight="medium" mr={3}>
-                                    完整備份路徑:
-                                </Typography>
-                                <TextField type="text" id="fullBackUpPath" label="請輸入IP位址" />
-                                <Box ml={2}>
-                                    <LoadingButton variant="contained"
-                                        size="large"
-                                        color="info"
-                                        onClick={manualHandleClickOpen}
-                                    >
-                                        手動完整備份
-                                    </LoadingButton>
-                                    <Dialog
-                                        open={manualOpen}
-                                        onClose={manualHandleClose}
-                                        aria-labelledby="alert-dialog-manual"
-                                        aria-describedby="alert-dialog-manual"
-                                    >
-                                        <DialogTitle id="alert-dialog-title">是否手動備份?</DialogTitle>
-                                        <DialogContent>
-                                            <DialogContentText id="alert-dialog-manual">
-                                                按下確認按鈕後將會進行手動備份
-                                            </DialogContentText>
-                                        </DialogContent>
-                                        <DialogActions>
-                                            <LoadingButton color="info" onClick={handleClickFullBackUp} autoFocus variant="contained">
-                                                確認
-                                            </LoadingButton>
-                                            <LoadingButton color="info" onClick={manualHandleClose} autoFocus variant="contained">
-                                                关闭
-                                            </LoadingButton>
-                                        </DialogActions>
-                                    </Dialog>
-                                </Box>
-                            </Box>
-                        </Box>
-                        <Box display="flex" alignItems="center" pt={3} px={2}>
-                            <Typography variant="h5" fontWeight="medium" mr={3}>
-                                差異備份路徑:
-                            </Typography>
-                            <TextField type="text" id="diffBackUpPath" label="請輸入IP位址" />
-                            <Box ml={2}>
-                                <LoadingButton size="large" variant="contained" color="info" onClick={handleClickUpdatediffBackUpPath}>
-                                    修改
-                                </LoadingButton>
-                            </Box>
-                        </Box>
-                        <Box display="flex" alignItems="center" pt={3} px={2} mb={2}>
-                            <Typography variant="h5" fontWeight="medium" mr={3}>
-                                還原路徑:
-                            </Typography>
-                            <TextField type="text" id="backUpRestroe" label="請輸入IP位址" />
-                            <Box ml={2}>
-                                <LoadingButton size="large" variant="contained" color="info" onClick={backUpRestroeHandleClickOpen}>
-                                    還原
-                                </LoadingButton>
-                                <Dialog
-                                    open={backUpRestroeOpen}
-                                    onClose={backUpRestroeHandleClickClose}
-                                    aria-labelledby="alert-dialog-title"
-                                    aria-describedby="alert-dialog-description"
-                                >
-                                    <DialogTitle id="alert-dialog-title">是否進行還原?</DialogTitle>
-                                    <DialogContent>
-                                        <DialogContentText id="alert-dialog-description">
-                                            按下確認按鈕後將會進行還原
-                                        </DialogContentText>
-                                    </DialogContent>
-                                    <DialogActions>
-                                        <LoadingButton onClick={handleClickUBackUpRestore} color="info" variant="contained">
-                                            確認
+                        <Divider sx={{ borderBottomWidth: 3 }} />
+                        <CardContent>
+                            <Grid container spacing={1} mt={1}>
+                                <Grid xs={6}>
+                                    <TableContainer component={Paper}>
+                                        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                                            <TableHead>
+                                                <TableRow>
+                                                    <TableCell
+                                                        align="center"
+                                                        colSpan={2}
+                                                        sx={{
+                                                            backgroundColor: "#bfbfbf",
+                                                            border: "1px solid black"
+                                                        }}
+                                                    >
+                                                        <Typography variant="h5" fontWeight="medium">
+                                                            前次备份时间
+                                                        </Typography>
+                                                    </TableCell>
+                                                </TableRow>
+                                                <TableRow>
+                                                    <TableCell align="center" sx={{ border: "1px solid black" }}>完整备份时间</TableCell>
+                                                    <TableCell align="center" sx={{ border: "1px solid black" }}>{completedBackupTime}</TableCell>
+                                                </TableRow>
+                                                <TableRow>
+                                                    <TableCell align="center" sx={{ border: "1px solid black" }}>差异备份时间</TableCell>
+                                                    <TableCell align="center" sx={{ border: "1px solid black" }}>{differentBackupTime}</TableCell>
+                                                </TableRow>
+                                                <TableRow>
+                                                    <TableCell align="center" sx={{ border: "1px solid black" }}>手动备份时间</TableCell>
+                                                    <TableCell align="center" sx={{ border: "1px solid black" }}>{manualBackupTime}</TableCell>
+                                                </TableRow>
+                                            </TableHead>
+                                        </Table>
+                                    </TableContainer>
+                                </Grid>
+                                <Grid xs={6}>
+                                    <TableContainer component={Paper}>
+                                        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                                            <TableHead>
+                                                <TableRow>
+                                                    <TableCell
+                                                        align="center"
+                                                        colSpan={2}
+                                                        sx={{
+                                                            backgroundColor: "#bfbfbf",
+                                                            border: "1px solid black"
+                                                        }}
+                                                    >
+                                                        <Typography variant="h5" fontWeight="medium">
+                                                            前次备份路径
+                                                        </Typography>
+                                                    </TableCell>
+                                                </TableRow>
+                                                <TableRow>
+                                                    <TableCell align="center" sx={{ border: "1px solid black" }}>完整备份路径</TableCell>
+                                                    <TableCell align="center" sx={{ border: "1px solid black" }}>{backUpPath}</TableCell>
+                                                </TableRow>
+                                                <TableRow>
+                                                    <TableCell align="center" sx={{ border: "1px solid black" }}>差异备份路径</TableCell>
+                                                    <TableCell align="center" sx={{ border: "1px solid black" }}>{diffBackUpPath}</TableCell>
+                                                </TableRow>
+                                            </TableHead>
+                                        </Table>
+                                    </TableContainer>
+                                </Grid>
+                            </Grid>
+                            <Grid container spacing={1}>
+                                <Grid item xs={12}>
+                                    <Box display="flex" alignItems="center" justifyContent="center" pt={3} >
+                                        <LoadingButton variant="contained" color="info" align="center" onClick={handleClickUpdateEnvSetting} style={{ width: '150px' }}>
+                                            更新资料
                                         </LoadingButton>
-                                        <LoadingButton onClick={backUpRestroeHandleClickClose} color="info" variant="contained">
-                                            关闭
-                                        </LoadingButton>
-                                    </DialogActions>
-                                </Dialog>
-                            </Box>
-                        </Box>
+                                    </Box>
+                                </Grid>
+                            </Grid>
+                        </CardContent>
                     </Card>
-                </Grid>
-            </Grid>
+                    <Grid container spacing={2} mt={1}>
+                        <Grid item xs={12} md={6}>
+                            <Card>
+                                <Box sx={{ bgcolor: '#696969' }}>
+                                    <CardHeader title="設定" color="#62aaf4" />
+                                </Box>
+                                <Box pt={4} pb={3} px={3}>
+                                    <Box>
+                                        <Box display="flex" alignItems="center" pt={3} px={2}>
+                                            <Typography variant="h5" fontWeight="medium" mr={2}>
+                                                完整备份时间:
+                                            </Typography>
+                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                <DateTimePicker
+                                                    label="请输入完整备份时间"
+                                                    value={fullDate}
+                                                    onChange={(newValue) => {
+                                                        setFullDateDate(newValue);
+                                                    }}
+                                                    renderInput={(params) => <TextField {...params} />}
+                                                />
+                                            </LocalizationProvider>
+                                            <Box ml={2}>
+                                                <LoadingButton variant="contained"
+                                                    size="large"
+                                                    component="span"
+                                                    color="info"
+                                                    onClick={handleClickUpdateBackUpTime}
+                                                >
+                                                    更改
+                                                </LoadingButton>
+                                            </Box>
+                                        </Box>
+                                        <Box display="flex" alignItems="center" pt={3} px={2}>
+                                            <Typography variant="h5" fontWeight="medium" mr={2}>
+                                                差异备份时间:
+                                            </Typography>
+                                            <Box mr={2}>
+                                                <FormControl>
+                                                    <InputLabel id="demo-simple-select-label">差异备份周期</InputLabel>
+                                                    <Select
+                                                        labelId="permission-select-label"
+                                                        id="permission-select"
+                                                        value={differentBackUp}
+                                                        label="差異備份週期"
+                                                        onChange={handleChangeDifferentBackUp}
+                                                        style={{ minWidth: "150px", height: "45px" }}
+                                                    >
+                                                        <MenuItem value="Monthly">月</MenuItem>
+                                                        <MenuItem value="Weekly">週</MenuItem>
+                                                        <MenuItem value="Daily">日</MenuItem>
+                                                    </Select>
+                                                </FormControl>
+                                            </Box>
+                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                <DateTimePicker
+                                                    label="请输入差异备份时间"
+                                                    value={diffDate}
+                                                    onChange={(newValue) => {
+                                                        setDiffDateDate(newValue);
+                                                    }}
+                                                    renderInput={(params) => <TextField {...params} />}
+                                                />
+                                            </LocalizationProvider>
+                                            <Box ml={2}>
+                                                <LoadingButton variant="contained"
+                                                    size="large"
+                                                    component="span"
+                                                    color="info"
+                                                    onClick={handleClickUpdateDiffBackUpTime}
+                                                >
+                                                    更改
+                                                </LoadingButton>
+                                            </Box>
+                                        </Box>
+                                        <Box display="flex" alignItems="center" pt={3} px={2}>
+                                            <Typography variant="h5" fontWeight="medium" mr={2}>
+                                                备份目的地1:
+                                            </Typography>
+                                            <TextField type="text" label="請輸入IP位址" />
+                                            <Box ml={2}>
+                                                <LoadingButton variant="contained"
+                                                    size="large"
+                                                    component="span"
+                                                    color="info"
+                                                >
+                                                    更改
+                                                </LoadingButton>
+                                            </Box>
+                                        </Box>
+                                        <Box display="flex" alignItems="center" pt={3} px={2}>
+                                            <Typography variant="h5" fontWeight="medium" mr={2}>
+                                                备份目的地2:
+                                            </Typography>
+                                            <TextField type="text" label="請輸入IP位址" />
+                                            <Box ml={2}>
+                                                <LoadingButton variant="contained"
+                                                    size="large"
+                                                    component="span"
+                                                    color="info"
+                                                >
+                                                    更改
+                                                </LoadingButton>
+                                            </Box>
+                                        </Box>
+                                    </Box>
+                                </Box>
+                            </Card>
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <Card>
+                                <Box sx={{ bgcolor: '#696969' }}>
+                                    <CardHeader title="手动备份" color="#62aaf4" />
+                                </Box>
+                                <Box>
+                                    <Typography variant="h6" color="gray" fontWeight="medium" ml={2} mt={2}>
+                                        IP位置范例:/app/backup-2023-12-02.sql
+                                    </Typography>
+                                </Box>
+                                <Box>
+                                    <Box display="flex" alignItems="center" pt={3} px={2}>
+                                        <Typography variant="h5" fontWeight="medium" mr={3}>
+                                            完整备份路径:
+                                        </Typography>
+                                        <TextField type="text" id="fullBackUpPath" label="请输入IP位址" />
+                                        <Box ml={2}>
+                                            <LoadingButton variant="contained"
+                                                size="large"
+                                                color="info"
+                                                onClick={manualHandleClickOpen}
+                                            >
+                                                手动完整备份
+                                            </LoadingButton>
+                                            <Dialog
+                                                open={manualOpen}
+                                                onClose={manualHandleClose}
+                                                aria-labelledby="alert-dialog-manual"
+                                                aria-describedby="alert-dialog-manual"
+                                            >
+                                                <DialogTitle id="alert-dialog-title">是否手动备份?</DialogTitle>
+                                                <DialogContent>
+                                                    <DialogContentText id="alert-dialog-manual">
+                                                        按下确认按钮后将会进行手动备份
+                                                    </DialogContentText>
+                                                </DialogContent>
+                                                <DialogActions>
+                                                    <LoadingButton color="info" onClick={handleClickFullBackUp} autoFocus variant="contained">
+                                                        确认
+                                                    </LoadingButton>
+                                                    <LoadingButton color="info" onClick={manualHandleClose} autoFocus variant="contained">
+                                                        关闭
+                                                    </LoadingButton>
+                                                </DialogActions>
+                                            </Dialog>
+                                        </Box>
+                                    </Box>
+                                </Box>
+                                <Box display="flex" alignItems="center" pt={3} px={2}>
+                                    <Typography variant="h5" fontWeight="medium" mr={3}>
+                                        差异备份路径:
+                                    </Typography>
+                                    <TextField type="text" id="diffBackUpPath" label="请输入IP位址" />
+                                    <Box ml={2}>
+                                        <LoadingButton size="large" variant="contained" color="info" onClick={handleClickUpdatediffBackUpPath}>
+                                            修改
+                                        </LoadingButton>
+                                    </Box>
+                                </Box>
+                                <Box display="flex" alignItems="center" pt={3} px={2} mb={2}>
+                                    <Typography variant="h5" fontWeight="medium" mr={3}>
+                                        还原路径:
+                                    </Typography>
+                                    <TextField type="text" id="backUpRestroe" label="请输入IP位址" />
+                                    <Box ml={2}>
+                                        <LoadingButton size="large" variant="contained" color="info" onClick={backUpRestroeHandleClickOpen}>
+                                            还原
+                                        </LoadingButton>
+                                        <Dialog
+                                            open={backUpRestroeOpen}
+                                            onClose={backUpRestroeHandleClickClose}
+                                            aria-labelledby="alert-dialog-title"
+                                            aria-describedby="alert-dialog-description"
+                                        >
+                                            <DialogTitle id="alert-dialog-title">是否进行还原?</DialogTitle>
+                                            <DialogContent>
+                                                <DialogContentText id="alert-dialog-description">
+                                                    按下确认按钮后将会进行还原
+                                                </DialogContentText>
+                                            </DialogContent>
+                                            <DialogActions>
+                                                <LoadingButton onClick={handleClickUBackUpRestore} color="info" variant="contained">
+                                                    确认
+                                                </LoadingButton>
+                                                <LoadingButton onClick={backUpRestroeHandleClickClose} color="info" variant="contained">
+                                                    关闭
+                                                </LoadingButton>
+                                            </DialogActions>
+                                        </Dialog>
+                                    </Box>
+                                </Box>
+                            </Card>
+                        </Grid>
+                    </Grid>
+                </>
+            ) : (
+                <>
+                    <Card>
+                        <Box sx={{ bgcolor: '#696969' }}>
+                            <CardHeader title="Backup page" color="#62aaf4" />
+                        </Box>
+                        <Divider sx={{ borderBottomWidth: 3 }} />
+                        <CardContent>
+                            <Grid container spacing={1} mt={1}>
+                                <Grid xs={6}>
+                                    <TableContainer component={Paper}>
+                                        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                                            <TableHead>
+                                                <TableRow>
+                                                    <TableCell
+                                                        align="center"
+                                                        colSpan={2}
+                                                        sx={{
+                                                            backgroundColor: "#bfbfbf",
+                                                            border: "1px solid black"
+                                                        }}
+                                                    >
+                                                        <Typography variant="h5" fontWeight="medium">
+                                                            Last backup time
+                                                        </Typography>
+                                                    </TableCell>
+                                                </TableRow>
+                                                <TableRow>
+                                                    <TableCell align="center" sx={{ border: "1px solid black" }}>Full backup time</TableCell>
+                                                    <TableCell align="center" sx={{ border: "1px solid black" }}>{completedBackupTime}</TableCell>
+                                                </TableRow>
+                                                <TableRow>
+                                                    <TableCell align="center" sx={{ border: "1px solid black" }}>Differential backup time</TableCell>
+                                                    <TableCell align="center" sx={{ border: "1px solid black" }}>{differentBackupTime}</TableCell>
+                                                </TableRow>
+                                                <TableRow>
+                                                    <TableCell align="center" sx={{ border: "1px solid black" }}>Manual backup time</TableCell>
+                                                    <TableCell align="center" sx={{ border: "1px solid black" }}>{manualBackupTime}</TableCell>
+                                                </TableRow>
+                                            </TableHead>
+                                        </Table>
+                                    </TableContainer>
+                                </Grid>
+                                <Grid xs={6}>
+                                    <TableContainer component={Paper}>
+                                        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                                            <TableHead>
+                                                <TableRow>
+                                                    <TableCell
+                                                        align="center"
+                                                        colSpan={2}
+                                                        sx={{
+                                                            backgroundColor: "#bfbfbf",
+                                                            border: "1px solid black"
+                                                        }}
+                                                    >
+                                                        <Typography variant="h5" fontWeight="medium">
+                                                            Last backup path
+                                                        </Typography>
+                                                    </TableCell>
+                                                </TableRow>
+                                                <TableRow>
+                                                    <TableCell align="center" sx={{ border: "1px solid black" }}>Full backup path</TableCell>
+                                                    <TableCell align="center" sx={{ border: "1px solid black" }}>{backUpPath}</TableCell>
+                                                </TableRow>
+                                                <TableRow>
+                                                    <TableCell align="center" sx={{ border: "1px solid black" }}>Differential backup path</TableCell>
+                                                    <TableCell align="center" sx={{ border: "1px solid black" }}>{diffBackUpPath}</TableCell>
+                                                </TableRow>
+                                            </TableHead>
+                                        </Table>
+                                    </TableContainer>
+                                </Grid>
+                            </Grid>
+                            <Grid container spacing={1}>
+                                <Grid item xs={12}>
+                                    <Box display="flex" alignItems="center" justifyContent="center" pt={3} >
+                                        <LoadingButton variant="contained" color="info" align="center" onClick={handleClickUpdateEnvSetting} style={{ width: '150px' }}>
+                                            Update data
+                                        </LoadingButton>
+                                    </Box>
+                                </Grid>
+                            </Grid>
+                        </CardContent>
+                    </Card>
+                    <Grid container spacing={2} mt={1}>
+                        <Grid item xs={12} md={6}>
+                            <Card>
+                                <Box sx={{ bgcolor: '#696969' }}>
+                                    <CardHeader title="設定" color="#62aaf4" />
+                                </Box>
+                                <Box pt={4} pb={3} px={3}>
+                                    <Box>
+                                        <Box display="flex" alignItems="center" pt={3} px={2}>
+                                            <Typography variant="h5" fontWeight="medium" mr={2}>
+                                                Full backup time:
+                                            </Typography>
+                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                <DateTimePicker
+                                                    label="Please enter the full backup time"
+                                                    value={fullDate}
+                                                    onChange={(newValue) => {
+                                                        setFullDateDate(newValue);
+                                                    }}
+                                                    renderInput={(params) => <TextField {...params} />}
+                                                />
+                                            </LocalizationProvider>
+                                            <Box ml={2}>
+                                                <LoadingButton variant="contained"
+                                                    size="large"
+                                                    component="span"
+                                                    color="info"
+                                                    onClick={handleClickUpdateBackUpTime}
+                                                >
+                                                    Change
+                                                </LoadingButton>
+                                            </Box>
+                                        </Box>
+                                        <Box display="flex" alignItems="center" pt={3} px={2}>
+                                            <Typography variant="h5" fontWeight="medium" mr={2}>
+                                                Differential backup time:
+                                            </Typography>
+                                            <Box mr={2}>
+                                                <FormControl>
+                                                    <InputLabel id="demo-simple-select-label">Differential backup cycle</InputLabel>
+                                                    <Select
+                                                        labelId="permission-select-label"
+                                                        id="permission-select"
+                                                        value={differentBackUp}
+                                                        label="Differential backup cycle"
+                                                        onChange={handleChangeDifferentBackUp}
+                                                        style={{ minWidth: "150px", height: "45px" }}
+                                                    >
+                                                        <MenuItem value="Monthly">Monthly</MenuItem>
+                                                        <MenuItem value="Weekly">Weekly</MenuItem>
+                                                        <MenuItem value="Daily">Daily</MenuItem>
+                                                    </Select>
+                                                </FormControl>
+                                            </Box>
+                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                <DateTimePicker
+                                                    label="Please enter the differential backup time"
+                                                    value={diffDate}
+                                                    onChange={(newValue) => {
+                                                        setDiffDateDate(newValue);
+                                                    }}
+                                                    renderInput={(params) => <TextField {...params} />}
+                                                />
+                                            </LocalizationProvider>
+                                            <Box ml={2}>
+                                                <LoadingButton variant="contained"
+                                                    size="large"
+                                                    component="span"
+                                                    color="info"
+                                                    onClick={handleClickUpdateDiffBackUpTime}
+                                                >
+                                                    Change
+                                                </LoadingButton>
+                                            </Box>
+                                        </Box>
+                                        <Box display="flex" alignItems="center" pt={3} px={2}>
+                                            <Typography variant="h5" fontWeight="medium" mr={2}>
+                                                Backup destination 1:
+                                            </Typography>
+                                            <TextField type="text" label="Please enter IP address" />
+                                            <Box ml={2}>
+                                                <LoadingButton variant="contained"
+                                                    size="large"
+                                                    component="span"
+                                                    color="info"
+                                                >
+                                                    Change
+                                                </LoadingButton>
+                                            </Box>
+                                        </Box>
+                                        <Box display="flex" alignItems="center" pt={3} px={2}>
+                                            <Typography variant="h5" fontWeight="medium" mr={2}>
+                                                Backup destination 2:
+                                            </Typography>
+                                            <TextField type="text" label="Please enter IP address" />
+                                            <Box ml={2}>
+                                                <LoadingButton variant="contained"
+                                                    size="large"
+                                                    component="span"
+                                                    color="info"
+                                                >
+                                                    Change
+                                                </LoadingButton>
+                                            </Box>
+                                        </Box>
+                                    </Box>
+                                </Box>
+                            </Card>
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <Card>
+                                <Box sx={{ bgcolor: '#696969' }}>
+                                    <CardHeader title="Manual backup" color="#62aaf4" />
+                                </Box>
+                                <Box>
+                                    <Typography variant="h6" color="gray" fontWeight="medium" ml={2} mt={2}>
+                                        IP location example:/app/backup-2023-12-02.sql
+                                    </Typography>
+                                </Box>
+                                <Box>
+                                    <Box display="flex" alignItems="center" pt={3} px={2}>
+                                        <Typography variant="h5" fontWeight="medium" mr={3}>
+                                            Full backup path:
+                                        </Typography>
+                                        <TextField type="text" id="fullBackUpPath" label="Please enter IP address" />
+                                        <Box ml={2}>
+                                            <LoadingButton variant="contained"
+                                                size="large"
+                                                color="info"
+                                                onClick={manualHandleClickOpen}
+                                            >
+                                                Manual full backup
+                                            </LoadingButton>
+                                            <Dialog
+                                                open={manualOpen}
+                                                onClose={manualHandleClose}
+                                                aria-labelledby="alert-dialog-manual"
+                                                aria-describedby="alert-dialog-manual"
+                                            >
+                                                <DialogTitle id="alert-dialog-title">Whether to back up manually?</DialogTitle>
+                                                <DialogContent>
+                                                    <DialogContentText id="alert-dialog-manual">
+                                                        After pressing the confirm button, a manual backup will be performed
+                                                    </DialogContentText>
+                                                </DialogContent>
+                                                <DialogActions>
+                                                    <LoadingButton color="info" onClick={handleClickFullBackUp} autoFocus variant="contained">
+                                                        Confirm
+                                                    </LoadingButton>
+                                                    <LoadingButton color="info" onClick={manualHandleClose} autoFocus variant="contained">
+                                                        Close
+                                                    </LoadingButton>
+                                                </DialogActions>
+                                            </Dialog>
+                                        </Box>
+                                    </Box>
+                                </Box>
+                                <Box display="flex" alignItems="center" pt={3} px={2}>
+                                    <Typography variant="h5" fontWeight="medium" mr={3}>
+                                        Differential backup path:
+                                    </Typography>
+                                    <TextField type="text" id="diffBackUpPath" label="Please enter IP address" />
+                                    <Box ml={2}>
+                                        <LoadingButton size="large" variant="contained" color="info" onClick={handleClickUpdatediffBackUpPath}>
+                                            Revise
+                                        </LoadingButton>
+                                    </Box>
+                                </Box>
+                                <Box display="flex" alignItems="center" pt={3} px={2} mb={2}>
+                                    <Typography variant="h5" fontWeight="medium" mr={3}>
+                                        Restore path:
+                                    </Typography>
+                                    <TextField type="text" id="backUpRestroe" label="Please enter IP address" />
+                                    <Box ml={2}>
+                                        <LoadingButton size="large" variant="contained" color="info" onClick={backUpRestroeHandleClickOpen}>
+                                            Reduction
+                                        </LoadingButton>
+                                        <Dialog
+                                            open={backUpRestroeOpen}
+                                            onClose={backUpRestroeHandleClickClose}
+                                            aria-labelledby="alert-dialog-title"
+                                            aria-describedby="alert-dialog-description"
+                                        >
+                                            <DialogTitle id="alert-dialog-title">Whether to restore?</DialogTitle>
+                                            <DialogContent>
+                                                <DialogContentText id="alert-dialog-description">
+                                                    Restore will take place after pressing the confirm button
+                                                </DialogContentText>
+                                            </DialogContent>
+                                            <DialogActions>
+                                                <LoadingButton onClick={handleClickUBackUpRestore} color="info" variant="contained">
+                                                    Confirm
+                                                </LoadingButton>
+                                                <LoadingButton onClick={backUpRestroeHandleClickClose} color="info" variant="contained">
+                                                    Close
+                                                </LoadingButton>
+                                            </DialogActions>
+                                        </Dialog>
+                                    </Box>
+                                </Box>
+                            </Card>
+                        </Grid>
+                    </Grid>
+                </>
+            )}
         </ThemeProvider>
     );
 }

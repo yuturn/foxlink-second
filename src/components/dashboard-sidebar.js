@@ -1,8 +1,8 @@
 // 這個頁面是左邊SIDEBAR制控制頁面
+import React, { useState, useEffect, useContext } from "react";
+import { GlobalContext } from '../components/GlobalContext';
 
-import React from "react";
-
-import { Box, Divider, Drawer } from '@mui/material';
+import { Box, Divider, Drawer, MenuItem, Select } from '@mui/material';
 import { ChartBar as StatusIcon } from '../icons/chart-bar';
 import { Layout as LayoutIcon } from '../icons/layout';
 import { QRCode as QRCodeIcon } from '../icons/qrcode';
@@ -17,6 +17,15 @@ import { NavItem } from './nav-item';
 import { Link } from "react-router-dom";
 
 export const DashboardSidebar = ({ idx, setIdx }) => {
+
+  const { globalVariable, updateGlobalVariable } = useContext(GlobalContext);
+
+  const handleGlobalVariableChange = (event) => {
+    const newValue = event.target.value;
+    // 调用 updateGlobalVariable 更新全局状态
+    updateGlobalVariable(newValue);
+  };
+
   const items = [
     {
       url: '/machinehealth',
@@ -126,6 +135,19 @@ export const DashboardSidebar = ({ idx, setIdx }) => {
             setIdx={setIdx}
           />
         ))}
+      </Box>
+      <Box sx={{ flexGrow: 1 }}>
+        {/* Mui的Select元件 */}
+        <Select
+          value={globalVariable}
+          onChange={handleGlobalVariableChange}
+          sx={{ width: '100%' }}
+        >
+          <MenuItem value="zh-tw">繁體中文</MenuItem>
+          <MenuItem value="zh-cn">简体中文</MenuItem>
+          <MenuItem value="en">English</MenuItem>
+          {/* ... 其他選項 */}
+        </Select>
       </Box>
     </Box>
   );

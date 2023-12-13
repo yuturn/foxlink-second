@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { apiGetPeddingList, apiConfirmedUser } from '../api'
+import { GlobalContext } from '../components/GlobalContext';
 import SpanningTable from '../components/SpanningTable'
 import {
     Box,
@@ -186,49 +187,142 @@ export default function Consumables({ token, ...rest }) {
         setProject(event.target.value);
         console.log(event.target.value)
     };
+    const { globalVariable, updateGlobalVariable } = useContext(GlobalContext);
     return (
         <ThemeProvider theme={darkTheme}>
-            <Card>
-                <CardContent>
-                    <Box>
-                        <FormControl>
-                            <InputLabel id="demo-simple-select-label">專案</InputLabel>
-                            <Select
-                                labelId="permission-select-label"
-                                id="permission-select"
-                                value={project}
-                                label="專案"
-                                onChange={projectNameChange}
-                                style={{ minWidth: "200px", height: "45px" }}
-                            >
-                                <MenuItem value="d7x">d7x</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Box>
-                    <Box>
-                        <Grid container spacing={1}>
-                            <Grid xs={4}>
-                                <Typography variant="h4" fontWeight="medium" mt={3} mb={3}>
-                                    設備耗材預測
-                                </Typography>
-                            </Grid>
-                            <Grid xs={4}>
-                                <Typography variant="h4" fontWeight="medium" mt={3} mb={3} mr={3}>
-                                    專案:{project}
-                                </Typography>
-                            </Grid>
-                            <Grid xs={4}>
-                                <Typography variant="h4" fontWeight="medium" mt={3} mb={3} mr={3}>
-                                    線號:M6L-39
-                                </Typography>
-                            </Grid>
-                        </Grid>
-                    </Box>
-                    <Box>
-                        <SpanningTable data={rows1} mt={3} />
-                    </Box>
-                </CardContent>
-            </Card>
+            {globalVariable == "zh-tw" ? (
+                <>
+                    <Card>
+                        <CardContent>
+                            <Box>
+                                <FormControl>
+                                    <InputLabel id="demo-simple-select-label">專案</InputLabel>
+                                    <Select
+                                        labelId="permission-select-label"
+                                        id="permission-select"
+                                        value={project}
+                                        label="專案"
+                                        onChange={projectNameChange}
+                                        style={{ minWidth: "200px", height: "45px" }}
+                                    >
+                                        <MenuItem value="d7x">d7x</MenuItem>
+                                    </Select>
+                                </FormControl>
+                            </Box>
+                            <Box>
+                                <Grid container spacing={1}>
+                                    <Grid xs={4}>
+                                        <Typography variant="h4" fontWeight="medium" mt={3} mb={3}>
+                                            設備耗材預測
+                                        </Typography>
+                                    </Grid>
+                                    <Grid xs={4}>
+                                        <Typography variant="h4" fontWeight="medium" mt={3} mb={3} mr={3}>
+                                            專案:{project}
+                                        </Typography>
+                                    </Grid>
+                                    <Grid xs={4}>
+                                        <Typography variant="h4" fontWeight="medium" mt={3} mb={3} mr={3}>
+                                            線號:M6L-39
+                                        </Typography>
+                                    </Grid>
+                                </Grid>
+                            </Box>
+                            <Box>
+                                <SpanningTable data={rows1} mt={3} />
+                            </Box>
+                        </CardContent>
+                    </Card>
+                </>
+            ) : globalVariable == "zh-cn" ? (
+                <>
+                    <Card>
+                        <CardContent>
+                            <Box>
+                                <FormControl>
+                                    <InputLabel id="demo-simple-select-label">专案</InputLabel>
+                                    <Select
+                                        labelId="permission-select-label"
+                                        id="permission-select"
+                                        value={project}
+                                        label="专案"
+                                        onChange={projectNameChange}
+                                        style={{ minWidth: "200px", height: "45px" }}
+                                    >
+                                        <MenuItem value="d7x">d7x</MenuItem>
+                                    </Select>
+                                </FormControl>
+                            </Box>
+                            <Box>
+                                <Grid container spacing={1}>
+                                    <Grid xs={4}>
+                                        <Typography variant="h4" fontWeight="medium" mt={3} mb={3}>
+                                            设备耗材预测
+                                        </Typography>
+                                    </Grid>
+                                    <Grid xs={4}>
+                                        <Typography variant="h4" fontWeight="medium" mt={3} mb={3} mr={3}>
+                                            专案:{project}
+                                        </Typography>
+                                    </Grid>
+                                    <Grid xs={4}>
+                                        <Typography variant="h4" fontWeight="medium" mt={3} mb={3} mr={3}>
+                                            线号:M6L-39
+                                        </Typography>
+                                    </Grid>
+                                </Grid>
+                            </Box>
+                            <Box>
+                                <SpanningTable data={rows1} mt={3} />
+                            </Box>
+                        </CardContent>
+                    </Card>
+                </>
+            ) : (
+                <>
+                    <Card>
+                        <CardContent>
+                            <Box>
+                                <FormControl>
+                                    <InputLabel id="demo-simple-select-label">Project</InputLabel>
+                                    <Select
+                                        labelId="permission-select-label"
+                                        id="permission-select"
+                                        value={project}
+                                        label="Project"
+                                        onChange={projectNameChange}
+                                        style={{ minWidth: "200px", height: "45px" }}
+                                    >
+                                        <MenuItem value="d7x">d7x</MenuItem>
+                                    </Select>
+                                </FormControl>
+                            </Box>
+                            <Box>
+                                <Grid container spacing={1}>
+                                    <Grid xs={4}>
+                                        <Typography variant="h4" fontWeight="medium" mt={3} mb={3}>
+                                            Equipment consumables predictions
+                                        </Typography>
+                                    </Grid>
+                                    <Grid xs={4}>
+                                        <Typography variant="h4" fontWeight="medium" mt={3} mb={3} mr={3}>
+                                            Project:{project}
+                                        </Typography>
+                                    </Grid>
+                                    <Grid xs={4}>
+                                        <Typography variant="h4" fontWeight="medium" mt={3} mb={3} mr={3}>
+                                            Wire number:M6L-39
+                                        </Typography>
+                                    </Grid>
+                                </Grid>
+                            </Box>
+                            <Box>
+                                <SpanningTable data={rows1} mt={3} />
+                            </Box>
+                        </CardContent>
+                    </Card>
+                </>
+            )}
         </ThemeProvider>
     );
 }
