@@ -530,7 +530,7 @@ export default function SpanningTable({ data }) {
                                         </TableRow>
                                         <TableRow>
                                             <TableCell sx={{ border: "1px solid black" }}>
-                                                不良更換
+                                                Bad replacement
                                             </TableCell>
                                             <TableCell sx={{ border: "1px solid black" }}>
                                                 {info.brokenchangetime}

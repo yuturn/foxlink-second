@@ -203,8 +203,8 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
       .then((res) => {
         console.log(res)
         setDateData(res.data)
-        handleOpen("查詢成功")
-      }).catch(err => { console.log(err); handleErrorOpen("查詢失敗" + err); })
+        handleOpen((globalVariable == "zh-tw" ? "查詢成功" : globalVariable == "zh-cn" ? "查询成功" : "Search successful"))
+      }).catch(err => { console.log(err); handleErrorOpen((globalVariable == "zh-tw" ? "查詢失敗:API請求失敗" : globalVariable == "zh-cn" ? "查询失败:API请求失败" : "Query failed: API request failed")); })
   }
 
   //success alert

@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { GlobalContext } from '../components/GlobalContext';
 
-import { Box, Divider, Drawer, MenuItem, Select } from '@mui/material';
+import { Box, Divider, Drawer, MenuItem, Select, Typography } from '@mui/material';
 import { ChartBar as StatusIcon } from '../icons/chart-bar';
 import { Layout as LayoutIcon } from '../icons/layout';
 import { QRCode as QRCodeIcon } from '../icons/qrcode';
@@ -100,7 +100,7 @@ export const DashboardSidebar = ({ idx, setIdx }) => {
       </Box>
       <Divider
         sx={{
-          borderColor: '#2D3748',
+          borderColor: '#bfbfbf',
           my: 3,
           height: 1.5
         }}
@@ -136,7 +136,19 @@ export const DashboardSidebar = ({ idx, setIdx }) => {
           />
         ))}
       </Box>
+      <Divider
+        sx={{
+          borderColor: '#bfbfbf',
+          my: 3,
+          height: 1.5
+        }}
+      />
       <Box sx={{ flexGrow: 1 }}>
+        <Box display="flex" alignItems="center" justifyContent="center" sx={{ mb: 2 }}>
+          <Typography variant="h6" fontWeight="medium">
+            {globalVariable == "zh-tw" ? "語言切換" : globalVariable == "zh-cn" ? "语言切换" : "Language switch"}
+          </Typography>
+        </Box>
         {/* Mui的Select元件 */}
         <Select
           value={globalVariable}

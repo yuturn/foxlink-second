@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { apiGetCompareList, apiGetCompareSearch, apiGetCompareAnalysis } from '../api'
 import {
   Box,
@@ -13,6 +13,7 @@ import {
   InputLabel
 } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
+import { GlobalContext } from '../components/GlobalContext';
 // import dialog
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -70,37 +71,6 @@ const tableContainerDialogStyle = {
   },
 };
 
-const data6 = [
-  {
-    name: '10/15',
-    value: 65.85,
-  },
-  {
-    name: '10/16',
-    value: 78.56,
-  },
-  {
-    name: '10/17',
-    value: 30.67,
-  },
-  {
-    name: '10/18',
-    value: 44.44,
-  },
-  {
-    name: '10/19',
-    value: 59.25,
-  },
-  {
-    name: '10/20',
-    value: 84.79,
-  },
-  {
-    name: '10/21',
-    value: 34.08,
-  },
-];
-
 export default function Project({ token, ...rest }) {
   const [projectName, setProjectName] = useState();
   const [line, setLine] = useState();
@@ -119,6 +89,8 @@ export default function Project({ token, ...rest }) {
   const [detailData, setDetailData] = useState({});
   const [chartData, setChartData] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const { globalVariable, updateGlobalVariable } = useContext(GlobalContext);
 
 
   //折線圖function
@@ -264,17 +236,17 @@ export default function Project({ token, ...rest }) {
       .then((res) => {
         if (res.data && res.data.length > 0) {
           setSearchDateData(res.data)
-          handleOpen("查詢成功")
+          handleOpen((globalVariable == "zh-tw" ? "查詢成功" : globalVariable == "zh-cn" ? "查询成功" : "Search successful"))
           setLoading(false)
         } else {
           setSearchDateData([])
-          handleErrorOpen("查詢失敗:沒有資料")
+          handleErrorOpen((globalVariable == "zh-tw" ? "查詢失敗:沒有資料" : globalVariable == "zh-cn" ? "查询失败:没有资料" : "Query failed: No data"))
           setLoading(false)
         }
       }).catch((error) => {
-        console.error("API 请求失败", error);
+        console.error((globalVariable == "zh-tw" ? ("API 请求失败", error) : globalVariable == "zh-cn" ? ("API 请求失败", error) : ("API request failed", error)));
         setSearchDateData([]);
-        handleErrorOpen("查詢失敗:API請求失敗");
+        handleErrorOpen((globalVariable == "zh-tw" ? "查詢失敗:API請求失敗" : globalVariable == "zh-cn" ? "查询失败:API请求失败" : "Query failed: API request failed"));
         setLoading(false)
       });
   };
@@ -294,17 +266,17 @@ export default function Project({ token, ...rest }) {
       .then((res) => {
         if (res.data && res.data.length > 0) {
           setChartData(res.data)
-          handleOpen("查詢成功")
+          handleOpen((globalVariable == "zh-tw" ? "查詢成功" : globalVariable == "zh-cn" ? "查询成功" : "Search successful"))
           setLoading(false)
         } else {
           setChartData([])
-          handleErrorOpen("查詢失敗:沒有資料")
+          handleErrorOpen((globalVariable == "zh-tw" ? "查詢失敗:沒有資料" : globalVariable == "zh-cn" ? "查询失败:没有资料" : "Query failed: No data"))
           setLoading(false)
         }
       }).catch((error) => {
-        console.error("API 请求失败", error);
+        console.error((globalVariable == "zh-tw" ? ("API 请求失败", error) : globalVariable == "zh-cn" ? ("API 请求失败", error) : "API request failed: No data"));
         setChartData([]);
-        handleErrorOpen("查詢失敗:API請求失敗");
+        handleErrorOpen((globalVariable == "zh-tw" ? "查詢失敗:API請求失敗" : globalVariable == "zh-cn" ? "查询失败:API请求失败" : "Query failed: API request failed"));
         setLoading(false)
       });
   };
@@ -378,17 +350,17 @@ export default function Project({ token, ...rest }) {
       <Box display="flex">
         <Box>
           <LoadingButton variant="contained" color="info" onClick={handleShowFirstCard} sx={{ mr: 1 }}>
-            日預測
+            {globalVariable == "zh-tw" ? "日預測" : globalVariable == "zh-cn" ? "日预测" : "Daily prediction"}
           </LoadingButton>
         </Box>
         <Box>
           <LoadingButton variant="contained" color="info" onClick={handleShowSecondCard} sx={{ mr: 1 }}>
-            週預測
+            {globalVariable == "zh-tw" ? "週預測" : globalVariable == "zh-cn" ? "週预测" : "Weekly prediction"}
           </LoadingButton>
         </Box>
         <Box>
           <LoadingButton variant="contained" color="info" onClick={handleShowThirdCard}>
-            準確率圖表
+            {globalVariable == "zh-tw" ? "準確率圖表" : globalVariable == "zh-cn" ? "准确率图表" : "Accuracy chart"}
           </LoadingButton>
         </Box>
       </Box>
@@ -423,11 +395,11 @@ export default function Project({ token, ...rest }) {
       {currentPage === 1 ? (
         <Card>
           <Box sx={{ bgcolor: '#696969' }}>
-            <CardHeader title="日預測" color="#696969" />
+            <CardHeader title={globalVariable == "zh-tw" ? "日預測" : globalVariable == "zh-cn" ? "日预测" : "Daily prediction"} color="#696969" />
           </Box>
           <CardContent>
             <Typography variant="h4" fontWeight="medium" mt={3}>
-              預測與實際結果比對查詢
+              {globalVariable == "zh-tw" ? "預測與實際結果比對查詢" : globalVariable == "zh-cn" ? "预测与实际结果比对查询" : "Prediction and actual result comparison"}
             </Typography>
             <Grid container spacing={1}>
               <Grid item xs={2}>
@@ -435,20 +407,20 @@ export default function Project({ token, ...rest }) {
                   <Box component="form" role="form">
                     <Box display="flex" alignItems="center" pt={3} >
                       <Typography variant="h6" fontWeight="medium" mr={2}>
-                        專案:
+                        {globalVariable == "zh-tw" ? "專案:" : globalVariable == "zh-cn" ? "专案:" : "Project:"}
                       </Typography>
                       <Box mr={2}>
                         <FormControl>
-                          <InputLabel id="demo-simple-select-label">專案</InputLabel>
+                          <InputLabel id="demo-simple-select-label">{globalVariable == "zh-tw" ? "專案:" : globalVariable == "zh-cn" ? "专案:" : "Project:"}</InputLabel>
                           <Select
                             labelId="permission-select-label"
                             id="permission-select"
                             value={projectName}
-                            label="專案"
+                            label={globalVariable == "zh-tw" ? "專案" : globalVariable == "zh-cn" ? "专案" : "Project"}
                             onChange={handleChangeProject}
                             style={{ minWidth: "150px", height: "45px" }}
                           >
-                            <MenuItem value="">清空欄位</MenuItem>
+                            <MenuItem value="">{globalVariable == "zh-tw" ? "清空欄位" : globalVariable == "zh-cn" ? "清空栏位" : "Clear field"}</MenuItem>
                             {projectNameList.map((projectItem) => (
                               <MenuItem value={projectItem}>
                                 {projectItem}
@@ -466,20 +438,20 @@ export default function Project({ token, ...rest }) {
                   <Box component="form" role="form">
                     <Box display="flex" alignItems="center" pt={3} >
                       <Typography variant="h6" fontWeight="medium" mr={2}>
-                        線號:
+                        {globalVariable == "zh-tw" ? "線號:" : globalVariable == "zh-cn" ? "线号:" : "Line:"}
                       </Typography>
                       <Box>
                         <FormControl>
-                          <InputLabel id="demo-simple-select-label">專案</InputLabel>
+                          <InputLabel id="demo-simple-select-label">{globalVariable == "zh-tw" ? "線號" : globalVariable == "zh-cn" ? "线号" : "Line"}</InputLabel>
                           <Select
                             labelId="permission-select-label"
                             id="permission-select"
                             value={line}
-                            label="線號"
+                            label={globalVariable == "zh-tw" ? "線號" : globalVariable == "zh-cn" ? "线号" : "Line"}
                             onChange={handleChangeLine}
                             style={{ minWidth: "150px", height: "45px" }}
                           >
-                            <MenuItem value="">清空欄位</MenuItem>
+                            <MenuItem value="">{globalVariable == "zh-tw" ? "清空欄位" : globalVariable == "zh-cn" ? "清空栏位" : "Clear field"}</MenuItem>
                             {lineList.map((lineItem) => (
                               <MenuItem value={lineItem}>
                                 {lineItem}
@@ -496,11 +468,11 @@ export default function Project({ token, ...rest }) {
                 <Box component="form" role="form">
                   <Box display="flex" alignItems="center" pt={3} >
                     <Typography variant="h6" fontWeight="medium" mr={2}>
-                      開始:
+                      {globalVariable == "zh-tw" ? "開始:" : globalVariable == "zh-cn" ? "开始:" : "Start date:"}
                     </Typography>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DatePicker
-                        label="選擇日期"
+                        label={globalVariable == "zh-tw" ? "選擇日期" : globalVariable == "zh-cn" ? "选择日期" : "Select date"}
                         value={startDate}
                         onChange={(newValue) => {
                           setStartDate(newValue);
@@ -515,11 +487,11 @@ export default function Project({ token, ...rest }) {
                 <Box component="form" role="form">
                   <Box display="flex" alignItems="center" pt={3} >
                     <Typography variant="h6" fontWeight="medium" mr={2}>
-                      結束:
+                      {globalVariable == "zh-tw" ? "結束:" : globalVariable == "zh-cn" ? "结束:" : "End date:"}
                     </Typography>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DatePicker
-                        label="選擇日期"
+                        label={globalVariable == "zh-tw" ? "選擇日期" : globalVariable == "zh-cn" ? "选择日期" : "Select date"}
                         value={endDate}
                         onChange={(newValue) => {
                           setEndDate(newValue);
@@ -535,7 +507,7 @@ export default function Project({ token, ...rest }) {
               <Grid item xs={12}>
                 <Box display="flex" alignItems="center" justifyContent="center" pt={3} >
                   <LoadingButton loading={loading} variant="contained" color="info" align="center" onClick={handleClickProjectSearch} style={{ width: '150px' }}>
-                    查詢
+                    {globalVariable == "zh-tw" ? "查詢" : globalVariable == "zh-cn" ? "查询" : "Search"}
                   </LoadingButton>
                 </Box>
               </Grid>
@@ -553,7 +525,7 @@ export default function Project({ token, ...rest }) {
                             direction={orderBy === 'label' ? order : 'asc'}
                             onClick={() => handleSortRequest('label')}
                           >
-                            <Typography fontSize={20}>專案</Typography>
+                            <Typography fontSize={20}>{globalVariable == "zh-tw" ? "專案" : globalVariable == "zh-cn" ? "专案" : "Project"}</Typography>
                           </TableSortLabel>
                         </TableCell>
                         <TableCell align="center" sx={{ borderBottom: 0 }}>
@@ -562,7 +534,7 @@ export default function Project({ token, ...rest }) {
                             direction={orderBy === 'line' ? order : 'asc'}
                             onClick={() => handleSortRequest('line')}
                           >
-                            <Typography fontSize={20}>線別</Typography>
+                            <Typography fontSize={20}>{globalVariable == "zh-tw" ? "線別" : globalVariable == "zh-cn" ? "线别" : "Line"}</Typography>
                           </TableSortLabel>
                         </TableCell>
                         <TableCell align="center" sx={{ borderBottom: 0 }}>
@@ -571,7 +543,7 @@ export default function Project({ token, ...rest }) {
                             direction={orderBy === 'date' ? order : 'asc'}
                             onClick={() => handleSortRequest('date')}
                           >
-                            <Typography fontSize={20}>時間</Typography>
+                            <Typography fontSize={20}>{globalVariable == "zh-tw" ? "時間" : globalVariable == "zh-cn" ? "时间" : "Time"}</Typography>
                           </TableSortLabel>
                         </TableCell>
                         <TableCell align="center" sx={{ borderBottom: 0 }}>
@@ -580,7 +552,7 @@ export default function Project({ token, ...rest }) {
                             direction={orderBy === 'accuracyDate' ? order : 'asc'}
                             onClick={() => handleSortRequest('accuracyDate')}
                           >
-                            <Typography fontSize={20}>預測準確率</Typography>
+                            <Typography fontSize={20}>{globalVariable == "zh-tw" ? "預測準確率" : globalVariable == "zh-cn" ? "预测准确率" : "Prediction accuracy"}</Typography>
                           </TableSortLabel>
                         </TableCell>
                       </TableRow>
@@ -617,14 +589,14 @@ export default function Project({ token, ...rest }) {
                                   },
                                 }}
                               >
-                                <DialogTitle id="alert-dialog-title-accuracy" sx={{ backgroundColor: "#bfbfbf" }}>設備預測明細</DialogTitle>
+                                <DialogTitle id="alert-dialog-title-accuracy" sx={{ backgroundColor: "#bfbfbf" }}>{globalVariable == "zh-tw" ? "設備預測明細" : globalVariable == "zh-cn" ? "设备预测明细" : "Equipment prediction details"}</DialogTitle>
                                 <DialogContent sx={{ marginTop: '1px', marginBottom: '1px' }} >
                                   <TableContainer style={tableContainerStyle.tableContainer} sx={{ mt: 3 }}>
                                     <Table>
                                       <TableHead>
                                         <TableRow>
                                           <TableCell align="center" sx={{ border: "1px solid black" }}>
-                                            <Typography fontSize={20}>設備編號</Typography>
+                                            <Typography fontSize={20}>{globalVariable == "zh-tw" ? "設備編號" : globalVariable == "zh-cn" ? "设备编号" : "Device ID"}</Typography>
                                           </TableCell>
                                           {Object.keys(detailData).map((detailTitle) => (
                                             <TableCell align="center" sx={{ border: "1px solid black" }}>
@@ -634,7 +606,7 @@ export default function Project({ token, ...rest }) {
                                         </TableRow>
                                         <TableRow>
                                           <TableCell align="center" sx={{ border: "1px solid black" }}>
-                                            <Typography fontSize={20}>設備名稱</Typography>
+                                            <Typography fontSize={20}>{globalVariable == "zh-tw" ? "設備名稱" : globalVariable == "zh-cn" ? "设备名称" : "Device name"}</Typography>
                                           </TableCell>
                                           {Object.values(detailData).map((detailInfo) => (
                                             <TableCell align="center" sx={{ border: "1px solid black" }}>
@@ -642,12 +614,12 @@ export default function Project({ token, ...rest }) {
                                             </TableCell>
                                           ))}
                                           <TableCell align="center" sx={{ border: "1px solid black" }}>
-                                            <Typography fontSize={20}>總計</Typography>
+                                            <Typography fontSize={20}>{globalVariable == "zh-tw" ? "總計" : globalVariable == "zh-cn" ? "总计" : "Total"}</Typography>
                                           </TableCell>
                                         </TableRow>
                                         <TableRow>
                                           <TableCell align="center" sx={{ border: "1px solid black" }}>
-                                            <Typography fontSize={20}>預測準確率</Typography>
+                                            <Typography fontSize={20}>{globalVariable == "zh-tw" ? "預測準確率" : globalVariable == "zh-cn" ? "预测准确率" : "Prediction accuracy"}</Typography>
                                           </TableCell>
                                           {Object.values(detailData).map((detailInfo) => (
                                             <TableCell align="center" sx={{ border: "1px solid black" }}>
@@ -686,10 +658,10 @@ export default function Project({ token, ...rest }) {
                                                   <Typography fontSize={20}>Message</Typography>
                                                 </TableCell>
                                                 <TableCell align="center" sx={{ height: 'auto', border: "1px solid black", backgroundColor: "#e0ffff" }}>
-                                                  <Typography fontSize={20}>實際</Typography>
+                                                  <Typography fontSize={20}>{globalVariable == "zh-tw" ? "實際" : globalVariable == "zh-cn" ? "实际" : "Ground truth"}</Typography>
                                                 </TableCell>
                                                 <TableCell align="center" sx={{ height: 'auto', border: "1px solid black", backgroundColor: "#e0ffff" }}>
-                                                  <Typography fontSize={20}>預測</Typography>
+                                                  <Typography fontSize={20}>{globalVariable == "zh-tw" ? "預測" : globalVariable == "zh-cn" ? "预测" : "Predict"}</Typography>
                                                 </TableCell>
                                               </TableRow>
                                             </TableHead>
@@ -719,7 +691,7 @@ export default function Project({ token, ...rest }) {
                                 </DialogContent>
                                 <DialogActions>
                                   <LoadingButton onClick={detailHandleClickClose} autoFocus variant="contained">
-                                    关闭
+                                    {globalVariable == "zh-tw" ? "關閉" : globalVariable == "zh-cn" ? "关闭" : "Close"}
                                   </LoadingButton>
                                 </DialogActions>
                               </Dialog>
@@ -737,11 +709,11 @@ export default function Project({ token, ...rest }) {
       ) : currentPage === 2 ? (
         <Card>
           <Box sx={{ bgcolor: '#696969' }}>
-            <CardHeader title="週預測" color="#696969" />
+            <CardHeader title={globalVariable == "zh-tw" ? "週預測" : globalVariable == "zh-cn" ? "週预测" : "Weekly prediction"} color="#696969" />
           </Box>
           <CardContent>
             <Typography variant="h4" fontWeight="medium" mt={3}>
-              預測與實際結果比對查詢
+              {globalVariable == "zh-tw" ? "預測與實際結果比對查詢" : globalVariable == "zh-cn" ? "预测与实际结果比对查询" : "Prediction and actual result comparison"}
             </Typography>
             <Grid container spacing={1}>
               <Grid item xs={2}>
@@ -749,20 +721,20 @@ export default function Project({ token, ...rest }) {
                   <Box component="form" role="form">
                     <Box display="flex" alignItems="center" pt={3} >
                       <Typography variant="h6" fontWeight="medium" mr={2}>
-                        專案:
+                        {globalVariable == "zh-tw" ? "專案:" : globalVariable == "zh-cn" ? "专案:" : "Project:"}
                       </Typography>
                       <Box mr={2}>
                         <FormControl>
-                          <InputLabel id="demo-simple-select-label">專案</InputLabel>
+                          <InputLabel id="demo-simple-select-label">{globalVariable == "zh-tw" ? "專案" : globalVariable == "zh-cn" ? "专案" : "Project"}</InputLabel>
                           <Select
                             labelId="permission-select-label"
                             id="permission-select"
                             value={projectName}
-                            label="專案"
+                            label={globalVariable == "zh-tw" ? "專案:" : globalVariable == "zh-cn" ? "专案:" : "Project"}
                             onChange={handleChangeProject}
                             style={{ minWidth: "150px", height: "45px" }}
                           >
-                            <MenuItem value="">清空欄位</MenuItem>
+                            <MenuItem value="">{globalVariable == "zh-tw" ? "清空欄位" : globalVariable == "zh-cn" ? "清空栏位" : "Clear field"}</MenuItem>
                             {projectNameList.map((projectItem) => (
                               <MenuItem value={projectItem}>
                                 {projectItem}
@@ -780,20 +752,20 @@ export default function Project({ token, ...rest }) {
                   <Box component="form" role="form">
                     <Box display="flex" alignItems="center" pt={3} >
                       <Typography variant="h6" fontWeight="medium" mr={2}>
-                        線號:
+                        {globalVariable == "zh-tw" ? "線號:" : globalVariable == "zh-cn" ? "线号:" : "Line:"}
                       </Typography>
                       <Box>
                         <FormControl>
-                          <InputLabel id="demo-simple-select-label">專案</InputLabel>
+                          <InputLabel id="demo-simple-select-label">{globalVariable == "zh-tw" ? "線號" : globalVariable == "zh-cn" ? "线号" : "Line"}</InputLabel>
                           <Select
                             labelId="permission-select-label"
                             id="permission-select"
                             value={line}
-                            label="線號"
+                            label={globalVariable == "zh-tw" ? "線號" : globalVariable == "zh-cn" ? "线号" : "Line"}
                             onChange={handleChangeLine}
                             style={{ minWidth: "150px", height: "45px" }}
                           >
-                            <MenuItem value="">清空欄位</MenuItem>
+                            <MenuItem value="">{globalVariable == "zh-tw" ? "清空欄位" : globalVariable == "zh-cn" ? "清空栏位" : "Clear field"}</MenuItem>
                             {lineList.map((lineItem) => (
                               <MenuItem value={lineItem}>
                                 {lineItem}
@@ -810,11 +782,11 @@ export default function Project({ token, ...rest }) {
                 <Box component="form" role="form">
                   <Box display="flex" alignItems="center" pt={3} >
                     <Typography variant="h6" fontWeight="medium" mr={2}>
-                      開始:
+                      {globalVariable == "zh-tw" ? "開始:" : globalVariable == "zh-cn" ? "开始:" : "Start date:"}
                     </Typography>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DatePicker
-                        label="選擇日期"
+                        label={globalVariable == "zh-tw" ? "選擇日期" : globalVariable == "zh-cn" ? "选择日期" : "Select date"}
                         value={startDate}
                         onChange={(newValue) => {
                           setStartDate(newValue);
@@ -829,11 +801,11 @@ export default function Project({ token, ...rest }) {
                 <Box component="form" role="form">
                   <Box display="flex" alignItems="center" pt={3} >
                     <Typography variant="h6" fontWeight="medium" mr={2}>
-                      結束:
+                      {globalVariable == "zh-tw" ? "結束:" : globalVariable == "zh-cn" ? "结束:" : "End date:"}
                     </Typography>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DatePicker
-                        label="選擇日期"
+                        label={globalVariable == "zh-tw" ? "選擇日期" : globalVariable == "zh-cn" ? "选择日期" : "Select date"}
                         value={endDate}
                         onChange={(newValue) => {
                           setEndDate(newValue);
@@ -849,7 +821,7 @@ export default function Project({ token, ...rest }) {
               <Grid item xs={12}>
                 <Box display="flex" alignItems="center" justifyContent="center" pt={3} >
                   <LoadingButton loading={loading} variant="contained" color="info" align="center" onClick={handleClickProjectSearch} style={{ width: '150px' }}>
-                    查詢
+                    {globalVariable == "zh-tw" ? "查詢" : globalVariable == "zh-cn" ? "查询" : "Search"}
                   </LoadingButton>
                 </Box>
               </Grid>
@@ -867,7 +839,7 @@ export default function Project({ token, ...rest }) {
                             direction={orderBy === 'label' ? order : 'asc'}
                             onClick={() => handleSortRequest('label')}
                           >
-                            <Typography fontSize={20}>專案</Typography>
+                            <Typography fontSize={20}>{globalVariable == "zh-tw" ? "專案" : globalVariable == "zh-cn" ? "专案" : "Project"}</Typography>
                           </TableSortLabel>
                         </TableCell>
                         <TableCell align="center" sx={{ borderBottom: 0 }}>
@@ -876,7 +848,7 @@ export default function Project({ token, ...rest }) {
                             direction={orderBy === 'line' ? order : 'asc'}
                             onClick={() => handleSortRequest('line')}
                           >
-                            <Typography fontSize={20}>線別</Typography>
+                            <Typography fontSize={20}>{globalVariable == "zh-tw" ? "線別" : globalVariable == "zh-cn" ? "线别" : "Line"}</Typography>
                           </TableSortLabel>
                         </TableCell>
                         <TableCell align="center" sx={{ borderBottom: 0 }}>
@@ -885,7 +857,7 @@ export default function Project({ token, ...rest }) {
                             direction={orderBy === 'date' ? order : 'asc'}
                             onClick={() => handleSortRequest('date')}
                           >
-                            <Typography fontSize={20}>時間</Typography>
+                            <Typography fontSize={20}>{globalVariable == "zh-tw" ? "時間" : globalVariable == "zh-cn" ? "时间" : "Time"}</Typography>
                           </TableSortLabel>
                         </TableCell>
                         <TableCell align="center" sx={{ borderBottom: 0 }}>
@@ -894,7 +866,7 @@ export default function Project({ token, ...rest }) {
                             direction={orderBy === 'accuracyDate' ? order : 'asc'}
                             onClick={() => handleSortRequest('accuracyDate')}
                           >
-                            <Typography fontSize={20}>預測準確率</Typography>
+                            <Typography fontSize={20}>{globalVariable == "zh-tw" ? "預測準確率" : globalVariable == "zh-cn" ? "预测准确率" : "Prediction accuracy"}</Typography>
                           </TableSortLabel>
                         </TableCell>
                       </TableRow>
@@ -931,14 +903,14 @@ export default function Project({ token, ...rest }) {
                                   },
                                 }}
                               >
-                                <DialogTitle id="alert-dialog-title-accuracy" sx={{ backgroundColor: "#696969" }}>設備預測明細</DialogTitle>
+                                <DialogTitle id="alert-dialog-title-accuracy" sx={{ backgroundColor: "#696969" }}>{globalVariable == "zh-tw" ? "設備預測明細" : globalVariable == "zh-cn" ? "设备预测明细" : "Equipment prediction details"}</DialogTitle>
                                 <DialogContent sx={{ marginTop: '1px', marginBottom: '1px' }} >
                                   <TableContainer style={tableContainerStyle.tableContainer} sx={{ mt: 3 }}>
                                     <Table>
                                       <TableHead>
                                         <TableRow>
                                           <TableCell align="center" sx={{ border: "1px solid black" }}>
-                                            <Typography fontSize={20}>設備編號</Typography>
+                                            <Typography fontSize={20}>{globalVariable == "zh-tw" ? "設備編號" : globalVariable == "zh-cn" ? "设备编号" : "Device ID"}</Typography>
                                           </TableCell>
                                           {Object.keys(detailData).map((detailTitle) => (
                                             <TableCell align="center" sx={{ border: "1px solid black" }}>
@@ -948,7 +920,7 @@ export default function Project({ token, ...rest }) {
                                         </TableRow>
                                         <TableRow>
                                           <TableCell align="center" sx={{ border: "1px solid black" }}>
-                                            <Typography fontSize={20}>設備名稱</Typography>
+                                            <Typography fontSize={20}>{globalVariable == "zh-tw" ? "設備名稱" : globalVariable == "zh-cn" ? "设备名称" : "Device name"}</Typography>
                                           </TableCell>
                                           {Object.values(detailData).map((detailInfo) => (
                                             <TableCell align="center" sx={{ border: "1px solid black" }}>
@@ -956,12 +928,12 @@ export default function Project({ token, ...rest }) {
                                             </TableCell>
                                           ))}
                                           <TableCell align="center" sx={{ border: "1px solid black" }}>
-                                            <Typography fontSize={20}>總計</Typography>
+                                            <Typography fontSize={20}>{globalVariable == "zh-tw" ? "總計" : globalVariable == "zh-cn" ? "总计" : "Total"}</Typography>
                                           </TableCell>
                                         </TableRow>
                                         <TableRow>
                                           <TableCell align="center" sx={{ border: "1px solid black" }}>
-                                            <Typography fontSize={20}>預測準確率</Typography>
+                                            <Typography fontSize={20}>{globalVariable == "zh-tw" ? "預測準確率" : globalVariable == "zh-cn" ? "预测准确率" : "Prediction accuracy"}</Typography>
                                           </TableCell>
                                           {Object.values(detailData).map((detailInfo) => (
                                             <TableCell align="center" sx={{ border: "1px solid black" }}>
@@ -1000,10 +972,10 @@ export default function Project({ token, ...rest }) {
                                                   <Typography fontSize={20}>Message</Typography>
                                                 </TableCell>
                                                 <TableCell align="center" sx={{ height: 'auto', border: "1px solid black", backgroundColor: "#e0ffff" }}>
-                                                  <Typography fontSize={20}>實際</Typography>
+                                                  <Typography fontSize={20}>{globalVariable == "zh-tw" ? "實際" : globalVariable == "zh-cn" ? "实际" : "Ground truth"}</Typography>
                                                 </TableCell>
                                                 <TableCell align="center" sx={{ height: 'auto', border: "1px solid black", backgroundColor: "#e0ffff" }}>
-                                                  <Typography fontSize={20}>預測</Typography>
+                                                  <Typography fontSize={20}>{globalVariable == "zh-tw" ? "預測" : globalVariable == "zh-cn" ? "预测" : "Predict"}</Typography>
                                                 </TableCell>
                                               </TableRow>
                                             </TableHead>
@@ -1033,7 +1005,7 @@ export default function Project({ token, ...rest }) {
                                 </DialogContent>
                                 <DialogActions>
                                   <LoadingButton onClick={detailHandleClickClose} autoFocus variant="contained">
-                                    关闭
+                                    {globalVariable == "zh-tw" ? "關閉" : globalVariable == "zh-cn" ? "关闭" : "Close"}
                                   </LoadingButton>
                                 </DialogActions>
                               </Dialog>
@@ -1051,11 +1023,11 @@ export default function Project({ token, ...rest }) {
       ) : (
         <Card>
           <Box sx={{ bgcolor: '#696969' }}>
-            <CardHeader title="準確率圖表" color="#696969" />
+            <CardHeader title={globalVariable == "zh-tw" ? "準確率圖表" : globalVariable == "zh-cn" ? "准确率图表" : "Accuracy chart"} color="#696969" />
           </Box>
           <CardContent>
             <Typography variant="h4" fontWeight="medium" mt={3}>
-              預測與實際結果比對查詢
+              {globalVariable == "zh-tw" ? "預測與實際結果比對查詢" : globalVariable == "zh-cn" ? "预测与实际结果比对查询" : "Prediction and actual result comparison"}
             </Typography>
             <Grid container spacing={1}>
               <Grid item xs={2}>
@@ -1063,19 +1035,20 @@ export default function Project({ token, ...rest }) {
                   <Box component="form" role="form">
                     <Box display="flex" alignItems="center" pt={3} >
                       <Typography variant="h6" fontWeight="medium" mr={2}>
-                        專案:
+                        {globalVariable == "zh-tw" ? "專案:" : globalVariable == "zh-cn" ? "专案:" : "Project:"}
                       </Typography>
                       <Box mr={2}>
                         <FormControl>
-                          <InputLabel id="demo-simple-select-label">專案</InputLabel>
+                          <InputLabel id="demo-simple-select-label">{globalVariable == "zh-tw" ? "專案" : globalVariable == "zh-cn" ? "专案" : "Project"}</InputLabel>
                           <Select
                             labelId="permission-select-label"
                             id="permission-select"
                             value={projectName}
-                            label="專案"
+                            label={globalVariable == "zh-tw" ? "專案" : globalVariable == "zh-cn" ? "专案" : "Project"}
                             onChange={handleChangeProject}
                             style={{ minWidth: "150px", height: "45px" }}
                           >
+                            <MenuItem value="">{globalVariable == "zh-tw" ? "清空欄位" : globalVariable == "zh-cn" ? "清空栏位" : "Clear field"}</MenuItem>
                             {projectNameList.map((projectItem) => (
                               <MenuItem value={projectItem}>
                                 {projectItem}
@@ -1093,19 +1066,20 @@ export default function Project({ token, ...rest }) {
                   <Box component="form" role="form">
                     <Box display="flex" alignItems="center" pt={3} >
                       <Typography variant="h6" fontWeight="medium" mr={2}>
-                        線號:
+                        {globalVariable == "zh-tw" ? "線號:" : globalVariable == "zh-cn" ? "线号:" : "Line:"}
                       </Typography>
                       <Box>
                         <FormControl>
-                          <InputLabel id="demo-simple-select-label">專案</InputLabel>
+                          <InputLabel id="demo-simple-select-label">{globalVariable == "zh-tw" ? "線號" : globalVariable == "zh-cn" ? "线号" : "Line"}</InputLabel>
                           <Select
                             labelId="permission-select-label"
                             id="permission-select"
                             value={line}
-                            label="線號"
+                            label={globalVariable == "zh-tw" ? "線號" : globalVariable == "zh-cn" ? "线号" : "Line"}
                             onChange={handleChangeLine}
                             style={{ minWidth: "150px", height: "45px" }}
                           >
+                            <MenuItem value="">{globalVariable == "zh-tw" ? "清空欄位" : globalVariable == "zh-cn" ? "清空栏位" : "Clear field"}</MenuItem>
                             {lineList.map((lineItem) => (
                               <MenuItem value={lineItem}>
                                 {lineItem}
@@ -1123,24 +1097,24 @@ export default function Project({ token, ...rest }) {
                   <Box component="form" role="form">
                     <Box display="flex" alignItems="center" pt={3} >
                       <Typography variant="h6" fontWeight="medium" mr={2}>
-                        類別:
+                        {globalVariable == "zh-tw" ? "類別:" : globalVariable == "zh-cn" ? "类别:" : "Category:"}
                       </Typography>
                       <Box>
                         <FormControl>
-                          <InputLabel id="demo-simple-select-label">專案</InputLabel>
+                          <InputLabel id="demo-simple-select-label">{globalVariable == "zh-tw" ? "類別" : globalVariable == "zh-cn" ? "类别" : "Category"}</InputLabel>
                           <Select
                             labelId="permission-select-label"
                             id="permission-select"
                             value={type}
-                            label="類別"
+                            label={globalVariable == "zh-tw" ? "類別" : globalVariable == "zh-cn" ? "类别" : "Category"}
                             onChange={handleChangeType}
                             style={{ minWidth: "150px", height: "45px" }}
                           >
                             <MenuItem value='day'>
-                              日預測
+                              {globalVariable == "zh-tw" ? "日預測" : globalVariable == "zh-cn" ? "日预测" : "Daily prediction"}
                             </MenuItem>
                             <MenuItem value='week'>
-                              週預測
+                              {globalVariable == "zh-tw" ? "週預測" : globalVariable == "zh-cn" ? "週预测" : "Weekly prediction"}
                             </MenuItem>
                           </Select>
                         </FormControl>
@@ -1153,11 +1127,11 @@ export default function Project({ token, ...rest }) {
                 <Box component="form" role="form">
                   <Box display="flex" alignItems="center" pt={3} >
                     <Typography variant="h6" fontWeight="medium" mr={2}>
-                      開始:
+                      {globalVariable == "zh-tw" ? "開始:" : globalVariable == "zh-cn" ? "开始:" : "Start date:"}
                     </Typography>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DatePicker
-                        label="選擇日期"
+                        label={globalVariable == "zh-tw" ? "選擇日期" : globalVariable == "zh-cn" ? "选择日期" : "Select date"}
                         value={startDate}
                         onChange={(newValue) => {
                           console.log('Selected Start Date:', newValue);
@@ -1173,11 +1147,11 @@ export default function Project({ token, ...rest }) {
                 <Box component="form" role="form">
                   <Box display="flex" alignItems="center" pt={3} >
                     <Typography variant="h6" fontWeight="medium" mr={2}>
-                      結束:
+                      {globalVariable == "zh-tw" ? "結束:" : globalVariable == "zh-cn" ? "结束:" : "End date:"}
                     </Typography>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DatePicker
-                        label="選擇日期"
+                        label={globalVariable == "zh-tw" ? "選擇日期" : globalVariable == "zh-cn" ? "选择日期" : "Select date"}
                         value={endDate}
                         onChange={(newValue) => {
                           console.log('Selected Start Date:', newValue);
@@ -1194,7 +1168,7 @@ export default function Project({ token, ...rest }) {
               <Grid item xs={12}>
                 <Box display="flex" alignItems="center" justifyContent="center" pt={3} >
                   <LoadingButton loading={loading} variant="contained" color="info" align="center" onClick={handleClickChartSearch} style={{ width: '150px' }}>
-                    查詢
+                    {globalVariable == "zh-tw" ? "查詢" : globalVariable == "zh-cn" ? "查询" : "Search"}
                   </LoadingButton>
                 </Box>
               </Grid>
