@@ -666,7 +666,7 @@ export default function Backup({ token, setAlert, ...rest }) {
                         <Grid item xs={12} md={6}>
                             <Card>
                                 <Box sx={{ bgcolor: '#696969' }}>
-                                    <CardHeader title="設定" color="#62aaf4" />
+                                    <CardHeader title="设置" color="#62aaf4" />
                                 </Box>
                                 <Box pt={4} pb={3} px={3}>
                                     <Box>
@@ -955,7 +955,7 @@ export default function Backup({ token, setAlert, ...rest }) {
                         <Grid item xs={12} md={6}>
                             <Card>
                                 <Box sx={{ bgcolor: '#696969' }}>
-                                    <CardHeader title="設定" color="#62aaf4" />
+                                    <CardHeader title="Settings" color="#62aaf4" />
                                 </Box>
                                 <Box pt={4} pb={3} px={3}>
                                     <Box>

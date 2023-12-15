@@ -729,7 +729,7 @@ export default function LOG({ token, ...rest }) {
             ) : (
                 <Card >
                     <Box sx={{ bgcolor: '#696969' }}>
-                        <CardHeader title="LOG頁面:" color="#62aaf4" />
+                        <CardHeader title="LOG:" color="#62aaf4" />
                     </Box>
                     <Divider sx={{ borderBottomWidth: 3 }} />
                     <CardContent>
