@@ -30,37 +30,37 @@ export const DashboardSidebar = ({ idx, setIdx }) => {
     {
       url: '/machinehealth',
       icon: (<Search fontSize="small" />),
-      title: '机況查詢',
+      title: (globalVariable == "zh-tw" ? "機況查詢" : globalVariable == "zh-cn" ? "机況查詢" : "Machine status"),
       active: false
     },
     {
       url: '/comparison',
       icon: (<Search fontSize="small" />),
-      title: '預測與結果比對查詢',
+      title: (globalVariable == "zh-tw" ? "預測與實際結果比對查詢" : globalVariable == "zh-cn" ? "预测与实际结果比对查询" : "Comparison"),
       active: false
     },
     {
       url: '/Project',
       icon: (<StatusIcon fontSize="small" />),
-      title: '專案頁面',
+      title: (globalVariable == "zh-tw" ? "專案頁面" : globalVariable == "zh-cn" ? "专案页面" : "Project"),
       active: false
     },
     {
       url: '/backup',
       icon: (<MapIcon fontSize="small" />),
-      title: '備份頁面',
+      title: (globalVariable == "zh-tw" ? "備份頁面" : globalVariable == "zh-cn" ? "备份页面" : "Backup"),
       active: false
     },
     {
       url: '/consumables',
       icon: (<SummarizeIcon fontSize="small" />),
-      title: '耗材預測頁面',
+      title: (globalVariable == "zh-tw" ? "耗材預測頁面" : globalVariable == "zh-cn" ? "耗材预测页面" : "Consumables"),
       active: false
     },
     {
       url: '/LOG',
       icon: (<Info fontSize="small" />),
-      title: 'LOG頁面',
+      title: (globalVariable == "zh-tw" ? "LOG頁面" : globalVariable == "zh-cn" ? "LOG页面" : "LOG"),
       active: false
     },
   ];
