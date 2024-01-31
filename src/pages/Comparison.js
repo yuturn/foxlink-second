@@ -92,7 +92,6 @@ export default function Project({ token, ...rest }) {
 
   const { globalVariable, updateGlobalVariable } = useContext(GlobalContext);
 
-
   //折線圖function
   const LineChartExample = () => {
     return (
@@ -295,11 +294,7 @@ export default function Project({ token, ...rest }) {
     apiGetCompareSearch(data)
       .then((res) => {
         console.log(res.data);
-        if (data.type == 'day') {
-          setCurrentAccuracyInfo(res.data[0]['accuracyDate']);
-        } else {
-          setCurrentAccuracyInfo(res.data[0]['accuracyWeek']);
-        }
+        setCurrentAccuracyInfo(res.data[0]['accuracyDate']);
         console.log(res.data[0]['devices']);
         setDetailData(res.data[0]['devices'])
       });
@@ -886,7 +881,7 @@ export default function Project({ token, ...rest }) {
                             </TableCell>
                             <TableCell align="center">
                               <LoadingButton variant="contained" color="info" align="center" onClick={() => detailHandleClickOpen(info.projectName, info.line, info.date)}>
-                                {(info.accuracyWeek * 100).toFixed(2)}%
+                                {(info.accuracyDate * 100).toFixed(2)}%
                               </LoadingButton>
                               <Dialog
                                 open={detailOpen}
