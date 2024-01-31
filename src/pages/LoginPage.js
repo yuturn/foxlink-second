@@ -43,10 +43,10 @@ export default function Login({ setUser, setAlert }) {
         try {
             let account = document.getElementById('account').value;
             let password = document.getElementById('password').value;
-            const hashPassWord = encrypt(password, "$5$rounds=10000$F0XL1NKPWDHaSH");
+            // const hashPassWord = encrypt(password, "$5$rounds=10000$F0XL1NKPWDHaSH");
 
             if (account == '' || password == '') throw "帐密不可為空";
-            apiUserLogin(`grant_type=&username=${account}&password=${hashPassWord}&scope=&client_id=123&client_secret=`)
+            apiUserLogin(`grant_type=&username=${account}&password=${password}&scope=&client_id=123&client_secret=`)
                 .then(res => {
                     if (_isMounted.current) {
                         setUser({
