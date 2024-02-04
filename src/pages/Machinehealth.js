@@ -1,6 +1,4 @@
 import React, { useState, useEffect, useContext } from "react";
-import { DataGrid } from '@mui/x-data-grid';
-import { borders } from '@mui/system';
 import { apiGetStatistics, apiGetStatisticsDetails, apiGetStatisticsDetailsFilter } from '../api'
 import {
   Box,
@@ -12,7 +10,6 @@ import {
   Typography,
   CardContent,
   Divider,
-  palette,
   Select,
   MenuItem
 } from '@mui/material';
@@ -69,14 +66,14 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
   const [dateData, setDateData] = useState({});
 
   const projectNameChange = (event) => {
-    if (event.target.value == 'null') {
+    if (event.target.value === 'null') {
       setProjectName(null);
     } else {
       setProjectName(event.target.value);
     }
   };
   const deviceNameChange = (event) => {
-    if (event.target.value == 'null') {
+    if (event.target.value === 'null') {
       setDeviceName(null);
     } else {
       setDeviceName(event.target.value);
@@ -86,13 +83,13 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
     setIsPaused(!isPaused);
   };
   // function getCircleIcon(color) {
-  //   if (color === "red") {
+  //   if (color ==== "red") {
   //     return <RCircle />;
-  //   } else if (color === "yellow") {
+  //   } else if (color ==== "yellow") {
   //     return <YCircle />;
-  //   } else if (color === "green") {
+  //   } else if (color ==== "green") {
   //     return <GCircle />;
-  //   } else if (color === "blue") {
+  //   } else if (color ==== "blue") {
   //     return <BCircle />;
   //   } else {
   //     return null; // 或者返回一个默认的图标
@@ -121,13 +118,13 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
   // }
 
   // function getCircleIcon(lightColor) {
-  //   if (lightColor === 1) {
+  //   if (lightColor ==== 1) {
   //     return <RCircle />;
-  //   } else if (lightColor === 2) {
+  //   } else if (lightColor ==== 2) {
   //     return <YCircle />;
-  //   } else if (lightColor === 3) {
+  //   } else if (lightColor ==== 3) {
   //     return <GCircle />;
-  //   } else if (lightColor === 4) {
+  //   } else if (lightColor ==== 4) {
   //     return <BCircle />;
   //   } else {
   //     return null; // 或者返回一个默认的图标
@@ -203,8 +200,8 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
       .then((res) => {
         console.log(res)
         setDateData(res.data)
-        handleOpen((globalVariable == "zh-tw" ? "查詢成功" : globalVariable == "zh-cn" ? "查询成功" : "Search successful"))
-      }).catch(err => { console.log(err); handleErrorOpen((globalVariable == "zh-tw" ? "查詢失敗:API請求失敗" : globalVariable == "zh-cn" ? "查询失败:API请求失败" : "Query failed: API request failed")); })
+        handleOpen((globalVariable === "zh-tw" ? "查詢成功" : globalVariable === "zh-cn" ? "查询成功" : "Search successful"))
+      }).catch(err => { console.log(err); handleErrorOpen((globalVariable === "zh-tw" ? "查詢失敗:API請求失敗" : globalVariable === "zh-cn" ? "查询失败:API请求失败" : "Query failed: API request failed")); })
   }
 
   //success alert
@@ -911,7 +908,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
           {errorMessage}
         </Alert>
       </Snackbar>
-      {globalVariable == "zh-tw" ? (
+      {globalVariable === "zh-tw" ? (
         <>
           <Card sx={{ mb: 3 }}>
             <Box sx={{ bgcolor: '#696969' }}>
@@ -1000,7 +997,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
           </Card>
           {createDeviceCardTW(dateData, dateData)}
         </>
-      ) : globalVariable == "zh-cn" ? (
+      ) : globalVariable === "zh-cn" ? (
         <>
           <Card sx={{ mb: 3 }}>
             <Box sx={{ bgcolor: '#696969' }}>

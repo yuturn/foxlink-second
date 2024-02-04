@@ -25,7 +25,6 @@ import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 
 import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
@@ -98,8 +97,8 @@ export default function Backup({ token, setAlert, ...rest }) {
             .then((res) => {
                 setBackUpPath(res.data.value)
             }).catch((error) => {
-                console.error((globalVariable == "zh-tw" ? ("API 请求失败", error) : globalVariable == "zh-cn" ? ("API 请求失败", error) : "API request failed: No data"));
-                handleErrorOpen((globalVariable == "zh-tw" ? "查詢失敗:API請求失敗" : globalVariable == "zh-cn" ? "查询失败:API请求失败" : "Query failed: API request failed"));
+                console.error((globalVariable === "zh-tw" ? ("API 请求失败", error) : globalVariable === "zh-cn" ? ("API 请求失败", error) : "API request failed: No data"));
+                handleErrorOpen((globalVariable === "zh-tw" ? "查詢失敗:API請求失敗" : globalVariable === "zh-cn" ? "查询失败:API请求失败" : "Query failed: API request failed"));
             });
 
         const diffBackUpData = {
@@ -110,12 +109,12 @@ export default function Backup({ token, setAlert, ...rest }) {
         apiGetSystemEnvSetting(diffBackUpData)
             .then((res) => {
                 console.log(res)
-                handleOpen((globalVariable == "zh-tw" ? "查詢成功" : globalVariable == "zh-cn" ? "查询成功" : "Search successful"))
+                handleOpen((globalVariable === "zh-tw" ? "查詢成功" : globalVariable === "zh-cn" ? "查询成功" : "Search successful"))
                 setDiffBackUpPath(res.data.value)
                 manualHandleClose()
             }).catch((error) => {
-                console.error((globalVariable == "zh-tw" ? ("API 请求失败", error) : globalVariable == "zh-cn" ? ("API 请求失败", error) : "API request failed: No data"));
-                handleErrorOpen((globalVariable == "zh-tw" ? "查詢失敗:API請求失敗" : globalVariable == "zh-cn" ? "查询失败:API请求失败" : "Query failed: API request failed"));
+                console.error((globalVariable === "zh-tw" ? ("API 请求失败", error) : globalVariable === "zh-cn" ? ("API 请求失败", error) : "API request failed: No data"));
+                handleErrorOpen((globalVariable === "zh-tw" ? "查詢失敗:API請求失敗" : globalVariable === "zh-cn" ? "查询失败:API请求失败" : "Query failed: API request failed"));
                 manualHandleClose()
             });
         const data = {
@@ -127,8 +126,8 @@ export default function Backup({ token, setAlert, ...rest }) {
                 setDifferentBackupTime(res.data[1].date)
                 setManualBackupTime(res.data[2].date)
             }).catch((error) => {
-                console.error((globalVariable == "zh-tw" ? ("API 请求失败", error) : globalVariable == "zh-cn" ? ("API 请求失败", error) : "API request failed: No data"));
-                handleErrorOpen((globalVariable == "zh-tw" ? "查詢失敗:API請求失敗" : globalVariable == "zh-cn" ? "查询失败:API请求失败" : "Query failed: API request failed"));
+                console.error((globalVariable === "zh-tw" ? ("API 请求失败", error) : globalVariable === "zh-cn" ? ("API 请求失败", error) : "API request failed: No data"));
+                handleErrorOpen((globalVariable === "zh-tw" ? "查詢失敗:API請求失敗" : globalVariable === "zh-cn" ? "查询失败:API请求失败" : "Query failed: API request failed"));
             });
     };
 
@@ -141,10 +140,10 @@ export default function Backup({ token, setAlert, ...rest }) {
         console.log(data)
         apiPostSchedulerDate(data)
             .then((res) => {
-                handleOpen((globalVariable == "zh-tw" ? ("更新成功,下次更新時間" + res.data.next_run_time) : globalVariable == "zh-cn" ? ("更新成功,下次更新时间" + res.data.next_run_time) : ("Update successful, next update time" + res.data.next_run_time)));
+                handleOpen((globalVariable === "zh-tw" ? ("更新成功,下次更新時間" + res.data.next_run_time) : globalVariable === "zh-cn" ? ("更新成功,下次更新时间" + res.data.next_run_time) : ("Update successful, next update time" + res.data.next_run_time)));
             }).catch((error) => {
-                console.error((globalVariable == "zh-tw" ? ("API 请求失败", error) : globalVariable == "zh-cn" ? ("API 请求失败", error) : "API request failed: No data"));
-                handleErrorOpen((globalVariable == "zh-tw" ? "查詢失敗:API請求失敗" : globalVariable == "zh-cn" ? "查询失败:API请求失败" : "Query failed: API request failed"));
+                console.error((globalVariable === "zh-tw" ? ("API 请求失败", error) : globalVariable === "zh-cn" ? ("API 请求失败", error) : "API request failed: No data"));
+                handleErrorOpen((globalVariable === "zh-tw" ? "查詢失敗:API請求失敗" : globalVariable === "zh-cn" ? "查询失败:API请求失败" : "Query failed: API request failed"));
             });
     };
 
@@ -159,10 +158,10 @@ export default function Backup({ token, setAlert, ...rest }) {
         console.log(data)
         apiPostSchedulerCron(data)
             .then((res) => {
-                handleOpen((globalVariable == "zh-tw" ? ("更新成功,下次更新時間" + res.data.next_run_time) : globalVariable == "zh-cn" ? ("更新成功,下次更新时间" + res.data.next_run_time) : ("Update successful, next update time" + res.data.next_run_time)));
+                handleOpen((globalVariable === "zh-tw" ? ("更新成功,下次更新時間" + res.data.next_run_time) : globalVariable === "zh-cn" ? ("更新成功,下次更新时间" + res.data.next_run_time) : ("Update successful, next update time" + res.data.next_run_time)));
             }).catch((error) => {
-                console.error((globalVariable == "zh-tw" ? ("API 请求失败", error) : globalVariable == "zh-cn" ? ("API 请求失败", error) : "API request failed: No data"));
-                handleErrorOpen((globalVariable == "zh-tw" ? "查詢失敗:API請求失敗" : globalVariable == "zh-cn" ? "查询失败:API请求失败" : "Query failed: API request failed"));
+                console.error((globalVariable === "zh-tw" ? ("API 请求失败", error) : globalVariable === "zh-cn" ? ("API 请求失败", error) : "API request failed: No data"));
+                handleErrorOpen((globalVariable === "zh-tw" ? "查詢失敗:API請求失敗" : globalVariable === "zh-cn" ? "查询失败:API请求失败" : "Query failed: API request failed"));
             });
     };
 
@@ -178,15 +177,15 @@ export default function Backup({ token, setAlert, ...rest }) {
             .then((res) => {
                 console.log(res)
                 if (res.data.message) {
-                    handleOpen((globalVariable == "zh-tw" ? ("備份成功 " + res.data.message) : globalVariable == "zh-cn" ? ("备份成功 " + res.data.message) : ("Backup successful" + res.data.message)))
+                    handleOpen((globalVariable === "zh-tw" ? ("備份成功 " + res.data.message) : globalVariable === "zh-cn" ? ("备份成功 " + res.data.message) : ("Backup successful" + res.data.message)))
                     manualHandleClose()
                 } else {
-                    handleErrorOpen((globalVariable == "zh-tw" ? "查詢失敗:沒有資料" : globalVariable == "zh-cn" ? "查询失败:没有资料" : "Query failed: No data"))
+                    handleErrorOpen((globalVariable === "zh-tw" ? "查詢失敗:沒有資料" : globalVariable === "zh-cn" ? "查询失败:没有资料" : "Query failed: No data"))
                     manualHandleClose()
                 }
             }).catch((error) => {
-                console.error((globalVariable == "zh-tw" ? ("API 请求失败", error) : globalVariable == "zh-cn" ? ("API 请求失败", error) : "API request failed: No data"));
-                handleErrorOpen((globalVariable == "zh-tw" ? "查詢失敗:API請求失敗" : globalVariable == "zh-cn" ? "查询失败:API请求失败" : "Query failed: API request failed"));
+                console.error((globalVariable === "zh-tw" ? ("API 请求失败", error) : globalVariable === "zh-cn" ? ("API 请求失败", error) : "API request failed: No data"));
+                handleErrorOpen((globalVariable === "zh-tw" ? "查詢失敗:API請求失敗" : globalVariable === "zh-cn" ? "查询失败:API请求失败" : "Query failed: API request failed"));
                 manualHandleClose()
             });
     };
@@ -203,10 +202,10 @@ export default function Backup({ token, setAlert, ...rest }) {
         apiPostUpdateSetting(data)
             .then((res) => {
                 console.log(res)
-                handleOpen((globalVariable == "zh-tw" ? "更改差異備份路徑成功" : globalVariable == "zh-cn" ? "更改差异备份路径成功" : "Change differential backup path successful"))
+                handleOpen((globalVariable === "zh-tw" ? "更改差異備份路徑成功" : globalVariable === "zh-cn" ? "更改差异备份路径成功" : "Change differential backup path successful"))
             }).catch((error) => {
-                console.error((globalVariable == "zh-tw" ? ("API 请求失败", error) : globalVariable == "zh-cn" ? ("API 请求失败", error) : "API request failed: No data"));
-                handleErrorOpen((globalVariable == "zh-tw" ? "查詢失敗:API請求失敗" : globalVariable == "zh-cn" ? "查询失败:API请求失败" : "Query failed: API request failed"));
+                console.error((globalVariable === "zh-tw" ? ("API 请求失败", error) : globalVariable === "zh-cn" ? ("API 请求失败", error) : "API request failed: No data"));
+                handleErrorOpen((globalVariable === "zh-tw" ? "查詢失敗:API請求失敗" : globalVariable === "zh-cn" ? "查询失败:API请求失败" : "Query failed: API request failed"));
                 manualHandleClose()
             });
     };
@@ -222,11 +221,11 @@ export default function Backup({ token, setAlert, ...rest }) {
         apiPostRestoreBackUp(data)
             .then((res) => {
                 console.log(res)
-                handleOpen((globalVariable == "zh-tw" ? "還原成功" : globalVariable == "zh-cn" ? "还原成功" : "Restore successful"))
+                handleOpen((globalVariable === "zh-tw" ? "還原成功" : globalVariable === "zh-cn" ? "还原成功" : "Restore successful"))
                 backUpRestroeHandleClickClose()
             }).catch((error) => {
-                console.error((globalVariable == "zh-tw" ? ("API 请求失败", error) : globalVariable == "zh-cn" ? ("API 请求失败", error) : "API request failed: No data"));
-                handleErrorOpen((globalVariable == "zh-tw" ? "查詢失敗:API請求失敗" : globalVariable == "zh-cn" ? "查询失败:API请求失败" : "Query failed: API request failed"));
+                console.error((globalVariable === "zh-tw" ? ("API 请求失败", error) : globalVariable === "zh-cn" ? ("API 请求失败", error) : "API request failed: No data"));
+                handleErrorOpen((globalVariable === "zh-tw" ? "查詢失敗:API請求失敗" : globalVariable === "zh-cn" ? "查询失败:API请求失败" : "Query failed: API request failed"));
                 backUpRestroeHandleClickClose()
             });
     };
@@ -288,7 +287,7 @@ export default function Backup({ token, setAlert, ...rest }) {
                     {errorMessage}
                 </Alert>
             </Snackbar>
-            {globalVariable == "zh-tw" ? (
+            {globalVariable === "zh-tw" ? (
                 <>
                     <Card>
                         <Box sx={{ bgcolor: '#696969' }}>
@@ -577,7 +576,7 @@ export default function Backup({ token, setAlert, ...rest }) {
                         </Grid>
                     </Grid>
                 </>
-            ) : globalVariable == "zh-cn" ? (
+            ) : globalVariable === "zh-cn" ? (
                 <>
                     <Card>
                         <Box sx={{ bgcolor: '#696969' }}>

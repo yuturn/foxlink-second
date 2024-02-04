@@ -10,15 +10,15 @@ import Login from './LoginPage';
 import FoxlinkPages from './homepage';
 import SnackbarAlert from "./Snackbar";
 import Status from "./AllStatus";
-import Statistics from "./Statistics";
+// import Statistics from "./Statistics";
 import Machinehealth from "./Machinehealth";
 import LOG from "./LOG";
 import Backup from "./Backup";
 import Consumables from "./Consumables";
 import Project from "./Project";
-import SignUp from "./Signup"
+// import SignUp from "./Signup"
 import Comparison from "./Comparison"
-import { NotFound } from "./404";
+// import { NotFound } from "./404";
 import { GlobalProvider } from '../components/GlobalContext';
 
 export default function App() {

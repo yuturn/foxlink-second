@@ -1,18 +1,12 @@
-import React, { useState, useRef, useEffect, useContext } from "react";
-import { DataGrid } from '@mui/x-data-grid';
+import React, { useState, useEffect, useContext } from "react";
 import { apiGetStatisticsDetails } from '../api'
 import { GlobalContext } from '../components/GlobalContext';
 import {
     Box,
     Card,
     Grid,
-    FormControl,
-    InputLabel,
     CardHeader,
-    Typography,
-    CardContent,
-    Divider,
-    palette
+    Typography
 } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -45,7 +39,7 @@ const darkTheme = createTheme({
     },
 });
 
-export default function Statistics({ token, setAlert, ...rest }) {
+export default function Statistics({ token, ...rest }) {
     const { globalVariable, updateGlobalVariable } = useContext(GlobalContext);
     const [orderWeek, setOrderWeek] = useState('asc');
     const [weekOrderBy, setWeekOrderBy] = useState('label');

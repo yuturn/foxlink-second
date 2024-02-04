@@ -94,26 +94,26 @@ export default function LOG({ token, ...rest }) {
                     setLogData(res.data.logs)
                     setCurrentPage(res.data.page)
                     setTotalData(res.data.total)
-                    if (res.data.total % res.data.limit == 0) {
+                    if (res.data.total % res.data.limit === 0) {
                         setTotalPage(res.data.total / res.data.limit)
                     } else {
                         setTotalPage(Math.floor(res.data.total / res.data.limit) + 1)
                     }
-                    handleOpen((globalVariable == "zh-tw" ? "查詢成功" : globalVariable == "zh-cn" ? "查询成功" : "Search successful"))
+                    handleOpen((globalVariable === "zh-tw" ? "查詢成功" : globalVariable === "zh-cn" ? "查询成功" : "Search successful"))
                 } else {
                     setLogData([])
                     setCurrentPage()
                     setTotalData()
                     setTotalPage()
-                    handleErrorOpen((globalVariable == "zh-tw" ? "查詢失敗:沒有資料" : globalVariable == "zh-cn" ? "查询失败:没有资料" : "Query failed: No data"))
+                    handleErrorOpen((globalVariable === "zh-tw" ? "查詢失敗:沒有資料" : globalVariable === "zh-cn" ? "查询失败:没有资料" : "Query failed: No data"))
                 }
             }).catch((error) => {
-                console.error((globalVariable == "zh-tw" ? ("API 请求失败", error) : globalVariable == "zh-cn" ? ("API 请求失败", error) : ("API request failed", error)));
+                console.error((globalVariable === "zh-tw" ? ("API 请求失败", error) : globalVariable === "zh-cn" ? ("API 请求失败", error) : ("API request failed", error)));
                 setLogData([])
                 setCurrentPage()
                 setTotalData()
                 setTotalPage()
-                handleErrorOpen((globalVariable == "zh-tw" ? "查詢失敗:API請求失敗" : globalVariable == "zh-cn" ? "查询失败:API请求失败" : "Query failed: API request failed"));
+                handleErrorOpen((globalVariable === "zh-tw" ? "查詢失敗:API請求失敗" : globalVariable === "zh-cn" ? "查询失败:API请求失败" : "Query failed: API request failed"));
             });
     };
     //這邊是上一頁的按鈕
@@ -138,26 +138,26 @@ export default function LOG({ token, ...rest }) {
                         setLogData(res.data.logs)
                         setCurrentPage(res.data.page)
                         setTotalData(res.data.total)
-                        if (res.data.total % res.data.limit == 0) {
+                        if (res.data.total % res.data.limit === 0) {
                             setTotalPage(res.data.total / res.data.limit)
                         } else {
                             setTotalPage(Math.floor(res.data.total / res.data.limit) + 1)
                         }
-                        handleOpen((globalVariable == "zh-tw" ? "查詢成功" : globalVariable == "zh-cn" ? "查询成功" : "Search successful"))
+                        handleOpen((globalVariable === "zh-tw" ? "查詢成功" : globalVariable === "zh-cn" ? "查询成功" : "Search successful"))
                     } else {
                         setLogData([])
                         setCurrentPage()
                         setTotalData()
                         setTotalPage()
-                        handleErrorOpen((globalVariable == "zh-tw" ? "查詢失敗:沒有資料" : globalVariable == "zh-cn" ? "查询失败:没有资料" : "Query failed: No data"))
+                        handleErrorOpen((globalVariable === "zh-tw" ? "查詢失敗:沒有資料" : globalVariable === "zh-cn" ? "查询失败:没有资料" : "Query failed: No data"))
                     }
                 }).catch((error) => {
-                    console.error((globalVariable == "zh-tw" ? ("API 请求失败", error) : globalVariable == "zh-cn" ? ("API 请求失败", error) : ("API request failed", error)));
+                    console.error((globalVariable === "zh-tw" ? ("API 请求失败", error) : globalVariable === "zh-cn" ? ("API 请求失败", error) : ("API request failed", error)));
                     setLogData([])
                     setCurrentPage()
                     setTotalData()
                     setTotalPage()
-                    handleErrorOpen((globalVariable == "zh-tw" ? "查詢失敗:API請求失敗" : globalVariable == "zh-cn" ? "查询失败:API请求失败" : "Query failed: API request failed"));
+                    handleErrorOpen((globalVariable === "zh-tw" ? "查詢失敗:API請求失敗" : globalVariable === "zh-cn" ? "查询失败:API请求失败" : "Query failed: API request failed"));
                 });
         } else {
             handleErrorOpen("沒有上一頁")
@@ -186,26 +186,26 @@ export default function LOG({ token, ...rest }) {
                         setLogData(res.data.logs)
                         setCurrentPage(res.data.page)
                         setTotalData(res.data.total)
-                        if (res.data.total % res.data.limit == 0) {
+                        if (res.data.total % res.data.limit === 0) {
                             setTotalPage(res.data.total / res.data.limit)
                         } else {
                             setTotalPage(Math.floor(res.data.total / res.data.limit) + 1)
                         }
-                        handleOpen((globalVariable == "zh-tw" ? "查詢成功" : globalVariable == "zh-cn" ? "查询成功" : "Search successful"))
+                        handleOpen((globalVariable === "zh-tw" ? "查詢成功" : globalVariable === "zh-cn" ? "查询成功" : "Search successful"))
                     } else {
                         setLogData([])
                         setCurrentPage()
                         setTotalData()
                         setTotalPage()
-                        handleErrorOpen((globalVariable == "zh-tw" ? "查詢失敗:沒有資料" : globalVariable == "zh-cn" ? "查询失败:没有资料" : "Query failed: No data"))
+                        handleErrorOpen((globalVariable === "zh-tw" ? "查詢失敗:沒有資料" : globalVariable === "zh-cn" ? "查询失败:没有资料" : "Query failed: No data"))
                     }
                 }).catch((error) => {
-                    console.error((globalVariable == "zh-tw" ? ("API 请求失败", error) : globalVariable == "zh-cn" ? ("API 请求失败", error) : ("API request failed", error)));
+                    console.error((globalVariable === "zh-tw" ? ("API 请求失败", error) : globalVariable === "zh-cn" ? ("API 请求失败", error) : ("API request failed", error)));
                     setLogData([])
                     setCurrentPage()
                     setTotalData()
                     setTotalPage()
-                    handleErrorOpen((globalVariable == "zh-tw" ? "查詢失敗:API請求失敗" : globalVariable == "zh-cn" ? "查询失败:API请求失败" : "Query failed: API request failed"));
+                    handleErrorOpen((globalVariable === "zh-tw" ? "查詢失敗:API請求失敗" : globalVariable === "zh-cn" ? "查询失败:API请求失败" : "Query failed: API request failed"));
                 });
         } else {
             handleErrorOpen("沒有下一頁")
@@ -274,7 +274,7 @@ export default function LOG({ token, ...rest }) {
                     {errorMessage}
                 </Alert>
             </Snackbar>
-            {globalVariable == "zh-tw" ? (
+            {globalVariable === "zh-tw" ? (
                 <Card >
                     <Box sx={{ bgcolor: '#696969' }}>
                         <CardHeader title="LOG頁面:" color="#62aaf4" />
@@ -500,7 +500,7 @@ export default function LOG({ token, ...rest }) {
                         </Grid>
                     </CardContent>
                 </Card>
-            ) : globalVariable == "zh-cn" ? (
+            ) : globalVariable === "zh-cn" ? (
                 <Card >
                     <Box sx={{ bgcolor: '#696969' }}>
                         <CardHeader title="LOG页面:" color="#62aaf4" />

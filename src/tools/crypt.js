@@ -122,7 +122,7 @@ function parseSalt(salt) {
             ? roundsMin
             : conf.rounds > roundsMax
                 ? /* istanbul ignore next */
-                    (conf.rounds = roundsMax)
+                (conf.rounds = roundsMax)
                 : conf.rounds;
     // sanity-check saltString
     conf.saltString = conf.saltString.substr(0, 16);
@@ -161,8 +161,8 @@ function generateDigestA(plaintext, conf) {
         .split("")
         .reverse()
         .forEach(function (num) {
-        hashA.update(num === "0" ? plaintext : digestB);
-    });
+            hashA.update(num === "0" ? plaintext : digestB);
+        });
     // step 12
     return hashA.digest();
 }
@@ -189,7 +189,7 @@ function generateHash(plaintext, conf) {
     // step 17-19
     var hashDS = (0, crypto_1.createHash)(hashType);
     var step18 = 16 + digestA[0];
-    for (var i = 0; i < step18; i++) {
+    for (var ii = 0; ii < step18; ii++) {
         hashDS.update(conf.saltString);
     }
     var digestDS = hashDS.digest();
@@ -198,9 +198,9 @@ function generateHash(plaintext, conf) {
     // step 20a
     // Isn't this step redundant? The salt string doesn't have 32 or 64 bytes. It's truncated to 16 characters
     var saltByteLength = buffer_1.Buffer.byteLength(conf.saltString);
-    for (var offset = 0; offset + digestSize < saltByteLength; offset += digestSize) {
+    for (var offset1 = 0; offset1 + digestSize < saltByteLength; offset1 += digestSize) {
         /* istanbul ignore next */
-        s.set(digestDS, offset);
+        s.set(digestDS, offset1);
     }
     // step 20b
     var saltRemainder = saltByteLength % digestSize;
