@@ -330,7 +330,7 @@ export default function Statistics({ token, ...rest }) {
                                                                 {data2[project][device].filter(columns => columns.frequency === "日預測").sort(getComparatorDate(orderDate)).map((columns) => (
                                                                     <TableRow key={columns.name}>
                                                                         <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.lightColor) }}>
-                                                                            <Typography fontSize={20}>{columns.lightColor === 0 ? "異常" : "穩定"}</Typography>
+                                                                            <Typography fontSize={20}>{columns.lightColor === 0 ? "穩定" : "異常"}</Typography>
                                                                         </TableCell>
                                                                         <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
                                                                             <Typography fontSize={20}>{columns.name}</Typography>
@@ -522,7 +522,7 @@ export default function Statistics({ token, ...rest }) {
                                                                 {data2[project][device].filter(columns => columns.frequency === "日預測").sort(getComparatorDate(orderDate)).map((columns) => (
                                                                     <TableRow key={columns.name}>
                                                                         <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.lightColor) }}>
-                                                                            <Typography fontSize={20}>{columns.lightColor === 0 ? "异常" : "稳定"}</Typography>
+                                                                            <Typography fontSize={20}>{columns.lightColor === 0 ? "稳定" : "异常"}</Typography>
                                                                         </TableCell>
                                                                         <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
                                                                             <Typography fontSize={20}>{columns.name}</Typography>
@@ -714,7 +714,7 @@ export default function Statistics({ token, ...rest }) {
                                                                 {data2[project][device].filter(columns => columns.frequency === "日預測").sort(getComparatorDate(orderDate)).map((columns) => (
                                                                     <TableRow key={columns.name}>
                                                                         <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.lightColor) }}>
-                                                                            <Typography fontSize={20}>{columns.lightColor === 0 ? "Abnormal" : "Stablize"}</Typography>
+                                                                            <Typography fontSize={20}>{columns.lightColor === 0 ? "Stablize" : "Abnormal"}</Typography>
                                                                         </TableCell>
                                                                         <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
                                                                             <Typography fontSize={20}>{columns.name}</Typography>
