@@ -56,6 +56,7 @@ const darkTheme = createTheme({
 
 const columnsTW = [
   { field: 'project', headerName: '專案名稱', width: 200 },
+  { field: 'selectedDisplay', headerName: '已於專案中', width: 200 },
   { field: 'line', headerName: '線別', width: 200 },
   { field: 'device', headerName: '機台名稱', width: 200 },
   { field: 'ename', headerName: 'ename', width: 450 },
@@ -63,6 +64,7 @@ const columnsTW = [
 ];
 const columnsCN = [
   { field: 'project', headerName: '专案名称', width: 200 },
+  { field: 'selectedDisplay', headerName: '已于专案中', width: 200 },
   { field: 'line', headerName: '线别', width: 200 },
   { field: 'device', headerName: '机台名称', width: 200 },
   { field: 'ename', headerName: 'ename', width: 450 },
@@ -70,6 +72,7 @@ const columnsCN = [
 ];
 const columnsEN = [
   { field: 'project', headerName: 'Project name', width: 200 },
+  { field: 'selectedDisplay', headerName: 'Already in project', width: 200 },
   { field: 'line', headerName: 'Line', width: 200 },
   { field: 'device', headerName: 'Machine name', width: 200 },
   { field: 'ename', headerName: 'ename', width: 450 },
@@ -265,6 +268,7 @@ export default function Project({ token, setAlert, ...rest }) {
         const newData = data.data.map((item, index) => ({
           ...item,
           id: index + 1, // 使用唯一的值作為 id
+          selectedDisplay: item.selected ? '是' : '否',
         }));
         const selectedIds = newData.filter((item) => item.selected).map((item) => item.id);
         // console.log(newData)
@@ -369,6 +373,11 @@ export default function Project({ token, setAlert, ...rest }) {
     setShowFirstCard(false);
   };
 
+  const getRowClassName = (params) => {
+    console.log(params.row.selected); // 检查这里的输出
+    return params.row.selected ? { backgroundColor: '#ffc107' } : {};
+  };
+
   return (
     <ThemeProvider theme={darkTheme}>
       <Box display="flex">
@@ -466,7 +475,6 @@ export default function Project({ token, setAlert, ...rest }) {
                           }}
                           pageSizeOptions={[5]}
                           checkboxSelection
-                          rowSelectionModel={selectionModel}
                           onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
                         />
                       </div>
@@ -482,9 +490,6 @@ export default function Project({ token, setAlert, ...rest }) {
                           }}
                           pageSizeOptions={[5]}
                           checkboxSelection
-                          defaultSelectionModel={projectList
-                            .filter((row) => row.selected)
-                            .map((row, index) => index)} // 使用行索引作为标识符
                           onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
                         />
                       </div>
@@ -500,9 +505,6 @@ export default function Project({ token, setAlert, ...rest }) {
                           }}
                           pageSizeOptions={[5]}
                           checkboxSelection
-                          selectionModel={projectList
-                            .filter((row) => row.selected)
-                            .map((row, index) => index)} // 使用行索引作为标识符
                           onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
                         />
                       </div>
