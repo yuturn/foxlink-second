@@ -191,7 +191,7 @@ export default function Project({ token, ...rest }) {
       return "#ffffff";
       // 0 是沒信心
     } else if (faithful === 0) {
-      return "#ff7f50";
+      return "#ffc107";
     } else {
       return null; // 或者返回一个默认的图标
     }
@@ -294,6 +294,11 @@ export default function Project({ token, ...rest }) {
     apiGetCompareSearch(data)
       .then((res) => {
         console.log(res.data);
+        if (!res.data || res.data.length < 0) {
+          // 没有token，不执行操作
+          handleErrorOpen((globalVariable == "zh-tw" ? "查詢失敗:沒有資料" : globalVariable == "zh-cn" ? "查询失败:没有资料" : "Query failed: No data"))
+          return;
+        }
         setCurrentAccuracyInfo(res.data[0]['accuracyDate']);
         console.log(res.data[0]['devices']);
         setDetailData(res.data[0]['devices'])

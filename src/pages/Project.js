@@ -248,6 +248,9 @@ export default function Project({ token, setAlert, ...rest }) {
       });
     handleUpdateProjectUser();
   }, [projectID, selectedDevicesDataUser]); // 空数组作为第二个参数，表示仅在组件加载时调用 useEffect
+
+  const [selectionModel, setSelectionModel] = React.useState([]);
+
   //Get資料庫裡project裡面的device詳細清單
   function handleOnClickProject() {
     console.log(document.getElementById('searchProject').value)
@@ -263,9 +266,11 @@ export default function Project({ token, setAlert, ...rest }) {
           ...item,
           id: index + 1, // 使用唯一的值作為 id
         }));
-        console.log(newData)
+        const selectedIds = newData.filter((item) => item.selected).map((item) => item.id);
+        // console.log(newData)
         setProjectList(newData);
-        console.log(projectList)
+        setSelectionModel(selectedIds); // 設定初始的選中狀態
+        // console.log(projectList)
         handleOpen((globalVariable === "zh-tw" ? "查詢成功" : globalVariable === "zh-cn" ? "查询成功" : "Search successful"))
       }).catch(err => { console.log(err); handleErrorOpen((globalVariable === "zh-tw" ? ("查詢專案失敗: " + err) : globalVariable === "zh-cn" ? ("查询专案失败:" + err) : ("Query project failed:" + err))); })
   };
@@ -461,6 +466,7 @@ export default function Project({ token, setAlert, ...rest }) {
                           }}
                           pageSizeOptions={[5]}
                           checkboxSelection
+                          rowSelectionModel={selectionModel}
                           onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
                         />
                       </div>
@@ -476,6 +482,9 @@ export default function Project({ token, setAlert, ...rest }) {
                           }}
                           pageSizeOptions={[5]}
                           checkboxSelection
+                          defaultSelectionModel={projectList
+                            .filter((row) => row.selected)
+                            .map((row, index) => index)} // 使用行索引作为标识符
                           onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
                         />
                       </div>
@@ -491,6 +500,9 @@ export default function Project({ token, setAlert, ...rest }) {
                           }}
                           pageSizeOptions={[5]}
                           checkboxSelection
+                          selectionModel={projectList
+                            .filter((row) => row.selected)
+                            .map((row, index) => index)} // 使用行索引作为标识符
                           onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
                         />
                       </div>
