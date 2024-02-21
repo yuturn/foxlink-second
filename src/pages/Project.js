@@ -56,6 +56,7 @@ const darkTheme = createTheme({
 
 const columnsTW = [
   { field: 'project', headerName: '專案名稱', width: 200 },
+  { field: 'selectedDisplay', headerName: '已於專案中', width: 200 },
   { field: 'line', headerName: '線別', width: 200 },
   { field: 'device', headerName: '機台名稱', width: 200 },
   { field: 'ename', headerName: 'ename', width: 450 },
@@ -63,6 +64,7 @@ const columnsTW = [
 ];
 const columnsCN = [
   { field: 'project', headerName: '专案名称', width: 200 },
+  { field: 'selectedDisplay', headerName: '已于专案中', width: 200 },
   { field: 'line', headerName: '线别', width: 200 },
   { field: 'device', headerName: '机台名称', width: 200 },
   { field: 'ename', headerName: 'ename', width: 450 },
@@ -70,6 +72,7 @@ const columnsCN = [
 ];
 const columnsEN = [
   { field: 'project', headerName: 'Project name', width: 200 },
+  { field: 'selectedDisplay', headerName: 'Already in project', width: 200 },
   { field: 'line', headerName: 'Line', width: 200 },
   { field: 'device', headerName: 'Machine name', width: 200 },
   { field: 'ename', headerName: 'ename', width: 450 },
@@ -248,6 +251,9 @@ export default function Project({ token, setAlert, ...rest }) {
       });
     handleUpdateProjectUser();
   }, [projectID, selectedDevicesDataUser]); // 空数组作为第二个参数，表示仅在组件加载时调用 useEffect
+
+  const [selectionModel, setSelectionModel] = React.useState([]);
+
   //Get資料庫裡project裡面的device詳細清單
   function handleOnClickProject() {
     console.log(document.getElementById('searchProject').value)
@@ -262,10 +268,13 @@ export default function Project({ token, setAlert, ...rest }) {
         const newData = data.data.map((item, index) => ({
           ...item,
           id: index + 1, // 使用唯一的值作為 id
+          selectedDisplay: item.selected ? '是' : '否',
         }));
-        console.log(newData)
+        const selectedIds = newData.filter((item) => item.selected).map((item) => item.id);
+        // console.log(newData)
         setProjectList(newData);
-        console.log(projectList)
+        setSelectionModel(selectedIds); // 設定初始的選中狀態
+        // console.log(projectList)
         handleOpen((globalVariable === "zh-tw" ? "查詢成功" : globalVariable === "zh-cn" ? "查询成功" : "Search successful"))
       }).catch(err => { console.log(err); handleErrorOpen((globalVariable === "zh-tw" ? ("查詢專案失敗: " + err) : globalVariable === "zh-cn" ? ("查询专案失败:" + err) : ("Query project failed:" + err))); })
   };
@@ -362,6 +371,11 @@ export default function Project({ token, setAlert, ...rest }) {
 
   const handleShowSecondCard = () => {
     setShowFirstCard(false);
+  };
+
+  const getRowClassName = (params) => {
+    console.log(params.row.selected); // 检查这里的输出
+    return params.row.selected ? { backgroundColor: '#ffc107' } : {};
   };
 
   return (
