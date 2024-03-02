@@ -581,7 +581,7 @@ export default function Statistics({ token, ...rest }) {
                                 });
                                 console.log(abnormalCount, nonAbnormalCount)
                                 let pieData = [
-                                    { value: nonAbnormalCount, label: 'Stablize' },
+                                    { value: nonAbnormalCount, label: 'Stabilize' },
                                     { value: abnormalCount, label: 'Abnormal' },
                                 ];
 
@@ -622,7 +622,7 @@ export default function Statistics({ token, ...rest }) {
                                                 </Grid>
                                                 <Grid xs={3} sx={{ mt: 4 }}>
                                                     <Box border={1} sx={{ mt: 4, ml: 6, width: 118, height: 'auto' }}>
-                                                        <Typography align="center" fontSize={25}>Stablize</Typography>
+                                                        <Typography align="center" fontSize={25}>Stabilize</Typography>
                                                         <Box sx={{ bgcolor: '#008f00', width: 'auto', height: 'auto' }}>
                                                             <Typography align="center" fontSize={20}>{nonAbnormalCount}</Typography>
                                                         </Box>
@@ -665,7 +665,7 @@ export default function Statistics({ token, ...rest }) {
                                                                 {data[project][device].filter(columns => columns.frequency === "週預測").sort(getComparator(orderWeek)).map((columns) => (
                                                                     <TableRow key={columns.name}>
                                                                         <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.lightColor) }}>
-                                                                            <Typography fontSize={20}>{columns.lightColor === 0 ? "Stablize" : "Abnormal"}</Typography>
+                                                                            <Typography fontSize={20}>{columns.lightColor === 0 ? "Stabilize" : "Abnormal"}</Typography>
                                                                         </TableCell>
                                                                         <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
                                                                             <Typography fontSize={20}>{columns.name}</Typography>
@@ -714,7 +714,7 @@ export default function Statistics({ token, ...rest }) {
                                                                 {data2[project][device].filter(columns => columns.frequency === "日預測").sort(getComparatorDate(orderDate)).map((columns) => (
                                                                     <TableRow key={columns.name}>
                                                                         <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.lightColor) }}>
-                                                                            <Typography fontSize={20}>{columns.lightColor === 0 ? "Stablize" : "Abnormal"}</Typography>
+                                                                            <Typography fontSize={20}>{columns.lightColor === 0 ? "Stabilize" : "Abnormal"}</Typography>
                                                                         </TableCell>
                                                                         <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
                                                                             <Typography fontSize={20}>{columns.name}</Typography>
