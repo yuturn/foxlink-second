@@ -302,6 +302,23 @@ export default function Project({ token, ...rest }) {
         setCurrentAccuracyInfo(res.data[0]['accuracyDate']);
         console.log(res.data[0]['devices']);
         setDetailData(res.data[0]['devices'])
+        // //就有排序功能了還要預設排序
+        setDetailData(prevDetailData => {
+          const sortedDetailData = Object.keys(prevDetailData).reduce((acc, deviceKey) => {
+            const device = prevDetailData[deviceKey];
+            const sortedEvents = device.events.sort((eventA, eventB) => eventA.category - eventB.category);
+            acc[deviceKey] = { ...device, events: sortedEvents };
+            return acc;
+          }, {});
+          return sortedDetailData;
+        });
+        // const sortedDetailData = Object.keys(detailData).reduce((acc, deviceKey) => {
+        //   const device = detailData[deviceKey];
+        //   const sortedEvents = device.events.sort((eventA, eventB) => eventA.category - eventB.category);
+        //   acc[deviceKey] = { ...device, events: sortedEvents };
+        //   return acc;
+        // }, {});
+        // setDetailData(sortedDetailData)
       });
   };
   const detailHandleClickClose = () => {
@@ -658,7 +675,13 @@ export default function Project({ token, ...rest }) {
                                                   <Typography fontSize={20}>Message</Typography>
                                                 </TableCell>
                                                 <TableCell align="center" sx={{ height: 'auto', border: "1px solid black", backgroundColor: "#e0ffff" }}>
-                                                  <Typography fontSize={20}>{globalVariable == "zh-tw" ? "實際" : globalVariable == "zh-cn" ? "实际" : "Ground truth"}</Typography>
+                                                  <TableSortLabel
+                                                    active={detailOrderBy === 'true'}
+                                                    direction={detailOrderBy === 'true' ? orderDetail : 'asc'}
+                                                    onClick={() => handleSortRequestDetail('true')}
+                                                  >
+                                                    <Typography fontSize={20}>{globalVariable == "zh-tw" ? "實際" : globalVariable == "zh-cn" ? "实际" : "Ground truth"}</Typography>
+                                                  </TableSortLabel>
                                                 </TableCell>
                                                 <TableCell align="center" sx={{ height: 'auto', border: "1px solid black", backgroundColor: "#e0ffff" }}>
                                                   <Typography fontSize={20}>{globalVariable == "zh-tw" ? "預測" : globalVariable == "zh-cn" ? "预测" : "Predict"}</Typography>
@@ -972,7 +995,13 @@ export default function Project({ token, ...rest }) {
                                                   <Typography fontSize={20}>Message</Typography>
                                                 </TableCell>
                                                 <TableCell align="center" sx={{ height: 'auto', border: "1px solid black", backgroundColor: "#e0ffff" }}>
-                                                  <Typography fontSize={20}>{globalVariable == "zh-tw" ? "實際" : globalVariable == "zh-cn" ? "实际" : "Ground truth"}</Typography>
+                                                  <TableSortLabel
+                                                    active={detailOrderBy === 'true'}
+                                                    direction={detailOrderBy === 'true' ? orderDetail : 'asc'}
+                                                    onClick={() => handleSortRequestDetail('true')}
+                                                  >
+                                                    <Typography fontSize={20}>{globalVariable == "zh-tw" ? "實際" : globalVariable == "zh-cn" ? "实际" : "Ground truth"}</Typography>
+                                                  </TableSortLabel>
                                                 </TableCell>
                                                 <TableCell align="center" sx={{ height: 'auto', border: "1px solid black", backgroundColor: "#e0ffff" }}>
                                                   <Typography fontSize={20}>{globalVariable == "zh-tw" ? "預測" : globalVariable == "zh-cn" ? "预测" : "Predict"}</Typography>
