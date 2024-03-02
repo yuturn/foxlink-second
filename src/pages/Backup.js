@@ -122,9 +122,22 @@ export default function Backup({ token, setAlert, ...rest }) {
         }
         apiGetBackUpStatistics(data)
             .then((res) => {
-                setCompletedBackupTime(res.data[0].date)
-                setDifferentBackupTime(res.data[1].date)
-                setManualBackupTime(res.data[2].date)
+                console.log(res.data)
+                for (var i = 0; i < res.data.length; i++) {
+                    if (res.data[i].name === "完整備份") {
+                        console.log(res.data[i].name)
+                        setCompletedBackupTime(res.data[i].date)
+                    } else if (res.data[i].name === "差異備份") {
+                        console.log(res.data[i].name)
+                        setDifferentBackupTime(res.data[i].date)
+                    } else {
+                        console.log(res.data[i].name)
+                        setManualBackupTime(res.data[i].date)
+                    }
+                }
+                // setCompletedBackupTime(res.data[0].date)
+                // setDifferentBackupTime(res.data[1].date)
+                // setManualBackupTime(res.data[2].date)
             }).catch((error) => {
                 console.error((globalVariable === "zh-tw" ? ("API 请求失败", error) : globalVariable === "zh-cn" ? ("API 请求失败", error) : "API request failed: No data"));
                 handleErrorOpen((globalVariable === "zh-tw" ? "查詢失敗:API請求失敗" : globalVariable === "zh-cn" ? "查询失败:API请求失败" : "Query failed: API request failed"));

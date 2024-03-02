@@ -279,7 +279,7 @@ export default function Project({ token, ...rest }) {
         setLoading(false)
       });
   };
-  //查看按鈕(detail table)
+  //準確率按鈕(detail table)
   const detailHandleClickOpen = (projectName, line, date) => {
     setDetailOpen(true);
     const data = {
