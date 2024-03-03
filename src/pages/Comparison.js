@@ -156,6 +156,17 @@ export default function Project({ token, ...rest }) {
       ? (a, b) => (a[orderBy] > b[orderBy] ? -1 : 1)
       : (a, b) => (a[orderBy] > b[orderBy] ? 1 : -1);
   };
+    ////////////////////////////////////////////////////////////////////
+  //預設開始與結束時間為昨天
+  useEffect(() => {
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+
+    setStartDate(yesterday);
+    setEndDate(yesterday);
+  }, []);
+  //////////////////////////////////////////////////////////////////////
   //點擊查看Detail的table sort
   const handleSortRequestDetail = (property) => {
     const isAsc = detailOrderBy === property && orderDetail === 'asc';
