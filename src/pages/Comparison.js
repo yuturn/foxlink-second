@@ -92,6 +92,35 @@ export default function Project({ token, ...rest }) {
 
   const { globalVariable, updateGlobalVariable } = useContext(GlobalContext);
 
+  function ColorBox(props) {
+    return (
+      <ThemeProvider
+        theme={{
+          ...darkTheme,
+          components: {
+            MuiBox: {
+              styleOverrides: { root: { width: "30px", height: "30px" } },
+            },
+          },
+        }}
+      >
+        <DialogContent>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <Box
+              sx={{
+                width: "30px",
+                height: "30px",
+                backgroundColor: "#ff7f50", // 橙色
+                marginRight: "10px",
+              }}
+            />
+            <Typography sx={{ fontSize: 30 }}>信心程度不足之異常事件</Typography>
+          </div>
+        </DialogContent>
+      </ThemeProvider>
+    );
+  }
+
   //折線圖function
   const LineChartExample = () => {
     return (
@@ -138,6 +167,15 @@ export default function Project({ token, ...rest }) {
         setProjectNameList(list);
       });
   }
+
+  useEffect(() => {
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+
+    setStartDate(yesterday);
+    setEndDate(yesterday);
+  }, []);
 
   //一開始的table
   const [order, setOrder] = useState('asc');
@@ -191,7 +229,7 @@ export default function Project({ token, ...rest }) {
       return "#ffffff";
       // 0 是沒信心
     } else if (faithful === 0) {
-      return "#ffc107";
+      return "#ff7f50";
     } else {
       return null; // 或者返回一个默认的图标
     }
@@ -711,6 +749,7 @@ export default function Project({ token, ...rest }) {
                                       </Grid>
                                     ))}
                                   </Grid>
+                                  <ColorBox msg={globalVariable == "zh-tw" ? "信心程度不足之異常事件" : globalVariable == "zh-cn" ? "信心程度不足之异常事件" : "Abnormal events with low confidence level"}></ColorBox>
                                 </DialogContent>
                                 <DialogActions>
                                   <LoadingButton onClick={detailHandleClickClose} autoFocus variant="contained">
@@ -1031,6 +1070,7 @@ export default function Project({ token, ...rest }) {
                                       </Grid>
                                     ))}
                                   </Grid>
+                                  <ColorBox msg={globalVariable == "zh-tw" ? "信心程度不足之異常事件" : globalVariable == "zh-cn" ? "信心程度不足之异常事件" : "Abnormal events with low confidence level"}></ColorBox>
                                 </DialogContent>
                                 <DialogActions>
                                   <LoadingButton onClick={detailHandleClickClose} autoFocus variant="contained">

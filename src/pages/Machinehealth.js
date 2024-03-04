@@ -26,7 +26,7 @@ import Paper from '@mui/material/Paper';
 import { PieChart, pieArcLabelClasses } from '@mui/x-charts';
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from 'react-responsive-carousel';
-
+import DialogContent from "@mui/material/DialogContent";
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 
@@ -65,6 +65,35 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
 
   const [dateData, setDateData] = useState({});
 
+  function ColorBox(props) {
+    return (
+      <ThemeProvider
+        theme={{
+          ...darkTheme,
+          components: {
+            MuiBox: {
+              styleOverrides: { root: { width: "30px", height: "30px" } },
+            },
+          },
+        }}
+      >
+        <DialogContent>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <Box
+              sx={{
+                width: "30px",
+                height: "30px",
+                backgroundColor: "#ffc107", // 黄色
+                marginRight: "10px",
+              }}
+            />
+            <Typography sx={{ fontSize: 30 }}>{props.msg}</Typography>
+          </div>
+        </DialogContent>
+      </ThemeProvider>
+    );
+  }
+
   const projectNameChange = (event) => {
     if (event.target.value === 'null') {
       setProjectName(null);
@@ -82,54 +111,6 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
   const togglePause = () => {
     setIsPaused(!isPaused);
   };
-  // function getCircleIcon(color) {
-  //   if (color ==== "red") {
-  //     return <RCircle />;
-  //   } else if (color ==== "yellow") {
-  //     return <YCircle />;
-  //   } else if (color ==== "green") {
-  //     return <GCircle />;
-  //   } else if (color ==== "blue") {
-  //     return <BCircle />;
-  //   } else {
-  //     return null; // 或者返回一个默认的图标
-  //   }
-  // }
-
-  // const RCircle = () => {
-  //   return (
-  //     <BsFillCircleFill style={{ color: 'red', fontSize: '30px' }} />
-  //   );
-  // }
-  // const YCircle = () => {
-  //   return (
-  //     <BsFillCircleFill style={{ color: 'yellow', fontSize: '30px' }} />
-  //   );
-  // }
-  // const GCircle = () => {
-  //   return (
-  //     <BsFillCircleFill style={{ color: 'green', fontSize: '30px' }} />
-  //   );
-  // }
-  // const BCircle = () => {
-  //   return (
-  //     <BsFillCircleFill style={{ color: '#4169e1', fontSize: '30px' }} />
-  //   );
-  // }
-
-  // function getCircleIcon(lightColor) {
-  //   if (lightColor ==== 1) {
-  //     return <RCircle />;
-  //   } else if (lightColor ==== 2) {
-  //     return <YCircle />;
-  //   } else if (lightColor ==== 3) {
-  //     return <GCircle />;
-  //   } else if (lightColor ==== 4) {
-  //     return <BCircle />;
-  //   } else {
-  //     return null; // 或者返回一个默认的图标
-  //   }
-  // }
   const settings = {
     dots: true,
     infinite: true,
@@ -327,9 +308,9 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
 
                 // Loop through the data for the current device to count '異常' and '穩定'
                 data[project][device].forEach((item) => {
-                  if (item.lightColor === 1) {
+                  if (item.steady === 1) {
                     abnormalCount++;
-                  } else if (item.lightColor === 0) {
+                  } else if (item.steady === 0) {
                     nonAbnormalCount++;
                   }
                 });
@@ -388,7 +369,12 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                               <TableHead style={{ backgroundColor: '#bfbfbf' }}>
                                 <TableRow>
                                   <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={3}>
-                                    <Typography fontSize={20}>週預測</Typography>
+                                    <Typography fontSize={20}>
+                                      週預測
+                                      {data[project][device]
+                                        .filter((columns) => columns.frequency === "週預測")
+                                        .map((item) => `${item.ori_date}-${item.pred_date}`)[0]}
+                                    </Typography>
                                   </TableCell>
                                 </TableRow>
                                 <TableRow>
@@ -418,14 +404,14 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                               <TableBody>
                                 {data[project][device].filter(columns => columns.frequency === "週預測").sort(getComparator(orderWeek)).map((columns) => (
                                   <TableRow key={columns.name}>
-                                    <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.lightColor) }}>
-                                      <Typography fontSize={20}>{columns.lightColor === 0 ? "穩定" : "異常"}</Typography>
+                                    <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.steady) }}>
+                                      <Typography fontSize={20}>{columns.steady === 0 ? "穩定" : "異常"}</Typography>
                                     </TableCell>
-                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.faithful) }}>
                                       <Typography fontSize={20}>{columns.name}</Typography>
                                     </TableCell>
-                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
-                                      <Typography fontSize={20}>{columns.date}</Typography>
+                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.faithful) }}>
+                                      <Typography fontSize={20}>{columns.happenLastTime}</Typography>
                                     </TableCell>
                                   </TableRow>
                                 ))}
@@ -437,7 +423,12 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                               <TableHead style={{ backgroundColor: '#bfbfbf' }}>
                                 <TableRow>
                                   <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={3}>
-                                    <Typography fontSize={20} >日預測</Typography>
+                                    <Typography fontSize={20}>
+                                      日預測
+                                      {data[project][device]
+                                        .filter((columns) => columns.frequency === "日預測")
+                                        .map((item) => `${item.pred_date}`)[0]}
+                                    </Typography>
                                   </TableCell>
                                 </TableRow>
                                 <TableRow>
@@ -467,20 +458,21 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                               <TableBody>
                                 {data2[project][device].filter(columns => columns.frequency === "日預測").sort(getComparatorDate(orderDate)).map((columns) => (
                                   <TableRow key={columns.name}>
-                                    <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.lightColor) }}>
-                                      <Typography fontSize={20}>{columns.lightColor === 0 ? "穩定" : "異常"}</Typography>
+                                    <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.steady) }}>
+                                      <Typography fontSize={20}>{columns.steady === 0 ? "穩定" : "異常"}</Typography>
                                     </TableCell>
                                     <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
                                       <Typography fontSize={20}>{columns.name}</Typography>
                                     </TableCell>
                                     <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
-                                      <Typography fontSize={20}>{columns.date}</Typography>
+                                      <Typography fontSize={20}>{columns.happenLastTime}</Typography>
                                     </TableCell>
                                   </TableRow>
                                 ))}
                               </TableBody>
                             </Table>
                           </TableContainer>
+                          <ColorBox msg="已發生過之異常事件"></ColorBox>
                         </Grid>
                       </Grid>
                     </Card>
@@ -519,9 +511,9 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
 
                 // Loop through the data for the current device to count '異常' and '穩定'
                 data[project][device].forEach((item) => {
-                  if (item.lightColor === 1) {
+                  if (item.steady === 1) {
                     abnormalCount++;
-                  } else if (item.lightColor === 0) {
+                  } else if (item.steady === 0) {
                     nonAbnormalCount++;
                   }
                 });
@@ -580,7 +572,12 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                               <TableHead style={{ backgroundColor: '#bfbfbf' }}>
                                 <TableRow>
                                   <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={3}>
-                                    <Typography fontSize={20}>周预测</Typography>
+                                    <Typography fontSize={20}>
+                                      周预测
+                                      {data[project][device]
+                                        .filter((columns) => columns.frequency === "週預測")
+                                        .map((item) => `${item.ori_date}-${item.pred_date}`)[0]}
+                                    </Typography>
                                   </TableCell>
                                 </TableRow>
                                 <TableRow>
@@ -610,14 +607,14 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                               <TableBody>
                                 {data[project][device].filter(columns => columns.frequency === "週預測").sort(getComparator(orderWeek)).map((columns) => (
                                   <TableRow key={columns.name}>
-                                    <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.lightColor) }}>
-                                      <Typography fontSize={20}>{columns.lightColor === 0 ? "稳定" : "异常"}</Typography>
+                                    <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.steady) }}>
+                                      <Typography fontSize={20}>{columns.steady === 0 ? "稳定" : "异常"}</Typography>
                                     </TableCell>
                                     <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
                                       <Typography fontSize={20}>{columns.name}</Typography>
                                     </TableCell>
                                     <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
-                                      <Typography fontSize={20}>{columns.date}</Typography>
+                                      <Typography fontSize={20}>{columns.happenLastTime}</Typography>
                                     </TableCell>
                                   </TableRow>
                                 ))}
@@ -629,7 +626,12 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                               <TableHead style={{ backgroundColor: '#bfbfbf' }}>
                                 <TableRow>
                                   <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={3}>
-                                    <Typography fontSize={20} >日预测</Typography>
+                                    <Typography fontSize={20}>
+                                      日预测
+                                      {data[project][device]
+                                        .filter((columns) => columns.frequency === "日預測")
+                                        .map((item) => `${item.ori_date}-${item.pred_date}`)[0]}
+                                    </Typography>
                                   </TableCell>
                                 </TableRow>
                                 <TableRow>
@@ -659,20 +661,21 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                               <TableBody>
                                 {data2[project][device].filter(columns => columns.frequency === "日預測").sort(getComparatorDate(orderDate)).map((columns) => (
                                   <TableRow key={columns.name}>
-                                    <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.lightColor) }}>
-                                      <Typography fontSize={20}>{columns.lightColor === 0 ? "稳定" : "异常"}</Typography>
+                                    <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.steady) }}>
+                                      <Typography fontSize={20}>{columns.steady === 0 ? "稳定" : "异常"}</Typography>
                                     </TableCell>
-                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.faithful) }}>
                                       <Typography fontSize={20}>{columns.name}</Typography>
                                     </TableCell>
-                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
-                                      <Typography fontSize={20}>{columns.date}</Typography>
+                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.faithful) }}>
+                                      <Typography fontSize={20}>{columns.happenLastTime}</Typography>
                                     </TableCell>
                                   </TableRow>
                                 ))}
                               </TableBody>
                             </Table>
                           </TableContainer>
+                          <ColorBox msg="已发生过之异常事件"></ColorBox>
                         </Grid>
                       </Grid>
                     </Card>
@@ -711,9 +714,9 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
 
                 // Loop through the data for the current device to count '異常' and '穩定'
                 data[project][device].forEach((item) => {
-                  if (item.lightColor === 1) {
+                  if (item.steady === 1) {
                     abnormalCount++;
-                  } else if (item.lightColor === 0) {
+                  } else if (item.steady === 0) {
                     nonAbnormalCount++;
                   }
                 });
@@ -772,7 +775,12 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                               <TableHead style={{ backgroundColor: '#bfbfbf' }}>
                                 <TableRow>
                                   <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={3}>
-                                    <Typography fontSize={20}>Weekly predictions</Typography>
+                                    <Typography fontSize={20}>
+                                      Weekly predictions
+                                      {data[project][device]
+                                        .filter((columns) => columns.frequency === "週預測")
+                                        .map((item) => `${item.ori_date}-${item.pred_date}`)[0]}
+                                    </Typography>
                                   </TableCell>
                                 </TableRow>
                                 <TableRow>
@@ -802,14 +810,14 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                               <TableBody>
                                 {data[project][device].filter(columns => columns.frequency === "週預測").sort(getComparator(orderWeek)).map((columns) => (
                                   <TableRow key={columns.name}>
-                                    <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.lightColor) }}>
-                                      <Typography fontSize={20}>{columns.lightColor === 0 ? "Stabilize" : "Abnormal"}</Typography>
+                                    <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.steady) }}>
+                                      <Typography fontSize={20}>{columns.steady === 0 ? "Stabilize" : "Abnormal"}</Typography>
                                     </TableCell>
                                     <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
                                       <Typography fontSize={20}>{columns.name}</Typography>
                                     </TableCell>
                                     <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
-                                      <Typography fontSize={20}>{columns.date}</Typography>
+                                      <Typography fontSize={20}>{columns.happenLastTime}</Typography>
                                     </TableCell>
                                   </TableRow>
                                 ))}
@@ -821,7 +829,12 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                               <TableHead style={{ backgroundColor: '#bfbfbf' }}>
                                 <TableRow>
                                   <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={3}>
-                                    <Typography fontSize={20} >Daily predictions</Typography>
+                                    <Typography fontSize={20}>
+                                      Daily predictions
+                                      {data[project][device]
+                                        .filter((columns) => columns.frequency === "日預測")
+                                        .map((item) => `${item.pred_date}`)[0]}
+                                    </Typography>
                                   </TableCell>
                                 </TableRow>
                                 <TableRow>
@@ -851,20 +864,21 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                               <TableBody>
                                 {data2[project][device].filter(columns => columns.frequency === "日預測").sort(getComparatorDate(orderDate)).map((columns) => (
                                   <TableRow key={columns.name}>
-                                    <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.lightColor) }}>
-                                      <Typography fontSize={20}>{columns.lightColor === 0 ? "Stabilize" : "Abnormal"}</Typography>
+                                    <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.steady) }}>
+                                      <Typography fontSize={20}>{columns.steady === 0 ? "Stabilize" : "Abnormal"}</Typography>
                                     </TableCell>
-                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.faithful) }}>
                                       <Typography fontSize={20}>{columns.name}</Typography>
                                     </TableCell>
-                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
-                                      <Typography fontSize={20}>{columns.date}</Typography>
+                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.faithful) }}>
+                                      <Typography fontSize={20}>{columns.happenLastTime}</Typography>
                                     </TableCell>
                                   </TableRow>
                                 ))}
                               </TableBody>
                             </Table>
                           </TableContainer>
+                          <ColorBox msg="Abnormal events that have occurred"></ColorBox>
                         </Grid>
                       </Grid>
                     </Card>
