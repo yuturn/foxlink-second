@@ -368,7 +368,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                             <Table>
                               <TableHead style={{ backgroundColor: '#bfbfbf' }}>
                                 <TableRow>
-                                  <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={4}>
+                                  <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={5}>
                                     <Typography fontSize={20}>
                                       週預測
                                       {data[project][device]
@@ -449,7 +449,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                             <Table>
                               <TableHead style={{ backgroundColor: '#bfbfbf' }}>
                                 <TableRow>
-                                  <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={4}>
+                                  <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={5}>
                                     <Typography fontSize={20}>
                                       日預測
                                       {data[project][device]
@@ -622,7 +622,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                             <Table>
                               <TableHead style={{ backgroundColor: '#bfbfbf' }}>
                                 <TableRow>
-                                  <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={4}>
+                                  <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={5}>
                                     <Typography fontSize={20}>
                                       周预测
                                       {data[project][device]
@@ -700,7 +700,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                             <Table>
                               <TableHead style={{ backgroundColor: '#bfbfbf' }}>
                                 <TableRow>
-                                  <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={4}>
+                                  <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={5}>
                                     <Typography fontSize={20}>
                                       日预测
                                       {data[project][device]
@@ -875,7 +875,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                             <Table>
                               <TableHead style={{ backgroundColor: '#bfbfbf' }}>
                                 <TableRow>
-                                  <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={4}>
+                                  <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={5}>
                                     <Typography fontSize={20}>
                                       Weekly predictions
                                       {data[project][device]
@@ -940,7 +940,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                     </TableCell>
                                     <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
                                       <Typography fontSize={20}>{columns.happenLastTime}</Typography>
-                                      
+
                                     </TableCell>
                                     {/* ///////////////////////////// */}
                                     <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
@@ -956,7 +956,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                             <Table>
                               <TableHead style={{ backgroundColor: '#bfbfbf' }}>
                                 <TableRow>
-                                  <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={4}>
+                                  <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={5}>
                                     <Typography fontSize={20}>
                                       Daily predictions
                                       {data[project][device]
@@ -1012,7 +1012,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                     <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.faithful) }}>
                                       <Typography fontSize={20}>{columns.category}</Typography>
                                     </TableCell>
-                                  {/* //////////////////////////////////////////// */}
+                                    {/* //////////////////////////////////////////// */}
                                     <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.steady) }}>
                                       <Typography fontSize={20}>{columns.steady === 0 ? "Stabilize" : "Abnormal"}</Typography>
                                     </TableCell>
@@ -1026,7 +1026,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                     <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.faithful) }}>
                                       <Typography fontSize={20}>{columns.happened_times}</Typography>
                                     </TableCell>
-                                  {/* //////////////////////////////////////////// */}
+                                    {/* //////////////////////////////////////////// */}
                                   </TableRow>
                                 ))}
                               </TableBody>
