@@ -368,7 +368,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                             <Table>
                               <TableHead style={{ backgroundColor: '#bfbfbf' }}>
                                 <TableRow>
-                                  <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={3}>
+                                  <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={4}>
                                     <Typography fontSize={20}>
                                       週預測
                                       {data[project][device]
@@ -378,6 +378,18 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                   </TableCell>
                                 </TableRow>
                                 <TableRow>
+                                  {/* ////////////////// */}
+                                  <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
+                                    <TableSortLabel
+                                      active={weekOrderBy === 'category'}
+                                      direction={weekOrderBy === 'category' ? orderWeek : 'asc'}
+                                      onClick={() => handleSortRequest('category')}
+                                    >
+                                      <Typography fontSize={20}>Category</Typography>
+                                    </TableSortLabel>
+                                  </TableCell>
+                                  {/* ///////////////////// */}
+
                                   <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
                                     <TableSortLabel
                                       active={weekOrderBy === 'label'}
@@ -399,11 +411,21 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                       <Typography fontSize={20}>前次發生時間</Typography>
                                     </TableSortLabel>
                                   </TableCell>
+                                  {/* ////////////////////// */}
+                                  <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
+                                    <Typography fontSize={20}>發生次數</Typography>
+                                  </TableCell>
+                                  {/* ////////////////////// */}
                                 </TableRow>
                               </TableHead>
                               <TableBody>
                                 {data[project][device].filter(columns => columns.frequency === "週預測").sort(getComparator(orderWeek)).map((columns) => (
                                   <TableRow key={columns.name}>
+                                    {/* ///////////////////////////////// */}
+                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.faithful) }}>
+                                      <Typography fontSize={20}>{columns.category}</Typography>
+                                    </TableCell>
+                                    {/* /////////////////////////////////// */}
                                     <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.steady) }}>
                                       <Typography fontSize={20}>{columns.steady === 0 ? "穩定" : "異常"}</Typography>
                                     </TableCell>
@@ -413,6 +435,11 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                     <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.faithful) }}>
                                       <Typography fontSize={20}>{columns.happenLastTime}</Typography>
                                     </TableCell>
+                                    {/* ///////////////// */}
+                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.faithful) }}>
+                                      <Typography fontSize={20}>{columns.happened_times}</Typography>
+                                    </TableCell>
+                                    {/* ///////////////// */}
                                   </TableRow>
                                 ))}
                               </TableBody>
@@ -422,7 +449,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                             <Table>
                               <TableHead style={{ backgroundColor: '#bfbfbf' }}>
                                 <TableRow>
-                                  <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={3}>
+                                  <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={4}>
                                     <Typography fontSize={20}>
                                       日預測
                                       {data[project][device]
@@ -432,6 +459,17 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                   </TableCell>
                                 </TableRow>
                                 <TableRow>
+                                  {/* /////////////////////////////////////////// */}
+                                  <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
+                                    <TableSortLabel
+                                      active={dateOrderBy === 'category'}
+                                      direction={dateOrderBy === 'category' ? orderDate : 'asc'}
+                                      onClick={() => handleSortRequestDate('category')}
+                                    >
+                                      <Typography fontSize={20} >Category</Typography>
+                                    </TableSortLabel>
+                                  </TableCell>
+                                  {/* //////////////////////////////////////////// */}
                                   <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
                                     <TableSortLabel
                                       active={dateOrderBy === 'label'}
@@ -453,11 +491,19 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                       <Typography fontSize={20} >前次發生時間</Typography>
                                     </TableSortLabel>
                                   </TableCell>
+                                  {/* ////////////////////////////////////////////// */}
+                                  <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
+                                    <Typography fontSize={20} >發生次數</Typography>
+                                  </TableCell>
+                                  {/* ////////////////////////////////////////////// */}
                                 </TableRow>
                               </TableHead>
                               <TableBody>
                                 {data2[project][device].filter(columns => columns.frequency === "日預測").sort(getComparatorDate(orderDate)).map((columns) => (
                                   <TableRow key={columns.name}>
+                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                      <Typography fontSize={20}>{columns.category}</Typography>
+                                    </TableCell>
                                     <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.steady) }}>
                                       <Typography fontSize={20}>{columns.steady === 0 ? "穩定" : "異常"}</Typography>
                                     </TableCell>
@@ -467,6 +513,11 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                     <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
                                       <Typography fontSize={20}>{columns.happenLastTime}</Typography>
                                     </TableCell>
+                                    {/* ////////////////////////////////////////////////// */}
+                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                      <Typography fontSize={20}>{columns.happened_times}</Typography>
+                                    </TableCell>
+                                    {/* ////////////////////////////////////////////////// */}
                                   </TableRow>
                                 ))}
                               </TableBody>
@@ -571,7 +622,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                             <Table>
                               <TableHead style={{ backgroundColor: '#bfbfbf' }}>
                                 <TableRow>
-                                  <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={3}>
+                                  <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={4}>
                                     <Typography fontSize={20}>
                                       周预测
                                       {data[project][device]
@@ -581,6 +632,17 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                   </TableCell>
                                 </TableRow>
                                 <TableRow>
+                                  {/* ////////////////// */}
+                                  <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
+                                    <TableSortLabel
+                                      active={weekOrderBy === 'category'}
+                                      direction={weekOrderBy === 'category' ? orderWeek : 'asc'}
+                                      onClick={() => handleSortRequest('category')}
+                                    >
+                                      <Typography fontSize={20}>category</Typography>
+                                    </TableSortLabel>
+                                  </TableCell>
+                                  {/* ///////////////////// */}
                                   <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
                                     <TableSortLabel
                                       active={weekOrderBy === 'label'}
@@ -602,11 +664,19 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                       <Typography fontSize={20}>前次发生时间</Typography>
                                     </TableSortLabel>
                                   </TableCell>
+                                  {/* ///////////////////// */}
+                                  <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
+                                    <Typography fontSize={20}>发生次数</Typography>
+                                  </TableCell>
+                                  {/*  //////////////////////*/}
                                 </TableRow>
                               </TableHead>
                               <TableBody>
                                 {data[project][device].filter(columns => columns.frequency === "週預測").sort(getComparator(orderWeek)).map((columns) => (
                                   <TableRow key={columns.name}>
+                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                      <Typography fontSize={20}>{columns.category}</Typography>
+                                    </TableCell>
                                     <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.steady) }}>
                                       <Typography fontSize={20}>{columns.steady === 0 ? "稳定" : "异常"}</Typography>
                                     </TableCell>
@@ -616,6 +686,11 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                     <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
                                       <Typography fontSize={20}>{columns.happenLastTime}</Typography>
                                     </TableCell>
+                                    {/* //////////////////// */}
+                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                      <Typography fontSize={20}>{columns.happened_times}</Typography>
+                                    </TableCell>
+                                    {/* //////////////////// */}
                                   </TableRow>
                                 ))}
                               </TableBody>
@@ -625,7 +700,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                             <Table>
                               <TableHead style={{ backgroundColor: '#bfbfbf' }}>
                                 <TableRow>
-                                  <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={3}>
+                                  <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={4}>
                                     <Typography fontSize={20}>
                                       日预测
                                       {data[project][device]
@@ -635,6 +710,17 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                   </TableCell>
                                 </TableRow>
                                 <TableRow>
+                                  {/* /////////////////////////////////////////// */}
+                                  <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
+                                    <TableSortLabel
+                                      active={dateOrderBy === 'category'}
+                                      direction={dateOrderBy === 'category' ? orderDate : 'asc'}
+                                      onClick={() => handleSortRequestDate('category')}
+                                    >
+                                      <Typography fontSize={20} >Category</Typography>
+                                    </TableSortLabel>
+                                  </TableCell>
+                                  {/* //////////////////////////////////////////// */}
                                   <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
                                     <TableSortLabel
                                       active={dateOrderBy === 'label'}
@@ -656,11 +742,21 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                       <Typography fontSize={20} >前次发生时间</Typography>
                                     </TableSortLabel>
                                   </TableCell>
+                                  {/* ///////////////////////// */}
+                                  <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
+                                    <Typography fontSize={20} >发生次数</Typography>
+                                  </TableCell>
+                                  {/* ///////////////////////// */}
                                 </TableRow>
                               </TableHead>
                               <TableBody>
                                 {data2[project][device].filter(columns => columns.frequency === "日預測").sort(getComparatorDate(orderDate)).map((columns) => (
                                   <TableRow key={columns.name}>
+                                    {/* /////////////////////// */}
+                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.faithful) }}>
+                                      <Typography fontSize={20}>{columns.category}</Typography>
+                                    </TableCell>
+                                    {/* /////////////////////// */}
                                     <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.steady) }}>
                                       <Typography fontSize={20}>{columns.steady === 0 ? "稳定" : "异常"}</Typography>
                                     </TableCell>
@@ -670,6 +766,11 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                     <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.faithful) }}>
                                       <Typography fontSize={20}>{columns.happenLastTime}</Typography>
                                     </TableCell>
+                                    {/* ///////////////////////// */}
+                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.faithful) }}>
+                                      <Typography fontSize={20}>{columns.happened_times}</Typography>
+                                    </TableCell>
+                                    {/* ////////////////////////// */}
                                   </TableRow>
                                 ))}
                               </TableBody>
@@ -774,7 +875,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                             <Table>
                               <TableHead style={{ backgroundColor: '#bfbfbf' }}>
                                 <TableRow>
-                                  <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={3}>
+                                  <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={4}>
                                     <Typography fontSize={20}>
                                       Weekly predictions
                                       {data[project][device]
@@ -784,6 +885,17 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                   </TableCell>
                                 </TableRow>
                                 <TableRow>
+                                  {/* ////////////////// */}
+                                  <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
+                                    <TableSortLabel
+                                      active={weekOrderBy === 'category'}
+                                      direction={weekOrderBy === 'category' ? orderWeek : 'asc'}
+                                      onClick={() => handleSortRequest('category')}
+                                    >
+                                      <Typography fontSize={20}>category</Typography>
+                                    </TableSortLabel>
+                                  </TableCell>
+                                  {/* ///////////////////// */}
                                   <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
                                     <TableSortLabel
                                       active={weekOrderBy === 'label'}
@@ -805,11 +917,21 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                       <Typography fontSize={20}>Last occurrence time</Typography>
                                     </TableSortLabel>
                                   </TableCell>
+                                  {/* ////////////////////////////// */}
+                                  <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
+                                    <Typography fontSize={20}>Number of occurrences</Typography>
+                                  </TableCell>
+                                  {/* ////////////////////////////// */}
                                 </TableRow>
                               </TableHead>
                               <TableBody>
                                 {data[project][device].filter(columns => columns.frequency === "週預測").sort(getComparator(orderWeek)).map((columns) => (
                                   <TableRow key={columns.name}>
+                                    {/* //////////////////////// */}
+                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                      <Typography fontSize={20}>{columns.category}</Typography>
+                                    </TableCell>
+                                    {/* ////////////////////////// */}
                                     <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.steady) }}>
                                       <Typography fontSize={20}>{columns.steady === 0 ? "Stabilize" : "Abnormal"}</Typography>
                                     </TableCell>
@@ -818,7 +940,13 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                     </TableCell>
                                     <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
                                       <Typography fontSize={20}>{columns.happenLastTime}</Typography>
+                                      
                                     </TableCell>
+                                    {/* ///////////////////////////// */}
+                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                      <Typography fontSize={20}>{columns.happened_times}</Typography>
+                                    </TableCell>
+                                    {/* ////////////////////////// */}
                                   </TableRow>
                                 ))}
                               </TableBody>
@@ -828,7 +956,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                             <Table>
                               <TableHead style={{ backgroundColor: '#bfbfbf' }}>
                                 <TableRow>
-                                  <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={3}>
+                                  <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={4}>
                                     <Typography fontSize={20}>
                                       Daily predictions
                                       {data[project][device]
@@ -838,6 +966,17 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                   </TableCell>
                                 </TableRow>
                                 <TableRow>
+                                  {/* /////////////////////// */}
+                                  <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
+                                    <TableSortLabel
+                                      active={dateOrderBy === 'category'}
+                                      direction={dateOrderBy === 'category' ? orderDate : 'asc'}
+                                      onClick={() => handleSortRequestDate('category')}
+                                    >
+                                      <Typography fontSize={20} >Category</Typography>
+                                    </TableSortLabel>
+                                  </TableCell>
+                                  {/* ////////////////////////// */}
                                   <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
                                     <TableSortLabel
                                       active={dateOrderBy === 'label'}
@@ -859,11 +998,21 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                       <Typography fontSize={20} >Last occurrence time</Typography>
                                     </TableSortLabel>
                                   </TableCell>
+                                  {/* ////////////////////////////// */}
+                                  <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
+                                    <Typography fontSize={20}>Number of occurrences</Typography>
+                                  </TableCell>
+                                  {/* ////////////////////////////// */}
                                 </TableRow>
                               </TableHead>
                               <TableBody>
                                 {data2[project][device].filter(columns => columns.frequency === "日預測").sort(getComparatorDate(orderDate)).map((columns) => (
                                   <TableRow key={columns.name}>
+                                    {/* /////////////////////////////////////////// */}
+                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.faithful) }}>
+                                      <Typography fontSize={20}>{columns.category}</Typography>
+                                    </TableCell>
+                                  {/* //////////////////////////////////////////// */}
                                     <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.steady) }}>
                                       <Typography fontSize={20}>{columns.steady === 0 ? "Stabilize" : "Abnormal"}</Typography>
                                     </TableCell>
@@ -873,6 +1022,11 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                     <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.faithful) }}>
                                       <Typography fontSize={20}>{columns.happenLastTime}</Typography>
                                     </TableCell>
+                                    {/* /////////////////////////////////////////// */}
+                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.faithful) }}>
+                                      <Typography fontSize={20}>{columns.happened_times}</Typography>
+                                    </TableCell>
+                                  {/* //////////////////////////////////////////// */}
                                   </TableRow>
                                 ))}
                               </TableBody>
