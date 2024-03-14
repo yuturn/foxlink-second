@@ -279,7 +279,7 @@ export default function Statistics({ token, ...rest }) {
                                                 <Grid item xs={6} md={6} lg={6}>
                                                     <TableContainer component={Paper} style={tableContainerStyle.tableContainer}>
                                                         <Table>
-                                                            <TableHead style={{ backgroundColor: '#bfbfbf' }}>
+                                                            <TableHead style={{ position: "sticky",top: 0,zIndex: 2,backgroundColor: "#bfbfbf" }}>
                                                                 <TableRow>
                                                                     <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={5}>
                                                                         <Typography fontSize={20}>
@@ -359,7 +359,7 @@ export default function Statistics({ token, ...rest }) {
                                                     </TableContainer>
                                                     <TableContainer component={Paper} style={tableContainerStyle.tableContainer}>
                                                         <Table>
-                                                            <TableHead style={{ backgroundColor: '#bfbfbf' }}>
+                                                            <TableHead style={{ position: "sticky",top: 0,zIndex: 2,backgroundColor: "#bfbfbf" }}>
                                                                 <TableRow>
                                                                     <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={5}>
                                                                         <Typography fontSize={20}>
@@ -534,7 +534,7 @@ export default function Statistics({ token, ...rest }) {
                                                 <Grid item xs={6} md={6} lg={6}>
                                                     <TableContainer component={Paper} style={tableContainerStyle.tableContainer}>
                                                         <Table>
-                                                            <TableHead style={{ backgroundColor: '#bfbfbf' }}>
+                                                            <TableHead style={{ position: "sticky",top: 0,zIndex: 2,backgroundColor: "#bfbfbf" }}>
                                                                 <TableRow>
                                                                     <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={5}>
                                                                         <Typography fontSize={20}>
@@ -614,7 +614,7 @@ export default function Statistics({ token, ...rest }) {
                                                     </TableContainer>
                                                     <TableContainer component={Paper} style={tableContainerStyle.tableContainer}>
                                                         <Table>
-                                                            <TableHead style={{ backgroundColor: '#bfbfbf' }}>
+                                                            <TableHead style={{ position: "sticky",top: 0,zIndex: 2,backgroundColor: "#bfbfbf" }}>
                                                                 <TableRow>
                                                                     <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={5}>
                                                                         <Typography fontSize={20}>
@@ -785,7 +785,7 @@ export default function Statistics({ token, ...rest }) {
                                                 <Grid item xs={6} md={6} lg={6}>
                                                     <TableContainer component={Paper} style={tableContainerStyle.tableContainer}>
                                                         <Table>
-                                                            <TableHead style={{ backgroundColor: '#bfbfbf' }}>
+                                                            <TableHead style={{ position: "sticky",top: 0,zIndex: 2,backgroundColor: "#bfbfbf" }}>
                                                                 <TableRow>
                                                                     <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={5}>
                                                                         <Typography fontSize={20}>
@@ -863,7 +863,7 @@ export default function Statistics({ token, ...rest }) {
                                                     </TableContainer>
                                                     <TableContainer component={Paper} style={tableContainerStyle.tableContainer}>
                                                         <Table>
-                                                            <TableHead style={{ backgroundColor: '#bfbfbf' }}>
+                                                            <TableHead style={{ position: "sticky",top: 0,zIndex: 2,backgroundColor: "#bfbfbf" }}>
                                                                 <TableRow>
                                                                     <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={5}>
                                                                         <Typography fontSize={20}>
