@@ -122,7 +122,20 @@ export default function Project({ token, ...rest }) {
   }
 
   //折線圖function
-  const LineChartExample = () => {
+  function LineChartExample  ()  {
+    const CustomTooltip = ({ active, payload, label }) => {
+      if (active && payload && payload.length) {
+        // 将小数值转换为百分比形式
+        const value = (payload[0].value * 100).toFixed(2) + '%';
+        return (
+          <div className="custom-tooltip">
+            <p className="label">{`${label} : ${value}`}</p>
+          </div>
+        );
+      }
+  
+      return null;
+    };
     return (
       <ResponsiveContainer width="100%" height="100%">
         <LineChart
@@ -139,9 +152,9 @@ export default function Project({ token, ...rest }) {
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="date" />
           <YAxis />
-          <Tooltip />
+          <Tooltip content={<CustomTooltip />}/>
           <Legend />
-          <Line type="monotone" dataKey="value" stroke="#82ca9d" />
+          <Line type="monotone" dataKey="value" stroke="#82ca9d" strokeWidth={2}/>
         </LineChart>
       </ResponsiveContainer>
     );
