@@ -154,7 +154,7 @@ export default function Project({ token, ...rest }) {
           <YAxis />
           <Tooltip content={<CustomTooltip />}/>
           <Legend />
-          <Line type="monotone" dataKey="value" stroke="#82ca9d" strokeWidth={2}/>
+          <Line type="monotone" dataKey="value" stroke="#82ca9d" strokeWidth={4}/>
         </LineChart>
       </ResponsiveContainer>
     );
