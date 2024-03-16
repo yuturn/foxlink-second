@@ -17,7 +17,7 @@ import { NavItem } from './nav-item';
 import { Link } from "react-router-dom";
 
 export const DashboardSidebar = ({ idx, setIdx }) => {
-
+  const [open, setOpen] = useState(false);
   const { globalVariable, updateGlobalVariable } = useContext(GlobalContext);
 
   const handleGlobalVariableChange = (event) => {
@@ -65,6 +65,9 @@ export const DashboardSidebar = ({ idx, setIdx }) => {
     },
   ];
 
+  const toggleDrawer = () => {
+    setOpen(!open);
+  };
   const upload_items = [
     // {
     //   url: '/devices-upload',
@@ -176,13 +179,38 @@ export const DashboardSidebar = ({ idx, setIdx }) => {
               primary: '#ffffff',
             },
             width: 280,
+            marginLeft: open ? '0' : '-280px', // 控制選單顯示與隱藏
+            transition: 'margin-left 0.3s ease', // 添加過渡效果
           }
         }}
         variant="permanent"
+        open={open}
       >
         {content}
       </Drawer>
-      <DashboardNavbar />
+      <Box
+        sx={{
+          flexGrow: 1,
+          marginLeft: open ? '280px' : '0', // 控制右側內容位置
+          transition: 'margin-left 1s ease', // 添加過渡效果
+        }}
+      >
+        <DashboardNavbar />
+        
+      </Box>
+      <IconButton
+        sx={{
+          position: 'fixed',
+          top: '20px',
+          left: open ? '280px' : '20px', // 控制按鈕位置
+          zIndex: 9999,
+        }}
+        onClick={toggleDrawer}
+        color="inherit"
+        aria-label="open drawer"
+      >
+        <MenuIcon />
+      </IconButton>
     </>
   );
 };
