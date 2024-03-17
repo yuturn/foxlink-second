@@ -289,9 +289,12 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
         {Object.keys(data).map((project) => (
           <div key={project}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-              <LoadingButton variant="contained" color="info" onClick={togglePause}>
-                {isPaused ? '恢復輪播' : '暫停輪播'}
-              </LoadingButton>
+              <div style={{ display: 'flex', alignItems: 'center', mr: '100px' }}>
+                <LoadingButton variant="contained" color="info" onClick={togglePause}>
+                  {isPaused ? '恢復輪播' : '暫停輪播'}
+                </LoadingButton>
+                <Marquee msg={"xxxxxxxxxxx"}/>
+              </div>
             </Box>
             <Carousel
               showArrows={false}
@@ -543,9 +546,12 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
         {Object.keys(data).map((project) => (
           <div key={project}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-              <LoadingButton variant="contained" color="info" onClick={togglePause}>
-                {isPaused ? '恢复轮播' : '暂停轮播'}
-              </LoadingButton>
+              <div style={{ display: 'flex', alignItems: 'center', mr: '100px' }}>
+                <LoadingButton variant="contained" color="info" onClick={togglePause}>
+                  {isPaused ? '恢复轮播' : '暂停轮播'}
+                </LoadingButton>
+                <Marquee msg={"xxxxxxxxxxxxxxxx"}/>
+               </div> 
             </Box>
             <Carousel
               showArrows={false}
@@ -796,9 +802,12 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
         {Object.keys(data).map((project) => (
           <div key={project}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-              <LoadingButton variant="contained" color="info" onClick={togglePause}>
-                {isPaused ? 'Resume carousel' : 'Pause carousel'}
-              </LoadingButton>
+              <div style={{ display: 'flex', alignItems: 'center', mr: '100px' }}>
+                <LoadingButton variant="contained" color="info" onClick={togglePause}>
+                  {isPaused ? 'Resume carousel' : 'Pause carousel'}
+                </LoadingButton>
+                <Marquee msg={"xxxxxxxxxxxxxxxxx"}/>
+              </div>
             </Box>
             <Carousel
               showArrows={false}
