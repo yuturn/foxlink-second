@@ -526,7 +526,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                               </TableBody>
                             </Table>
                           </TableContainer>
-                          <ColorBox msg="已發生過之異常事件"></ColorBox>
+                          {/* <ColorBox msg="已發生過之異常事件"></ColorBox> */}
                         </Grid>
                       </Grid>
                     </Card>
@@ -782,7 +782,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                               </TableBody>
                             </Table>
                           </TableContainer>
-                          <ColorBox msg="已发生过之异常事件"></ColorBox>
+                          {/* <ColorBox msg="已发生过之异常事件"></ColorBox> */}
                         </Grid>
                       </Grid>
                     </Card>
@@ -1041,7 +1041,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                               </TableBody>
                             </Table>
                           </TableContainer>
-                          <ColorBox msg="Abnormal events that have occurred"></ColorBox>
+                          {/* <ColorBox msg="Abnormal events that have occurred"></ColorBox> */}
                         </Grid>
                       </Grid>
                     </Card>
@@ -1172,6 +1172,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
               </Grid>
             </CardContent>
           </Card>
+          <ColorBox msg="已發生過之異常事件"></ColorBox>
           {createDeviceCardTW(dateData, dateData)}
         </>
       ) : globalVariable === "zh-cn" ? (
@@ -1261,6 +1262,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
               </Grid>
             </CardContent>
           </Card>
+          <ColorBox msg="已发生过之异常事件"></ColorBox>
           {createDeviceCardCN(dateData, dateData)}
         </>
       ) : (
@@ -1350,6 +1352,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
               </Grid>
             </CardContent>
           </Card>
+          <ColorBox msg="Abnormal events that have occurred"></ColorBox>
           {createDeviceCardEN(dateData, dateData)}
         </>
       )}
