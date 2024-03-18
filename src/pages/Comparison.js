@@ -604,7 +604,7 @@ export default function Project({ token, ...rest }) {
               <Grid xs={12}>
                 <TableContainer component={Paper} style={tableContainerStyle.tableContainer}>
                   <Table>
-                    <TableHead style={{ backgroundColor: '#bfbfbf' }}>
+                    <TableHead style={{ position: "sticky",top: 0,zIndex: 2,backgroundColor: '#bfbfbf' }}>
                       <TableRow>
                         <TableCell align="center" sx={{ borderBottom: 0 }}>
                           <TableSortLabel
@@ -725,7 +725,7 @@ export default function Project({ token, ...rest }) {
                                       <Grid item xs={6} key={deviceKey}>
                                         <TableContainer style={tableContainerDialogStyle.tableContainer}>
                                           <Table>
-                                            <TableHead style={{ backgroundColor: '#696969' }}>
+                                            <TableHead style={{ position: "sticky",top: 0,zIndex: 2,backgroundColor: '#696969' }}>
                                               <TableRow>
                                                 <TableCell align="center" sx={{ height: 'auto', border: "1px solid black", backgroundColor: "#bfbfbf" }} colSpan={4}>
                                                   <Typography fontSize={20}>{`${deviceKey} ${device.cname}`}</Typography>
@@ -925,7 +925,7 @@ export default function Project({ token, ...rest }) {
               <Grid xs={12}>
                 <TableContainer component={Paper} style={tableContainerStyle.tableContainer}>
                   <Table>
-                    <TableHead style={{ backgroundColor: '#bfbfbf' }}>
+                    <TableHead style={{ position: "sticky",top: 0,zIndex: 2,backgroundColor: '#bfbfbf' }}>
                       <TableRow>
                         <TableCell align="center" sx={{ borderBottom: 0 }}>
                           <TableSortLabel
@@ -1001,7 +1001,7 @@ export default function Project({ token, ...rest }) {
                                 <DialogContent sx={{ marginTop: '1px', marginBottom: '1px' }} >
                                   <TableContainer style={tableContainerStyle.tableContainer} sx={{ mt: 3 }}>
                                     <Table>
-                                      <TableHead>
+                                      <TableHead style={{ position: "sticky",top: 0,zIndex: 2,backgroundColor: '#bfbfbf' }}>
                                         <TableRow>
                                           <TableCell align="center" sx={{ border: "1px solid black" }}>
                                             <Typography fontSize={20}>{globalVariable == "zh-tw" ? "設備編號" : globalVariable == "zh-cn" ? "设备编号" : "Device ID"}</Typography>
