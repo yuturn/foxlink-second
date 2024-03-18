@@ -53,7 +53,10 @@ const darkTheme = createTheme({
     },
   },
 });
-
+const columnsListTW = [
+  { field: 'project', headerName: '專案名稱', width: 200 },
+  { field: 'selectedDisplay', headerName: '已於專案中', width: 200 },
+];
 const columnsTW = [
   { field: 'project', headerName: '專案名稱', width: 200 },
   { field: 'selectedDisplay', headerName: '已於專案中', width: 200 },
@@ -62,6 +65,10 @@ const columnsTW = [
   { field: 'ename', headerName: 'ename', width: 450 },
   { field: 'cname', headerName: 'cname', width: 300 }
 ];
+const columnsListCN = [
+  { field: 'project', headerName: '专案名称', width: 200 },
+  { field: 'selectedDisplay', headerName: '已于专案中', width: 200 },
+];
 const columnsCN = [
   { field: 'project', headerName: '专案名称', width: 200 },
   { field: 'selectedDisplay', headerName: '已于专案中', width: 200 },
@@ -69,6 +76,10 @@ const columnsCN = [
   { field: 'device', headerName: '机台名称', width: 200 },
   { field: 'ename', headerName: 'ename', width: 450 },
   { field: 'cname', headerName: 'cname', width: 300 }
+];
+const columnsListEN = [
+  { field: 'project', headerName: 'Project name', width: 200 },
+  { field: 'selectedDisplay', headerName: 'Already in project', width: 200 },
 ];
 const columnsEN = [
   { field: 'project', headerName: 'Project name', width: 200 },

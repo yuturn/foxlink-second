@@ -121,8 +121,7 @@ export default function Project({ token, ...rest }) {
     );
   }
 
-  //折線圖function
-  function LineChartExample  ()  {
+  function LineChartExample() {
     const CustomTooltip = ({ active, payload, label }) => {
       if (active && payload && payload.length) {
         // 将小数值转换为百分比形式
@@ -136,12 +135,17 @@ export default function Project({ token, ...rest }) {
   
       return null;
     };
+  
+    const formatYAxisTick = (tick) => {
+      return (tick * 100).toFixed(0) + '%';
+    };
+  
     return (
       <ResponsiveContainer width="100%" height="100%">
         <LineChart
-          width={1000}
-          height={500}
-          data={chartData}
+          width={500}
+          height={300}
+          data={data6}
           margin={{
             top: 5,
             right: 30,
@@ -150,15 +154,19 @@ export default function Project({ token, ...rest }) {
           }}
         >
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="date" />
-          <YAxis />
-          <Tooltip content={<CustomTooltip />}/>
+          <XAxis dataKey="name" />
+          <YAxis
+            label={{ value: 'Percentage', angle: -90, position: 'insideLeft' }}
+            tickFormatter={formatYAxisTick}
+          />
+          <Tooltip content={<CustomTooltip />} />
           <Legend />
-          <Line type="monotone" dataKey="value" stroke="#82ca9d" strokeWidth={4}/>
+          <Line type="monotone" dataKey="uv" stroke="#82ca9d" strokeWidth={4} />
         </LineChart>
       </ResponsiveContainer>
     );
-  };
+  }
+  
 
   // 使用另一个useEffect监听statisticDevices的变化
   useEffect(() => {
@@ -1038,7 +1046,7 @@ export default function Project({ token, ...rest }) {
                                       <Grid item xs={6} key={deviceKey}>
                                         <TableContainer style={tableContainerDialogStyle.tableContainer}>
                                           <Table>
-                                            <TableHead style={{ backgroundColor: '#696969' }}>
+                                            <TableHead style={{ position: "sticky",top: 0,zIndex: 2,backgroundColor: "#696969" }}>
                                               <TableRow>
                                                 <TableCell align="center" sx={{ height: 'auto', border: "1px solid black", backgroundColor: "#e0ffff" }} colSpan={4}>
                                                   <Typography fontSize={20}>{`${deviceKey} ${device.cname}`}</Typography>
