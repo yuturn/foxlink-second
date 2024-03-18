@@ -1,14 +1,14 @@
 // 這個頁面是左邊SIDEBAR制控制頁面
 import React, { useState, useEffect, useContext } from "react";
 import { GlobalContext } from '../components/GlobalContext';
-
+import { Menu as MenuIcon } from '@mui/icons-material';
 import { Box, Divider, Drawer, MenuItem, Select, Typography } from '@mui/material';
 import { ChartBar as StatusIcon } from '../icons/chart-bar';
 import { Layout as LayoutIcon } from '../icons/layout';
 import { QRCode as QRCodeIcon } from '../icons/qrcode';
 import { Info as Info } from '../icons/info';
 import { Search as Search } from '../icons/search';
-
+import IconButton from '@mui/material/IconButton';
 import SummarizeIcon from '@mui/icons-material/Summarize';
 import MapIcon from '@mui/icons-material/Map';
 import { Logo } from './logo';
