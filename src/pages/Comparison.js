@@ -121,6 +121,7 @@ export default function Project({ token, ...rest }) {
     );
   }
 
+  //折線圖function
   function LineChartExample() {
     const CustomTooltip = ({ active, payload, label }) => {
       if (active && payload && payload.length) {
@@ -136,16 +137,12 @@ export default function Project({ token, ...rest }) {
       return null;
     };
   
-    const formatYAxisTick = (tick) => {
-      return (tick * 100).toFixed(0) + '%';
-    };
-  
     return (
       <ResponsiveContainer width="100%" height="100%">
         <LineChart
           width={500}
           height={300}
-          data={data6}
+          data={chartData}
           margin={{
             top: 5,
             right: 30,
@@ -155,10 +152,7 @@ export default function Project({ token, ...rest }) {
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="name" />
-          <YAxis
-            label={{ value: 'Percentage', angle: -90, position: 'insideLeft' }}
-            tickFormatter={formatYAxisTick}
-          />
+          <YAxis label={{ value: 'Percentage', angle: -90, position: 'insideLeft' }} />
           <Tooltip content={<CustomTooltip />} />
           <Legend />
           <Line type="monotone" dataKey="uv" stroke="#82ca9d" strokeWidth={4} />
@@ -166,8 +160,6 @@ export default function Project({ token, ...rest }) {
       </ResponsiveContainer>
     );
   }
-  
-
   // 使用另一个useEffect监听statisticDevices的变化
   useEffect(() => {
     getProjectName(token)
