@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { apiGetStatistics, apiGetStatisticsDetails, apiGetStatisticsDetailsFilter } from '../api'
+import { apiGetStatistics, apiGetStatisticsDetails, apiGetStatisticsDetailsFilter ,apiMarquee} from '../api'
 import {
   Box,
   Card,
@@ -132,12 +132,76 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
       return null; // 或者返回一个默认的图标
     }
   }
+    // /system/timestamp資料大概長這樣{"event_id": 194, "recently": null, "happened": 0}], "timestamp": "2024-03-06 20:16:25.698261"}
+//////////////////////////////////////////////////////////////////不確定這樣做對不對??????
+const [timeStampData, setTimestampData] = useState("");
 
+const fetchTimestampData = (token) => {
+  if (!token) {
+    // 没有token，不执行操作
+    return;
+  }
+
+  apiMarquee(token)
+    .then((res) => {
+      console.log(res.data); // 确保你能够看到这个时间戳在控制台中输出
+      // 在这里对返回的时间戳进行处理
+      setTimestampData(res.data); // 将时间戳保存到状态中，以便在组件中使用
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+};
+
+
+
+
+// useEffect(() => {
+//   fetchTimestampData();
+
+//   const interval = setInterval(() => {
+//     fetchTimestampData();
+//   }, 60000);
+
+//   return () => clearInterval(interval);
+// }, []);
+
+
+useEffect(() => {
+  getProjectName(token);
+  // fetchTimestampData()
+  apiMarquee(token)
+    .then((res) => {
+      console.log(res.data); // 确保你能够看到这个时间戳在控制台中输出
+      // 在这里对返回的时间戳进行处理
+      setTimestampData(res.data); // 将时间戳保存到状态中，以便在组件中使用
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+  const refreshInterval = setInterval(() => {
+    apiMarquee(token)
+    .then((res) => {
+      console.log(res.data); // 确保你能够看到这个时间戳在控制台中输出
+      // 在这里对返回的时间戳进行处理
+      setTimestampData(res.data); // 将时间戳保存到状态中，以便在组件中使用
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+      // window.location.reload(); // 每 60 秒重新加載頁面
+  }, 60000); // 60000 毫秒為 60 秒
+
+  return () => clearInterval(refreshInterval); // 清除定時器
+}, [globalVariable]); // 在 globalVariable 更新時執行
+
+
+////////////////////////////////////////////////////////////
 
   // 使用另一个useEffect监听statisticDevices的变化
-  useEffect(() => {
-    getProjectName(token)
-  }, [globalVariable]);
+  // useEffect(() => {
+  //   getProjectName(token)
+  // }, [globalVariable]);
 
   const getProjectName = (token) => {
     if (!token) {
@@ -293,7 +357,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                 <LoadingButton variant="contained" color="info" onClick={togglePause}>
                   {isPaused ? '恢復輪播' : '暫停輪播'}
                 </LoadingButton>
-                <Marquee msg={"xxxxxxxxxxx"}/>
+                <Marquee msg={timeStampData}/>
               </div>
             </Box>
             <Carousel
@@ -550,7 +614,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                 <LoadingButton variant="contained" color="info" onClick={togglePause}>
                   {isPaused ? '恢复轮播' : '暂停轮播'}
                 </LoadingButton>
-                <Marquee msg={"xxxxxxxxxxxxxxxx"}/>
+                <Marquee msg={timeStampData}/>
                </div> 
             </Box>
             <Carousel
@@ -806,7 +870,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                 <LoadingButton variant="contained" color="info" onClick={togglePause}>
                   {isPaused ? 'Resume carousel' : 'Pause carousel'}
                 </LoadingButton>
-                <Marquee msg={"xxxxxxxxxxxxxxxxx"}/>
+                <Marquee msg={timeStampData}/>
               </div>
             </Box>
             <Carousel
