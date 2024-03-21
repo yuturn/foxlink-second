@@ -146,7 +146,8 @@ const fetchTimestampData = (token) => {
     .then((res) => {
       console.log(res.data); // 确保你能够看到这个时间戳在控制台中输出
       // 在这里对返回的时间戳进行处理
-      setTimestampData(res.data); // 将时间戳保存到状态中，以便在组件中使用
+      const timestampWithoutDecimal = Math.floor(res.data); // 去掉小数点
+      setTimestampData(timestampWithoutDecimal.toString()); // 将时间戳保存到状态中，以便在组件中使用
     })
     .catch((error) => {
       console.error(error);
