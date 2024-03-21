@@ -67,6 +67,15 @@ export const apiDeleteProject = (data) => auth_except(baseRequest.delete(`/proje
   }
 }));
 
+////////////////////////////////////專案管理的list會有下拉式選單然後點了會顯示專案內容
+export const apiGetProjectTable = (data) => auth_except(baseRequest.get(`/project/tables`, {
+  headers:
+  {
+    'accept': 'application/json',
+    'Authorization': `Bearer ${data['token']}`
+  }
+}));
+////////////////////////////////////
 export const apiGetProjectDevices = (data) => auth_except(baseRequest.get(`/project/search-project-devices?project_name=${data['name']}`, {
   headers:
   {

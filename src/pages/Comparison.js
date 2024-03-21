@@ -144,8 +144,8 @@ export default function Project({ token, ...rest }) {
     return (
       <ResponsiveContainer width="100%" height="100%">
         <LineChart
-          width={500}
-          height={300}
+          width={1000}
+          height={600}
           data={chartData}
           margin={{
             top: 5,
@@ -155,14 +155,14 @@ export default function Project({ token, ...rest }) {
           }}
         >
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
+          <XAxis dataKey="date" />
           <YAxis
             label={{ value: 'Percentage', angle: -90, position: 'insideLeft' }}
             tickFormatter={formatYAxisTick}
           />
           <Tooltip content={<CustomTooltip />} />
           <Legend />
-          <Line type="monotone" dataKey="uv" stroke="#82ca9d" strokeWidth={4} />
+          <Line type="monotone" dataKey="value" stroke="#82ca9d" strokeWidth={4} />
         </LineChart>
       </ResponsiveContainer>
     );
