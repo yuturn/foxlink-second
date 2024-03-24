@@ -346,13 +346,13 @@ export default function Project({ token, setAlert, ...rest }) {
         }));
   
         // 根据 select 字段过滤已选择的项目
-        const selectedIds = newData.filter((item) => item.selected === 0).map((item) => item.id);
+        const selectedIds = newData.filter((item) => item.selected === 1).map((item) => item.id);
   
-        // 根据 select 字段为 0 的项目
-        const unselectedItems = newData.filter((item) => item.selected === 1);
+        // // 根据 select 字段为 1 的项目
+        // const unselectedItems = newData.filter((item) => item.selected === 1);
   
-        // 将未选择的项目进行进一步处理，例如显示在表格中或执行其他操作
-        console.log("未选择的项目：", unselectedItems);
+        // // 将未选择的项目进行进一步处理，例如显示在表格中或执行其他操作
+        // console.log("未选择的项目：", unselectedItems);
   
         // 根据 select 字段的值设置表格数据和初始选中状态
         setProjectList(newData);
@@ -480,15 +480,18 @@ export default function Project({ token, setAlert, ...rest }) {
   //       console.error(error);
   //     });
   // };
-
+const [projectTableList,setProjectTableList]=useState([])
 //  Get資料庫裡project裡面的project詳細清單
-  function handleOnClickProject() {
-    const [projectTableList,setProjectTableList]=useState([])
-    apiGetProjectTable(data)
-      .then(data => {
-        console.log(data.data)
+  function handleOnClickProjectTable() {
+    if (!token) {
+      // 没有token，不执行操作
+      return;
+    }
+    apiGetProjectTable(token)
+      .then((res) => {
+        console.log(res.data)
         //因為Mui dataGrid這個套件要有一個id的欄位當作基準，但是api回傳資料沒有，所以這邊做一個id的欄位讓dataGrid可以順利渲染
-        const newData = data.data.map((item, index) => ({
+        const newData = res.data.map((item, index) => ({
           ...item,
           id: index + 1, // 使用唯一的值作為 id
           selectedDisplay: item.selected ? '是' : '否',
@@ -529,7 +532,7 @@ export default function Project({ token, setAlert, ...rest }) {
         <Card>
       {/* ////////////////////////////////////// 建立一個list可供選擇project要串api_table*/}
         <Card display="flex" alignItems="center" pt={3} px={2}>
-          <Box sx={{ bgcolor: "#696969" }}>
+          {/* <Box sx={{ bgcolor: "#696969" }}>
           {globalVariable === "zh-tw" ? (
               <CardHeader title="專案表單" color="#696969" />
             ) : globalVariable === "zh-cn" ? (
@@ -538,10 +541,17 @@ export default function Project({ token, setAlert, ...rest }) {
               <CardHeader title="Project list" color="#696969" />
             )}
           </Box>
+          {/* 利用project/table這支api去的到一個陣列，裡面會有每個專案的名字，建構一個table裏面包含了checkbox,已於專案中 */}
+          {/* <Box ml={2}>
+            <LoadingButton variant="contained" color="info" onClick={handleOnClickProjectTable}>
+                {globalVariable === "zh-tw" ? "查詢專案" : globalVariable === "zh-cn" ? "查询專案" : "Search project"}
+            </LoadingButton>
+          </Box>  */}
+{/* 
           <Box display="flex" pt={3} px={2} mb={3}>
             <div style={{ height: 600, width: "100%" }}>
               <DataGrid
-                rows={projectTableList}//這個共用應該會有問題
+                rows={projectTableList}
                 columns={columnsListTW}
                 pageSize={10}
                 checkboxSelection
@@ -550,8 +560,15 @@ export default function Project({ token, setAlert, ...rest }) {
               />
             </div>
           </Box>
+          {/* 利用project/table這支api去的到一個陣列，裡面會有每個專案的名字，建構一個table裏面包含了checkbox,已於專案中 */}
+          {/* <Box ml={2}>
+            <LoadingButton variant="contained" color="info" onClick={}>
+                {globalVariable === "zh-tw" ? "選擇專案" : globalVariable === "zh-cn" ? "选择專案" : "choose project"}
+            </LoadingButton>
+          </Box>  */}
+
         </Card>
-        <Divider sx={{ borderBottomWidth: 3, mt: 2 }} />
+        {/* <Divider sx={{ borderBottomWidth: 3, mt: 2 }} /> */}
       {/* ////////////////////////////////////// */}
           <Box sx={{ bgcolor: '#696969' }}>
             {globalVariable === "zh-tw" ? (
@@ -788,7 +805,8 @@ export default function Project({ token, setAlert, ...rest }) {
                           <Button
                             onClick={() => {
                               console.log("Delete button clicked 裡面的");
-                              projectDelete();
+                              // projectDelete();
+                              handleOnClickProjectPost()
                             }}
                             color="error"
                             variant="contained"
