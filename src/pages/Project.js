@@ -699,14 +699,15 @@ export default function Project({ token, setAlert, ...rest }) {
                     <Typography variant="h4" fontWeight="medium" mt={3}>
                       {globalVariable === "zh-tw" ? "刪除專案" : globalVariable === "zh-cn" ? "删除专案" : "Delete project"}
                     </Typography>
-                    <LoadingButton
-                      variant="contained"
-                      color="info"
-                      onClick={handleOnClickProjectDelete}
-                    >
-                      {globalVariable === "zh-tw" ? "更新專案" : globalVariable === "zh-cn" ? "更新专案" : "Update project"}
-                    </LoadingButton>
-                    <LoadingButton
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <LoadingButton
+                        variant="contained"
+                        color="info"
+                        onClick={handleOnClickProjectDelete}
+                      >
+                        {globalVariable === "zh-tw" ? "更新專案" : globalVariable === "zh-cn" ? "更新专案" : "Update project"}
+                      </LoadingButton>
+                      <LoadingButton
                         variant="contained"
                         color="error"
                         onClick={() => {
@@ -716,41 +717,43 @@ export default function Project({ token, setAlert, ...rest }) {
                       >
                         {globalVariable === "zh-tw" ? "刪除機台" : globalVariable === "zh-cn" ? "删除机台" : "Delete Machine"}
                       </LoadingButton>
-                      <Dialog
-                        open={projectDeleteOpen}
-                        onClose={projectDeleteHandleClose}
-                        aria-labelledby="alert-dialog-project"
-                        aria-describedby="alert-dialog-project"
-                      >
-                        <DialogTitle id="alert-dialog-title">
-                          {globalVariable === "zh-tw" ? "是否刪除機台?" : globalVariable === "zh-cn" ? "是否删除机台?" : "Delete Machine?"}
-                        </DialogTitle>
-                        <DialogContent>
-                          <DialogContentText id="alert-dialog-permission">
-                            {globalVariable === "zh-tw" ? "按下刪除按鈕後將會刪除機台" : globalVariable === "zh-cn" ? "按下删除按钮后将会删除机台" : "Clicking the delete button will delete the Machine"}
-                          </DialogContentText>
-                        </DialogContent>
-                        <DialogActions>
-                          <Button
-                            onClick={() => {
-                              console.log("Delete button clicked 裡面的");
-                              // projectDelete();
-                              handleOnClickProjectPost()
-                            }}
-                            color="error"
-                            variant="contained"
-                          >
-                            {globalVariable === "zh-tw" ? "刪除" : globalVariable === "zh-cn" ? "删除" : "Delete"}
-                          </Button>
-                          <Button
-                            onClick={projectDeleteHandleClose}
-                            color="info"
-                            variant="contained"
-                          >
-                            {globalVariable === "zh-tw" ? "關閉" : globalVariable === "zh-cn" ? "关闭" : "Close"}
-                          </Button>
-                        </DialogActions>
-                      </Dialog>
+                    </div>
+                    <Dialog
+                      open={projectDeleteOpen}
+                      onClose={projectDeleteHandleClose}
+                      aria-labelledby="alert-dialog-project"
+                      aria-describedby="alert-dialog-project"
+                    >
+                      <DialogTitle id="alert-dialog-title">
+                        {globalVariable === "zh-tw" ? "是否刪除機台?" : globalVariable === "zh-cn" ? "是否删除机台?" : "Delete Machine?"}
+                      </DialogTitle>
+                      <DialogContent>
+                        <DialogContentText id="alert-dialog-permission">
+                          {globalVariable === "zh-tw" ? "按下刪除按鈕後將會刪除機台" : globalVariable === "zh-cn" ? "按下删除按钮后将会删除机台" : "Clicking the delete button will delete the Machine"}
+                        </DialogContentText>
+                      </DialogContent>
+                      <DialogActions>
+                        <Button
+                          onClick={() => {
+                            console.log("Delete button clicked 裡面的");
+                            // projectDelete();
+                            handleOnClickProjectPost()
+                          }}
+                          color="error"
+                          variant="contained"
+                        >
+                          {globalVariable === "zh-tw" ? "刪除" : globalVariable === "zh-cn" ? "删除" : "Delete"}
+                        </Button>
+                        <Button
+                          onClick={projectDeleteHandleClose}
+                          color="info"
+                          variant="contained"
+                        >
+                          {globalVariable === "zh-tw" ? "關閉" : globalVariable === "zh-cn" ? "关闭" : "Close"}
+                        </Button>
+                      </DialogActions>
+                    </Dialog>
+
                     {/* ///////////////////////////////////// */}
                     <Box display="flex" alignItems="center" pt={3} px={2}>
                       {globalVariable === "zh-tw" ? (
