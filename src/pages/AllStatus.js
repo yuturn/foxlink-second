@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
-import { apiGetStatisticsDetails } from '../api'
+import { apiGetStatisticsDetails ,apiMarquee} from '../api'
 import { GlobalContext } from '../components/GlobalContext';
+import Marquee from "./Marquee";
 import {
     Box,
     Card,
@@ -171,7 +172,69 @@ export default function Statistics({ token, ...rest }) {
             // paddingRight: '20px', // 調整內邊距以增加內容區域
         },
     };
+//////////////////////////////////////////////////////////////////不確定這樣做對不對??????
+    const [timeStampData, setTimestampData] = useState("");
 
+    const fetchTimestampData = (token) => {
+    if (!token) {
+        // 没有token，不执行操作
+        return;
+    }
+
+    apiMarquee(token)
+        .then((res) => {
+        console.log(res.data); // 确保你能够看到这个时间戳在控制台中输出
+        // 在这里对返回的时间戳进行处理
+        const timestampWithoutDecimal = Math.floor(res.data); // 去掉小数点
+        setTimestampData(timestampWithoutDecimal.toString()); // 将时间戳保存到状态中，以便在组件中使用
+        })
+        .catch((error) => {
+        console.error(error);
+        });
+    };
+
+
+
+
+    // useEffect(() => {
+    //   fetchTimestampData();
+
+    //   const interval = setInterval(() => {
+    //     fetchTimestampData();
+    //   }, 60000);
+
+    //   return () => clearInterval(interval);
+    // }, []);
+
+
+    useEffect(() => {
+    getProjectName(token);
+    // fetchTimestampData()
+    apiMarquee(token)
+        .then((res) => {
+        console.log(res.data); // 确保你能够看到这个时间戳在控制台中输出
+        // 在这里对返回的时间戳进行处理
+        setTimestampData(res.data); // 将时间戳保存到状态中，以便在组件中使用
+        })
+        .catch((error) => {
+        console.error(error);
+        });
+    const refreshInterval = setInterval(() => {
+        apiMarquee(token)
+        .then((res) => {
+        console.log(res.data); // 确保你能够看到这个时间戳在控制台中输出
+        // 在这里对返回的时间戳进行处理
+        setTimestampData(res.data); // 将时间戳保存到状态中，以便在组件中使用
+        })
+        .catch((error) => {
+        console.error(error);
+        });
+        // window.location.reload(); // 每 60 秒重新加載頁面
+    }, 60000); // 60000 毫秒為 60 秒
+
+    return () => clearInterval(refreshInterval); // 清除定時器
+    }, [globalVariable]); // 在 globalVariable 更新時執行
+    ////////////////////////////////////////
     const handleSortRequest = (property) => {
         const isAsc = weekOrderBy === property && orderWeek === 'asc';
         setOrderWeek(isAsc ? 'desc' : 'asc');
@@ -202,9 +265,12 @@ export default function Statistics({ token, ...rest }) {
                 {Object.keys(data).map((project) => (
                     <div key={project}>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', mr: '100px' }}>
                             <LoadingButton variant="contained" color="info" onClick={togglePause}>
-                                {isPaused ? '恢復輪播' : '暫停輪播'}
+                            {isPaused ? '恢復輪播' : '暫停輪播'}
                             </LoadingButton>
+                            <Marquee msg={timeStampData}/>
+                        </div>
                         </Box>
                         <Carousel
                             showArrows={false}
@@ -437,7 +503,7 @@ export default function Statistics({ token, ...rest }) {
                                                             </TableBody>
                                                         </Table>
                                                     </TableContainer>
-                                                    <ColorBox msg="已發生過之異常事件"></ColorBox>
+                                                    {/* <ColorBox msg="已發生過之異常事件"></ColorBox> */}
                                                 </Grid>
                                             </Grid>
                                         </Card>
@@ -457,10 +523,14 @@ export default function Statistics({ token, ...rest }) {
                 {Object.keys(data).map((project) => (
                     <div key={project}>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', mr: '100px' }}>
                             <LoadingButton variant="contained" color="info" onClick={togglePause}>
                                 {isPaused ? '恢复轮播' : '暂停轮播'}
                             </LoadingButton>
+                            <Marquee msg={timeStampData}/>
+                        </div>    
                         </Box>
+                        
                         <Carousel
                             showArrows={false}
                             renderIndicator={customRenderIndicator}
@@ -688,7 +758,7 @@ export default function Statistics({ token, ...rest }) {
                                                             </TableBody>
                                                         </Table>
                                                     </TableContainer>
-                                                    <ColorBox msg="已发生过之异常事件"></ColorBox>
+                                                    {/* <ColorBox msg="已发生过之异常事件"></ColorBox> */}
                                                 </Grid>
                                             </Grid>
                                         </Card>
@@ -708,9 +778,12 @@ export default function Statistics({ token, ...rest }) {
                 {Object.keys(data).map((project) => (
                     <div key={project}>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', mr: '100px' }}>
                             <LoadingButton variant="contained" color="info" onClick={togglePause}>
                                 {isPaused ? 'Resume carousel' : 'Pause carousel'}
                             </LoadingButton>
+                            <Marquee msg={timeStampData}/>
+                        </div>
                         </Box>
                         <Carousel
                             showArrows={false}
@@ -939,7 +1012,7 @@ export default function Statistics({ token, ...rest }) {
                                                             </TableBody>
                                                         </Table>
                                                     </TableContainer>
-                                                    <ColorBox msg="Abnormal events that have occurred"></ColorBox>
+                                                    {/* <ColorBox msg="Abnormal events that have occurred"></ColorBox> */}
                                                 </Grid>
                                             </Grid>
                                         </Card>
@@ -956,10 +1029,13 @@ export default function Statistics({ token, ...rest }) {
     return (
         <ThemeProvider theme={darkTheme}>
             {globalVariable == "zh-tw" ? (
+                <ColorBox msg="已發生過之異常事件"></ColorBox>,
                 createDeviceCardTW(dateData, dateData)
             ) : globalVariable == "zh-cn" ? (
+                <ColorBox msg="已发生过之异常事件"></ColorBox>,
                 createDeviceCardCN(dateData, dateData)
             ) : (
+                <ColorBox msg="Abnormal events that have occurred"></ColorBox>,
                 createDeviceCardEN(dateData, dateData)
             )}
         </ThemeProvider>
