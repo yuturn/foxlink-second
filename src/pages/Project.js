@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { apiGetProjectDevices, apiPostProjectDevices, apiGetProjectName, apiDeleteProject, apiGetProjectUsers, apiPostProjectUser, apiDeleteProjectUser, apiGetUserName,apiGetProjectTable } from '../api'
+import { apiGetProjectDevices, apiPostProjectDevices, apiGetProjectName, apiDeleteProject, apiGetProjectUsers, apiPostProjectUser, apiDeleteProjectUser, apiGetUserName, apiGetProjectTable } from '../api'
 import {
   Box,
   Card,
@@ -124,6 +124,7 @@ export default function Project({ token, setAlert, ...rest }) {
   const [projectDeleteOpen, setProjectDeleteOpen] = useState(false);
   const [userDeleteOpen, setUserDeleteOpen] = useState(false);
   const [projectList, setProjectList] = useState([]);
+  const [projectDeleteList, setProjectDeleteList] = useState([]);
   const [employeeName, setEmployeeName] = useState("");
   const [projectUsers, setProjectUsers] = useState([]);
   const [selectedRow, setSelectedRow] = useState(null);
@@ -299,7 +300,7 @@ export default function Project({ token, setAlert, ...rest }) {
     apiGetProjectDevices(data)
       .then(response => {
         const responseData = response.data;
-  
+
         // 修改 API 返回的数据结构，确保包含 select 字段
         const newData = responseData.map((item, index) => ({
           ...item,
@@ -307,18 +308,18 @@ export default function Project({ token, setAlert, ...rest }) {
           selected: item.select ? item.select : 0, // 如果 select 字段不存在，默认为 0
           selectedDisplay: item.select ? (item.select === 1 ? '是' : '否') : '否', // 根据 select 字段的值确定显示内容
         }));
-  
+
         // 根据 select 字段过滤已选择的项目
-        const selectedIds = newData.filter((item) => item.selected === 1).map((item) => item.id);
-  
+        const selectedIds = newData.filter((item) => item.select === 1).map((item) => item.id);
+
         // 根据 select 字段为 0 的项目
-        const unselectedItems = newData.filter((item) => item.selected === 0);
-  
+        const unselectedItems = newData.filter((item) => item.select === 0);
+
         // 将未选择的项目进行进一步处理，例如显示在表格中或执行其他操作
         console.log("未选择的项目：", unselectedItems);
-  
+
         // 根据 select 字段的值设置表格数据和初始选中状态
-        setProjectList(newData);
+        setProjectList(unselectedItems);
         setSelectionModel(selectedIds);
         handleOpen((globalVariable === "zh-tw" ? "查詢成功" : globalVariable === "zh-cn" ? "查询成功" : "Search successful"));
       })
@@ -336,7 +337,7 @@ export default function Project({ token, setAlert, ...rest }) {
     apiGetProjectDevices(data)
       .then(response => {
         const responseData = response.data;
-  
+
         // 修改 API 返回的数据结构，确保包含 select 字段
         const newData = responseData.map((item, index) => ({
           ...item,
@@ -344,18 +345,18 @@ export default function Project({ token, setAlert, ...rest }) {
           selected: item.select ? item.select : 0, // 如果 select 字段不存在，默认为 0
           selectedDisplay: item.select ? (item.select === 1 ? '是' : '否') : '否', // 根据 select 字段的值确定显示内容
         }));
-  
+
         // 根据 select 字段过滤已选择的项目
-        const selectedIds = newData.filter((item) => item.selected === 1).map((item) => item.id);
-  
-        // // 根据 select 字段为 1 的项目
-        // const unselectedItems = newData.filter((item) => item.selected === 1);
-  
+        const selectedIds = newData.filter((item) => item.select === 1).map((item) => item.id);
+
+        // 根据 select 字段为 1 的项目
+        const unselectedItems = newData.filter((item) => item.select === 1);
+
         // // 将未选择的项目进行进一步处理，例如显示在表格中或执行其他操作
-        // console.log("未选择的项目：", unselectedItems);
-  
+        console.log("未选择的项目：", unselectedItems);
+
         // 根据 select 字段的值设置表格数据和初始选中状态
-        setProjectList(newData);
+        setProjectList(unselectedItems);
         setSelectionModel(selectedIds);
         handleOpen((globalVariable === "zh-tw" ? "查詢成功" : globalVariable === "zh-cn" ? "查询成功" : "Search successful"));
       })
@@ -364,7 +365,7 @@ export default function Project({ token, setAlert, ...rest }) {
         handleErrorOpen((globalVariable === "zh-tw" ? ("查詢專案失敗: " + err) : globalVariable === "zh-cn" ? ("查询专案失败:" + err) : ("Query project failed:" + err)));
       });
   }
-//////////////////////// 
+  //////////////////////// 
 
   //取得datagrid裡面所有select的資料(device)
   const onRowsSelectionHandler = (ids) => {
@@ -374,8 +375,8 @@ export default function Project({ token, setAlert, ...rest }) {
     const selectedRowsData = ids.map((id) => projectList.find((row) => row.id === id))
     const newData = selectedRowsData.map(item => {
       // 創建一個新物件，只包含你要保留的欄位
-      const { project, line, device, ename, cname ,select} = item;
-      return { project, line, device, ename, cname,select };
+      const { project, line, device, ename, cname } = item;
+      return { project, line, device, ename, cname };
     });
     setSelectedDevicesData(newData);
     console.log(newData);
@@ -390,7 +391,7 @@ export default function Project({ token, setAlert, ...rest }) {
     const selectedRowsData = ids.map((id) => projectUsers.find((row) => row.id === id))
     setSelectedDevicesDataUser(selectedRowsData);
   };
-//////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////
   //依照所選擇的device去建立資料
   function handleOnClickProjectPost() {
     if (!token) {
@@ -419,7 +420,7 @@ export default function Project({ token, setAlert, ...rest }) {
         })
     }
   };
-///////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////
   //新增user到專案
   function handleOnClickAddUserToProject() {
     const data = {
@@ -480,8 +481,8 @@ export default function Project({ token, setAlert, ...rest }) {
   //       console.error(error);
   //     });
   // };
-const [projectTableList,setProjectTableList]=useState([])
-//  Get資料庫裡project裡面的project詳細清單
+  const [projectTableList, setProjectTableList] = useState([])
+  //  Get資料庫裡project裡面的project詳細清單
   function handleOnClickProjectTable() {
     if (!token) {
       // 没有token，不执行操作
@@ -530,9 +531,9 @@ const [projectTableList,setProjectTableList]=useState([])
       </Box>
       {showFirstCard ? (
         <Card>
-      {/* ////////////////////////////////////// 建立一個list可供選擇project要串api_table*/}
-        <Card display="flex" alignItems="center" pt={3} px={2}>
-          {/* <Box sx={{ bgcolor: "#696969" }}>
+          {/* ////////////////////////////////////// 建立一個list可供選擇project要串api_table*/}
+          <Card display="flex" alignItems="center" pt={3} px={2}>
+            {/* <Box sx={{ bgcolor: "#696969" }}>
           {globalVariable === "zh-tw" ? (
               <CardHeader title="專案表單" color="#696969" />
             ) : globalVariable === "zh-cn" ? (
@@ -542,12 +543,12 @@ const [projectTableList,setProjectTableList]=useState([])
             )}
           </Box>
           {/* 利用project/table這支api去的到一個陣列，裡面會有每個專案的名字，建構一個table裏面包含了checkbox,已於專案中 */}
-          {/* <Box ml={2}>
+            {/* <Box ml={2}>
             <LoadingButton variant="contained" color="info" onClick={handleOnClickProjectTable}>
                 {globalVariable === "zh-tw" ? "查詢專案" : globalVariable === "zh-cn" ? "查询專案" : "Search project"}
             </LoadingButton>
           </Box>  */}
-{/* 
+            {/* 
           <Box display="flex" pt={3} px={2} mb={3}>
             <div style={{ height: 600, width: "100%" }}>
               <DataGrid
@@ -561,15 +562,15 @@ const [projectTableList,setProjectTableList]=useState([])
             </div>
           </Box>
           {/* 利用project/table這支api去的到一個陣列，裡面會有每個專案的名字，建構一個table裏面包含了checkbox,已於專案中 */}
-          {/* <Box ml={2}>
+            {/* <Box ml={2}>
             <LoadingButton variant="contained" color="info" onClick={}>
                 {globalVariable === "zh-tw" ? "選擇專案" : globalVariable === "zh-cn" ? "选择專案" : "choose project"}
             </LoadingButton>
           </Box>  */}
 
-        </Card>
-        {/* <Divider sx={{ borderBottomWidth: 3, mt: 2 }} /> */}
-      {/* ////////////////////////////////////// */}
+          </Card>
+          {/* <Divider sx={{ borderBottomWidth: 3, mt: 2 }} /> */}
+          {/* ////////////////////////////////////// */}
           <Box sx={{ bgcolor: '#696969' }}>
             {globalVariable === "zh-tw" ? (
               <CardHeader title="專案" color="#696969" />
@@ -693,7 +694,7 @@ const [projectTableList,setProjectTableList]=useState([])
                   </Box>
 
                   <Divider sx={{ borderBottomWidth: 3, mt: 2 }} />
-                  
+
                   <Box component="form" role="form" mb={3}>
                     <Typography variant="h4" fontWeight="medium" mt={3}>
                       {globalVariable === "zh-tw" ? "刪除專案" : globalVariable === "zh-cn" ? "删除专案" : "Delete project"}
@@ -707,54 +708,54 @@ const [projectTableList,setProjectTableList]=useState([])
                     </LoadingButton>
                     {/* ///////////////////////////////////// */}
                     <Box display="flex" alignItems="center" pt={3} px={2}>
-                    {globalVariable === "zh-tw" ? (
-                      <div style={{ height: 600, width: '100%' }}>
-                        <DataGrid
-                          rows={projectList}
-                          columns={columnsTW}
-                          initialState={{
-                            pagination: {
-                              paginationModel: { pageSize: 5 },
-                            },
-                          }}
-                          pageSizeOptions={[5]}
-                          checkboxSelection
-                          onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
-                        />
-                      </div>
-                    ) : globalVariable === "zh-cn" ? (
-                      <div style={{ height: 600, width: '100%' }}>
-                        <DataGrid
-                          rows={projectList}
-                          columns={columnsCN}
-                          initialState={{
-                            pagination: {
-                              paginationModel: { pageSize: 5 },
-                            },
-                          }}
-                          pageSizeOptions={[5]}
-                          checkboxSelection
-                          onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
-                        />
-                      </div>
-                    ) : (
-                      <div style={{ height: 600, width: '100%' }}>
-                        <DataGrid
-                          rows={projectList}
-                          columns={columnsEN}
-                          initialState={{
-                            pagination: {
-                              paginationModel: { pageSize: 5 },
-                            },
-                          }}
-                          pageSizeOptions={[5]}
-                          checkboxSelection
-                          onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
-                        />
-                      </div>
-                    )}
+                      {globalVariable === "zh-tw" ? (
+                        <div style={{ height: 600, width: '100%' }}>
+                          <DataGrid
+                            rows={projectList}
+                            columns={columnsTW}
+                            initialState={{
+                              pagination: {
+                                paginationModel: { pageSize: 5 },
+                              },
+                            }}
+                            pageSizeOptions={[5]}
+                            checkboxSelection
+                            onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
+                          />
+                        </div>
+                      ) : globalVariable === "zh-cn" ? (
+                        <div style={{ height: 600, width: '100%' }}>
+                          <DataGrid
+                            rows={projectList}
+                            columns={columnsCN}
+                            initialState={{
+                              pagination: {
+                                paginationModel: { pageSize: 5 },
+                              },
+                            }}
+                            pageSizeOptions={[5]}
+                            checkboxSelection
+                            onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
+                          />
+                        </div>
+                      ) : (
+                        <div style={{ height: 600, width: '100%' }}>
+                          <DataGrid
+                            rows={projectList}
+                            columns={columnsEN}
+                            initialState={{
+                              pagination: {
+                                paginationModel: { pageSize: 5 },
+                              },
+                            }}
+                            pageSizeOptions={[5]}
+                            checkboxSelection
+                            onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
+                          />
+                        </div>
+                      )}
                       {/* //////////////////// */}
-                      
+
                       {/* <Typography variant="h5" fontWeight="medium" mr={2}>
                         {globalVariable === "zh-tw" ? "專案名稱:" : globalVariable === "zh-cn" ? "专案名称:" : "Project name:"}
                       </Typography>
