@@ -172,7 +172,8 @@ export default function Statistics({ token, ...rest }) {
             // paddingRight: '20px', // 調整內邊距以增加內容區域
         },
     };
-//////////////////////////////////////////////////////////////////不確定這樣做對不對??????
+        // /system/timestamp資料大概長這樣{"event_id": 194, "recently": null, "happened": 0}], "timestamp": "2024-03-06 20:16:25.698261"}
+    //////////////////////////////////////////////////////////////////不確定這樣做對不對??????
     const [timeStampData, setTimestampData] = useState("");
 
     const fetchTimestampData = (token) => {
@@ -214,7 +215,8 @@ export default function Statistics({ token, ...rest }) {
         .then((res) => {
         console.log(res.data); // 确保你能够看到这个时间戳在控制台中输出
         // 在这里对返回的时间戳进行处理
-        setTimestampData(res.data); // 将时间戳保存到状态中，以便在组件中使用
+        const timestampWithoutDecimal = Math.floor(res.data); // 去掉小数点
+        setTimestampData(timestampWithoutDecimal.toString());  // 将时间戳保存到状态中，以便在组件中使用
         })
         .catch((error) => {
         console.error(error);
@@ -224,7 +226,8 @@ export default function Statistics({ token, ...rest }) {
         .then((res) => {
         console.log(res.data); // 确保你能够看到这个时间戳在控制台中输出
         // 在这里对返回的时间戳进行处理
-        setTimestampData(res.data); // 将时间戳保存到状态中，以便在组件中使用
+        const timestampWithoutDecimal = Math.floor(res.data); // 去掉小数点
+        setTimestampData(timestampWithoutDecimal.toString()); // 将时间戳保存到状态中，以便在组件中使用
         })
         .catch((error) => {
         console.error(error);
@@ -234,7 +237,9 @@ export default function Statistics({ token, ...rest }) {
 
     return () => clearInterval(refreshInterval); // 清除定時器
     }, [globalVariable]); // 在 globalVariable 更新時執行
-    ////////////////////////////////////////
+
+
+    ////////////////////////////////////////////////////////////
     const handleSortRequest = (property) => {
         const isAsc = weekOrderBy === property && orderWeek === 'asc';
         setOrderWeek(isAsc ? 'desc' : 'asc');
