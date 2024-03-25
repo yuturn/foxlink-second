@@ -203,7 +203,7 @@ useEffect(() => {
 
   // 使用另一个useEffect监听statisticDevices的变化
   // useEffect(() => {
-    getProjectName(token)
+    // getProjectName(token)
   // }, [globalVariable]);
 
   const getProjectName = (token) => {

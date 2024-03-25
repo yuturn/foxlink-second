@@ -209,7 +209,7 @@ export default function Statistics({ token, ...rest }) {
 
 
     useEffect(() => {
-    getProjectName(token);
+    // getProjectName(token);
     // fetchTimestampData()
     apiMarquee(token)
         .then((res) => {
