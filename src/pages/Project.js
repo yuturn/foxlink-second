@@ -356,7 +356,7 @@ export default function Project({ token, setAlert, ...rest }) {
         console.log("未选择的项目：", unselectedItems);
 
         // 根据 select 字段的值设置表格数据和初始选中状态
-        setProjectList(unselectedItems);
+        setProjectDeleteList(unselectedItems);
         setSelectionModel(selectedIds);
         handleOpen((globalVariable === "zh-tw" ? "查詢成功" : globalVariable === "zh-cn" ? "查询成功" : "Search successful"));
       })
@@ -711,7 +711,7 @@ export default function Project({ token, setAlert, ...rest }) {
                       {globalVariable === "zh-tw" ? (
                         <div style={{ height: 600, width: '100%' }}>
                           <DataGrid
-                            rows={projectList}
+                            rows={projectDeleteList}
                             columns={columnsTW}
                             initialState={{
                               pagination: {
@@ -726,7 +726,7 @@ export default function Project({ token, setAlert, ...rest }) {
                       ) : globalVariable === "zh-cn" ? (
                         <div style={{ height: 600, width: '100%' }}>
                           <DataGrid
-                            rows={projectList}
+                            rows={projectDeleteList}
                             columns={columnsCN}
                             initialState={{
                               pagination: {
@@ -741,7 +741,7 @@ export default function Project({ token, setAlert, ...rest }) {
                       ) : (
                         <div style={{ height: 600, width: '100%' }}>
                           <DataGrid
-                            rows={projectList}
+                            rows={projectDeleteList}
                             columns={columnsEN}
                             initialState={{
                               pagination: {
