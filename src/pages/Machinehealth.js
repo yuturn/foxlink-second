@@ -118,7 +118,24 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
     slidesToShow: 1,
     slidesToScroll: 1,
   };
+///////////////////////
+const [refreshKey, setRefreshKey] = useState(0);
 
+
+
+// 使用useEffect在组件加载和refreshKey变化时获取数据
+useEffect(() => {
+  getProjectName();
+  getProjectDetails();
+  getProjectDetailsFilter();//
+
+}, [token, refreshKey]); // 依赖于token和refreshKey，任何一个变化都会触发重新获取数据
+
+// handleRefresh用于更新refreshKey，触发重新渲染
+const handleRefresh = () => {
+    setRefreshKey(prevKey => prevKey + 1); // 更新状态以触发重新渲染
+};
+//////////////////////////////////////////////////////////
 
 
   function getColor(lightColor) {
@@ -361,6 +378,9 @@ useEffect(() => {
                   {isPaused ? '恢復輪播' : '暫停輪播'}
                 </LoadingButton>
                 <Marquee msg={timeStampData}/>
+                <LoadingButton variant="contained" color="info" onClick={handleRefresh} style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}>
+                  刷新
+                </LoadingButton>
               </div>
             </Box>
             <Carousel
@@ -618,6 +638,9 @@ useEffect(() => {
                   {isPaused ? '恢复轮播' : '暂停轮播'}
                 </LoadingButton>
                 <Marquee msg={timeStampData}/>
+                <LoadingButton variant="contained" color="info" onClick={handleRefresh} style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}>
+                  刷新
+                </LoadingButton>
                </div> 
             </Box>
             <Carousel
@@ -874,6 +897,9 @@ useEffect(() => {
                   {isPaused ? 'Resume carousel' : 'Pause carousel'}
                 </LoadingButton>
                 <Marquee msg={timeStampData}/>
+                <LoadingButton variant="contained" color="info" onClick={handleRefresh} style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}>
+                  refresh
+                </LoadingButton>
               </div>
             </Box>
             <Carousel

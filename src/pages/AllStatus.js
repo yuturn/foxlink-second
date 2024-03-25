@@ -263,6 +263,24 @@ export default function Statistics({ token, ...rest }) {
             ? (a, b) => (a[dateOrderBy] > b[dateOrderBy] ? -1 : 1)
             : (a, b) => (a[dateOrderBy] > b[dateOrderBy] ? 1 : -1);
     };
+        ///////////////////////
+    const [refreshKey, setRefreshKey] = useState(0);
+
+
+
+    // 使用useEffect在组件加载和refreshKey变化时获取数据
+    useEffect(() => {
+    
+    getProjectDetails();
+    
+
+    }, [token, refreshKey]); // 依赖于token和refreshKey，任何一个变化都会触发重新获取数据
+
+    // handleRefresh用于更新refreshKey，触发重新渲染
+    const handleRefresh = () => {
+        setRefreshKey(prevKey => prevKey + 1); // 更新状态以触发重新渲染
+    };
+    //////////////////////////////////////////////////////////
 
     const createDeviceCardTW = (data, data2) => {
         return (
@@ -275,6 +293,9 @@ export default function Statistics({ token, ...rest }) {
                             {isPaused ? '恢復輪播' : '暫停輪播'}
                             </LoadingButton>
                             <Marquee msg={timeStampData}/>
+                            <LoadingButton variant="contained" color="info" onClick={handleRefresh} style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}>
+                                手動刷新
+                            </LoadingButton>
                         </div>
                         </Box>
                         <Carousel
@@ -533,6 +554,9 @@ export default function Statistics({ token, ...rest }) {
                                 {isPaused ? '恢复轮播' : '暂停轮播'}
                             </LoadingButton>
                             <Marquee msg={timeStampData}/>
+                            <LoadingButton variant="contained" color="info" onClick={handleRefresh} style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}>
+                                刷新
+                            </LoadingButton>
                         </div>    
                         </Box>
                         
@@ -788,6 +812,9 @@ export default function Statistics({ token, ...rest }) {
                                 {isPaused ? 'Resume carousel' : 'Pause carousel'}
                             </LoadingButton>
                             <Marquee msg={timeStampData}/>
+                            <LoadingButton variant="contained" color="info" onClick={handleRefresh} style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}>
+                                refresh
+                            </LoadingButton>
                         </div>
                         </Box>
                         <Carousel
