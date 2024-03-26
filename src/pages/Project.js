@@ -711,6 +711,7 @@ export default function Project({ token, setAlert, ...rest }) {
                     <LoadingButton
                         variant="contained"
                         color="error"
+                        sx={{ marginleft: 3 }}
                         onClick={() => {
                           console.log("Delete button clicked");
                           projectDeleteHandleClickOpen();
