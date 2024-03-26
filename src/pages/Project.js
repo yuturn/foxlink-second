@@ -699,12 +699,24 @@ export default function Project({ token, setAlert, ...rest }) {
                     <Typography variant="h4" fontWeight="medium" mt={3}>
                       {globalVariable === "zh-tw" ? "刪除專案" : globalVariable === "zh-cn" ? "删除专案" : "Delete project"}
                     </Typography>
+                    
                     <LoadingButton
                       variant="contained"
                       color="info"
                       onClick={handleOnClickProjectDelete}
                     >
                       {globalVariable === "zh-tw" ? "更新專案" : globalVariable === "zh-cn" ? "更新专案" : "Update project"}
+                    </LoadingButton>
+                    
+                    <LoadingButton
+                        variant="contained"
+                        color="error"
+                        onClick={() => {
+                          console.log("Delete button clicked");
+                          projectDeleteHandleClickOpen();
+                        }}
+                      >
+                        {globalVariable === "zh-tw" ? "刪除機台" : globalVariable === "zh-cn" ? "删除机台" : "Delete Machine"}
                     </LoadingButton>
                     {/* ///////////////////////////////////// */}
                     <Box display="flex" alignItems="center" pt={3} px={2}>
@@ -779,7 +791,7 @@ export default function Project({ token, setAlert, ...rest }) {
                         </FormControl>
                       </Box> */}
                       <Divider sx={{ borderBottomWidth: 3, mt: 2 }} />
-                      <LoadingButton
+                      {/* <LoadingButton
                         variant="contained"
                         color="error"
                         onClick={() => {
@@ -788,7 +800,7 @@ export default function Project({ token, setAlert, ...rest }) {
                         }}
                       >
                         {globalVariable === "zh-tw" ? "刪除機台" : globalVariable === "zh-cn" ? "删除机台" : "Delete Machine"}
-                      </LoadingButton>
+                      </LoadingButton> */}
                       <Dialog
                         open={projectDeleteOpen}
                         onClose={projectDeleteHandleClose}
