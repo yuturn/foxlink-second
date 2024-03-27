@@ -384,26 +384,26 @@ export default function Project({ token, setAlert, ...rest }) {
   //////////////////////// 
 //////////////顯示專案名稱、流程、進度api導入//////////////
   function handleOnClickProjectProcess() {
-    apiGetProjectDevices(data)
-      .then(response => {
-        const responseData = response.data;
+    // apiGetProjectDevices()
+    //   .then(response => {
+    //     const responseData = response.data;
 
-        // 修改 API 返回的数据结构，确保包含 select 字段
-        const newData = responseData.map((item, index) => ({
-          ...item,
-          id: index + 1, // 使用唯一的值作为 id
-        }));
+    //     // 修改 API 返回的数据结构，确保包含 select 字段
+    //     const newData = responseData.map((item, index) => ({
+    //       ...item,
+    //       id: index + 1, // 使用唯一的值作为 id
+    //     }));
 
 
-        // 根据 select 字段的值设置表格数据和初始选中状态
-        setProjectProcessList(newData);
+    //     // 根据 select 字段的值设置表格数据和初始选中状态
+    //     setProjectProcessList(newData);
 
-        handleOpen((globalVariable === "zh-tw" ? "查詢專案進度成功" : globalVariable === "zh-cn" ? "查询专案进度成功" : "Search Project progress successful"));
-      })
-      .catch(err => {
-        console.log(err);
-        handleErrorOpen((globalVariable === "zh-tw" ? ("查詢專案進度失敗: " + err) : globalVariable === "zh-cn" ? ("查询专案进度失败:" + err) : ("Query Project progress failed:" + err)));
-      });
+    //     handleOpen((globalVariable === "zh-tw" ? "查詢專案進度成功" : globalVariable === "zh-cn" ? "查询专案进度成功" : "Search Project progress successful"));
+    //   })
+    //   .catch(err => {
+    //     console.log(err);
+    //     handleErrorOpen((globalVariable === "zh-tw" ? ("查詢專案進度失敗: " + err) : globalVariable === "zh-cn" ? ("查询专案进度失败:" + err) : ("Query Project progress failed:" + err)));
+    //   });
   }
 ///////////////////////////////////////////////////////////
 
