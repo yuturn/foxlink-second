@@ -65,6 +65,11 @@ const columnsTW = [
   { field: 'ename', headerName: 'ename', width: 450 },
   { field: 'cname', headerName: 'cname', width: 300 }
 ];
+const columnsprojectprogressTW = [
+  { field: 'project', headerName: '專案名稱', width: 200 },
+  { field: 'process', headerName: '流程', width: 200 },
+  { field: 'progress', headerName: '進度', width: 200 },
+];
 const columnsListCN = [
   { field: 'project', headerName: '专案名称', width: 200 },
   { field: 'selectedDisplay', headerName: '已于专案中', width: 200 },
@@ -76,6 +81,11 @@ const columnsCN = [
   { field: 'device', headerName: '机台名称', width: 200 },
   { field: 'ename', headerName: 'ename', width: 450 },
   { field: 'cname', headerName: 'cname', width: 300 }
+];
+const columnsprojectprogressCN = [
+  { field: 'project', headerName: '专案名称', width: 200 },
+  { field: 'process', headerName: '流程', width: 200 },
+  { field: 'progress', headerName: '进度', width: 200 },
 ];
 const columnsListEN = [
   { field: 'project', headerName: 'Project name', width: 200 },
@@ -89,7 +99,11 @@ const columnsEN = [
   { field: 'ename', headerName: 'ename', width: 450 },
   { field: 'cname', headerName: 'cname', width: 300 }
 ];
-
+const columnsprojectprogressEN = [
+  { field: 'project', headerName: 'Project name', width: 200 },
+  { field: 'process', headerName: 'Process', width: 200 },
+  { field: 'progress', headerName: 'Progress', width: 200 },
+];
 const empColumnsTW = [
   { field: 'badge', headerName: '員工編號', width: 250 },
   { field: 'username', headerName: '員工名稱', width: 250 },
@@ -125,6 +139,7 @@ export default function Project({ token, setAlert, ...rest }) {
   const [userDeleteOpen, setUserDeleteOpen] = useState(false);
   const [projectList, setProjectList] = useState([]);
   const [projectDeleteList, setProjectDeleteList] = useState([]);
+  const [projectProcessList, setProjectProcessList] = useState([]);
   const [employeeName, setEmployeeName] = useState("");
   const [projectUsers, setProjectUsers] = useState([]);
   const [selectedRow, setSelectedRow] = useState(null);
@@ -365,7 +380,32 @@ export default function Project({ token, setAlert, ...rest }) {
         handleErrorOpen((globalVariable === "zh-tw" ? ("查詢專案失敗: " + err) : globalVariable === "zh-cn" ? ("查询专案失败:" + err) : ("Query project failed:" + err)));
       });
   }
+  
   //////////////////////// 
+//////////////顯示專案名稱、流程、進度api導入//////////////
+  function handleOnClickProjectProcess() {
+    apiGetProjectDevices(data)
+      .then(response => {
+        const responseData = response.data;
+
+        // 修改 API 返回的数据结构，确保包含 select 字段
+        const newData = responseData.map((item, index) => ({
+          ...item,
+          id: index + 1, // 使用唯一的值作为 id
+        }));
+
+
+        // 根据 select 字段的值设置表格数据和初始选中状态
+        setProjectProcessList(newData);
+
+        handleOpen((globalVariable === "zh-tw" ? "查詢專案進度成功" : globalVariable === "zh-cn" ? "查询专案进度成功" : "Search Project progress successful"));
+      })
+      .catch(err => {
+        console.log(err);
+        handleErrorOpen((globalVariable === "zh-tw" ? ("查詢專案進度失敗: " + err) : globalVariable === "zh-cn" ? ("查询专案进度失败:" + err) : ("Query Project progress failed:" + err)));
+      });
+  }
+///////////////////////////////////////////////////////////
 
   //取得datagrid裡面所有select的資料(device)
   const onRowsSelectionHandler = (ids) => {
@@ -719,6 +759,41 @@ export default function Project({ token, setAlert, ...rest }) {
                       >
                         {globalVariable === "zh-tw" ? "刪除機台" : globalVariable === "zh-cn" ? "删除机台" : "Delete Machine"}
                     </LoadingButton>
+                    <Dialog
+                        open={projectDeleteOpen}
+                        onClose={projectDeleteHandleClose}
+                        aria-labelledby="alert-dialog-project"
+                        aria-describedby="alert-dialog-project"
+                      >
+                        <DialogTitle id="alert-dialog-title">
+                          {globalVariable === "zh-tw" ? "是否刪除機台?" : globalVariable === "zh-cn" ? "是否删除机台?" : "Delete Machine?"}
+                        </DialogTitle>
+                        <DialogContent>
+                          <DialogContentText id="alert-dialog-permission">
+                            {globalVariable === "zh-tw" ? "按下刪除按鈕後將會刪除機台" : globalVariable === "zh-cn" ? "按下删除按钮后将会删除机台" : "Clicking the delete button will delete the Machine"}
+                          </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                          <Button
+                            onClick={() => {
+                              console.log("Delete button clicked 裡面的");
+                              // projectDelete();
+                              handleOnClickProjectPost()
+                            }}
+                            color="error"
+                            variant="contained"
+                          >
+                            {globalVariable === "zh-tw" ? "刪除" : globalVariable === "zh-cn" ? "删除" : "Delete"}
+                          </Button>
+                          <Button
+                            onClick={projectDeleteHandleClose}
+                            color="info"
+                            variant="contained"
+                          >
+                            {globalVariable === "zh-tw" ? "關閉" : globalVariable === "zh-cn" ? "关闭" : "Close"}
+                          </Button>
+                        </DialogActions>
+                      </Dialog>
                     {/* ///////////////////////////////////// */}
                     <Box display="flex" alignItems="center" pt={3} px={2}>
                       {globalVariable === "zh-tw" ? (
@@ -769,7 +844,7 @@ export default function Project({ token, setAlert, ...rest }) {
                       )}
                       {/* //////////////////// */}
 
-                      {/* <Typography variant="h5" fontWeight="medium" mr={2}>
+                      {/* {/* <Typography variant="h5" fontWeight="medium" mr={2}>
                         {globalVariable === "zh-tw" ? "專案名稱:" : globalVariable === "zh-cn" ? "专案名称:" : "Project name:"}
                       </Typography>
                       <Box mr={2}>
@@ -789,9 +864,73 @@ export default function Project({ token, setAlert, ...rest }) {
                               </MenuItem>
                             ))}
                           </Select>
-                        </FormControl>
-                      </Box> */}
-                      <Divider sx={{ borderBottomWidth: 3, mt: 2 }} />
+                        </FormControl> */}
+                      </Box>
+                    {/* ////////////////////////專案名稱、專案流程、專案進度(未完成)/////////////////////////// */}
+                    <Divider sx={{ borderBottomWidth: 3, mt: 2 ,mb:2}} />
+                    <Box component="form" role="form" mb={3}>
+                      <Typography variant="h4" fontWeight="medium" mt={3}>
+                        {globalVariable === "zh-tw" ? "專案進度顯示" : globalVariable === "zh-cn" ? "专案进度显示" : "Project progress display project"}
+                      </Typography>
+                      
+                      <LoadingButton
+                        variant="contained"
+                        color="info"
+                        onClick={handleOnClickProjectProcess}////////////要改，資料要改成新的API，並進行資料處理
+                      >
+                        {globalVariable === "zh-tw" ? "更新專案進度" : globalVariable === "zh-cn" ? "更新专案进度" : "Update projectprogress"}
+                      </LoadingButton>
+                      
+                      <Box display="flex" alignItems="center" pt={3} px={2}>
+                      {globalVariable === "zh-tw" ? (
+                        <div style={{ height: 600, width: '100%' }}>
+                          <DataGrid
+                            rows={projectProcessList}
+                            columns={columnsprojectprogressTW}
+                            initialState={{
+                              pagination: {
+                                paginationModel: { pageSize: 5 },
+                              },
+                            }}
+                            pageSizeOptions={[5]}
+                            checkboxSelection
+                            onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
+                          />
+                        </div>
+                      ) : globalVariable === "zh-cn" ? (
+                        <div style={{ height: 600, width: '100%' }}>
+                          <DataGrid
+                            rows={projectProcessList}
+                            columns={columnsprojectprogressCN}
+                            initialState={{
+                              pagination: {
+                                paginationModel: { pageSize: 5 },
+                              },
+                            }}
+                            pageSizeOptions={[5]}
+                            checkboxSelection
+                            onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
+                          />
+                        </div>
+                      ) : (
+                        <div style={{ height: 600, width: '100%' }}>
+                          <DataGrid
+                            rows={projectProcessList}
+                            columns={columnsprojectprogressEN}
+                            initialState={{
+                              pagination: {
+                                paginationModel: { pageSize: 5 },
+                              },
+                            }}
+                            pageSizeOptions={[5]}
+                            checkboxSelection
+                            onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
+                          />
+                        </div>
+                      )}
+                      </Box>
+                      {/* /////////////////////////////////////////////////// */}
+                      {/* 原本刪除機台的位置 */}
                       {/* <LoadingButton
                         variant="contained"
                         color="error"
@@ -802,7 +941,7 @@ export default function Project({ token, setAlert, ...rest }) {
                       >
                         {globalVariable === "zh-tw" ? "刪除機台" : globalVariable === "zh-cn" ? "删除机台" : "Delete Machine"}
                       </LoadingButton> */}
-                      <Dialog
+                      {/* <Dialog
                         open={projectDeleteOpen}
                         onClose={projectDeleteHandleClose}
                         aria-labelledby="alert-dialog-project"
@@ -836,7 +975,7 @@ export default function Project({ token, setAlert, ...rest }) {
                             {globalVariable === "zh-tw" ? "關閉" : globalVariable === "zh-cn" ? "关闭" : "Close"}
                           </Button>
                         </DialogActions>
-                      </Dialog>
+                      </Dialog> */}
                     </Box>
                   </Box>
                 </Box>
