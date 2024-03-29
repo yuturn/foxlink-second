@@ -622,23 +622,19 @@ export default function Project({ token, setAlert, ...rest }) {
               )}
             </Box>
             {/* 利用project/table這支api去的到一個陣列，裡面會有每個專案的名字，建構一個table裏面包含了checkbox,已於專案中 */}
-            <Box ml={2}>
+            <div style={{ display: 'flex', alignItems: 'center', mr: '100px' }}>
               <LoadingButton variant="contained" color="info" onClick={handleOnClickProjectTable}>
                 {globalVariable === "zh-tw" ? "查詢現有專案" : globalVariable === "zh-cn" ? "查询现有专案" : "Query existing projects"}
               </LoadingButton>
-            </Box>
 
-            <Box>
               <LoadingButton loading={loading} variant="contained" color="info" onClick={() => { handleOnClickAdminProjectPost(); }}>
                 {globalVariable === "zh-tw" ? "新增專案至專案選擇表" : globalVariable === "zh-cn" ? "新增专案至专案选择表" : "Add newAdd a new project to the project selection list project"}
               </LoadingButton>
-            </Box>
 
-            <Box>
               <LoadingButton loading={loading} variant="contained" color="error" onClick={() => { projectAdminhandleDelete(); }}>
                 {globalVariable === "zh-tw" ? "刪除所選專案" : globalVariable === "zh-cn" ? "删除所选专案" : "Delete selected projects"}
               </LoadingButton>
-            </Box>
+            </div>
 
 
             <Box display="flex" pt={3} px={2} mb={3}>
