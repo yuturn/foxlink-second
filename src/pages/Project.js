@@ -420,7 +420,20 @@ export default function Project({ token, setAlert, ...rest }) {
       });
   }
   ///////////////////////////////////////////////////////////
-
+  //取得datagrid裡面所有select的資料(device)
+  const onRowsSelectionHandlerAdmin = (ids) => {
+    console.log(ids)
+    console.log(type(ids))
+    console.log(projectList)
+    const selectedRowsData = ids.map((id) => projectList.find((row) => row.id === id))
+    const newData = selectedRowsData.map(item => {
+      // 創建一個新物件，只包含你要保留的欄位
+      const { project} = item;
+      return { project};
+    });
+    setSelectedDevicesData(newData);
+    console.log(newData);
+  };
   //取得datagrid裡面所有select的資料(device)
   const onRowsSelectionHandler = (ids) => {
     console.log(ids)
@@ -579,7 +592,7 @@ export default function Project({ token, setAlert, ...rest }) {
         const newData = res.data.map((item, index) => ({
           ...item,
           id: index + 1, // 使用唯一的值作為 id
-          project: item.project,
+          project: item,
           selectedDisplay: item.selected ? '是' : '否',
         }));
         const selectedIds = newData.filter((item) => item.selected).map((item) => item.id);
@@ -652,7 +665,7 @@ export default function Project({ token, setAlert, ...rest }) {
                       }}
                       pageSizeOptions={[5]}
                       checkboxSelection
-                      onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
+                      onSelectionModelChange={(ids) => onRowsSelectionHandlerAdmin(ids)}
                     />
                   </div>
                 ) : globalVariable === "zh-cn" ? (
@@ -667,7 +680,7 @@ export default function Project({ token, setAlert, ...rest }) {
                       }}
                       pageSizeOptions={[5]}
                       checkboxSelection
-                      onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
+                      onSelectionModelChange={(ids) => onRowsSelectionHandlerAdmin(ids)}
                     />
                   </div>
                 ) : (
@@ -682,7 +695,7 @@ export default function Project({ token, setAlert, ...rest }) {
                       }}
                       pageSizeOptions={[5]}
                       checkboxSelection
-                      onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
+                      onSelectionModelChange={(ids) => onRowsSelectionHandlerAdmin(ids)}
                     />
                   </div>
                 )}
