@@ -579,6 +579,7 @@ export default function Project({ token, setAlert, ...rest }) {
         const newData = res.data.map((item, index) => ({
           ...item,
           id: index + 1, // 使用唯一的值作為 id
+          project: item.project,
           selectedDisplay: item.selected ? '是' : '否',
         }));
         const selectedIds = newData.filter((item) => item.selected).map((item) => item.id);
@@ -586,8 +587,8 @@ export default function Project({ token, setAlert, ...rest }) {
         setProjectTableList(newData);
         setSelectionModel(selectedIds); // 設定初始的選中狀態
         console.log(projectTableList)
-        handleOpen((globalVariable === "zh-tw" ? "新增成功" : globalVariable === "zh-cn" ? "新增成功" : "Added successful"))
-      }).catch(err => { console.log(err); handleErrorOpen((globalVariable === "zh-tw" ? ("新增專案失敗: " + err) : globalVariable === "zh-cn" ? ("新增专案失败:" + err) : ("Added project failed:" + err))); })
+        handleOpen((globalVariable === "zh-tw" ? "查詢成功" : globalVariable === "zh-cn" ? "查询成功" : "search successful"))
+      }).catch(err => { console.log(err); handleErrorOpen((globalVariable === "zh-tw" ? ("查询專案失敗: " + err) : globalVariable === "zh-cn" ? ("新增专案失败:" + err) : ("Query project failed:" + err))); })
   };
 
   return (
@@ -623,7 +624,7 @@ export default function Project({ token, setAlert, ...rest }) {
             </Box>
             {/* 利用project/table這支api去的到一個陣列，裡面會有每個專案的名字，建構一個table裏面包含了checkbox,已於專案中 */}
             <div style={{ display: 'flex', alignItems: 'center', mr: '100px' }}>
-              <LoadingButton variant="contained" color="info" onClick={handleOnClickProjectTable}>
+              <LoadingButton variant="contained" color="info" onClick={handleOnClickProjectTable} >
                 {globalVariable === "zh-tw" ? "查詢現有專案" : globalVariable === "zh-cn" ? "查询现有专案" : "Query existing projects"}
               </LoadingButton>
 
