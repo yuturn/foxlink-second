@@ -424,8 +424,8 @@ export default function Project({ token, setAlert, ...rest }) {
   const onRowsSelectionHandlerAdmin = (ids) => {
     console.log(ids)
     console.log(type(ids))
-    console.log(projectList)
-    const selectedRowsData = ids.map((id) => projectList.find((row) => row.id === id))
+    console.log(projectTableList)
+    const selectedRowsData = ids.map((id) => projectTableList.find((row) => row.id === id))
     const newData = selectedRowsData.map(item => {
       // 創建一個新物件，只包含你要保留的欄位
       const { project} = item;
