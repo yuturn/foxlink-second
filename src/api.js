@@ -93,11 +93,11 @@ export const apiPostProjectDevices = (data) => auth_except(baseRequest.post(`/pr
   }
 }));
 
-export const apiPostAdminProjectDevices = (token) => auth_except(baseRequest.post(`/project/project`, data['devicePostData'], {
+export const apiPostAdminProjectDevices = (data) => auth_except(baseRequest.post(`/project/project`, data['devicePostData'], {
   headers:
   {
     'accept': 'application/json',
-    'Authorization': `Bearer ${token}`,
+    'Authorization': `Bearer ${data['token']}`,
     'Content-Type': 'application/json'
   }
 }));
