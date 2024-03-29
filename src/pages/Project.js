@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { apiGetProjectDevices, apiPostProjectDevices, apiGetProjectName, apiDeleteProject, apiGetProjectUsers, apiPostProjectUser, apiDeleteProjectUser, apiGetUserName, apiGetProjectTable } from '../api'
+import { apiGetProjectDevices, apiPostProjectDevices,apiGetProjectprogress, apiGetProjectName, apiPostAdminProjectDevices,apiDeleteProject,apiDeleteAdminProjectDevices, apiGetProjectUsers, apiPostProjectUser, apiDeleteProjectUser, apiGetUserName, apiGetProjectTable } from '../api'
 import {
   Box,
   Card,
@@ -131,6 +131,7 @@ const permissionMap = {
 
 export default function Project({ token, setAlert, ...rest }) {
   const [selectedDevicesData, setSelectedDevicesData] = useState();
+  const [selectedAdminDevicesData, setSelectedAdminDevicesData] = useState();
   const [selectedDevicesDataUser, setSelectedDevicesDataUser] = useState();
   const [projectID, setProjectID] = useState("");
   const [project, setProject] = useState([]);
@@ -145,7 +146,15 @@ export default function Project({ token, setAlert, ...rest }) {
   const [selectedRow, setSelectedRow] = useState(null);
   const { globalVariable, updateGlobalVariable } = useContext(GlobalContext);
   const [loading, setLoading] = useState(false);
-
+  const [projectIDSelect, setProjectIDSelect] = useState("");
+//下拉式選單的onchange
+  const projectSelectNameChange = (event) => {
+    console.log("有更改projectIDSelect")
+    setProjectIDSelect(event.target.value);
+    console.log(event.target.value)
+    console.log(projectIDSelect)
+    handleUpdateProjectUser()
+  };
 
   const projectNameChange = (event) => {
     console.log("有更改projectID")
@@ -198,13 +207,13 @@ export default function Project({ token, setAlert, ...rest }) {
 
 
   //刪除project的function
-  const projectDelete = () => {
+  const projectAdminhandleDelete = () => {
     const data = {
       token: token,
       projectID: projectID
     }
     console.log(data)
-    apiDeleteProject(data)
+    apiDeleteAdminProjectDevices(data)
       .then((res) => {
         handleOpen((globalVariable === "zh-tw" ? "刪除專案成功" : globalVariable === "zh-cn" ? "删除专案成功" : "Delete project successful"));
       }).catch((error) => {
@@ -214,17 +223,17 @@ export default function Project({ token, setAlert, ...rest }) {
       });
   };
   //更新目前的project，看還有哪些
-  function handleUpdateProject() {
-    apiGetProjectName(token)
-      .then((res) => {
-        setProject(res.data);
-        console.log(res.data)
-      })
-      .catch((error) => {
-        setProject([]);
-        console.error('Error fetching project data:', error);
-      });
-  }
+  // function handleUpdateProject() {
+  //   apiGetProjectName(token)
+  //     .then((res) => {
+  //       setProject(res.data);
+  //       console.log(res.data)
+  //     })
+  //     .catch((error) => {
+  //       setProject([]);
+  //       console.error('Error fetching project data:', error);
+  //     });
+  // }
   //此function是用來取User name
   function handleOnclickGetUserName() {
     let userid = document.getElementById("userID").value
@@ -265,7 +274,7 @@ export default function Project({ token, setAlert, ...rest }) {
         console.error('Error fetching project data:', error);
       });
   }
-
+//useeffect來控制某些東西
   useEffect(() => {
     // 在这里调用你的 API 获取项目数据(project的名稱)
     apiGetProjectName(token)
@@ -305,7 +314,7 @@ export default function Project({ token, setAlert, ...rest }) {
   //       handleOpen((globalVariable === "zh-tw" ? "查詢成功" : globalVariable === "zh-cn" ? "查询成功" : "Search successful"))
   //     }).catch(err => { console.log(err); handleErrorOpen((globalVariable === "zh-tw" ? ("查詢專案失敗: " + err) : globalVariable === "zh-cn" ? ("查询专案失败:" + err) : ("Query project failed:" + err))); })
   // };
-  //////////////////////// 
+  //////////////////////// 新增專案按鈕onclick
   function handleOnClickProjectAdd() {
     console.log(document.getElementById('searchProject').value)
     let search = document.getElementById('searchProject').value;
@@ -343,6 +352,7 @@ export default function Project({ token, setAlert, ...rest }) {
         handleErrorOpen((globalVariable === "zh-tw" ? ("查詢專案失敗: " + err) : globalVariable === "zh-cn" ? ("查询专案失败:" + err) : ("Query project failed:" + err)));
       });
   }
+  ///////////專案刪除
   function handleOnClickProjectDelete() {
     console.log(document.getElementById('searchProject').value)
     let search = document.getElementById('searchProject').value;
@@ -384,26 +394,26 @@ export default function Project({ token, setAlert, ...rest }) {
   //////////////////////// 
 //////////////顯示專案名稱、流程、進度api導入//////////////
   function handleOnClickProjectProcess() {
-    // apiGetProjectDevices()
-    //   .then(response => {
-    //     const responseData = response.data;
+    apiGetProjectprogress()
+      .then(response => {
+        const responseData = response.data;
 
-    //     // 修改 API 返回的数据结构，确保包含 select 字段
-    //     const newData = responseData.map((item, index) => ({
-    //       ...item,
-    //       id: index + 1, // 使用唯一的值作为 id
-    //     }));
+        // 修改 API 返回的数据结构，确保包含 select 字段
+        const newData = responseData.map((item, index) => ({
+          ...item,
+          id: index + 1, // 使用唯一的值作为 id
+        }));
 
 
-    //     // 根据 select 字段的值设置表格数据和初始选中状态
-    //     setProjectProcessList(newData);
+        // 根据 select 字段的值设置表格数据和初始选中状态
+        setProjectProcessList(newData);
 
-    //     handleOpen((globalVariable === "zh-tw" ? "查詢專案進度成功" : globalVariable === "zh-cn" ? "查询专案进度成功" : "Search Project progress successful"));
-    //   })
-    //   .catch(err => {
-    //     console.log(err);
-    //     handleErrorOpen((globalVariable === "zh-tw" ? ("查詢專案進度失敗: " + err) : globalVariable === "zh-cn" ? ("查询专案进度失败:" + err) : ("Query Project progress failed:" + err)));
-    //   });
+        handleOpen((globalVariable === "zh-tw" ? "查詢專案進度成功" : globalVariable === "zh-cn" ? "查询专案进度成功" : "Search Project progress successful"));
+      })
+      .catch(err => {
+        console.log(err);
+        handleErrorOpen((globalVariable === "zh-tw" ? ("查詢專案進度失敗: " + err) : globalVariable === "zh-cn" ? ("查询专案进度失败:" + err) : ("Query Project progress failed:" + err)));
+      });
   }
 ///////////////////////////////////////////////////////////
 
@@ -432,7 +442,7 @@ export default function Project({ token, setAlert, ...rest }) {
     setSelectedDevicesDataUser(selectedRowsData);
   };
   //////////////////////////////////////////////////////////////
-  //依照所選擇的device去建立資料
+  //依照所選擇的device去post資料
   function handleOnClickProjectPost() {
     if (!token) {
       // 没有token，不执行操作
@@ -453,6 +463,36 @@ export default function Project({ token, setAlert, ...rest }) {
         .then(res => {
           handleOpen((globalVariable === "zh-tw" ? "新增專案成功" : globalVariable === "zh-cn" ? "新增专案成功" : "New project successful"));
           setLoading(false)
+        }).catch(err => {
+          console.log(err);
+          handleErrorOpen((globalVariable === "zh-tw" ? ("新增專案失敗" + err) : globalVariable === "zh-cn" ? ("新增专案失败" + err) : ("Failed to add new project" + err)))
+          setLoading(false)
+        })
+    }
+  };
+  const [projectTableListPost, setProjectTableListPost] = useState([]);
+  //////////////////////////////////////////////////////////
+  function handleOnClickAdminProjectPost() {
+    if (!token) {
+      // 没有token，不执行操作
+      return;
+    }
+    setLoading(true)
+    const data = {
+      token: token,
+      devicePostData: selectedDevicesData
+    }
+    console.log(data)
+    if (data.devicePostData === undefined || data.devicePostData.length === 0) {
+      handleErrorOpen((globalVariable === "zh-tw" ? ("尚未選取專案") : globalVariable === "zh-cn" ? ("尚未选取专案") : ("No project selected")))
+      setLoading(false)
+    } else {
+      handleOpen((globalVariable === "zh-tw" ? "正在進行專案前處理" : globalVariable === "zh-cn" ? "正在进行专案前处理" : "Project pre-processing in progress"));
+      apiPostAdminProjectDevices(data)
+        .then(res => {
+          handleOpen((globalVariable === "zh-tw" ? "新增專案成功" : globalVariable === "zh-cn" ? "新增专案成功" : "New project successful"));
+          setLoading(false)
+          setProjectTableListPost(data.devicePostData)
         }).catch(err => {
           console.log(err);
           handleErrorOpen((globalVariable === "zh-tw" ? ("新增專案失敗" + err) : globalVariable === "zh-cn" ? ("新增专案失败" + err) : ("Failed to add new project" + err)))
@@ -510,7 +550,7 @@ export default function Project({ token, setAlert, ...rest }) {
     console.log(params.row.selected); // 检查这里的输出
     return params.row.selected ? { backgroundColor: '#ffc107' } : {};
   };
-  // const fetchYableData = () => {
+  // const fetchtableData = () => {
   //   apiProjectTable(token)
   //     .then((res) => {
   //       console.log(res.data); // 确保你能够看到这个时间戳在控制台中输出
@@ -541,7 +581,7 @@ export default function Project({ token, setAlert, ...rest }) {
         // console.log(newData)
         setProjectTableList(newData);
         setSelectionModel(selectedIds); // 設定初始的選中狀態
-        // console.log(projectList)
+        console.log(projectTableList)
         handleOpen((globalVariable === "zh-tw" ? "新增成功" : globalVariable === "zh-cn" ? "新增成功" : "Added successful"))
       }).catch(err => { console.log(err); handleErrorOpen((globalVariable === "zh-tw" ? ("新增專案失敗: " + err) : globalVariable === "zh-cn" ? ("新增专案失败:" + err) : ("Added project failed:" + err))); })
   };
@@ -562,54 +602,96 @@ export default function Project({ token, setAlert, ...rest }) {
             {globalVariable === "zh-tw" ? "人員管理" : globalVariable === "zh-cn" ? "人员管理" : "Employee management"}
           </LoadingButton>
         </Box>
-        {/* <Box>
-          <LoadingButton variant="contained" color="info" onClick={handleShowThirdCard} sx={{ mr: 1 }}>
-            <AccountBoxIcon sx={{ mr: 2 }} />
-            {globalVariable === "zh-tw" ? "查詢人員負責專案" : globalVariable === "zh-cn" ? "查询人员负责专案" : "Inquiry personnel responsible for the project"}
-          </LoadingButton>handleShowThirdCard
-        </Box> */}
+
       </Box>
       {showFirstCard ? (
         <Card>
           {/* ////////////////////////////////////// 建立一個list可供選擇project要串api_table*/}
           <Card display="flex" alignItems="center" pt={3} px={2}>
-            {/* <Box sx={{ bgcolor: "#696969" }}>
-          {globalVariable === "zh-tw" ? (
-              <CardHeader title="專案表單" color="#696969" />
-            ) : globalVariable === "zh-cn" ? (
-              <CardHeader title="专案表单" color="#696969" />
-            ) : (
-              <CardHeader title="Project list" color="#696969" />
-            )}
-          </Box>
-          {/* 利用project/table這支api去的到一個陣列，裡面會有每個專案的名字，建構一個table裏面包含了checkbox,已於專案中 */}
-            {/* <Box ml={2}>
-            <LoadingButton variant="contained" color="info" onClick={handleOnClickProjectTable}>
-                {globalVariable === "zh-tw" ? "查詢專案" : globalVariable === "zh-cn" ? "查询專案" : "Search project"}
-            </LoadingButton>
-          </Box>  */}
-            {/* 
-          <Box display="flex" pt={3} px={2} mb={3}>
-            <div style={{ height: 600, width: "100%" }}>
-              <DataGrid
-                rows={projectTableList}
-                columns={columnsListTW}
-                pageSize={10}
-                checkboxSelection
-                hideFooter
-                onSelectionModelChange={(ids) => console.log(ids)} // Handle selection change here
-              />
-            </div>
-          </Box>
-          {/* 利用project/table這支api去的到一個陣列，裡面會有每個專案的名字，建構一個table裏面包含了checkbox,已於專案中 */}
-            {/* <Box ml={2}>
-            <LoadingButton variant="contained" color="info" onClick={}>
-                {globalVariable === "zh-tw" ? "選擇專案" : globalVariable === "zh-cn" ? "选择專案" : "choose project"}
-            </LoadingButton>
-          </Box>  */}
+          <Box sx={{ bgcolor: "#696969" }}>
+            {globalVariable === "zh-tw" ? (
+                <CardHeader title="專案表單" color="#696969" />
+              ) : globalVariable === "zh-cn" ? (
+                <CardHeader title="专案表单" color="#696969" />
+              ) : (
+                <CardHeader title="Project list" color="#696969" />
+              )}
+            </Box>
+            {/* 利用project/table這支api去的到一個陣列，裡面會有每個專案的名字，建構一個table裏面包含了checkbox,已於專案中 */}
+            <Box ml={2}>
+              <LoadingButton variant="contained" color="info" onClick={handleOnClickProjectTable}>
+                  {globalVariable === "zh-tw" ? "查詢現有專案" : globalVariable === "zh-cn" ? "查询现有专案" : "Query existing projects"}
+              </LoadingButton>
+            </Box>  
+            
+            <Box>
+              <LoadingButton loading={loading} variant="contained" color="info" onClick={() => { handleOnClickAdminProjectPost(); }}>
+                {globalVariable === "zh-tw" ? "新增專案至專案選擇表" : globalVariable === "zh-cn" ? "新增专案至专案选择表" : "Add newAdd a new project to the project selection list project"}
+              </LoadingButton>
+            </Box>
 
+            <Box>
+              <LoadingButton loading={loading} variant="contained" color="error" onClick={() => { projectAdminhandleDelete(); }}>
+                {globalVariable === "zh-tw" ? "刪除所選專案" : globalVariable === "zh-cn" ? "删除所选专案" : "Delete selected projects"}
+              </LoadingButton>
+            </Box>
+            
+
+            <Box display="flex" pt={3} px={2} mb={3}>
+              <div style={{ height: 600, width: "100%" }}>
+              {globalVariable === "zh-tw" ? (
+                        <div style={{ height: 600, width: '100%' }}>
+                          <DataGrid
+                            rows={projectTableList}
+                            columns={columnsListTW}
+                            initialState={{
+                              pagination: {
+                                paginationModel: { pageSize: 5 },
+                              },
+                            }}
+                            pageSizeOptions={[5]}
+                            checkboxSelection
+                            onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
+                          />
+                        </div>
+                      ) : globalVariable === "zh-cn" ? (
+                        <div style={{ height: 600, width: '100%' }}>
+                          <DataGrid
+                            rows={projectTableList}
+                            columns={columnsListCN}
+                            initialState={{
+                              pagination: {
+                                paginationModel: { pageSize: 5 },
+                              },
+                            }}
+                            pageSizeOptions={[5]}
+                            checkboxSelection
+                            onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
+                          />
+                        </div>
+                      ) : (
+                        <div style={{ height: 600, width: '100%' }}>
+                          <DataGrid
+                            rows={projectTableList}
+                            columns={columnsListEN}
+                            initialState={{
+                              pagination: {
+                                paginationModel: { pageSize: 5 },
+                              },
+                            }}
+                            pageSizeOptions={[5]}
+                            checkboxSelection
+                            onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
+                          />
+                        </div>
+                      )}
+                    
+              </div>
+            </Box>
+
+            
           </Card>
-          {/* <Divider sx={{ borderBottomWidth: 3, mt: 2 }} /> */}
+          <Divider sx={{ borderBottomWidth: 3, mt: 2 }} />
           {/* ////////////////////////////////////// */}
           <Box sx={{ bgcolor: '#696969' }}>
             {globalVariable === "zh-tw" ? (
@@ -652,23 +734,34 @@ export default function Project({ token, setAlert, ...rest }) {
             </Snackbar>
             <Grid container spacing={1}>
               <Grid item xs={12} md={12}>
-                <Box>
-                  <Box component="form" role="form" mb={3}>
-                    <Typography variant="h4" fontWeight="medium" mt={3}>
-                      {globalVariable === "zh-tw" ? "新增專案" : globalVariable === "zh-cn" ? "新增专案" : "Add new project"}
-                    </Typography>
+              <Box>
+                <Box component="form" role="form" mb={3}>
+                  <Typography variant="h4" fontWeight="medium" mt={3}>
+                    {globalVariable === "zh-tw" ? "新增專案" : globalVariable === "zh-cn" ? "新增专案" : "Add new project"}
+                  </Typography>
+                  <FormControl fullWidth>
                     <Box display="flex" alignItems="center" pt={3} px={2}>
                       <Typography variant="h5" fontWeight="medium" mr={2}>
                         {globalVariable === "zh-tw" ? "專案名稱:" : globalVariable === "zh-cn" ? "专案名称:" : "Project name:"}
                       </Typography>
-                      <Box mr={2}>
-                        {globalVariable === "zh-tw" ? (
-                          <TextField id="searchProject" type="search-staff" label="專案名稱" />
-                        ) : globalVariable === "zh-cn" ? (
-                          <TextField id="searchProject" type="search-staff" label="专案名称" />
-                        ) : (
-                          <TextField id="searchProject" type="search-staff" label="Project name" />
-                        )}
+                      <Box mr={2} sx={{ minWidth: 200 }}>
+                        <InputLabel id="demo-multiple-name-label">Project</InputLabel>
+                        <Select
+                          labelId="demo-multiple-name-label"
+                          id="searchProject"
+                          multiple
+                          value={projectTableListPost}
+                          onChange={projectSelectNameChange}
+                          // 这里你可以添加渲染 MenuItem 的代码
+                          // 比如，基于你的项目列表渲染 MenuItem
+                        >
+                          {/* 假设 projectList 是可选项目的列表 */}
+                          {projectTableListPost.map((device) => (
+                            <MenuItem key={device.devicePostData} value={device.selectedDevicesData}>
+                              {data.selectedDevicesData}
+                            </MenuItem>
+                          ))}
+                        </Select>
                       </Box>
                       <Box ml={2}>
                         <LoadingButton variant="contained" color="info" onClick={handleOnClickProjectAdd}>
@@ -676,7 +769,37 @@ export default function Project({ token, setAlert, ...rest }) {
                         </LoadingButton>
                       </Box>
                     </Box>
-                  </Box>
+                  </FormControl>
+                </Box>
+              
+
+                {/* <Box>
+                  <Box component="form" role="form" mb={3}>
+                    <Typography variant="h4" fontWeight="medium" mt={3}>
+                      {globalVariable === "zh-tw" ? "新增專案" : globalVariable === "zh-cn" ? "新增专案" : "Add new project"}
+                    </Typography>
+                    <FormControl>
+                      <Box display="flex" alignItems="center" pt={3} px={2}>
+                        <Typography variant="h5" fontWeight="medium" mr={2}>
+                          {globalVariable === "zh-tw" ? "專案名稱:" : globalVariable === "zh-cn" ? "专案名称:" : "Project name:"}
+                        </Typography>
+                        <Box mr={2}>
+                          {globalVariable === "zh-tw" ? (//要改value onchange
+                            <Select id="searchProject" multiple type="search-staff" label="專案名稱" value={projectTableListPost} onChange={projectSelectNameChange} style={{ minWidth: "200px", height: "45px" }}/>
+                          ) : globalVariable === "zh-cn" ? (
+                            <Select id="searchProject" multiple type="search-staff" label="专案名称" value={projectTableListPost} onChange={projectSelectNameChange} style={{ minWidth: "200px", height: "45px" }}/>
+                          ) : (
+                            <Select id="searchProject" multiple type="search-staff" label="Project name" value={projectTableListPost} onChange={projectSelectNameChange} style={{ minWidth: "200px", height: "45px" }}/>
+                          )}
+                        </Box>
+                        <Box ml={2}>
+                          <LoadingButton variant="contained" color="info" onClick={handleOnClickProjectAdd}>
+                            {globalVariable === "zh-tw" ? "查詢" : globalVariable === "zh-cn" ? "查询" : "Search"}
+                          </LoadingButton>
+                        </Box>
+                      </Box>
+                    </FormControl>
+                  </Box> */}
                   <Box display="flex" alignItems="center" pt={3} px={2}>
                     {globalVariable === "zh-tw" ? (
                       <div style={{ height: 600, width: '100%' }}>
