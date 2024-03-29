@@ -497,10 +497,10 @@ export default function Project({ token, setAlert, ...rest }) {
     setLoading(true)
     const data = {
       token: token,
-      devicePostData: selectedDevicesData
+      project: project
     }
     console.log(data)
-    if (data.devicePostData === undefined || data.devicePostData.length === 0) {
+    if (data.project === undefined || data.project.length === 0) {
       handleErrorOpen((globalVariable === "zh-tw" ? ("尚未選取專案") : globalVariable === "zh-cn" ? ("尚未选取专案") : ("No project selected")))
       setLoading(false)
     } else {
@@ -509,7 +509,7 @@ export default function Project({ token, setAlert, ...rest }) {
         .then(res => {
           handleOpen((globalVariable === "zh-tw" ? "新增專案成功" : globalVariable === "zh-cn" ? "新增专案成功" : "New project successful"));
           setLoading(false)
-          setProjectTableListPost(data.devicePostData)
+          setProjectTableListPost(data.project)
         }).catch(err => {
           console.log(err);
           handleErrorOpen((globalVariable === "zh-tw" ? ("新增專案失敗" + err) : globalVariable === "zh-cn" ? ("新增专案失败" + err) : ("Failed to add new project" + err)))
