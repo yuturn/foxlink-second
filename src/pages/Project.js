@@ -210,10 +210,10 @@ export default function Project({ token, setAlert, ...rest }) {
   const projectAdminhandleDelete = () => {
     const data = {
       token: token,
-      projectID: projectID
+      project: project
     }
     console.log(data)
-    apiDeleteAdminProjectDevices(data)
+    apiDeleteAdminProjectDevices(data.project)
       .then((res) => {
         handleOpen((globalVariable === "zh-tw" ? "刪除專案成功" : globalVariable === "zh-cn" ? "删除专案成功" : "Delete project successful"));
       }).catch((error) => {
@@ -505,7 +505,7 @@ export default function Project({ token, setAlert, ...rest }) {
       setLoading(false)
     } else {
       handleOpen((globalVariable === "zh-tw" ? "正在進行專案前處理" : globalVariable === "zh-cn" ? "正在进行专案前处理" : "Project pre-processing in progress"));
-      apiPostAdminProjectDevices(data)
+      apiPostAdminProjectDevices(data.project)
         .then(res => {
           handleOpen((globalVariable === "zh-tw" ? "新增專案成功" : globalVariable === "zh-cn" ? "新增专案成功" : "New project successful"));
           setLoading(false)
