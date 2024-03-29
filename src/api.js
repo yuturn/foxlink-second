@@ -102,7 +102,7 @@ export const apiPostAdminProjectDevices = (data) => auth_except(baseRequest.post
   }
 }));
 
-export const apiDeleteAdminProjectDevices = (data) => auth_except(baseRequest.Delete(`/project/project`, data['devicePostData'], {
+export const apiDeleteAdminProjectDevices = (data) => auth_except(baseRequest.delete(`/project/project`, data['devicePostData'], {
   headers:
   {
     'accept': 'application/json',
@@ -110,11 +110,19 @@ export const apiDeleteAdminProjectDevices = (data) => auth_except(baseRequest.De
   }
 }));
 
-export const apiGetProjectprogress = (data) => auth_except(baseRequest.get(`/project/task?project_name=${data['name']}&action=${data['action']}&status=${data['progress']}`, {
+// export const apiGetProjectprogress = (data) => auth_except(baseRequest.get(`/project/task?project_name=${data['name']}&action=${data['action']}&status=${data['progress']}`, {
+//   headers:
+//   {
+//     'accept': 'application/json',
+//     'Authorization': `Bearer ${data['token']}`,
+//   }
+// }));
+
+export const apiGetProjectprogress = (token) => auth_except(baseRequest.get(`/project/task`, {
   headers:
   {
     'accept': 'application/json',
-    'Authorization': `Bearer ${data['token']}`,
+    'Authorization': `Bearer ${token}`,
   }
 }));
 
