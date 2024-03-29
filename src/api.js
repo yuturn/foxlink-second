@@ -102,7 +102,7 @@ export const apiPostAdminProjectDevices = (data) => auth_except(baseRequest.post
   }
 }));
 
-export const apiDeleteAdminProjectDevices = (data) => auth_except(baseRequest.Delete(`/project/project`, data['projectID'], {
+export const apiDeleteAdminProjectDevices = (data) => auth_except(baseRequest.Delete(`/project/project`, data['devicePostData'], {
   headers:
   {
     'accept': 'application/json',
