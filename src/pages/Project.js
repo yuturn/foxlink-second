@@ -55,7 +55,7 @@ const darkTheme = createTheme({
 });
 const columnsListTW = [
   { field: 'project', headerName: '專案名稱', width: 200 },
-  { field: 'selectedDisplay', headerName: '已於專案中', width: 200 },
+  // { field: 'selectedDisplay', headerName: '已於專案中', width: 200 },
 ];
 const columnsTW = [
   { field: 'project', headerName: '專案名稱', width: 200 },
@@ -72,7 +72,7 @@ const columnsprojectprogressTW = [
 ];
 const columnsListCN = [
   { field: 'project', headerName: '专案名称', width: 200 },
-  { field: 'selectedDisplay', headerName: '已于专案中', width: 200 },
+  // { field: 'selectedDisplay', headerName: '已于专案中', width: 200 },
 ];
 const columnsCN = [
   { field: 'project', headerName: '专案名称', width: 200 },
@@ -89,7 +89,7 @@ const columnsprojectprogressCN = [
 ];
 const columnsListEN = [
   { field: 'project', headerName: 'Project name', width: 200 },
-  { field: 'selectedDisplay', headerName: 'Already in project', width: 200 },
+  // { field: 'selectedDisplay', headerName: 'Already in project', width: 200 },
 ];
 const columnsEN = [
   { field: 'project', headerName: 'Project name', width: 200 },
@@ -210,16 +210,26 @@ export default function Project({ token, setAlert, ...rest }) {
   const projectAdminhandleDelete = () => {
     const data = {
       token: token,
-      project: project
+      project: selectedDevicesData.map(device => device.project)
     }
     console.log(data)
+    console.log(data.project)
     apiDeleteAdminProjectDevices(data)
       .then((res) => {
         handleOpen((globalVariable === "zh-tw" ? "刪除專案成功" : globalVariable === "zh-cn" ? "删除专案成功" : "Delete project successful"));
+        setLoading(false)
+        // 假设data.project是一个包含要删除项目ID的数组
+        setProjectTableListPost(currentProjects =>
+          currentProjects.filter(project =>
+            !data.project.includes(project)
+          )
+        );
+
       }).catch((error) => {
         // 处理错误
         console.error(error);
         handleErrorOpen((globalVariable === "zh-tw" ? ("刪除專案失敗" + error) : globalVariable === "zh-cn" ? ("删除专案失败:" + error) : ("Delete project failed:" + error)));
+        setLoading(false)
       });
   };
   //更新目前的project，看還有哪些
@@ -316,10 +326,11 @@ export default function Project({ token, setAlert, ...rest }) {
   // };
   //////////////////////// 新增專案按鈕onclick
   function handleOnClickProjectAdd() {
-    console.log(document.getElementById('searchProject').value)
-    let search = document.getElementById('searchProject').value;
+    console.log(projectIDSelect)
+    // console.log(document.getElementById('permission-select').value)
+    // let search = document.getElementById('permission-select').value;
     const data = {
-      'name': search
+      'name': projectIDSelect
     }
     apiGetProjectDevices(data)
       .then(response => {
@@ -334,13 +345,13 @@ export default function Project({ token, setAlert, ...rest }) {
         }));
 
         // 根据 select 字段过滤已选择的项目
-        const selectedIds = newData.filter((item) => item.select === 1).map((item) => item.id);
+        const selectedIds = newData.filter((item) => item).map((item) => item.id);
 
         // 根据 select 字段为 0 的项目
-        const unselectedItems = newData.filter((item) => item.select === 0);
+        const unselectedItems = newData.filter((item) => item);
 
         // 将未选择的项目进行进一步处理，例如显示在表格中或执行其他操作
-        console.log("未选择的项目：", unselectedItems);
+        console.log("所有的项目：", unselectedItems);
 
         // 根据 select 字段的值设置表格数据和初始选中状态
         setProjectList(unselectedItems);
@@ -352,16 +363,19 @@ export default function Project({ token, setAlert, ...rest }) {
         handleErrorOpen((globalVariable === "zh-tw" ? ("查詢專案失敗: " + err) : globalVariable === "zh-cn" ? ("查询专案失败:" + err) : ("Query project failed:" + err)));
       });
   }
+
   ///////////專案刪除
   function handleOnClickProjectDelete() {
-    console.log(document.getElementById('searchProject').value)
-    let search = document.getElementById('searchProject').value;
+    // console.log(document.getElementById('searchProject').value)
+    // let search = document.getElementById('searchProject').value;
     const data = {
-      'name': search
+
+      'name': project
     }
     apiGetProjectDevices(data)
       .then(response => {
         const responseData = response.data;
+        console.log(response.data)
 
         // 修改 API 返回的数据结构，确保包含 select 字段
         const newData = responseData.map((item, index) => ({
@@ -378,7 +392,7 @@ export default function Project({ token, setAlert, ...rest }) {
         const unselectedItems = newData.filter((item) => item.select === 1);
 
         // // 将未选择的项目进行进一步处理，例如显示在表格中或执行其他操作
-        console.log("未选择的项目：", unselectedItems);
+        // console.log("未选择的项目：", unselectedItems);
 
         // 根据 select 字段的值设置表格数据和初始选中状态
         setProjectDeleteList(unselectedItems);
@@ -428,8 +442,8 @@ export default function Project({ token, setAlert, ...rest }) {
     const selectedRowsData = ids.map((id) => projectTableList.find((row) => row.id === id))
     const newData = selectedRowsData.map(item => {
       // 創建一個新物件，只包含你要保留的欄位
-      const { project} = item;
-      return { project};
+      const project = item;
+      return project;
     });
     setSelectedDevicesData(newData);
     console.log(newData);
@@ -468,10 +482,11 @@ export default function Project({ token, setAlert, ...rest }) {
     setLoading(true)
     const data = {
       token: token,
-      devicePostData: selectedDevicesData
+      project: selectedDevicesData
+
     }
     console.log(data)
-    if (data.devicePostData === undefined || data.devicePostData.length === 0) {
+    if (data.project === undefined || data.project.length === 0) {
       handleErrorOpen((globalVariable === "zh-tw" ? ("尚未選取專案") : globalVariable === "zh-cn" ? ("尚未选取专案") : ("No project selected")))
       setLoading(false)
     } else {
@@ -497,10 +512,12 @@ export default function Project({ token, setAlert, ...rest }) {
     setLoading(true)
     const data = {
       token: token,
-      project: project
+      project: selectedDevicesData.map(device => device.project)
     }
     console.log(data)
-    if (data.project === undefined || data.project.length === 0) {
+    console.log(data.project[0])
+    console.log(data.project)
+    if (data === undefined || data.length === 0) {
       handleErrorOpen((globalVariable === "zh-tw" ? ("尚未選取專案") : globalVariable === "zh-cn" ? ("尚未选取专案") : ("No project selected")))
       setLoading(false)
     } else {
@@ -510,6 +527,7 @@ export default function Project({ token, setAlert, ...rest }) {
           handleOpen((globalVariable === "zh-tw" ? "新增專案成功" : globalVariable === "zh-cn" ? "新增专案成功" : "New project successful"));
           setLoading(false)
           setProjectTableListPost(data.project)
+          console.log(projectTableListPost)
         }).catch(err => {
           console.log(err);
           handleErrorOpen((globalVariable === "zh-tw" ? ("新增專案失敗" + err) : globalVariable === "zh-cn" ? ("新增专案失败" + err) : ("Failed to add new project" + err)))
@@ -593,7 +611,7 @@ export default function Project({ token, setAlert, ...rest }) {
           ...item,
           id: index + 1, // 使用唯一的值作為 id
           project: item,
-          selectedDisplay: item.selected ? '是' : '否',
+          // selectedDisplay: item.selected ? '是' : '否',
         }));
         const selectedIds = newData.filter((item) => item.selected).map((item) => item.id);
         // console.log(newData)
@@ -759,21 +777,20 @@ export default function Project({ token, setAlert, ...rest }) {
                           {globalVariable === "zh-tw" ? "專案名稱:" : globalVariable === "zh-cn" ? "专案名称:" : "Project name:"}
                         </Typography>
                         <Box mr={2} sx={{ minWidth: 200 }}>
-                          <InputLabel id="demo-multiple-name-label">Project</InputLabel>
                           <Select
-                            labelId="demo-multiple-name-label"
-                            id="searchProject"
-                            multiple
-                            value={projectTableListPost}
+                            labelId="permission-select-label"
+                            id="permission-select"
+                            value={projectIDSelect}
                             onChange={projectSelectNameChange}
-                          // 这里你可以添加渲染 MenuItem 的代码
-                          // 比如，基于你的项目列表渲染 MenuItem
+
                           >
-                            {/* 假设 projectList 是可选项目的列表 */}
-                            {projectTableListPost.map((device) => (
-                              <MenuItem key={device.devicePostData} value={device.selectedDevicesData}>
-                                {device.selectedDevicesData}
+                            <MenuItem value="">清空欄位</MenuItem>
+                            {projectTableListPost.map((project) => (
+                              <MenuItem value={project}>
+                                {project}
+
                               </MenuItem>
+
                             ))}
                           </Select>
                         </Box>

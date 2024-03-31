@@ -84,7 +84,7 @@ export const apiGetProjectDevices = (data) => auth_except(baseRequest.get(`/proj
   }
 }));
 
-export const apiPostProjectDevices = (data) => auth_except(baseRequest.post(`/project/add-project-events`, data['devicePostData'], {
+export const apiPostProjectDevices = (data) => auth_except(baseRequest.post(`/project/add-project-events`, data['project'], {
   headers:
   {
     'accept': 'application/json',
@@ -93,7 +93,7 @@ export const apiPostProjectDevices = (data) => auth_except(baseRequest.post(`/pr
   }
 }));
 
-export const apiPostAdminProjectDevices = (data) => auth_except(baseRequest.post(`/project/project`, data['devicePostData'], {
+export const apiPostAdminProjectDevices = (data) => auth_except(baseRequest.post(`/project/project`, data['project'], {
   headers:
   {
     'accept': 'application/json',
@@ -101,12 +101,16 @@ export const apiPostAdminProjectDevices = (data) => auth_except(baseRequest.post
     'Content-Type': 'application/json'
   }
 }));
-
-export const apiDeleteAdminProjectDevices = (data) => auth_except(baseRequest.delete(`/project/project`, data['devicePostData'], {
+// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsIlVVSUQiOm51bGwsImV4cCI6MTcxMTkzNzMyMn0.LOLLK_PWs8zZyYpjOqVh3tIgGkx1-C1GI1TgOTTjwjE (V)
+// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsIlVVSUQiOm51bGwsImV4cCI6MTcxMTg5ODU3Nn0.yzOEH9fdcUW-gGZIiho72PlHq6W1GG4F1e6eOJNgbiw (V)
+// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsIlVVSUQiOiIxMjMiLCJleHAiOjE3MTE5MzY1NjJ9.KnTtqhOkIiavgp6nD5J_0Ha-_0JZwyZnfXfNGlvptXw (X)
+// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsIlVVSUQiOiIxMjMiLCJleHAiOjE3MTE5MzY4Nzl9.a7nic7FpCvVXIpmbMOGDvMWfqxz8qEFAOqR8YKL0lAw (X)
+export const apiDeleteAdminProjectDevices = (data) => auth_except(baseRequest.delete(`/project/project`, data['project'], {
   headers:
   {
     'accept': 'application/json',
-    'Authorization': `Bearer ${data['token']}`
+    'Authorization': `Bearer ${data['token']}`,
+    'Content-Type': 'application/json'
   }
 }));
 
@@ -166,6 +170,7 @@ export const apiGetStatistics = (token) => auth_except(baseRequest.get(`/statist
     'Authorization': `Bearer ${token}`,
   }
 }));
+
 
 export const apiGetStatisticsDetails = (data) => auth_except(baseRequest.get(`statistics/predict_result`, {
   headers:

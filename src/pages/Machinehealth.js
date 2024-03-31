@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { apiGetStatistics, apiGetStatisticsDetails, apiGetStatisticsDetailsFilter ,apiMarquee} from '../api'
+import { apiGetStatistics, apiGetStatisticsDetails, apiGetStatisticsDetailsFilter, apiMarquee } from '../api'
 import {
   Box,
   Card,
@@ -118,24 +118,33 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
     slidesToShow: 1,
     slidesToScroll: 1,
   };
-///////////////////////
-const [refreshKey, setRefreshKey] = useState(0);
+  ///////////////////////
+  const [refreshKey, setRefreshKey] = useState(0);
 
 
 
-// 使用useEffect在组件加载和refreshKey变化时获取数据
-useEffect(() => {
-  getProjectName();
-  getProjectDetails();
-  getProjectDetailsFilter();//
+  // 使用useEffect在组件加载和refreshKey变化时获取数据
+  useEffect(() => {
+    getProjectName();
+    getProjectDetails();
+    getProjectDetailsFilter();//
+    apiMarquee(token)
+      .then((res) => {
+        console.log(res.data); // 确保你能够看到这个时间戳在控制台中输出
+        // 在这里对返回的时间戳进行处理
+        setTimestampData(res.data); // 将时间戳保存到状态中，以便在组件中使用
+      })
+      .catch((error) => {
+        console.error(error);
+      })
 
-}, [token, refreshKey]); // 依赖于token和refreshKey，任何一个变化都会触发重新获取数据
+  }, [token, refreshKey]); // 依赖于token和refreshKey，任何一个变化都会触发重新获取数据
 
-// handleRefresh用于更新refreshKey，触发重新渲染
-const handleRefresh = () => {
+  // handleRefresh用于更新refreshKey，触发重新渲染
+  const handleRefresh = () => {
     setRefreshKey(prevKey => prevKey + 1); // 更新状态以触发重新渲染
-};
-//////////////////////////////////////////////////////////
+  };
+  //////////////////////////////////////////////////////////
 
 
   function getColor(lightColor) {
@@ -149,78 +158,75 @@ const handleRefresh = () => {
       return null; // 或者返回一个默认的图标
     }
   }
-    // /system/timestamp資料大概長這樣{"event_id": 194, "recently": null, "happened": 0}], "timestamp": "2024-03-06 20:16:25.698261"}
-//////////////////////////////////////////////////////////////////不確定這樣做對不對??????
-const [timeStampData, setTimestampData] = useState("");
+  // /system/timestamp資料大概長這樣{"event_id": 194, "recently": null, "happened": 0}], "timestamp": "2024-03-06 20:16:25.698261"}
+  //////////////////////////////////////////////////////////////////不確定這樣做對不對??????
+  const [timeStampData, setTimestampData] = useState("");
 
-const fetchTimestampData = (token) => {
-  if (!token) {
-    // 没有token，不执行操作
-    return;
-  }
+  const fetchTimestampData = (token) => {
+    if (!token) {
+      // 没有token，不执行操作
+      return;
+    }
 
-  apiMarquee(token)
-    .then((res) => {
-      console.log(res.data); // 确保你能够看到这个时间戳在控制台中输出
-      // 在这里对返回的时间戳进行处理
-      const timestampWithoutDecimal = Math.floor(res.data); // 去掉小数点
-      setTimestampData(timestampWithoutDecimal.toString()); // 将时间戳保存到状态中，以便在组件中使用
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-};
-
-
-
-
-// useEffect(() => {
-//   fetchTimestampData();
-
-//   const interval = setInterval(() => {
-//     fetchTimestampData();
-//   }, 60000);
-
-//   return () => clearInterval(interval);
-// }, []);
-
-
-useEffect(() => {
-  getProjectName(token);
-  // fetchTimestampData()
-  apiMarquee(token)
-    .then((res) => {
-      console.log(res.data); // 确保你能够看到这个时间戳在控制台中输出
-      // 在这里对返回的时间戳进行处理
-      const timestampWithoutDecimal = Math.floor(res.data); // 去掉小数点
-      setTimestampData(timestampWithoutDecimal.toString());  // 将时间戳保存到状态中，以便在组件中使用
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-  const refreshInterval = setInterval(() => {
     apiMarquee(token)
-    .then((res) => {
-      console.log(res.data); // 确保你能够看到这个时间戳在控制台中输出
-      // 在这里对返回的时间戳进行处理
-      const timestampWithoutDecimal = Math.floor(res.data); // 去掉小数点
-      setTimestampData(timestampWithoutDecimal.toString()); // 将时间戳保存到状态中，以便在组件中使用
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+      .then((res) => {
+        console.log(res.data); // 确保你能够看到这个时间戳在控制台中输出
+        // 在这里对返回的时间戳进行处理
+        setTimestampData(res.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+
+
+
+  // useEffect(() => {
+  //   fetchTimestampData();
+
+  //   const interval = setInterval(() => {
+  //     fetchTimestampData();
+  //   }, 60000);
+
+  //   return () => clearInterval(interval);
+  // }, []);
+
+
+  useEffect(() => {
+    getProjectName(token);
+    // fetchTimestampData()
+    apiMarquee(token)
+      .then((res) => {
+        console.log(res.data); // 确保你能够看到这个时间戳在控制台中输出
+        // 在这里对返回的时间戳进行处理
+        setTimestampData(res.data); // 将时间戳保存到状态中，以便在组件中使用
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    const refreshInterval = setInterval(() => {
+      apiMarquee(token)
+        .then((res) => {
+          console.log(res.data); // 确保你能够看到这个时间戳在控制台中输出
+          // 在这里对返回的时间戳进行处理
+          setTimestampData(res.data); // 将时间戳保存到状态中，以便在组件中使用
+        })
+        .catch((error) => {
+          console.error(error);
+        });
       // window.location.reload(); // 每 60 秒重新加載頁面
-  }, 60000); // 60000 毫秒為 60 秒
+    }, 60000); // 60000 毫秒為 60 秒
 
-  return () => clearInterval(refreshInterval); // 清除定時器
-}, [globalVariable]); // 在 globalVariable 更新時執行
+    return () => clearInterval(refreshInterval); // 清除定時器
+  }, [globalVariable]); // 在 globalVariable 更新時執行
 
 
-////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////
 
   // 使用另一个useEffect监听statisticDevices的变化
   // useEffect(() => {
-    // getProjectName(token)
+  // getProjectName(token)
   // }, [globalVariable]);
 
   const getProjectName = (token) => {
@@ -291,8 +297,8 @@ useEffect(() => {
     setErrorAlertOpen(false);
   };
 
-  function infoColor(happenLastTime) {
-    if (happenLastTime != null) {
+  function infoColor(happened_times) {
+    if (happened_times != 0) {
       return "#ffc107";
     } else {
       return null; // 或者返回一个默认的图标
@@ -377,7 +383,7 @@ useEffect(() => {
                 <LoadingButton variant="contained" color="info" onClick={togglePause}>
                   {isPaused ? '恢復輪播' : '暫停輪播'}
                 </LoadingButton>
-                <Marquee msg={timeStampData}/>
+                <Marquee msg={timeStampData} />
                 <LoadingButton variant="contained" color="info" onClick={handleRefresh} style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}>
                   刷新
                 </LoadingButton>
@@ -414,7 +420,7 @@ useEffect(() => {
                   <div key={device}>
                     <Card>
                       <Box sx={{ bgcolor: '#696969' }}>
-                        <CardHeader title={project + "-" + " 線號 "+data[project][device][0].line+ device} color="#696969" align="center" />
+                        <CardHeader title={project + "-" + " 線號 " + data[project][device][0].line + device} color="#696969" align="center" />
                       </Box>
                       <Grid container spacing={1}>
                         <Grid xs={3} sx={{ mt: 4 }}>
@@ -456,7 +462,7 @@ useEffect(() => {
                         <Grid item xs={6} md={6} lg={6}>
                           <TableContainer component={Paper} style={tableContainerStyle.tableContainer}>
                             <Table>
-                              <TableHead style={{ position: "sticky",top: 0,zIndex: 2,backgroundColor: "#bfbfbf" }}>
+                              <TableHead style={{ position: "sticky", top: 0, zIndex: 2, backgroundColor: "#bfbfbf" }}>
                                 <TableRow>
                                   <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={5}>
                                     <Typography fontSize={20}>
@@ -512,21 +518,21 @@ useEffect(() => {
                                 {data[project][device].filter(columns => columns.frequency === "週預測").sort(getComparator(orderWeek)).map((columns) => (
                                   <TableRow key={columns.name}>
                                     {/* ///////////////////////////////// */}
-                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                       <Typography fontSize={20}>{columns.category}</Typography>
                                     </TableCell>
                                     {/* /////////////////////////////////// */}
                                     <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.steady) }}>
                                       <Typography fontSize={20}>{columns.steady === 0 ? "穩定" : "異常"}</Typography>
                                     </TableCell>
-                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                       <Typography fontSize={20}>{columns.name}</Typography>
                                     </TableCell>
-                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                       <Typography fontSize={20}>{columns.happenLastTime}</Typography>
                                     </TableCell>
                                     {/* ///////////////// */}
-                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                       <Typography fontSize={20}>{columns.happened_times}</Typography>
                                     </TableCell>
                                     {/* ///////////////// */}
@@ -537,7 +543,7 @@ useEffect(() => {
                           </TableContainer>
                           <TableContainer component={Paper} style={tableContainerStyle.tableContainer}>
                             <Table>
-                              <TableHead style={{ position: "sticky",top: 0,zIndex: 2,backgroundColor: "#bfbfbf" }}>
+                              <TableHead style={{ position: "sticky", top: 0, zIndex: 2, backgroundColor: "#bfbfbf" }}>
                                 <TableRow>
                                   <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={5}>
                                     <Typography fontSize={20}>
@@ -591,20 +597,20 @@ useEffect(() => {
                               <TableBody>
                                 {data2[project][device].filter(columns => columns.frequency === "日預測").sort(getComparatorDate(orderDate)).map((columns) => (
                                   <TableRow key={columns.name}>
-                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                       <Typography fontSize={20}>{columns.category}</Typography>
                                     </TableCell>
                                     <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.steady) }}>
                                       <Typography fontSize={20}>{columns.steady === 0 ? "穩定" : "異常"}</Typography>
                                     </TableCell>
-                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                       <Typography fontSize={20}>{columns.name}</Typography>
                                     </TableCell>
-                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                       <Typography fontSize={20}>{columns.happenLastTime}</Typography>
                                     </TableCell>
                                     {/* ////////////////////////////////////////////////// */}
-                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                       <Typography fontSize={20}>{columns.happened_times}</Typography>
                                     </TableCell>
                                     {/* ////////////////////////////////////////////////// */}
@@ -637,11 +643,11 @@ useEffect(() => {
                 <LoadingButton variant="contained" color="info" onClick={togglePause}>
                   {isPaused ? '恢复轮播' : '暂停轮播'}
                 </LoadingButton>
-                <Marquee msg={timeStampData}/>
+                <Marquee msg={timeStampData} />
                 <LoadingButton variant="contained" color="info" onClick={handleRefresh} style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}>
                   刷新
                 </LoadingButton>
-               </div> 
+              </div>
             </Box>
             <Carousel
               showArrows={false}
@@ -674,7 +680,7 @@ useEffect(() => {
                   <div key={device}>
                     <Card>
                       <Box sx={{ bgcolor: '#696969' }}>
-                        <CardHeader title={project + "-" + " 线号 "+data[project][device][0].line+ device} color="#696969" align="center" />
+                        <CardHeader title={project + "-" + " 线号 " + data[project][device][0].line + device} color="#696969" align="center" />
                       </Box>
                       <Grid container spacing={1}>
                         <Grid xs={3} sx={{ mt: 4 }}>
@@ -716,7 +722,7 @@ useEffect(() => {
                         <Grid item xs={6} md={6} lg={6}>
                           <TableContainer component={Paper} style={tableContainerStyle.tableContainer}>
                             <Table>
-                              <TableHead style={{ position: "sticky",top: 0,zIndex: 2,backgroundColor: "#bfbfbf" }}>
+                              <TableHead style={{ position: "sticky", top: 0, zIndex: 2, backgroundColor: "#bfbfbf" }}>
                                 <TableRow>
                                   <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={5}>
                                     <Typography fontSize={20}>
@@ -770,20 +776,20 @@ useEffect(() => {
                               <TableBody>
                                 {data[project][device].filter(columns => columns.frequency === "週預測").sort(getComparator(orderWeek)).map((columns) => (
                                   <TableRow key={columns.name}>
-                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                       <Typography fontSize={20}>{columns.category}</Typography>
                                     </TableCell>
                                     <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.steady) }}>
                                       <Typography fontSize={20}>{columns.steady === 0 ? "稳定" : "异常"}</Typography>
                                     </TableCell>
-                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                       <Typography fontSize={20}>{columns.name}</Typography>
                                     </TableCell>
-                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                       <Typography fontSize={20}>{columns.happenLastTime}</Typography>
                                     </TableCell>
                                     {/* //////////////////// */}
-                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                       <Typography fontSize={20}>{columns.happened_times}</Typography>
                                     </TableCell>
                                     {/* //////////////////// */}
@@ -794,7 +800,7 @@ useEffect(() => {
                           </TableContainer>
                           <TableContainer component={Paper} style={tableContainerStyle.tableContainer}>
                             <Table>
-                              <TableHead style={{ position: "sticky",top: 0,zIndex: 2,backgroundColor: "#bfbfbf" }}>
+                              <TableHead style={{ position: "sticky", top: 0, zIndex: 2, backgroundColor: "#bfbfbf" }}>
                                 <TableRow>
                                   <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={5}>
                                     <Typography fontSize={20}>
@@ -849,21 +855,21 @@ useEffect(() => {
                                 {data2[project][device].filter(columns => columns.frequency === "日預測").sort(getComparatorDate(orderDate)).map((columns) => (
                                   <TableRow key={columns.name}>
                                     {/* /////////////////////// */}
-                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                       <Typography fontSize={20}>{columns.category}</Typography>
                                     </TableCell>
                                     {/* /////////////////////// */}
                                     <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.steady) }}>
                                       <Typography fontSize={20}>{columns.steady === 0 ? "稳定" : "异常"}</Typography>
                                     </TableCell>
-                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                       <Typography fontSize={20}>{columns.name}</Typography>
                                     </TableCell>
-                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                       <Typography fontSize={20}>{columns.happenLastTime}</Typography>
                                     </TableCell>
                                     {/* ///////////////////////// */}
-                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                       <Typography fontSize={20}>{columns.happened_times}</Typography>
                                     </TableCell>
                                     {/* ////////////////////////// */}
@@ -896,7 +902,7 @@ useEffect(() => {
                 <LoadingButton variant="contained" color="info" onClick={togglePause}>
                   {isPaused ? 'Resume carousel' : 'Pause carousel'}
                 </LoadingButton>
-                <Marquee msg={timeStampData}/>
+                <Marquee msg={timeStampData} />
                 <LoadingButton variant="contained" color="info" onClick={handleRefresh} style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}>
                   refresh
                 </LoadingButton>
@@ -933,7 +939,7 @@ useEffect(() => {
                   <div key={device}>
                     <Card>
                       <Box sx={{ bgcolor: '#696969' }}>
-                        <CardHeader title={project + "-" + " line "+data[project][device][0].line+ device} color="#696969" align="center" />
+                        <CardHeader title={project + "-" + " line " + data[project][device][0].line + device} color="#696969" align="center" />
                       </Box>
                       <Grid container spacing={1}>
                         <Grid xs={3} sx={{ mt: 4 }}>
@@ -975,7 +981,7 @@ useEffect(() => {
                         <Grid item xs={6} md={6} lg={6}>
                           <TableContainer component={Paper} style={tableContainerStyle.tableContainer}>
                             <Table>
-                              <TableHead style={{ position: "sticky",top: 0,zIndex: 2,backgroundColor: "#bfbfbf" }}>
+                              <TableHead style={{ position: "sticky", top: 0, zIndex: 2, backgroundColor: "#bfbfbf" }}>
                                 <TableRow>
                                   <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={5}>
                                     <Typography fontSize={20}>
@@ -1030,22 +1036,22 @@ useEffect(() => {
                                 {data[project][device].filter(columns => columns.frequency === "週預測").sort(getComparator(orderWeek)).map((columns) => (
                                   <TableRow key={columns.name}>
                                     {/* //////////////////////// */}
-                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                       <Typography fontSize={20}>{columns.category}</Typography>
                                     </TableCell>
                                     {/* ////////////////////////// */}
                                     <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.steady) }}>
                                       <Typography fontSize={20}>{columns.steady === 0 ? "Stabilize" : "Abnormal"}</Typography>
                                     </TableCell>
-                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                       <Typography fontSize={20}>{columns.name}</Typography>
                                     </TableCell>
-                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                       <Typography fontSize={20}>{columns.happenLastTime}</Typography>
 
                                     </TableCell>
                                     {/* ///////////////////////////// */}
-                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                       <Typography fontSize={20}>{columns.happened_times}</Typography>
                                     </TableCell>
                                     {/* ////////////////////////// */}
@@ -1056,7 +1062,7 @@ useEffect(() => {
                           </TableContainer>
                           <TableContainer component={Paper} style={tableContainerStyle.tableContainer}>
                             <Table>
-                              <TableHead style={{ position: "sticky",top: 0,zIndex: 2,backgroundColor: "#bfbfbf" }}>
+                              <TableHead style={{ position: "sticky", top: 0, zIndex: 2, backgroundColor: "#bfbfbf" }}>
                                 <TableRow>
                                   <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={5}>
                                     <Typography fontSize={20}>
@@ -1111,21 +1117,21 @@ useEffect(() => {
                                 {data2[project][device].filter(columns => columns.frequency === "日預測").sort(getComparatorDate(orderDate)).map((columns) => (
                                   <TableRow key={columns.name}>
                                     {/* /////////////////////////////////////////// */}
-                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                       <Typography fontSize={20}>{columns.category}</Typography>
                                     </TableCell>
                                     {/* //////////////////////////////////////////// */}
                                     <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.steady) }}>
                                       <Typography fontSize={20}>{columns.steady === 0 ? "Stabilize" : "Abnormal"}</Typography>
                                     </TableCell>
-                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                       <Typography fontSize={20}>{columns.name}</Typography>
                                     </TableCell>
-                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                       <Typography fontSize={20}>{columns.happenLastTime}</Typography>
                                     </TableCell>
                                     {/* /////////////////////////////////////////// */}
-                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                    <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                       <Typography fontSize={20}>{columns.happened_times}</Typography>
                                     </TableCell>
                                     {/* //////////////////////////////////////////// */}
