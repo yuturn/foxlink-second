@@ -329,7 +329,7 @@ export default function Statistics({ token, ...rest }) {
                                     <div key={device}>
                                         <Card>
                                             <Box sx={{ bgcolor: '#696969' }}>
-                                                <CardHeader title={project + "-" + device} color="#696969" align="center" />
+                                            <CardHeader title={project + "-" + " 線號 " + data[project][device][0].line +"-"+ device} color="#696969" align="center" />
                                             </Box>
                                             <Grid container spacing={1}>
                                                 <Grid xs={3} sx={{ mt: 4 }}>
@@ -591,7 +591,7 @@ export default function Statistics({ token, ...rest }) {
                                     <div key={device}>
                                         <Card>
                                             <Box sx={{ bgcolor: '#696969' }}>
-                                                <CardHeader title={project + "-" + device} color="#696969" align="center" />
+                                            <CardHeader title={project + "-" + " 线号 " + data[project][device][0].line +"-"+ device} color="#696969" align="center" />
                                             </Box>
                                             <Grid container spacing={1}>
                                                 <Grid xs={3} sx={{ mt: 4 }}>
@@ -848,7 +848,7 @@ export default function Statistics({ token, ...rest }) {
                                     <div key={device}>
                                         <Card>
                                             <Box sx={{ bgcolor: '#696969' }}>
-                                                <CardHeader title={project + "-" + device} color="#696969" align="center" />
+                                            <CardHeader title={project + "-" + " line " + data[project][device][0].line +"-"+ device} color="#696969" align="center" />
                                             </Box>
                                             <Grid container spacing={1}>
                                                 <Grid xs={3} sx={{ mt: 4 }}>

@@ -126,10 +126,11 @@ export default function Project({ token, ...rest }) {
     const CustomTooltip = ({ active, payload, label }) => {
       if (active && payload && payload.length) {
         // 将小数值转换为百分比形式
+        const formattedLabel = label.substring(0, 10);
         const value = (payload[0].value * 100).toFixed(2) + '%';
         return (
           <div className="custom-tooltip">
-            <p className="label">{`${label} : ${value}`}</p>
+            <p className="label">{`${formattedLabel} : ${value}`}</p>
           </div>
         );
       }
@@ -140,7 +141,10 @@ export default function Project({ token, ...rest }) {
     const formatYAxisTick = (tick) => {
       return (tick * 100).toFixed(0) + '%';
     };
-  
+    const formatDateTick = (tick) => {
+      // 获取日期字符串的前 10 位（假设 tick 是 ISO 8601 格式的日期字符串）
+      return tick.substring(0, 10);
+    };
     return (
       <ResponsiveContainer width="100%" height="100%">
         <LineChart
@@ -155,7 +159,7 @@ export default function Project({ token, ...rest }) {
           }}
         >
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="date" />
+          <XAxis dataKey="date" tickFormatter={formatDateTick}/>
           <YAxis
             label={{ value: 'Percentage', angle: -90, position: 'insideLeft' }}
             tickFormatter={formatYAxisTick}

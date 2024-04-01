@@ -462,6 +462,20 @@ export default function Project({ token, setAlert, ...rest }) {
     setSelectedDevicesData(newData);
     console.log(newData);
   };
+  // 刪除專案的選擇整列的function
+  const onRowsSelectionHandlerDelete = (ids) => {
+    console.log(ids)
+    console.log(type(ids))
+    console.log(projectList)
+    const selectedRowsData = ids.map((id) => projectList.find((row) => row.id === id))
+    const newData = selectedRowsData.map(item => {
+      // 創建一個新物件，只包含你要保留的欄位
+      const { project, line, device, ename, cname } = item;
+      return { project, line, device, ename, cname };
+    });
+    setSelectedDevicesData(newData);
+    console.log(newData);
+  };
   //取得datagrid裡面所有select的資料(project userID)
   const onRowsSelectionHandlerUser = (ids) => {
     if (ids.length === 0) {
@@ -962,7 +976,7 @@ export default function Project({ token, setAlert, ...rest }) {
                             }}
                             pageSizeOptions={[5]}
                             checkboxSelection
-                            onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
+                            onSelectionModelChange={(ids) => onRowsSelectionHandlerDelete(ids)}
                           />
                         </div>
                       ) : globalVariable === "zh-cn" ? (
@@ -977,7 +991,7 @@ export default function Project({ token, setAlert, ...rest }) {
                             }}
                             pageSizeOptions={[5]}
                             checkboxSelection
-                            onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
+                            onSelectionModelChange={(ids) => onRowsSelectionHandlerDelete(ids)}
                           />
                         </div>
                       ) : (
@@ -992,7 +1006,7 @@ export default function Project({ token, setAlert, ...rest }) {
                             }}
                             pageSizeOptions={[5]}
                             checkboxSelection
-                            onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
+                            onSelectionModelChange={(ids) => onRowsSelectionHandlerDelete(ids)}
                           />
                         </div>
                       )}
