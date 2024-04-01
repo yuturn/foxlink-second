@@ -142,7 +142,7 @@ export default function Project({ token, ...rest }) {
       return (tick * 100).toFixed(0) + '%';
     };
     const formatDateTick = (tick) => {
-      // 获取日期字符串的前 10 位（假设 tick 是 ISO 8601 格式的日期字符串）
+      // 获取日期字符串的前 10 位
       return tick.substring(0, 10);
     };
     return (

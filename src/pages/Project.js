@@ -442,8 +442,8 @@ export default function Project({ token, setAlert, ...rest }) {
     const selectedRowsData = ids.map((id) => projectTableList.find((row) => row.id === id))
     const newData = selectedRowsData.map(item => {
       // 創建一個新物件，只包含你要保留的欄位
-      const project = item;
-      return project;
+      const {project} = item;
+      return {project};
     });
     setSelectedDevicesData(newData);
     console.log(newData);
