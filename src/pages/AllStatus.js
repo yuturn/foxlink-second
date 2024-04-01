@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { apiGetStatisticsDetails ,apiMarquee} from '../api'
+import { apiGetStatisticsDetails, apiMarquee } from '../api'
 import { GlobalContext } from '../components/GlobalContext';
 import Marquee from "./Marquee";
 import {
@@ -172,26 +172,26 @@ export default function Statistics({ token, ...rest }) {
             // paddingRight: '20px', // 調整內邊距以增加內容區域
         },
     };
-        // /system/timestamp資料大概長這樣{"event_id": 194, "recently": null, "happened": 0}], "timestamp": "2024-03-06 20:16:25.698261"}
+    // /system/timestamp資料大概長這樣{"event_id": 194, "recently": null, "happened": 0}], "timestamp": "2024-03-06 20:16:25.698261"}
     //////////////////////////////////////////////////////////////////不確定這樣做對不對??????
     const [timeStampData, setTimestampData] = useState("");
 
     const fetchTimestampData = (token) => {
-    if (!token) {
-        // 没有token，不执行操作
-        return;
-    }
+        if (!token) {
+            // 没有token，不执行操作
+            return;
+        }
 
-    apiMarquee(token)
-        .then((res) => {
-        console.log(res.data); // 确保你能够看到这个时间戳在控制台中输出
-        // 在这里对返回的时间戳进行处理
-        const timestampWithoutDecimal = Math.floor(res.data); // 去掉小数点
-        setTimestampData(timestampWithoutDecimal.toString()); // 将时间戳保存到状态中，以便在组件中使用
-        })
-        .catch((error) => {
-        console.error(error);
-        });
+        apiMarquee(token)
+            .then((res) => {
+                console.log(res.data); // 确保你能够看到这个时间戳在控制台中输出
+                // 在这里对返回的时间戳进行处理
+                const timestampWithoutDecimal = Math.floor(res.data); // 去掉小数点
+                setTimestampData(timestampWithoutDecimal.toString()); // 将时间戳保存到状态中，以便在组件中使用
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     };
 
 
@@ -209,33 +209,35 @@ export default function Statistics({ token, ...rest }) {
 
 
     useEffect(() => {
-    // getProjectName(token);
-    // fetchTimestampData()
-    apiMarquee(token)
-        .then((res) => {
-        console.log(res.data); // 确保你能够看到这个时间戳在控制台中输出
-        // 在这里对返回的时间戳进行处理
-        const timestampWithoutDecimal = Math.floor(res.data); // 去掉小数点
-        setTimestampData(timestampWithoutDecimal.toString());  // 将时间戳保存到状态中，以便在组件中使用
-        })
-        .catch((error) => {
-        console.error(error);
-        });
-    const refreshInterval = setInterval(() => {
+        // getProjectName(token);
+        // fetchTimestampData()
         apiMarquee(token)
-        .then((res) => {
-        console.log(res.data); // 确保你能够看到这个时间戳在控制台中输出
-        // 在这里对返回的时间戳进行处理
-        const timestampWithoutDecimal = Math.floor(res.data); // 去掉小数点
-        setTimestampData(timestampWithoutDecimal.toString()); // 将时间戳保存到状态中，以便在组件中使用
-        })
-        .catch((error) => {
-        console.error(error);
-        });
-        // window.location.reload(); // 每 60 秒重新加載頁面
-    }, 60000); // 60000 毫秒為 60 秒
+            .then((res) => {
+                console.log(res.data); // 确保你能够看到这个时间戳在控制台中输出
+                // 在这里对返回的时间戳进行处理
+                // const timestampWithoutDecimal = Math.floor(res.data); // 去掉小数点
+                // setTimestampData(timestampWithoutDecimal.toString());  // 将时间戳保存到状态中，以便在组件中使用
+                setTimestampData(res.data)
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+        const refreshInterval = setInterval(() => {
+            apiMarquee(token)
+                .then((res) => {
+                    console.log(res.data); // 确保你能够看到这个时间戳在控制台中输出
+                    setTimestampData(res.data)
+                    // 在这里对返回的时间戳进行处理
+                    // const timestampWithoutDecimal = Math.floor(res.data); // 去掉小数点
+                    // setTimestampData(timestampWithoutDecimal.toString()); // 将时间戳保存到状态中，以便在组件中使用
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+            // window.location.reload(); // 每 60 秒重新加載頁面
+        }, 60000); // 60000 毫秒為 60 秒
 
-    return () => clearInterval(refreshInterval); // 清除定時器
+        return () => clearInterval(refreshInterval); // 清除定時器
     }, [globalVariable]); // 在 globalVariable 更新時執行
 
 
@@ -263,16 +265,16 @@ export default function Statistics({ token, ...rest }) {
             ? (a, b) => (a[dateOrderBy] > b[dateOrderBy] ? -1 : 1)
             : (a, b) => (a[dateOrderBy] > b[dateOrderBy] ? 1 : -1);
     };
-        ///////////////////////
+    ///////////////////////
     const [refreshKey, setRefreshKey] = useState(0);
 
 
 
     // 使用useEffect在组件加载和refreshKey变化时获取数据
     useEffect(() => {
-    
-    getProjectDetails();
-    
+
+        getProjectDetails();
+
 
     }, [token, refreshKey]); // 依赖于token和refreshKey，任何一个变化都会触发重新获取数据
 
@@ -288,15 +290,15 @@ export default function Statistics({ token, ...rest }) {
                 {Object.keys(data).map((project) => (
                     <div key={project}>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                        <div style={{ display: 'flex', alignItems: 'center', mr: '100px' }}>
-                            <LoadingButton variant="contained" color="info" onClick={togglePause}>
-                            {isPaused ? '恢復輪播' : '暫停輪播'}
-                            </LoadingButton>
-                            <Marquee msg={timeStampData}/>
-                            <LoadingButton variant="contained" color="info" onClick={handleRefresh} style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}>
-                                手動刷新
-                            </LoadingButton>
-                        </div>
+                            <div style={{ display: 'flex', alignItems: 'center', mr: '100px' }}>
+                                <LoadingButton variant="contained" color="info" onClick={togglePause}>
+                                    {isPaused ? '恢復輪播' : '暫停輪播'}
+                                </LoadingButton>
+                                <Marquee msg={timeStampData} />
+                                <LoadingButton variant="contained" color="info" onClick={handleRefresh} style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}>
+                                    手動刷新
+                                </LoadingButton>
+                            </div>
                         </Box>
                         <Carousel
                             showArrows={false}
@@ -329,7 +331,7 @@ export default function Statistics({ token, ...rest }) {
                                     <div key={device}>
                                         <Card>
                                             <Box sx={{ bgcolor: '#696969' }}>
-                                            <CardHeader title={project + "-" + " 線號 " + data[project][device][0].line +"-"+ device} color="#696969" align="center" />
+                                                <CardHeader title={project + "-" + " 線號 " + data[project][device][0].line + "-" + device} color="#696969" align="center" />
                                             </Box>
                                             <Grid container spacing={1}>
                                                 <Grid xs={3} sx={{ mt: 4 }}>
@@ -371,7 +373,7 @@ export default function Statistics({ token, ...rest }) {
                                                 <Grid item xs={6} md={6} lg={6}>
                                                     <TableContainer component={Paper} style={tableContainerStyle.tableContainer}>
                                                         <Table>
-                                                            <TableHead style={{ position: "sticky",top: 0,zIndex: 2,backgroundColor: "#bfbfbf" }}>
+                                                            <TableHead style={{ position: "sticky", top: 0, zIndex: 2, backgroundColor: "#bfbfbf" }}>
                                                                 <TableRow>
                                                                     <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={5}>
                                                                         <Typography fontSize={20}>
@@ -451,7 +453,7 @@ export default function Statistics({ token, ...rest }) {
                                                     </TableContainer>
                                                     <TableContainer component={Paper} style={tableContainerStyle.tableContainer}>
                                                         <Table>
-                                                            <TableHead style={{ position: "sticky",top: 0,zIndex: 2,backgroundColor: "#bfbfbf" }}>
+                                                            <TableHead style={{ position: "sticky", top: 0, zIndex: 2, backgroundColor: "#bfbfbf" }}>
                                                                 <TableRow>
                                                                     <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={5}>
                                                                         <Typography fontSize={20}>
@@ -549,17 +551,17 @@ export default function Statistics({ token, ...rest }) {
                 {Object.keys(data).map((project) => (
                     <div key={project}>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                        <div style={{ display: 'flex', alignItems: 'center', mr: '100px' }}>
-                            <LoadingButton variant="contained" color="info" onClick={togglePause}>
-                                {isPaused ? '恢复轮播' : '暂停轮播'}
-                            </LoadingButton>
-                            <Marquee msg={timeStampData}/>
-                            <LoadingButton variant="contained" color="info" onClick={handleRefresh} style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}>
-                                刷新
-                            </LoadingButton>
-                        </div>    
+                            <div style={{ display: 'flex', alignItems: 'center', mr: '100px' }}>
+                                <LoadingButton variant="contained" color="info" onClick={togglePause}>
+                                    {isPaused ? '恢复轮播' : '暂停轮播'}
+                                </LoadingButton>
+                                <Marquee msg={timeStampData} />
+                                <LoadingButton variant="contained" color="info" onClick={handleRefresh} style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}>
+                                    刷新
+                                </LoadingButton>
+                            </div>
                         </Box>
-                        
+
                         <Carousel
                             showArrows={false}
                             renderIndicator={customRenderIndicator}
@@ -591,7 +593,7 @@ export default function Statistics({ token, ...rest }) {
                                     <div key={device}>
                                         <Card>
                                             <Box sx={{ bgcolor: '#696969' }}>
-                                            <CardHeader title={project + "-" + " 线号 " + data[project][device][0].line +"-"+ device} color="#696969" align="center" />
+                                                <CardHeader title={project + "-" + " 线号 " + data[project][device][0].line + "-" + device} color="#696969" align="center" />
                                             </Box>
                                             <Grid container spacing={1}>
                                                 <Grid xs={3} sx={{ mt: 4 }}>
@@ -633,7 +635,7 @@ export default function Statistics({ token, ...rest }) {
                                                 <Grid item xs={6} md={6} lg={6}>
                                                     <TableContainer component={Paper} style={tableContainerStyle.tableContainer}>
                                                         <Table>
-                                                            <TableHead style={{ position: "sticky",top: 0,zIndex: 2,backgroundColor: "#bfbfbf" }}>
+                                                            <TableHead style={{ position: "sticky", top: 0, zIndex: 2, backgroundColor: "#bfbfbf" }}>
                                                                 <TableRow>
                                                                     <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={5}>
                                                                         <Typography fontSize={20}>
@@ -713,7 +715,7 @@ export default function Statistics({ token, ...rest }) {
                                                     </TableContainer>
                                                     <TableContainer component={Paper} style={tableContainerStyle.tableContainer}>
                                                         <Table>
-                                                            <TableHead style={{ position: "sticky",top: 0,zIndex: 2,backgroundColor: "#bfbfbf" }}>
+                                                            <TableHead style={{ position: "sticky", top: 0, zIndex: 2, backgroundColor: "#bfbfbf" }}>
                                                                 <TableRow>
                                                                     <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={5}>
                                                                         <Typography fontSize={20}>
@@ -807,15 +809,15 @@ export default function Statistics({ token, ...rest }) {
                 {Object.keys(data).map((project) => (
                     <div key={project}>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                        <div style={{ display: 'flex', alignItems: 'center', mr: '100px' }}>
-                            <LoadingButton variant="contained" color="info" onClick={togglePause}>
-                                {isPaused ? 'Resume carousel' : 'Pause carousel'}
-                            </LoadingButton>
-                            <Marquee msg={timeStampData}/>
-                            <LoadingButton variant="contained" color="info" onClick={handleRefresh} style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}>
-                                refresh
-                            </LoadingButton>
-                        </div>
+                            <div style={{ display: 'flex', alignItems: 'center', mr: '100px' }}>
+                                <LoadingButton variant="contained" color="info" onClick={togglePause}>
+                                    {isPaused ? 'Resume carousel' : 'Pause carousel'}
+                                </LoadingButton>
+                                <Marquee msg={timeStampData} />
+                                <LoadingButton variant="contained" color="info" onClick={handleRefresh} style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}>
+                                    refresh
+                                </LoadingButton>
+                            </div>
                         </Box>
                         <Carousel
                             showArrows={false}
@@ -848,7 +850,7 @@ export default function Statistics({ token, ...rest }) {
                                     <div key={device}>
                                         <Card>
                                             <Box sx={{ bgcolor: '#696969' }}>
-                                            <CardHeader title={project + "-" + " line " + data[project][device][0].line +"-"+ device} color="#696969" align="center" />
+                                                <CardHeader title={project + "-" + " line " + data[project][device][0].line + "-" + device} color="#696969" align="center" />
                                             </Box>
                                             <Grid container spacing={1}>
                                                 <Grid xs={3} sx={{ mt: 4 }}>
@@ -890,7 +892,7 @@ export default function Statistics({ token, ...rest }) {
                                                 <Grid item xs={6} md={6} lg={6}>
                                                     <TableContainer component={Paper} style={tableContainerStyle.tableContainer}>
                                                         <Table>
-                                                            <TableHead style={{ position: "sticky",top: 0,zIndex: 2,backgroundColor: "#bfbfbf" }}>
+                                                            <TableHead style={{ position: "sticky", top: 0, zIndex: 2, backgroundColor: "#bfbfbf" }}>
                                                                 <TableRow>
                                                                     <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={5}>
                                                                         <Typography fontSize={20}>
@@ -968,7 +970,7 @@ export default function Statistics({ token, ...rest }) {
                                                     </TableContainer>
                                                     <TableContainer component={Paper} style={tableContainerStyle.tableContainer}>
                                                         <Table>
-                                                            <TableHead style={{ position: "sticky",top: 0,zIndex: 2,backgroundColor: "#bfbfbf" }}>
+                                                            <TableHead style={{ position: "sticky", top: 0, zIndex: 2, backgroundColor: "#bfbfbf" }}>
                                                                 <TableRow>
                                                                     <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }} colSpan={5}>
                                                                         <Typography fontSize={20}>
