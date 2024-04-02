@@ -279,8 +279,8 @@ export default function Project({ token, setAlert, ...rest }) {
         console.log(res);
         const list = res.data.map((project) => project.project_name);
         setProjectNameList(list);
-        const devicesList = res.data.map((project) => project);
-        setDeviceNameList(devicesList);
+        // const devicesList = res.data.map((project) => project);
+        // setDeviceNameList(devicesList);
       });
 
 
@@ -835,7 +835,7 @@ export default function Project({ token, setAlert, ...rest }) {
                             </Select>
                           </FormControl>
                         </Box>
-                        
+
                         {/* <Box mr={2} sx={{ minWidth: 200 }}>
                           <Select
                             labelId="permission-select-label"
