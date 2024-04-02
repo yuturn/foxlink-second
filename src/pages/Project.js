@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { apiGetProjectDevices, apiPostProjectDevices, apiGetProjectprogress, apiGetProjectName, apiPostAdminProjectDevices, apiDeleteProject, apiDeleteAdminProjectDevices, apiGetProjectUsers, apiPostProjectUser, apiDeleteProjectUser, apiGetUserName, apiGetProjectTable } from '../api'
+import { apiGetProjectDevices, apiGetStatistics,apiPostProjectDevices, apiGetProjectprogress, apiGetProjectName, apiPostAdminProjectDevices, apiDeleteProject, apiDeleteAdminProjectDevices, apiGetProjectUsers, apiPostProjectUser, apiDeleteProjectUser, apiGetUserName, apiGetProjectTable } from '../api'
 import {
   Box,
   Card,
@@ -259,6 +259,31 @@ export default function Project({ token, setAlert, ...rest }) {
       .catch((error) => {
         console.error('Error fetching project data:', error);
       });
+  }
+  // const projectNameChange = (event) => {
+  //   if (event.target.value === 'null') {
+  //     setProjectName(null);
+  //   } else {
+  //     setProjectName(event.target.value);
+  //   }
+  // };
+  const [projectNameList, setProjectNameList] = useState([]);
+  const getProjectName = (token) => {
+    if (!token) {
+      // 没有token，不执行操作
+      return;
+    }
+
+    apiGetStatistics(token)
+      .then((res) => {
+        console.log(res);
+        const list = res.data.map((project) => project.project_name);
+        setProjectNameList(list);
+        const devicesList = res.data.map((project) => project);
+        setDeviceNameList(devicesList);
+      });
+
+
   }
   //此function是用來取的project的Users
   function handleUpdateProjectUser() {
@@ -785,12 +810,33 @@ export default function Project({ token, setAlert, ...rest }) {
                     <Typography variant="h4" fontWeight="medium" mt={3}>
                       {globalVariable === "zh-tw" ? "新增專案" : globalVariable === "zh-cn" ? "新增专案" : "Add new project"}
                     </Typography>
-                    <FormControl fullWidth>
+                    
                       <Box display="flex" alignItems="center" pt={3} px={2}>
                         <Typography variant="h5" fontWeight="medium" mr={2}>
                           {globalVariable === "zh-tw" ? "專案名稱:" : globalVariable === "zh-cn" ? "专案名称:" : "Project name:"}
                         </Typography>
-                        <Box mr={2} sx={{ minWidth: 200 }}>
+                        <Box>
+                          <FormControl>
+                            <InputLabel id="operation-type-select-label">專案名稱</InputLabel>
+                            <Select
+                              labelId="permission-select-label"
+                              id="permission-select"
+                              value={projectIDSelect}
+                              label="專案名稱"
+                              onChange={projectSelectNameChange}
+                              style={{ minWidth: "271px", height: "56px" }}
+                            >
+                              <MenuItem value="">清空欄位</MenuItem>
+                              {projectNameList.map((projectItem) => (
+                                <MenuItem value={projectItem}>
+                                  {projectItem}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </FormControl>
+                        </Box>
+                        
+                        {/* <Box mr={2} sx={{ minWidth: 200 }}>
                           <Select
                             labelId="permission-select-label"
                             id="permission-select"
@@ -807,14 +853,14 @@ export default function Project({ token, setAlert, ...rest }) {
 
                             ))}
                           </Select>
-                        </Box>
+                        </Box> */}
                         <Box ml={2}>
                           <LoadingButton variant="contained" color="info" onClick={handleOnClickProjectAdd}>
                             {globalVariable === "zh-tw" ? "查詢" : globalVariable === "zh-cn" ? "查询" : "Search"}
                           </LoadingButton>
                         </Box>
                       </Box>
-                    </FormControl>
+                    
                   </Box>
 
 
