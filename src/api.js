@@ -59,12 +59,13 @@ export const apiMarquee = (token) => auth_except(baseRequest.get(`/system/search
   }
 }));
 ////////////////////////////////////
-export const apiDeleteProject = (data) => auth_except(baseRequest.delete(`/project/?project_id=${data['projectID']}`, {
+export const apiDeleteProject = (data) => auth_except(baseRequest.delete(`/project/`, {
   headers:
   {
     'accept': 'application/json',
     'Authorization': `Bearer ${data['token']}`
-  }
+  },
+  data: data.project
 }));
 
 ////////////////////////////////////專案管理的list會有下拉式選單然後點了會顯示專案內容
@@ -90,9 +91,9 @@ export const apiPostProjectDevices = (data) => auth_except(baseRequest.post(`/pr
     'accept': 'application/json',
     'Authorization': `Bearer ${data['token']}`,
     'Content-Type': 'application/json'
-  }
+  },
+  // data: data.project
 }));
-
 export const apiPostAdminProjectDevices = (data) => auth_except(baseRequest.post(`/project/project`, data['project'], {
   headers:
   {
@@ -105,13 +106,14 @@ export const apiPostAdminProjectDevices = (data) => auth_except(baseRequest.post
 // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsIlVVSUQiOm51bGwsImV4cCI6MTcxMTg5ODU3Nn0.yzOEH9fdcUW-gGZIiho72PlHq6W1GG4F1e6eOJNgbiw (V)
 // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsIlVVSUQiOiIxMjMiLCJleHAiOjE3MTE5MzY1NjJ9.KnTtqhOkIiavgp6nD5J_0Ha-_0JZwyZnfXfNGlvptXw (X)
 // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsIlVVSUQiOiIxMjMiLCJleHAiOjE3MTE5MzY4Nzl9.a7nic7FpCvVXIpmbMOGDvMWfqxz8qEFAOqR8YKL0lAw (X)
-export const apiDeleteAdminProjectDevices = (data) => auth_except(baseRequest.delete(`/project/project`, data['project'], {
+export const apiDeleteAdminProjectDevices = (data) => auth_except(baseRequest.delete(`/project/project`, {
   headers:
   {
     'accept': 'application/json',
     'Authorization': `Bearer ${data['token']}`,
     'Content-Type': 'application/json'
-  }
+  },
+  data: [data.project]
 }));
 
 // export const apiGetProjectprogress = (data) => auth_except(baseRequest.get(`/project/task?project_name=${data['name']}&action=${data['action']}&status=${data['progress']}`, {
@@ -163,6 +165,22 @@ export const apiDeleteProjectUser = (data) => auth_except(baseRequest.delete(`/p
   }
 }));
 
+export const apiGetProjectUserBelong = (data) => auth_except(baseRequest.get(`/project/user-projects?user_id=${data['user_id']}`, {
+  headers:
+  {
+    'accept': 'application/json',
+    'Authorization': `Bearer ${data['token']}`
+  }
+}));
+export const apiDeleteProjectUserBelong = (data) => auth_except(baseRequest.delete(`/project/user-projects?user_id=${data['user_id']}`, {
+  headers:
+  {
+    'accept': 'application/json',
+    'Authorization': `Bearer ${data['token']}`,
+    'Content-Type': 'application/json'
+  },
+  data: [data.project_id]
+}));
 export const apiGetStatistics = (token) => auth_except(baseRequest.get(`/statistics/`, {
   headers:
   {

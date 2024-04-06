@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { apiGetProjectDevices, apiGetStatistics,apiPostProjectDevices, apiGetProjectprogress, apiGetProjectName, apiPostAdminProjectDevices, apiDeleteProject, apiDeleteAdminProjectDevices, apiGetProjectUsers, apiPostProjectUser, apiDeleteProjectUser, apiGetUserName, apiGetProjectTable } from '../api'
+import { apiGetProjectDevices, apiGetProjectUserBelong, apiDeleteProjectUserBelong, apiGetStatistics, apiPostProjectDevices, apiGetProjectprogress, apiGetProjectName, apiPostAdminProjectDevices, apiDeleteProject, apiDeleteAdminProjectDevices, apiGetProjectUsers, apiPostProjectUser, apiDeleteProjectUser, apiGetUserName, apiGetProjectTable } from '../api'
 import {
   Box,
   Card,
@@ -32,6 +32,7 @@ import { type } from "@testing-library/user-event/dist/type";
 
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import FolderCopyIcon from '@mui/icons-material/FolderCopy';
+import { Construction } from "@mui/icons-material";
 
 
 // import { apiMissionEmergency, apiMissionNeedRepair } from "../api.js";
@@ -120,6 +121,27 @@ const empColumnsEN = [
   { field: 'permission', headerName: 'Permissions', width: 250 },
 ];
 
+const columnsProjectFromUserTW = [
+  // { field: 'badge', headerName: '員工編號', width: 250 },
+  { field: 'project_id', headerName: 'project_id', width: 250 },
+  { field: 'project', headerName: '專案名稱', width: 200 },
+  // { field: 'permission', headerName: '權限', width: 250 },
+  // { field: 'selectedDisplay', headerName: 'Already in project', width: 200 },
+];
+const columnsProjectFromUserCN = [
+  // { field: 'badge', headerName: '員工編號', width: 250 },
+  { field: 'project_id', headerName: 'project_id', width: 250 },
+  { field: 'project', headerName: '专案名称', width: 200 },
+  // { field: 'permission', headerName: '权限', width: 250 },
+  // { field: 'selectedDisplay', headerName: 'Already in project', width: 200 },
+];
+const columnsProjectFromUserEN = [
+  { field: 'project_id', headerName: 'project_id', width: 250 },
+  // { field: 'badge', headerName: 'Employee ID', width: 250 },
+  { field: 'project', headerName: 'Project name', width: 200 },
+  // { field: 'permission', headerName: 'Permissions', width: 250 },
+  // { field: 'selectedDisplay', headerName: 'Already in project', width: 200 },
+];
 const permissionMap = {
   5: "系統管理者",
   4: "專案管理者",
@@ -131,8 +153,11 @@ const permissionMap = {
 
 export default function Project({ token, setAlert, ...rest }) {
   const [selectedDevicesData, setSelectedDevicesData] = useState();
+  const [selectedDeleteDevicesData, setSelectedDeleteDevicesData] = useState();
   const [selectedAdminDevicesData, setSelectedAdminDevicesData] = useState();
+  const [selectedProjectRow, setSelectedProjectRow] = useState(null);//存取user所負責的project的row data
   const [selectedDevicesDataUser, setSelectedDevicesDataUser] = useState();
+  const [selectedProjectDataBelong, setSelectedProjectDataBelong] = useState();//存取
   const [projectID, setProjectID] = useState("");
   const [project, setProject] = useState([]);
   const [permission, setPermission] = useState("");
@@ -143,6 +168,7 @@ export default function Project({ token, setAlert, ...rest }) {
   const [projectProcessList, setProjectProcessList] = useState([]);
   const [employeeName, setEmployeeName] = useState("");
   const [projectUsers, setProjectUsers] = useState([]);
+  const [projectUsersBelong, setProjectUsersBelong] = useState([]);//存取user所負責的project
   const [selectedRow, setSelectedRow] = useState(null);
   const { globalVariable, updateGlobalVariable } = useContext(GlobalContext);
   const [loading, setLoading] = useState(false);
@@ -205,12 +231,26 @@ export default function Project({ token, setAlert, ...rest }) {
     setErrorAlertOpen(false);
   };
 
-
+  const projectDelete = () => {
+    const data = {
+      token: token,
+      project: selectedDeleteDevicesData
+    }
+    console.log(data)
+    apiDeleteProject(data)
+      .then((res) => {
+        handleOpen((globalVariable === "zh-tw" ? "刪除專案成功" : globalVariable === "zh-cn" ? "删除专案成功" : "Delete project successful"));
+      }).catch((error) => {
+        // 处理错误
+        console.error(error);
+        handleErrorOpen((globalVariable === "zh-tw" ? ("刪除專案失敗" + error) : globalVariable === "zh-cn" ? ("删除专案失败:" + error) : ("Delete project failed:" + error)));
+      });
+  };
   //刪除project的function
   const projectAdminhandleDelete = () => {
     const data = {
       token: token,
-      project: selectedDevicesData.map(device => device.project)
+      project: selectedAdminDevicesData.map(device => device.project).join(',')
     }
     console.log(data)
     console.log(data.project)
@@ -311,6 +351,7 @@ export default function Project({ token, setAlert, ...rest }) {
   }
   //useeffect來控制某些東西
   useEffect(() => {
+    getProjectName(token)//projectid改變我會call這隻api
     // 在这里调用你的 API 获取项目数据(project的名稱)
     apiGetProjectName(token)
       .then((res) => {
@@ -389,13 +430,13 @@ export default function Project({ token, setAlert, ...rest }) {
       });
   }
 
-  ///////////專案刪除
+  ///////////刪除專案列表
   function handleOnClickProjectDelete() {
     // console.log(document.getElementById('searchProject').value)
     // let search = document.getElementById('searchProject').value;
     const data = {
-
-      'name': project
+      token: token,
+      'name': projectIDSelect
     }
     apiGetProjectDevices(data)
       .then(response => {
@@ -467,10 +508,10 @@ export default function Project({ token, setAlert, ...rest }) {
     const selectedRowsData = ids.map((id) => projectTableList.find((row) => row.id === id))
     const newData = selectedRowsData.map(item => {
       // 創建一個新物件，只包含你要保留的欄位
-      const {project} = item;
-      return {project};
+      const { project } = item;
+      return { project };
     });
-    setSelectedDevicesData(newData);
+    setSelectedAdminDevicesData(newData);
     console.log(newData);
   };
   //取得datagrid裡面所有select的資料(device)
@@ -498,7 +539,7 @@ export default function Project({ token, setAlert, ...rest }) {
       const { project, line, device, ename, cname } = item;
       return { project, line, device, ename, cname };
     });
-    setSelectedDevicesData(newData);
+    setSelectedDeleteDevicesData(newData);
     console.log(newData);
   };
   //取得datagrid裡面所有select的資料(project userID)
@@ -511,6 +552,23 @@ export default function Project({ token, setAlert, ...rest }) {
     const selectedRowsData = ids.map((id) => projectUsers.find((row) => row.id === id))
     setSelectedDevicesDataUser(selectedRowsData);
   };
+  useEffect(() => {
+
+    console.log("selectedProjectDataBelong updated:", selectedProjectDataBelong);
+  }, [selectedProjectDataBelong]);
+  //取得datagrid裡面所有select的資料(project)
+  const onRowsSelectionHandlerProjectFromUser = (ids) => {
+    // 处理选中行逻辑
+    const selectedRowsProjectData = ids.map((id) => projectUsersBelong.find((row) => row.id === id))
+    const newData = selectedRowsProjectData.map(item => {
+      // 創建一個新物件，只包含你要保留的欄位
+      const project_id = item.project_id;
+      return project_id;
+    });
+    console.log(newData)
+    setSelectedProjectDataBelong(newData[0]); // 更新状态
+    console.log(selectedProjectDataBelong)
+  }
   //////////////////////////////////////////////////////////////
   //依照所選擇的device去post資料
   function handleOnClickProjectPost() {
@@ -551,7 +609,7 @@ export default function Project({ token, setAlert, ...rest }) {
     setLoading(true)
     const data = {
       token: token,
-      project: selectedDevicesData.map(device => device.project)
+      project: selectedAdminDevicesData.map(device => device.project)
     }
     console.log(data)
     console.log(data.project[0])
@@ -588,7 +646,43 @@ export default function Project({ token, setAlert, ...rest }) {
         handleOpen((globalVariable === "zh-tw" ? "新增成功" : globalVariable === "zh-cn" ? "新增成功" : "Added successfully"))
       }).catch(err => { console.log(err); handleErrorOpen((globalVariable === "zh-tw" ? "新增user失敗" : globalVariable === "zh-cn" ? "新增user失败" : "Failed to add user")); })
   };
-
+  //查詢user負責之專案
+  function getProjectFromUser() {
+    const data = {
+      token: token,
+      user_id: document.getElementById('searchStaff').value,
+      //要設定一個const ...useState來存資料，並用useeffect去取資料
+    }
+    apiGetProjectUserBelong(data)
+      .then((res) => {
+        const newData = res.data.map((item, index) => ({
+          ...item,
+          id: index + 1,
+          project_id: item.project_id
+          // role: permissionMap[item.permission]
+        }));
+        console.log(newData)
+        setProjectUsersBelong(newData)
+      })
+      .catch((error) => {
+        console.error('Error fetching project data:', error);
+      });
+  }
+  //刪除user負責之專案
+  function deleteProjectFromUser() {
+    const data = {
+      token: token,
+      user_id: document.getElementById('searchStaff').value,
+      project_id: selectedProjectDataBelong//有機會變成是只能一次刪一個project(要測試)
+    }
+    console.log(data)
+    apiDeleteProjectUserBelong(data)
+      .then(res => {
+        handleOpen((globalVariable === "zh-tw" ? ('成功刪除User: ' + data.userID) : globalVariable === "zh-cn" ? ('成功删除User: ' + data.userID) : ('User deleted successfully: ' + data.userID)))
+        // 关闭对话框
+        userDeleteHandleClose();
+      }).catch(err => { console.log(err); handleErrorOpen((globalVariable === "zh-tw" ? "刪除User失敗" : globalVariable === "zh-cn" ? "删除User失败" : "Failed to delete User")) })
+  };
   //刪除project user
   function deleteProjectUser() {
     const data = {
@@ -810,33 +904,33 @@ export default function Project({ token, setAlert, ...rest }) {
                     <Typography variant="h4" fontWeight="medium" mt={3}>
                       {globalVariable === "zh-tw" ? "新增專案" : globalVariable === "zh-cn" ? "新增专案" : "Add new project"}
                     </Typography>
-                    
-                      <Box display="flex" alignItems="center" pt={3} px={2}>
-                        <Typography variant="h5" fontWeight="medium" mr={2}>
-                          {globalVariable === "zh-tw" ? "專案名稱:" : globalVariable === "zh-cn" ? "专案名称:" : "Project name:"}
-                        </Typography>
-                        <Box>
-                          <FormControl>
-                            <InputLabel id="operation-type-select-label">專案名稱</InputLabel>
-                            <Select
-                              labelId="permission-select-label"
-                              id="permission-select"
-                              value={projectIDSelect}
-                              label="專案名稱"
-                              onChange={projectSelectNameChange}
-                              style={{ minWidth: "271px", height: "56px" }}
-                            >
-                              <MenuItem value="">清空欄位</MenuItem>
-                              {projectNameList.map((projectItem) => (
-                                <MenuItem value={projectItem}>
-                                  {projectItem}
-                                </MenuItem>
-                              ))}
-                            </Select>
-                          </FormControl>
-                        </Box>
 
-                        {/* <Box mr={2} sx={{ minWidth: 200 }}>
+                    <Box display="flex" alignItems="center" pt={3} px={2}>
+                      <Typography variant="h5" fontWeight="medium" mr={2}>
+                        {globalVariable === "zh-tw" ? "專案名稱:" : globalVariable === "zh-cn" ? "专案名称:" : "Project name:"}
+                      </Typography>
+                      <Box>
+                        <FormControl>
+                          <InputLabel id="operation-type-select-label">專案名稱</InputLabel>
+                          <Select
+                            labelId="permission-select-label"
+                            id="permission-select"
+                            value={projectIDSelect}
+                            label="專案名稱"
+                            onChange={projectSelectNameChange}
+                            style={{ minWidth: "271px", height: "56px" }}
+                          >
+                            <MenuItem value="">清空欄位</MenuItem>
+                            {projectNameList.map((projectItem) => (
+                              <MenuItem value={projectItem}>
+                                {projectItem}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
+                      </Box>
+
+                      {/* <Box mr={2} sx={{ minWidth: 200 }}>
                           <Select
                             labelId="permission-select-label"
                             id="permission-select"
@@ -854,13 +948,13 @@ export default function Project({ token, setAlert, ...rest }) {
                             ))}
                           </Select>
                         </Box> */}
-                        <Box ml={2}>
-                          <LoadingButton variant="contained" color="info" onClick={handleOnClickProjectAdd}>
-                            {globalVariable === "zh-tw" ? "查詢" : globalVariable === "zh-cn" ? "查询" : "Search"}
-                          </LoadingButton>
-                        </Box>
+                      <Box ml={2}>
+                        <LoadingButton variant="contained" color="info" onClick={handleOnClickProjectAdd}>
+                          {globalVariable === "zh-tw" ? "查詢" : globalVariable === "zh-cn" ? "查询" : "Search"}
+                        </LoadingButton>
                       </Box>
-                    
+                    </Box>
+
                   </Box>
 
 
@@ -991,8 +1085,9 @@ export default function Project({ token, setAlert, ...rest }) {
                         <Button
                           onClick={() => {
                             console.log("Delete button clicked 裡面的");
-                            // projectDelete();
-                            handleOnClickProjectPost()
+                            projectDelete();
+                            // handleOnClickProjectPost()
+
                           }}
                           color="error"
                           variant="contained"
@@ -1458,6 +1553,145 @@ export default function Project({ token, setAlert, ...rest }) {
                     </Dialog>
                   </Box>
                 </Box>
+                {/* //////////////////////////////////// */}
+                <Divider sx={{ borderBottomWidth: 3 }} />
+                <Box component="form" role="form" mb={3}>
+                  <Typography variant="h4" fontWeight="medium" mt={3}>
+                    {globalVariable === "zh-tw" ? "查詢專案人員負責專案" : globalVariable === "zh-cn" ? "查询专案人员负责专案" : " Query the project personnel responsible for the project"}
+                  </Typography>
+                  <Box display="flex" alignItems="center" pt={3} px={2}>
+                    <Typography variant="h5" fontWeight="medium" mr={2}>
+                      {globalVariable === "zh-tw" ? "人員編號:" : globalVariable === "zh-cn" ? "人員編號:" : "User ID:"}
+                    </Typography>
+                    <Box mr={2}>
+                      {globalVariable === "zh-tw" ? (
+                        <TextField id="searchStaff" type="search-staff" label="人員名稱" />
+                      ) : globalVariable === "zh-cn" ? (
+                        <TextField id="searchStaff" type="search-staff" label="人員名称" />
+                      ) : (
+                        <TextField id="searchStaff" type="search-staff" label="User ID" />
+                      )}
+                    </Box>
+                    <Box ml={2}>
+                      <LoadingButton variant="contained" color="info" onClick={getProjectFromUser}>
+                        {globalVariable === "zh-tw" ? "查詢" : globalVariable === "zh-cn" ? "查询" : "Search"}
+                      </LoadingButton>
+                    </Box>
+                    {/* <FormControl>
+                        <InputLabel id="demo-simple-select-label">{globalVariable === "zh-tw" ? "人員編號" : globalVariable === "zh-cn" ? "人員編號" : "User ID"}</InputLabel> */}
+                    {/* <Select
+                          labelId="permission-select-label"
+                          id="permission-select"
+                          value={projectID}//要改
+                          label={globalVariable === "zh-tw" ? "專案" : globalVariable === "zh-cn" ? "专案" : "Project"}
+                          onChange={projectNameChange}//要改成人員namechange
+                          style={{ minWidth: "200px", height: "45px" }}
+                        >
+                          {project.map((projectItem) => (
+                            <MenuItem value={projectItem.id}>
+                              {projectItem.name}
+                            </MenuItem>
+                          ))}
+                        </Select> */}
+                    {/* </FormControl> */}
+                  </Box>
+                </Box>
+
+                <Box display="flex" alignItems="center" pt={3} px={2}>
+                  {globalVariable === "zh-tw" ? (
+                    <div style={{ height: 400, width: '100%' }}>
+                      <DataGrid
+                        rows={projectUsersBelong}
+                        columns={columnsProjectFromUserTW}
+                        initialState={{
+                          pagination: {
+                            paginationModel: { pageSize: 5 },
+                          },
+                        }}
+                        pageSizeOptions={[5]}
+                        checkboxSelection// 通过 selectedRow 控制选中状态
+                        onSelectionModelChange={(ids) => {
+                          onRowsSelectionHandlerProjectFromUser(ids);
+                        }}
+                      />
+                    </div>
+                  ) : globalVariable === "zh-cn" ? (
+                    <div style={{ height: 400, width: '100%' }}>
+                      <DataGrid
+                        rows={projectUsersBelong}
+                        columns={columnsProjectFromUserCN}
+                        initialState={{
+                          pagination: {
+                            paginationModel: { pageSize: 5 },
+                          },
+                        }}
+                        pageSizeOptions={[5]}
+                        checkboxSelection
+                        onSelectionModelChange={(ids) => {
+                          onRowsSelectionHandlerProjectFromUser(ids);
+                        }}
+                      />
+                    </div>
+                  ) : (
+                    <div style={{ height: 400, width: '100%' }}>
+                      <DataGrid
+                        rows={projectUsersBelong}
+                        columns={columnsProjectFromUserEN}
+                        initialState={{
+                          pagination: {
+                            paginationModel: { pageSize: 5 },
+                          },
+                        }}
+                        pageSizeOptions={[5]}
+                        checkboxSelection// 通过 selectedRow 控制选中状态
+                        onSelectionModelChange={(ids) => {
+                          onRowsSelectionHandlerProjectFromUser(ids);
+                        }}
+                      />
+                    </div>
+                  )}
+                </Box>
+                <Box display="flex" pt={3} px={2}>
+                  <Box>
+                    <LoadingButton
+                      variant="contained"
+                      color="error"
+                      onClick={userDeleteHandleClickOpen}
+                    >
+                      {globalVariable === "zh-tw" ? "刪除負責該專案之人員" : globalVariable === "zh-cn" ? "刪除負責該專案之人員" : "Delete the person responsible for the project"}
+                    </LoadingButton>
+                    <Dialog
+                      open={userDeleteOpen}
+                      onClose={userDeleteHandleClose}
+                      aria-labelledby="alert-dialog-permission"
+                      aria-describedby="alert-dialog-permission"
+                    >
+                      <DialogTitle id="alert-dialog-title">{globalVariable === "zh-tw" ? "是否刪除專案人員?" : globalVariable === "zh-cn" ? "是否删除专案人员?" : "Delete project staff?"}</DialogTitle>
+                      <DialogContent>
+                        <DialogContentText id="alert-dialog-permission">
+                          {globalVariable === "zh-tw" ? "按下刪除按鈕後將會刪除專案人員" : globalVariable === "zh-cn" ? "按下删除按钮后将会删除专案人员" : "Clicking the delete button will delete the project worker"}
+                        </DialogContentText>
+                      </DialogContent>
+                      <DialogActions>
+                        <LoadingButton
+                          onClick={() => { deleteProjectFromUser(); }}
+                          color="error"
+                          variant="contained"
+                        >
+                          {globalVariable === "zh-tw" ? "刪除" : globalVariable === "zh-cn" ? "删除" : "Delete"}
+                        </LoadingButton>
+                        <LoadingButton
+                          onClick={userDeleteHandleClose}
+                          color="info"
+                          variant="contained"
+                        >
+                          {globalVariable === "zh-tw" ? "關閉" : globalVariable === "zh-cn" ? "关闭" : "Close"}
+                        </LoadingButton>
+                      </DialogActions>
+                    </Dialog>
+                  </Box>
+                </Box>
+                {/* //////////////////////////////////// */}
               </Grid>
             </Grid>
           </CardContent>
