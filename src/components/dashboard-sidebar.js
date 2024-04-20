@@ -40,6 +40,12 @@ export const DashboardSidebar = ({ idx, setIdx }) => {
       active: false
     },
     {
+      url: '/Adminpage',
+      icon: (<StatusIcon fontSize="small" />),
+      title: (globalVariable == "zh-tw" ? "管理者專案頁面" : globalVariable == "zh-cn" ? "管理者专案页面" : "Manager project page"),
+      active: false
+    },
+    {
       url: '/Project',
       icon: (<StatusIcon fontSize="small" />),
       title: (globalVariable == "zh-tw" ? "專案頁面" : globalVariable == "zh-cn" ? "专案页面" : "Project"),

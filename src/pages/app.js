@@ -5,7 +5,7 @@ import {
     Route,
     Navigate
 } from 'react-router-dom'
-
+import Adminpage from "./Adminpage"
 import Login from './LoginPage';
 import FoxlinkPages from './homepage';
 import SnackbarAlert from "./Snackbar";
@@ -52,6 +52,7 @@ export default function App() {
                             <Route element={<Backup setAlert={setAlert} token={authUser.token} />} path={'/backup'}></Route>
                             <Route element={<Project token={authUser.token} />} path={'/Project'}></Route>
                             <Route element={<Comparison token={authUser.token} />} path={'/comparison'}></Route>
+                            <Route element={<Adminpage token={authUser.token} />} path={'/Adminpage'}></Route>
                         </Route>
                         <Route
                             path='*'
