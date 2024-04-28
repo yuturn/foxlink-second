@@ -60,7 +60,7 @@ const columnsListTW = [
 ];
 const columnsTW = [
   { field: 'project', headerName: '專案名稱', width: 200 },
-  { field: 'selectedDisplay', headerName: '已於專案中', width: 200 },
+  // { field: 'selectedDisplay', headerName: '已於專案中', width: 200 },
   { field: 'line', headerName: '線別', width: 200 },
   { field: 'device', headerName: '機台名稱', width: 200 },
   { field: 'ename', headerName: 'ename', width: 450 },
@@ -77,7 +77,7 @@ const columnsListCN = [
 ];
 const columnsCN = [
   { field: 'project', headerName: '专案名称', width: 200 },
-  { field: 'selectedDisplay', headerName: '已于专案中', width: 200 },
+  // { field: 'selectedDisplay', headerName: '已于专案中', width: 200 },
   { field: 'line', headerName: '线别', width: 200 },
   { field: 'device', headerName: '机台名称', width: 200 },
   { field: 'ename', headerName: 'ename', width: 450 },
@@ -94,7 +94,7 @@ const columnsListEN = [
 ];
 const columnsEN = [
   { field: 'project', headerName: 'Project name', width: 200 },
-  { field: 'selectedDisplay', headerName: 'Already in project', width: 200 },
+  // { field: 'selectedDisplay', headerName: 'Already in project', width: 200 },
   { field: 'line', headerName: 'Line', width: 200 },
   { field: 'device', headerName: 'Machine name', width: 200 },
   { field: 'ename', headerName: 'ename', width: 450 },
@@ -408,6 +408,7 @@ export default function Project({ token, setAlert, ...rest }) {
           id: index + 1, // 使用唯一的值作为 id
           selected: item.select ? item.select : 0, // 如果 select 字段不存在，默认为 0
           selectedDisplay: item.select ? (item.select === 1 ? '是' : '否') : '否', // 根据 select 字段的值确定显示内容
+          select: item.select // Make sure 'select' is mapped correctly
         }));
 
         // 根据 select 字段过滤已选择的项目
@@ -776,8 +777,8 @@ export default function Project({ token, setAlert, ...rest }) {
       {showFirstCard ? (
         <Card>
           {/* ////////////////////////////////////// 建立一個list可供選擇project要串api_table*/}
-          <Card display="flex" alignItems="center" pt={3} px={2}>
-            <Box sx={{ bgcolor: "#696969" }}>
+          {/* <Card display="flex" alignItems="center" pt={3} px={2}> */}
+          {/* <Box sx={{ bgcolor: "#696969" }}>
               {globalVariable === "zh-tw" ? (
                 <CardHeader title="專案表單" color="#696969" />
               ) : globalVariable === "zh-cn" ? (
@@ -785,9 +786,9 @@ export default function Project({ token, setAlert, ...rest }) {
               ) : (
                 <CardHeader title="Project list" color="#696969" />
               )}
-            </Box>
-            {/* 利用project/table這支api去的到一個陣列，裡面會有每個專案的名字，建構一個table裏面包含了checkbox,已於專案中 */}
-            <div style={{ display: 'flex', alignItems: 'center', mr: '100px' }}>
+            </Box> */}
+          {/* 利用project/table這支api去的到一個陣列，裡面會有每個專案的名字，建構一個table裏面包含了checkbox,已於專案中 */}
+          {/* <div style={{ display: 'flex', alignItems: 'center', mr: '100px' }}>
               <LoadingButton variant="contained" color="info" onClick={handleOnClickProjectTable} >
                 {globalVariable === "zh-tw" ? "查詢現有專案" : globalVariable === "zh-cn" ? "查询现有专案" : "Query existing projects"}
               </LoadingButton>
@@ -852,11 +853,11 @@ export default function Project({ token, setAlert, ...rest }) {
                 )}
 
               </div>
-            </Box>
+            </Box> */}
 
 
-          </Card>
-          <Divider sx={{ borderBottomWidth: 3, mt: 2 }} />
+          {/* </Card> */}
+          {/* <Divider sx={{ borderBottomWidth: 3, mt: 2 }} /> */}
           {/* ////////////////////////////////////// */}
           <Box sx={{ bgcolor: '#696969' }}>
             {globalVariable === "zh-tw" ? (
@@ -989,6 +990,7 @@ export default function Project({ token, setAlert, ...rest }) {
                     {globalVariable === "zh-tw" ? (
                       <div style={{ height: 600, width: '100%' }}>
                         <DataGrid
+                          isRowSelectable={(params) => params.row.select === 0}
                           rows={projectList}
                           columns={columnsTW}
                           initialState={{
@@ -999,11 +1001,18 @@ export default function Project({ token, setAlert, ...rest }) {
                           pageSizeOptions={[5]}
                           checkboxSelection
                           onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
+                          getRowCheckboxProps={(params) => {
+                            console.log(params)
+                            return {
+                              disabled: params.rows.select === 1 // 根据 select 列的值来决定是否禁用 checkbox
+                            };
+                          }}
                         />
                       </div>
                     ) : globalVariable === "zh-cn" ? (
                       <div style={{ height: 600, width: '100%' }}>
                         <DataGrid
+                          isRowSelectable={(params) => params.row.select === 0}
                           rows={projectList}
                           columns={columnsCN}
                           initialState={{
@@ -1014,11 +1023,18 @@ export default function Project({ token, setAlert, ...rest }) {
                           pageSizeOptions={[5]}
                           checkboxSelection
                           onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
+                          getRowCheckboxProps={(params) => {
+                            console.log(params)
+                            return {
+                              disabled: params.rows.select === 1 // 根据 select 列的值来决定是否禁用 checkbox
+                            };
+                          }}
                         />
                       </div>
                     ) : (
                       <div style={{ height: 600, width: '100%' }}>
                         <DataGrid
+                          isRowSelectable={(params) => params.row.select === 0}
                           rows={projectList}
                           columns={columnsEN}
                           initialState={{
@@ -1029,6 +1045,12 @@ export default function Project({ token, setAlert, ...rest }) {
                           pageSizeOptions={[5]}
                           checkboxSelection
                           onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
+                          getRowCheckboxProps={(params) => {
+                            console.log(params)
+                            return {
+                              disabled: params.rows.select === 1 // 根据 select 列的值来决定是否禁用 checkbox
+                            };
+                          }}
                         />
                       </div>
                     )}

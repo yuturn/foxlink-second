@@ -143,6 +143,11 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
   // handleRefresh用于更新refreshKey，触发重新渲染
   const handleRefresh = () => {
     setRefreshKey(prevKey => prevKey + 1); // 更新状态以触发重新渲染
+    if (projectName && deviceName) {
+      getProjectDetailsFilter(); // This will perform the query as well
+    } else {
+      console.log("Project Name or Device Name not set."); // Optional: Handle cases where the required fields are not set
+    }
   };
   //////////////////////////////////////////////////////////
 
@@ -238,14 +243,20 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
     apiGetStatistics(token)
       .then((res) => {
         console.log(res);
-        const list = res.data.map((project) => project.project_name);
-        setProjectNameList(list);
-        const devicesList = res.data.map((project) => project);
+        const devicesList = res.data.map((project) => {
+          // 对每个项目的设备名称进行排序
+          project.devices.sort((a, b) => {
+            const lastDigitA = parseInt(a.match(/\d+$/)[0]);
+            const lastDigitB = parseInt(b.match(/\d+$/)[0]);
+            return lastDigitA - lastDigitB;
+          });
+          return project;
+        });
         setDeviceNameList(devicesList);
       });
 
     getProjectDetails(token);
-  }
+  };
   const getProjectDetails = () => {
     const data = {
       token: token,
@@ -420,7 +431,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                   <div key={device}>
                     <Card>
                       <Box sx={{ bgcolor: '#696969' }}>
-                        <CardHeader title={project + "-" + " 線號 " + data[project][device][0].line  +"-"+  device} color="#696969" align="center" />
+                        <CardHeader title={project + "-" + " 線號 " + data[project][device][0].line + "-" + device} color="#696969" align="center" />
                       </Box>
                       <Grid container spacing={1}>
                         <Grid xs={3} sx={{ mt: 4 }}>
@@ -680,7 +691,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                   <div key={device}>
                     <Card>
                       <Box sx={{ bgcolor: '#696969' }}>
-                        <CardHeader title={project + "-" + " 线号 " + data[project][device][0].line  +"-"+  device} color="#696969" align="center" />
+                        <CardHeader title={project + "-" + " 线号 " + data[project][device][0].line + "-" + device} color="#696969" align="center" />
                       </Box>
                       <Grid container spacing={1}>
                         <Grid xs={3} sx={{ mt: 4 }}>
@@ -939,7 +950,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                   <div key={device}>
                     <Card>
                       <Box sx={{ bgcolor: '#696969' }}>
-                        <CardHeader title={project + "-" + " line " + data[project][device][0].line  +"-"+  device} color="#696969" align="center" />
+                        <CardHeader title={project + "-" + " line " + data[project][device][0].line + "-" + device} color="#696969" align="center" />
                       </Box>
                       <Grid container spacing={1}>
                         <Grid xs={3} sx={{ mt: 4 }}>

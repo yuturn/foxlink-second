@@ -69,13 +69,14 @@ export default function Statistics({ token, ...rest }) {
         }
     }
 
-    function infoColor(happenLastTime) {
-        if (happenLastTime != null) {
+    function infoColor(happened_times) {
+        if (happened_times != 0) {
             return "#ffc107";
         } else {
             return null; // 或者返回一个默认的图标
         }
     }
+
 
     function ColorBox(props) {
         return (
@@ -428,21 +429,21 @@ export default function Statistics({ token, ...rest }) {
                                                                 {data[project][device].filter(columns => columns.frequency === "週預測").sort(getComparator(orderWeek)).map((columns) => (
                                                                     <TableRow key={columns.name}>
                                                                         {/* //////////////////////////// */}
-                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                                                             <Typography fontSize={20}>{columns.category}</Typography>
                                                                         </TableCell>
                                                                         {/* ///////////////////////////// */}
                                                                         <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.steady) }}>
                                                                             <Typography fontSize={20}>{columns.steady === 0 ? "穩定" : "異常"}</Typography>
                                                                         </TableCell>
-                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                                                             <Typography fontSize={20}>{columns.name}</Typography>
                                                                         </TableCell>
-                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                                                             <Typography fontSize={20}>{columns.happenLastTime}</Typography>
                                                                         </TableCell>
                                                                         {/* //////////////////////////// */}
-                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                                                             <Typography fontSize={20}>{columns.happened_times}</Typography>
                                                                         </TableCell>
                                                                         {/* ///////////////////////////// */}
@@ -508,21 +509,21 @@ export default function Statistics({ token, ...rest }) {
                                                                 {data2[project][device].filter(columns => columns.frequency === "日預測").sort(getComparatorDate(orderDate)).map((columns) => (
                                                                     <TableRow key={columns.name}>
                                                                         {/* ///////////////////////////////// */}
-                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                                                             <Typography fontSize={20}>{columns.category}</Typography>
                                                                         </TableCell>
                                                                         {/* /////////////////////////////// */}
                                                                         <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.steady) }}>
                                                                             <Typography fontSize={20}>{columns.steady === 0 ? "穩定" : "異常"}</Typography>
                                                                         </TableCell>
-                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                                                             <Typography fontSize={20}>{columns.name}</Typography>
                                                                         </TableCell>
-                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                                                             <Typography fontSize={20}>{columns.happenLastTime}</Typography>
                                                                         </TableCell>
                                                                         {/* //////////////////////////////// */}
-                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                                                             <Typography fontSize={20}>{columns.happened_times}</Typography>
                                                                         </TableCell>
                                                                         {/* //////////////////////////////// */}
@@ -690,21 +691,21 @@ export default function Statistics({ token, ...rest }) {
                                                                 {data[project][device].filter(columns => columns.frequency === "週預測").sort(getComparator(orderWeek)).map((columns) => (
                                                                     <TableRow key={columns.name}>
                                                                         {/* //////////////////////////////// */}
-                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                                                             <Typography fontSize={20}>{columns.category}</Typography>
                                                                         </TableCell>
                                                                         {/* //////////////////////////////// */}
                                                                         <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.getColor) }}>
                                                                             <Typography fontSize={20}>{columns.steady === 0 ? "稳定" : "异常"}</Typography>
                                                                         </TableCell>
-                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                                                             <Typography fontSize={20}>{columns.name}</Typography>
                                                                         </TableCell>
-                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                                                             <Typography fontSize={20}>{columns.happenLastTime}</Typography>
                                                                         </TableCell>
                                                                         {/* //////////////////////////////////// */}
-                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                                                             <Typography fontSize={20}>{columns.happened_times}</Typography>
                                                                         </TableCell>
                                                                         {/* //////////////////////////////////// */}
@@ -768,20 +769,20 @@ export default function Statistics({ token, ...rest }) {
                                                                 {data2[project][device].filter(columns => columns.frequency === "日預測").sort(getComparatorDate(orderDate)).map((columns) => (
                                                                     <TableRow key={columns.name}>
                                                                         {/* /////////////////////// */}
-                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                                                             <Typography fontSize={20}>{columns.name}</Typography>
                                                                         </TableCell>
                                                                         {/* /////////////////////// */}
                                                                         <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.getColor) }}>
                                                                             <Typography fontSize={20}>{columns.steady === 0 ? "稳定" : "异常"}</Typography>
                                                                         </TableCell>
-                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                                                             <Typography fontSize={20}>{columns.name}</Typography>
                                                                         </TableCell>
-                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                                                             <Typography fontSize={20}>{columns.happenLastTime}</Typography>
                                                                         </TableCell>
-                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                                                             <Typography fontSize={20}>{columns.happened_times}</Typography>
                                                                         </TableCell>
                                                                     </TableRow>
@@ -946,20 +947,20 @@ export default function Statistics({ token, ...rest }) {
                                                             <TableBody>
                                                                 {data[project][device].filter(columns => columns.frequency === "週預測").sort(getComparator(orderWeek)).map((columns) => (
                                                                     <TableRow key={columns.name}>
-                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                                                             <Typography fontSize={20}>{columns.category}</Typography>
                                                                         </TableCell>
                                                                         <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.getColor) }}>
                                                                             <Typography fontSize={20}>{columns.steady === 0 ? "Stabilize" : "Abnormal"}</Typography>
                                                                         </TableCell>
-                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                                                             <Typography fontSize={20}>{columns.name}</Typography>
                                                                         </TableCell>
-                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                                                             <Typography fontSize={20}>{columns.happenLastTime}</Typography>
                                                                         </TableCell>
                                                                         {/* /////////////////////////////// */}
-                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                                                             <Typography fontSize={20}>{columns.happened_times}</Typography>
                                                                         </TableCell>
                                                                         {/* /////////////////////////////// */}
@@ -1025,20 +1026,20 @@ export default function Statistics({ token, ...rest }) {
                                                                 {data2[project][device].filter(columns => columns.frequency === "日預測").sort(getComparatorDate(orderDate)).map((columns) => (
                                                                     <TableRow key={columns.name}>
                                                                         {/* /////////////////////// */}
-                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                                                             <Typography fontSize={20}>{columns.category}</Typography>
                                                                         </TableCell>
                                                                         {/* /////////////////////// */}
                                                                         <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.getColor) }}>
                                                                             <Typography fontSize={20}>{columns.steady === 0 ? "Stabilize" : "Abnormal"}</Typography>
                                                                         </TableCell>
-                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                                                             <Typography fontSize={20}>{columns.name}</Typography>
                                                                         </TableCell>
-                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                                                             <Typography fontSize={20}>{columns.happenLastTime}</Typography>
                                                                         </TableCell>
-                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happenLastTime) }}>
+                                                                        <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                                                             <Typography fontSize={20}>{columns.happened_times}</Typography>
                                                                         </TableCell>
                                                                     </TableRow>

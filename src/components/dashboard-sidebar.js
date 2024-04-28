@@ -16,8 +16,8 @@ import { DashboardNavbar } from './dashboard-navbar';
 import { NavItem } from './nav-item';
 import { Link } from "react-router-dom";
 
-export const DashboardSidebar = ({ idx, setIdx }) => {
-  const [open, setOpen] = useState(false);
+export const DashboardSidebar = ({ idx, setIdx, initialOpen, toggleSidebar }) => {
+  const [open, setOpen] = useState(initialOpen);
   const { globalVariable, updateGlobalVariable } = useContext(GlobalContext);
 
   const handleGlobalVariableChange = (event) => {
@@ -73,6 +73,7 @@ export const DashboardSidebar = ({ idx, setIdx }) => {
 
   const toggleDrawer = () => {
     setOpen(!open);
+    toggleSidebar(); // Toggle parent's sidebar state
   };
   const upload_items = [
     // {
@@ -202,7 +203,7 @@ export const DashboardSidebar = ({ idx, setIdx }) => {
         }}
       >
         <DashboardNavbar />
-        
+
       </Box>
       <IconButton
         sx={{

@@ -1,44 +1,54 @@
 import React, { useState, useEffect, useContext } from "react";
-import {
-  apiGetProjectTable,
-  apiDeleteAdminProjectDevices,
-  apiGetProjectName,
-  apiPostAdminProjectDevices,
-} from '../api';
+import { apiGetProjectDevices, apiGetProjectUserBelong, apiDeleteProjectUserBelong, apiGetStatistics, apiPostProjectDevices, apiGetProjectprogress, apiGetProjectName, apiPostAdminProjectDevices, apiDeleteProject, apiDeleteAdminProjectDevices, apiGetProjectUsers, apiPostProjectUser, apiDeleteProjectUser, apiGetUserName, apiGetProjectTable } from '../api'
 import {
   Box,
+  Card,
   CardHeader,
-  LoadingButton,
-  DataGrid,
-  FormControlLabel,
-  styled,
-  createTheme,
-  ThemeProvider,
-  Switch
+  CardContent,
+  Divider,
+  Grid,
+  Typography,
+  TextField,
+  FormControl,
+  InputLabel,
+  Button
 } from '@mui/material';
 import { GlobalContext } from '../components/GlobalContext';
+import LoadingButton from '@mui/lab/LoadingButton';
+import { DataGrid } from '@mui/x-data-grid';
+// import dialog
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
+import { FormControlLabel } from '@mui/material';
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
+import { type } from "@testing-library/user-event/dist/type";
+import Switch from '@mui/material/Switch';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import FolderCopyIcon from '@mui/icons-material/FolderCopy';
+import { Construction } from "@mui/icons-material";
+
 
 const darkTheme = createTheme({
   palette: {
     mode: 'light',
-    background: {
-      default: '#62aaf4',
-      paper: '#FFFFFF',
-    },
-    text: {
-      primary: '#000000',
-    },
-    primary: {
-      main: '#696969',
-    },
+    background: { default: '#62aaf4', paper: '#FFFFFF' },
+    text: { primary: '#000000' },
+    primary: { main: '#696969' },
   },
 });
 
-const Android12Switch = styled(Switch)(({ theme }) => ({
+const Android12Switch = styled(Switch)({
   padding: 8,
   '& .MuiSwitch-track': {
     borderRadius: 22 / 2,
-    backgroundColor: '#fff',  // Default (off) color
+    backgroundColor: '#fff',
     '&::before, &::after': {
       content: '""',
       position: 'absolute',
@@ -49,102 +59,154 @@ const Android12Switch = styled(Switch)(({ theme }) => ({
     },
     '&::before': {
       left: 12,
-      backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24"><path fill="${encodeURIComponent(theme.palette.getContrastText('#007BFF'))}" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"/></svg>')`,
+      backgroundImage: 'desired-icon-url',
     },
     '&::after': {
       right: 12,
-      backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24"><path fill="${encodeURIComponent(theme.palette.getContrastText('#007BFF'))}" d="M19,13H5V11H19V13Z" /></svg>')`,
+      backgroundImage: 'desired-icon-url',
     },
   },
   '& .MuiSwitch-thumb': {
-    boxShadow: 'none',
-    width: 16,
-    height: 16,
-    margin: 2,
     backgroundColor: '#fff',
-  },
-  '& .Mui-checked .MuiSwitch-thumb': {
-    backgroundColor: '#007BFF',
+    '&.Mui-checked': {
+      backgroundColor: '#007BFF',
+    },
   },
   '& .Mui-checked + .MuiSwitch-track': {
     backgroundColor: '#007BFF',
   },
-}));
+});
 
-function Adminpage({ token, ...rest }) {
+function Adminpage({ token }) {
   const { globalVariable } = useContext(GlobalContext);
   const [projectTableList, setProjectTableList] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (token) {
-      apiGetProjectName(token)
-        .then((res) => {
-          const formattedData = res.data.map((item, index) => ({
-            id: index + 1,
-            name: item,
-            select: false
-          }));
-          setProjectTableList(formattedData);
-        })
-        .catch((error) => console.error('Error fetching project data:', error));
+  const fetchProjectList = () => {
+    if (!token) {
+      console.error("No token provided");
+      return;
     }
-  }, [token]);
-
-  const handleOnClickProjectTable = () => {
+    setLoading(true);
     apiGetProjectTable(token)
       .then((res) => {
-        const formattedData = res.data.map((item, index) => ({
+        const newData = Object.entries(res.data).map(([key, valueArray], index) => ({
           id: index + 1,
-          name: item,
-          select: false
+          name: key,
+          select: valueArray[0].select
         }));
-        setProjectTableList(formattedData);
+        setProjectTableList(newData);
+        setLoading(false);
       })
-      .catch((error) => console.error('Error fetching project data:', error));
+      .catch((error) => {
+        console.error("Failed to fetch projects:", error);
+        setLoading(false);
+      });
   };
+
+  useEffect(() => {
+    fetchProjectList();
+  }, [token]);
 
   const handleSwitchChange = (id, event) => {
     const newState = event.target.checked;
-    setProjectTableList(current =>
-      current.map(row => 
-        row.id === id ? { ...row, select: newState } : row
-      )
+    const newRows = projectTableList.map(row =>
+      row.id === id ? { ...row, select: newState } : row
     );
+    setProjectTableList(newRows);
+
+    const selectedRow = newRows.find(row => row.id === id);
+    if (newState) {
+      postProject(selectedRow.name);
+    } else {
+      deleteProject(selectedRow.name);
+    }
   };
+
+  const postProject = (projectName) => {
+    if (!token) return;
+    apiPostAdminProjectDevices({ token, project: [projectName] })
+      .then(() => {
+        console.log("Project added:", projectName);
+      })
+      .catch((error) => {
+        console.error("Failed to add project:", error);
+      });
+  };
+
+  const deleteProject = (projectName) => {
+    if (!token) return;
+    // Ensure that we are sending a string, not an array
+    apiDeleteAdminProjectDevices({ token, project: projectName }) // Change here
+      .then(() => {
+        console.log("Project deleted:", projectName);
+      })
+      .catch((error) => {
+        console.error("Failed to delete project:", error);
+      });
+  };
+  useEffect(() => {
+    apiGetProjectTable(token)
+      .then((res) => {
+        // 假設 res.data 是一個物件陣列，且每個物件中有一個 'select' 屬性
+        const sortedData = res.data
+          .map((item, index) => ({
+            id: index + 1,
+            name: item.name,
+            select: item.select,
+          }))
+          .sort((a, b) => b.select - a.select); // 將已選擇的項目排序到前面
+
+        setProjectTableList(sortedData);
+        console.log("Sorted data loaded");
+      })
+      .catch((error) => {
+        console.error("Failed to fetch data:", error);
+      });
+  }, [token]); // token 作為依賴，確保在 token 變更時重新取得數據
 
   const columns = [
     { field: 'name', headerName: globalVariable === "zh-tw" ? "專案名稱" : globalVariable === "zh-cn" ? "专案名称" : "Project name", width: 200 },
-    { field: 'switch', headerName: globalVariable === "zh-tw" ? "是否加入專案中" : globalVariable === "zh-cn" ? "是否加入专案中" : "Whether to join the project", width: 200,
+    {
+      field: 'select',
+      headerName: globalVariable === "zh-tw" ? "是否加入專案中" : globalVariable === "zh-cn" ? "是否加入专案中" : "Whether to join the project", width: 200,
+      width: 150,
       renderCell: (params) => (
         <FormControlLabel
           control={
             <Android12Switch
-              checked={params.row.select}
-              onChange={(event) => handleSwitchChange(params.row.id, event)}
-              color="primary"
+              checked={params.value}
+              onChange={(event) => handleSwitchChange(params.id, event)}
             />
           }
           label=""
         />
-      )
+      ),
     },
   ];
 
   return (
     <ThemeProvider theme={darkTheme}>
-      <Box sx={{ bgcolor: "#696969" }}>
+      <Box >
         <CardHeader title={globalVariable === "zh-tw" ? "專案表單" : globalVariable === "zh-cn" ? "专案表单" : "Project list"} color="#696969" />
-        <LoadingButton variant="contained" color="info" onClick={handleOnClickProjectTable}>
+        <Divider sx={{ my: 1 }} />
+        <LoadingButton loading={loading} onClick={fetchProjectList} variant="contained" color="primary">
           {globalVariable === "zh-tw" ? "查詢現有專案" : globalVariable === "zh-cn" ? "查询现有专案" : "Query existing projects"}
         </LoadingButton>
-        <Box display="flex" pt={3} px={2} mb={3}>
+        <div style={{ height: 725, width: '100%' }}>
           <DataGrid
             rows={projectTableList}
             columns={columns}
-            pageSize={5}
+            pageSize={12}
             disableSelectionOnClick
+            initialState={{
+              sorting: {
+                sortModel: [{ field: 'select', sort: 'desc' }],
+              },
+            }}
           />
-        </Box>
+
+        </div>
       </Box>
     </ThemeProvider>
   );
