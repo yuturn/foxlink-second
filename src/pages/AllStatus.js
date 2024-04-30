@@ -1064,8 +1064,8 @@ export default function Statistics({ token, ...rest }) {
 
     return (
         <ThemeProvider theme={darkTheme}>
-            {globalVariable == "zh-tw" ? (
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+            {globalVariable === "zh-tw" ? (
+                <div>
                     <div style={{ display: 'flex', alignItems: 'center', mr: '100px' }}>
                         <LoadingButton variant="contained" color="info" onClick={togglePause}>
                             {isPaused ? '恢復輪播' : '暫停輪播'}
@@ -1076,39 +1076,41 @@ export default function Statistics({ token, ...rest }) {
                         </LoadingButton>
                         <ColorBox msg="已發生過之異常事件"></ColorBox>
                     </div>
-                </Box>
-
-                , createDeviceCardTW(dateData, dateData)
-            ) : globalVariable == "zh-cn" ? (
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', mr: '100px' }}>
-                        <LoadingButton variant="contained" color="info" onClick={togglePause}>
-                            {isPaused ? '恢复轮播' : '暂停轮播'}
-                        </LoadingButton>
-                        <Marquee msg={timeStampData} />
-                        <LoadingButton variant="contained" color="info" onClick={handleRefresh} style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}>
-                            刷新
-                        </LoadingButton>
-                        <ColorBox msg="已发生过之异常事件"></ColorBox>,
-                    </div>
-                </Box>
-                , createDeviceCardCN(dateData, dateData)
+                    {createDeviceCardTW(dateData, dateData)}
+                </div>
+            ) : globalVariable === "zh-cn" ? (
+                <div>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', mr: '100px' }}>
+                            <LoadingButton variant="contained" color="info" onClick={togglePause}>
+                                {isPaused ? '恢复轮播' : '暂停轮播'}
+                            </LoadingButton>
+                            <Marquee msg={timeStampData} />
+                            <LoadingButton variant="contained" color="info" onClick={handleRefresh} style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}>
+                                刷新
+                            </LoadingButton>
+                            <ColorBox msg="已发生过之异常事件"></ColorBox>
+                        </div>
+                    </Box>
+                    {createDeviceCardCN(dateData, dateData)}
+                </div>
             ) : (
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', mr: '100px' }}>
-                        <LoadingButton variant="contained" color="info" onClick={togglePause}>
-                            {isPaused ? 'Resume carousel' : 'Pause carousel'}
-                        </LoadingButton>
-                        <Marquee msg={timeStampData} />
-                        <LoadingButton variant="contained" color="info" onClick={handleRefresh} style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}>
-                            refresh
-                        </LoadingButton>
-                        <ColorBox msg="Abnormal events that have occurred"></ColorBox>,
-                    </div>
-                </Box>
-
-                , createDeviceCardEN(dateData, dateData)
+                <div>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', mr: '100px' }}>
+                            <LoadingButton variant="contained" color="info" onClick={togglePause}>
+                                {isPaused ? 'Resume carousel' : 'Pause carousel'}
+                            </LoadingButton>
+                            <Marquee msg={timeStampData} />
+                            <LoadingButton variant="contained" color="info" onClick={handleRefresh} style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}>
+                                refresh
+                            </LoadingButton>
+                            <ColorBox msg="Abnormal events that have occurred"></ColorBox>
+                        </div>
+                    </Box>
+                    {createDeviceCardEN(dateData, dateData)}
+                </div>
             )}
         </ThemeProvider>
-    );
-}
+    )
+};
