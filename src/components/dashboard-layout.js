@@ -1,23 +1,20 @@
 import React, { useState, useEffect } from "react";
-
-import { Logo } from './logo';
 import { Box, Container } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { AppBar } from '@mui/material';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { Logo } from './logo';
 import { DashboardNavbar } from './dashboard-navbar';
 import { DashboardSidebar } from './dashboard-sidebar';
-import { Toolbar, IconButton, Typography } from "@mui/material";
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import AppBar from '@mui/material/AppBar';
-import MenuIcon from '@mui/icons-material/Menu';
 
 const DashboardLayoutRoot = styled('div')(({ theme, isSidebarOpen }) => ({
   display: 'flex',
   flex: '1 1 auto',
   maxWidth: '100%',
   paddingTop: 64,
-  paddingLeft: isSidebarOpen ? 280 : 0,
+  paddingLeft: isSidebarOpen ? 0 : 280,
   [theme.breakpoints.up('lg')]: {
-    paddingLeft: isSidebarOpen ? 280 : 0
+    paddingLeft: isSidebarOpen ? 0 : 280
   }
 }));
 
@@ -32,14 +29,13 @@ const darkTheme = createTheme({
 
 export const DashboardLayout = ({ children, user }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [userToggledSidebar, setUserToggledSidebar] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
-      // Update the sidebar status based on screen width
-      if (window.innerWidth >= 1280) {
-        setIsSidebarOpen(false);
-      } else {
-        setIsSidebarOpen(true);
+      // Only update the sidebar status if it wasn't toggled by the user
+      if (!userToggledSidebar) {
+        setIsSidebarOpen(window.innerWidth >= 1280);
       }
     };
 
@@ -51,7 +47,12 @@ export const DashboardLayout = ({ children, user }) => {
 
     // Clean up the event listener
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [userToggledSidebar]);
+
+  const toggleSidebar = () => {
+    setUserToggledSidebar(true);
+    setIsSidebarOpen(!isSidebarOpen);
+  };
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -61,7 +62,7 @@ export const DashboardLayout = ({ children, user }) => {
             <Logo sx={{ height: 42, width: 42 }} />
           </AppBar>
         </Box>
-        <Container maxWidth={false}>
+        <Container maxWidth={true}>
           <DashboardLayoutRoot isSidebarOpen={isSidebarOpen}>
             <Box
               sx={{
@@ -77,7 +78,7 @@ export const DashboardLayout = ({ children, user }) => {
           <DashboardSidebar
             initialOpen={false}
             isOpen={isSidebarOpen}
-            toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+            toggleSidebar={toggleSidebar}
           />
           <DashboardNavbar user={user} />
         </Container>
@@ -85,4 +86,3 @@ export const DashboardLayout = ({ children, user }) => {
     </ThemeProvider>
   );
 };
-

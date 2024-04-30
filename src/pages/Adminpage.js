@@ -34,7 +34,6 @@ import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import FolderCopyIcon from '@mui/icons-material/FolderCopy';
 import { Construction } from "@mui/icons-material";
 
-
 const darkTheme = createTheme({
   palette: {
     mode: 'light',
@@ -59,11 +58,9 @@ const Android12Switch = styled(Switch)({
     },
     '&::before': {
       left: 12,
-      backgroundImage: 'desired-icon-url',
     },
     '&::after': {
       right: 12,
-      backgroundImage: 'desired-icon-url',
     },
   },
   '& .MuiSwitch-thumb': {
@@ -81,6 +78,8 @@ function Adminpage({ token }) {
   const { globalVariable } = useContext(GlobalContext);
   const [projectTableList, setProjectTableList] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [projectDeleteOpen, setProjectDeleteOpen] = useState(false);
+  const [deleteProjectName, setDeleteProjectName] = useState("");
 
   const fetchProjectList = () => {
     if (!token) {
@@ -119,7 +118,8 @@ function Adminpage({ token }) {
     if (newState) {
       postProject(selectedRow.name);
     } else {
-      deleteProject(selectedRow.name);
+      setDeleteProjectName(selectedRow.name);
+      setProjectDeleteOpen(true);
     }
   };
 
@@ -134,43 +134,43 @@ function Adminpage({ token }) {
       });
   };
 
-  const deleteProject = (projectName) => {
-    if (!token) return;
-    // Ensure that we are sending a string, not an array
-    apiDeleteAdminProjectDevices({ token, project: projectName }) // Change here
+  // const deleteProject = (projectName) => {
+  //   if (!token) return;
+  //   apiDeleteAdminProjectDevices({ token, project: projectName })
+  //     .then(() => {
+  //       console.log("Project deleted:", projectName);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Failed to delete project:", error);
+  //     });
+  // };
+
+  const handleCloseDialog = () => {
+    setProjectDeleteOpen(false);
+    if (!deleteProjectName) {
+      fetchProjectList();
+    }
+  };
+
+  const confirmDeleteProject = () => {
+    if (!token || !deleteProjectName) return;
+    apiDeleteAdminProjectDevices({ token, project: deleteProjectName })
       .then(() => {
-        console.log("Project deleted:", projectName);
+        console.log("Project deleted:", deleteProjectName);
+        setProjectDeleteOpen(false);
+        setDeleteProjectName("");
+        fetchProjectList();
       })
       .catch((error) => {
         console.error("Failed to delete project:", error);
       });
   };
-  useEffect(() => {
-    apiGetProjectTable(token)
-      .then((res) => {
-        // 假設 res.data 是一個物件陣列，且每個物件中有一個 'select' 屬性
-        const sortedData = res.data
-          .map((item, index) => ({
-            id: index + 1,
-            name: item.name,
-            select: item.select,
-          }))
-          .sort((a, b) => b.select - a.select); // 將已選擇的項目排序到前面
-
-        setProjectTableList(sortedData);
-        console.log("Sorted data loaded");
-      })
-      .catch((error) => {
-        console.error("Failed to fetch data:", error);
-      });
-  }, [token]); // token 作為依賴，確保在 token 變更時重新取得數據
 
   const columns = [
     { field: 'name', headerName: globalVariable === "zh-tw" ? "專案名稱" : globalVariable === "zh-cn" ? "专案名称" : "Project name", width: 200 },
     {
       field: 'select',
       headerName: globalVariable === "zh-tw" ? "是否加入專案中" : globalVariable === "zh-cn" ? "是否加入专案中" : "Whether to join the project", width: 200,
-      width: 150,
       renderCell: (params) => (
         <FormControlLabel
           control={
@@ -205,8 +205,41 @@ function Adminpage({ token }) {
               },
             }}
           />
-
         </div>
+        <Dialog
+          open={projectDeleteOpen}
+          onClose={handleCloseDialog}
+          aria-labelledby="alert-dialog-project"
+          aria-describedby="alert-dialog-project"
+        >
+          <DialogTitle id="alert-dialog-title">
+            {globalVariable === "zh-tw" ? "是否刪除機台?" : globalVariable === "zh-cn" ? "是否删除机台?" : "Delete Machine?"}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-permission">
+              {globalVariable === "zh-tw" ? "按下刪除按鈕後將會刪除機台" : globalVariable === "zh-cn" ? "按下删除按钮后将会删除机台" : "Clicking the delete button will delete the Machine"}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={confirmDeleteProject}
+              color="error"
+              variant="contained"
+            >
+              {globalVariable === "zh-tw" ? "刪除" : globalVariable === "zh-cn" ? "删除" : "Delete"}
+            </Button>
+            <Button
+              onClick={() => {
+                setProjectDeleteOpen(false);
+                fetchProjectList(); // Add this line to re-fetch project list on dialog close
+              }}
+              color="info"
+              variant="contained"
+            >
+              {globalVariable === "zh-tw" ? "關閉" : globalVariable === "zh-cn" ? "关闭" : "Close"}
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Box>
     </ThemeProvider>
   );

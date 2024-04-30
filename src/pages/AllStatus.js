@@ -290,17 +290,17 @@ export default function Statistics({ token, ...rest }) {
             <div>
                 {Object.keys(data).map((project) => (
                     <div key={project}>
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+                        {/* <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
                             <div style={{ display: 'flex', alignItems: 'center', mr: '100px' }}>
                                 <LoadingButton variant="contained" color="info" onClick={togglePause}>
                                     {isPaused ? '恢復輪播' : '暫停輪播'}
                                 </LoadingButton>
                                 <Marquee msg={timeStampData} />
                                 <LoadingButton variant="contained" color="info" onClick={handleRefresh} style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}>
-                                    手動刷新
+                                    刷新
                                 </LoadingButton>
                             </div>
-                        </Box>
+                        </Box> */}
                         <Carousel
                             showArrows={false}
                             renderIndicator={customRenderIndicator}
@@ -332,7 +332,7 @@ export default function Statistics({ token, ...rest }) {
                                     <div key={device}>
                                         <Card>
                                             <Box sx={{ bgcolor: '#696969' }}>
-                                                <CardHeader title={project + "-" + " 線號 " + data[project][device][0].line + "-" + device} color="#696969" align="center" />
+                                                <CardHeader title={project + "@" + " 線號 " + data[project][device][0].line + "@" + device} color="#696969" align="center" />
                                             </Box>
                                             <Grid container spacing={1}>
                                                 <Grid xs={3} sx={{ mt: 4 }}>
@@ -552,7 +552,7 @@ export default function Statistics({ token, ...rest }) {
                 {Object.keys(data).map((project) => (
                     <div key={project}>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                            <div style={{ display: 'flex', alignItems: 'center', mr: '100px' }}>
+                            {/* <div style={{ display: 'flex', alignItems: 'center', mr: '100px' }}>
                                 <LoadingButton variant="contained" color="info" onClick={togglePause}>
                                     {isPaused ? '恢复轮播' : '暂停轮播'}
                                 </LoadingButton>
@@ -560,7 +560,8 @@ export default function Statistics({ token, ...rest }) {
                                 <LoadingButton variant="contained" color="info" onClick={handleRefresh} style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}>
                                     刷新
                                 </LoadingButton>
-                            </div>
+                                <ColorBox msg="已发生过之异常事件"></ColorBox>,
+                            </div> */}
                         </Box>
 
                         <Carousel
@@ -594,7 +595,7 @@ export default function Statistics({ token, ...rest }) {
                                     <div key={device}>
                                         <Card>
                                             <Box sx={{ bgcolor: '#696969' }}>
-                                                <CardHeader title={project + "-" + " 线号 " + data[project][device][0].line + "-" + device} color="#696969" align="center" />
+                                                <CardHeader title={project + "@" + " 线号 " + data[project][device][0].line + "@" + device} color="#696969" align="center" />
                                             </Box>
                                             <Grid container spacing={1}>
                                                 <Grid xs={3} sx={{ mt: 4 }}>
@@ -809,7 +810,7 @@ export default function Statistics({ token, ...rest }) {
             <div>
                 {Object.keys(data).map((project) => (
                     <div key={project}>
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+                        {/* <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
                             <div style={{ display: 'flex', alignItems: 'center', mr: '100px' }}>
                                 <LoadingButton variant="contained" color="info" onClick={togglePause}>
                                     {isPaused ? 'Resume carousel' : 'Pause carousel'}
@@ -819,7 +820,7 @@ export default function Statistics({ token, ...rest }) {
                                     refresh
                                 </LoadingButton>
                             </div>
-                        </Box>
+                        </Box> */}
                         <Carousel
                             showArrows={false}
                             renderIndicator={customRenderIndicator}
@@ -851,7 +852,7 @@ export default function Statistics({ token, ...rest }) {
                                     <div key={device}>
                                         <Card>
                                             <Box sx={{ bgcolor: '#696969' }}>
-                                                <CardHeader title={project + "-" + " line " + data[project][device][0].line + "-" + device} color="#696969" align="center" />
+                                                <CardHeader title={project + "@" + " line " + data[project][device][0].line + "@" + device} color="#696969" align="center" />
                                             </Box>
                                             <Grid container spacing={1}>
                                                 <Grid xs={3} sx={{ mt: 4 }}>
@@ -1064,14 +1065,49 @@ export default function Statistics({ token, ...rest }) {
     return (
         <ThemeProvider theme={darkTheme}>
             {globalVariable == "zh-tw" ? (
-                <ColorBox msg="已發生過之異常事件"></ColorBox>,
-                createDeviceCardTW(dateData, dateData)
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', mr: '100px' }}>
+                        <LoadingButton variant="contained" color="info" onClick={togglePause}>
+                            {isPaused ? '恢復輪播' : '暫停輪播'}
+                        </LoadingButton>
+                        <Marquee msg={timeStampData} />
+                        <LoadingButton variant="contained" color="info" onClick={handleRefresh} style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}>
+                            刷新
+                        </LoadingButton>
+                        <ColorBox msg="已發生過之異常事件"></ColorBox>
+                    </div>
+                </Box>
+
+                , createDeviceCardTW(dateData, dateData)
             ) : globalVariable == "zh-cn" ? (
-                <ColorBox msg="已发生过之异常事件"></ColorBox>,
-                createDeviceCardCN(dateData, dateData)
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', mr: '100px' }}>
+                        <LoadingButton variant="contained" color="info" onClick={togglePause}>
+                            {isPaused ? '恢复轮播' : '暂停轮播'}
+                        </LoadingButton>
+                        <Marquee msg={timeStampData} />
+                        <LoadingButton variant="contained" color="info" onClick={handleRefresh} style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}>
+                            刷新
+                        </LoadingButton>
+                        <ColorBox msg="已发生过之异常事件"></ColorBox>,
+                    </div>
+                </Box>
+                , createDeviceCardCN(dateData, dateData)
             ) : (
-                <ColorBox msg="Abnormal events that have occurred"></ColorBox>,
-                createDeviceCardEN(dateData, dateData)
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', mr: '100px' }}>
+                        <LoadingButton variant="contained" color="info" onClick={togglePause}>
+                            {isPaused ? 'Resume carousel' : 'Pause carousel'}
+                        </LoadingButton>
+                        <Marquee msg={timeStampData} />
+                        <LoadingButton variant="contained" color="info" onClick={handleRefresh} style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}>
+                            refresh
+                        </LoadingButton>
+                        <ColorBox msg="Abnormal events that have occurred"></ColorBox>,
+                    </div>
+                </Box>
+
+                , createDeviceCardEN(dateData, dateData)
             )}
         </ThemeProvider>
     );

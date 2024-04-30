@@ -144,9 +144,16 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
   const handleRefresh = () => {
     setRefreshKey(prevKey => prevKey + 1); // 更新状态以触发重新渲染
     if (projectName && deviceName) {
-      getProjectDetailsFilter(); // This will perform the query as well
+      getProjectDetailsFilter(); // 这个函数根据选择的项目和设备获取过滤详情。
     } else {
-      console.log("Project Name or Device Name not set."); // Optional: Handle cases where the required fields are not set
+      console.log("Project Name or Device Name not set."); // 处理未设置任一字段的情况。
+      if (globalVariable === "zh-tw") {
+        handleErrorOpen("請選擇完整查詢條件");
+      } else if (globalVariable === "zh-cn") {
+        handleErrorOpen("请选择完整查询条件");
+      } else {
+        handleErrorOpen("Please select complete query criteria");
+      }
     }
   };
   //////////////////////////////////////////////////////////
@@ -234,6 +241,29 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
   // getProjectName(token)
   // }, [globalVariable]);
 
+  // const getProjectName = (token) => {
+  //   if (!token) {
+  //     // 没有token，不执行操作
+  //     return;
+  //   }
+
+  //   apiGetStatistics(token)
+  //     .then((res) => {
+  //       console.log(res);
+  //       const devicesList = res.data.map((project) => {
+  //         // 对每个项目的设备名称进行排序
+  //         project.devices.sort((a, b) => {
+  //           const lastDigitA = parseInt(a.match(/\d+$/)[0]);
+  //           const lastDigitB = parseInt(b.match(/\d+$/)[0]);
+  //           return lastDigitA - lastDigitB;
+  //         });
+  //         return project;
+  //       });
+  //       setDeviceNameList(devicesList);
+  //     });
+
+  //   getProjectDetails(token);
+  // };
   const getProjectName = (token) => {
     if (!token) {
       // 没有token，不执行操作
@@ -243,20 +273,33 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
     apiGetStatistics(token)
       .then((res) => {
         console.log(res);
+        const list = res.data.map((project) => project.project_name);
+        setProjectNameList(list);
+
+        // 对设备列表进行排序
         const devicesList = res.data.map((project) => {
-          // 对每个项目的设备名称进行排序
-          project.devices.sort((a, b) => {
-            const lastDigitA = parseInt(a.match(/\d+$/)[0]);
-            const lastDigitB = parseInt(b.match(/\d+$/)[0]);
-            return lastDigitA - lastDigitB;
+          const devices = project;
+          const sortedDevices = {};
+
+          // 对设备名称进行排序
+          Object.keys(devices).sort((a, b) => {
+            // 从设备名称中提取数字并按升序排序
+            const numA = parseInt(a.match(/\d+/) || 0);
+            const numB = parseInt(b.match(/\d+/) || 0);
+            return numA - numB;
+          }).forEach((key) => {
+            sortedDevices[key] = devices[key];
           });
-          return project;
+
+          return sortedDevices;
         });
+
         setDeviceNameList(devicesList);
       });
 
     getProjectDetails(token);
-  };
+  }
+
   const getProjectDetails = () => {
     const data = {
       token: token,
@@ -389,8 +432,8 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
       <div>
         {Object.keys(data).map((project) => (
           <div key={project}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-              <div style={{ display: 'flex', alignItems: 'center', mr: '100px' }}>
+            {/* <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}> */}
+            {/* <div style={{ display: 'flex', alignItems: 'center', mr: '100px' }}>
                 <LoadingButton variant="contained" color="info" onClick={togglePause}>
                   {isPaused ? '恢復輪播' : '暫停輪播'}
                 </LoadingButton>
@@ -398,8 +441,8 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                 <LoadingButton variant="contained" color="info" onClick={handleRefresh} style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}>
                   刷新
                 </LoadingButton>
-              </div>
-            </Box>
+              </div> */}
+            {/* </Box> */}
             <Carousel
               showArrows={false}
               renderIndicator={customRenderIndicator}
@@ -431,7 +474,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                   <div key={device}>
                     <Card>
                       <Box sx={{ bgcolor: '#696969' }}>
-                        <CardHeader title={project + "-" + " 線號 " + data[project][device][0].line + "-" + device} color="#696969" align="center" />
+                        <CardHeader title={project + "@" + " 線號 " + data[project][device][0].line + "@" + device} color="#696969" align="center" />
                       </Box>
                       <Grid container spacing={1}>
                         <Grid xs={3} sx={{ mt: 4 }}>
@@ -650,7 +693,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
         {Object.keys(data).map((project) => (
           <div key={project}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-              <div style={{ display: 'flex', alignItems: 'center', mr: '100px' }}>
+              {/* <div style={{ display: 'flex', alignItems: 'center', mr: '100px' }}>
                 <LoadingButton variant="contained" color="info" onClick={togglePause}>
                   {isPaused ? '恢复轮播' : '暂停轮播'}
                 </LoadingButton>
@@ -658,7 +701,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                 <LoadingButton variant="contained" color="info" onClick={handleRefresh} style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}>
                   刷新
                 </LoadingButton>
-              </div>
+              </div> */}
             </Box>
             <Carousel
               showArrows={false}
@@ -691,7 +734,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                   <div key={device}>
                     <Card>
                       <Box sx={{ bgcolor: '#696969' }}>
-                        <CardHeader title={project + "-" + " 线号 " + data[project][device][0].line + "-" + device} color="#696969" align="center" />
+                        <CardHeader title={project + "@" + " 线号 " + data[project][device][0].line + "@" + device} color="#696969" align="center" />
                       </Box>
                       <Grid container spacing={1}>
                         <Grid xs={3} sx={{ mt: 4 }}>
@@ -908,7 +951,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
       <div>
         {Object.keys(data).map((project) => (
           <div key={project}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+            {/* <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
               <div style={{ display: 'flex', alignItems: 'center', mr: '100px' }}>
                 <LoadingButton variant="contained" color="info" onClick={togglePause}>
                   {isPaused ? 'Resume carousel' : 'Pause carousel'}
@@ -918,7 +961,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                   refresh
                 </LoadingButton>
               </div>
-            </Box>
+            </Box> */}
             <Carousel
               showArrows={false}
               renderIndicator={customRenderIndicator}
@@ -950,7 +993,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                   <div key={device}>
                     <Card>
                       <Box sx={{ bgcolor: '#696969' }}>
-                        <CardHeader title={project + "-" + " line " + data[project][device][0].line + "-" + device} color="#696969" align="center" />
+                        <CardHeader title={project + "@" + " line " + data[project][device][0].line + "@" + device} color="#696969" align="center" />
                       </Box>
                       <Grid container spacing={1}>
                         <Grid xs={3} sx={{ mt: 4 }}>
@@ -1256,13 +1299,18 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                             <MenuItem value="">清空欄位</MenuItem>
                             {deviceNameList.map((object) => {
                               if (object.project_name === projectName) {
-                                return object.devices.map((device) => (
+                                return object.devices.sort((a, b) => {
+                                  const lastNumberA = parseInt(a.match(/\d+$/)[0]);
+                                  const lastNumberB = parseInt(b.match(/\d+$/)[0]);
+                                  return lastNumberA - lastNumberB;
+                                }).map((device) => (
                                   <MenuItem key={device} value={device}>
                                     {device}
                                   </MenuItem>
                                 ));
                               }
                             })}
+
                           </Select>
                         </FormControl>
                       </Box>
@@ -1282,7 +1330,19 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
               </Grid>
             </CardContent>
           </Card>
-          <ColorBox msg="已發生過之異常事件"></ColorBox>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+            <div style={{ display: 'flex', alignItems: 'center', mr: '100px' }}>
+              <LoadingButton variant="contained" color="info" onClick={togglePause}>
+                {isPaused ? '恢復輪播' : '暫停輪播'}
+              </LoadingButton>
+              <Marquee msg={timeStampData} />
+              <LoadingButton variant="contained" color="info" onClick={handleRefresh} style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}>
+                刷新
+              </LoadingButton>
+              <ColorBox msg="已發生過之異常事件"></ColorBox>
+            </div>
+          </Box>
+
           {createDeviceCardTW(dateData, dateData)}
         </>
       ) : globalVariable === "zh-cn" ? (
@@ -1346,7 +1406,11 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                             <MenuItem value="">清空栏位</MenuItem>
                             {deviceNameList.map((object) => {
                               if (object.project_name === projectName) {
-                                return object.devices.map((device) => (
+                                return object.devices.sort((a, b) => {
+                                  const lastNumberA = parseInt(a.match(/\d+$/)[0]);
+                                  const lastNumberB = parseInt(b.match(/\d+$/)[0]);
+                                  return lastNumberA - lastNumberB;
+                                }).map((device) => (
                                   <MenuItem key={device} value={device}>
                                     {device}
                                   </MenuItem>
@@ -1372,7 +1436,18 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
               </Grid>
             </CardContent>
           </Card>
-          <ColorBox msg="已发生过之异常事件"></ColorBox>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+            <div style={{ display: 'flex', alignItems: 'center', mr: '100px' }}>
+              <LoadingButton variant="contained" color="info" onClick={togglePause}>
+                {isPaused ? '恢复轮播' : '暂停轮播'}
+              </LoadingButton>
+              <Marquee msg={timeStampData} />
+              <LoadingButton variant="contained" color="info" onClick={handleRefresh} style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}>
+                刷新
+              </LoadingButton>
+              <ColorBox msg="已发生过之异常事件"></ColorBox>
+            </div>
+          </Box>
           {createDeviceCardCN(dateData, dateData)}
         </>
       ) : (
@@ -1436,7 +1511,11 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                             <MenuItem value="">Clear field</MenuItem>
                             {deviceNameList.map((object) => {
                               if (object.project_name === projectName) {
-                                return object.devices.map((device) => (
+                                return object.devices.sort((a, b) => {
+                                  const lastNumberA = parseInt(a.match(/\d+$/)[0]);
+                                  const lastNumberB = parseInt(b.match(/\d+$/)[0]);
+                                  return lastNumberA - lastNumberB;
+                                }).map((device) => (
                                   <MenuItem key={device} value={device}>
                                     {device}
                                   </MenuItem>
@@ -1462,7 +1541,19 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
               </Grid>
             </CardContent>
           </Card>
-          <ColorBox msg="Abnormal events that have occurred"></ColorBox>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+            <div style={{ display: 'flex', alignItems: 'center', mr: '100px' }}>
+              <LoadingButton variant="contained" color="info" onClick={togglePause}>
+                {isPaused ? 'Resume carousel' : 'Pause carousel'}
+              </LoadingButton>
+              <Marquee msg={timeStampData} />
+              <LoadingButton variant="contained" color="info" onClick={handleRefresh} style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}>
+                refresh
+              </LoadingButton>
+              <ColorBox msg="Abnormal events that have occurred"></ColorBox>
+            </div>
+          </Box>
+
           {createDeviceCardEN(dateData, dateData)}
         </>
       )}

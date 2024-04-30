@@ -6,7 +6,7 @@ const marqueeAnimation = (width) => keyframes`
     transform: translate(0, 0);
   }
   100% {
-    transform: translate(-${width - 300}px, 0); /* 調整框的大小 */
+    transform: translate(-${width - 200}px, 0); /* 調整框的大小 */
   }
 `;
 
@@ -16,17 +16,9 @@ const MarqueeContainer = styled.div`
     white-space: nowrap;
     border: solid 1px rgb(189, 189, 189);
     overflow: hidden;
-    width: 350px; /* 調整框的大小 */
+    width: 400px; /* 調整框的大小 */
     height: 35px;
-    .marquee {
-      display: block;
-      position: absolute;
-      animation-duration: ${(props) => (props.width <= 420 ? 3 : (props.width - 420) / 16 + 3)}s;
-      animation-name: ${(props) => marqueeAnimation(props.width)};
-      animation-timing-function: linear;
-      animation-direction: alternate;
-      animation-iteration-count: infinite;
-    }
+    
     /* 調整字體大小 */
     font-size: 25px;
   }
