@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import dayjs from 'dayjs';
 import { apiGetProjectDevices, apiGetProjectUserBelong, apiDeleteProjectUserBelong, apiGetStatistics, apiPostProjectDevices, apiGetProjectprogress, apiGetProjectName, apiPostAdminProjectDevices, apiDeleteProject, apiDeleteAdminProjectDevices, apiGetProjectUsers, apiPostProjectUser, apiDeleteProjectUser, apiGetUserName, apiGetProjectTable } from '../api'
 import {
   Box,
@@ -29,6 +30,10 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { type } from "@testing-library/user-event/dist/type";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import FolderCopyIcon from '@mui/icons-material/FolderCopy';
@@ -571,35 +576,65 @@ export default function Project({ token, setAlert, ...rest }) {
     console.log(selectedProjectDataBelong)
   }
   //////////////////////////////////////////////////////////////
+  const [startDate, setStartDate] = useState(new Date());
+  const formattedStartDate = dayjs(startDate).format('YYYYMMDD');
   //依照所選擇的device去post資料
   function handleOnClickProjectPost() {
     if (!token) {
       // 没有token，不执行操作
       return;
     }
-    setLoading(true)
+    setLoading(true);
     const data = {
       token: token,
-      project: selectedDevicesData
+      project: selectedDevicesData,
+      startDate: formattedStartDate // 使用格式化后的日期
+    };
 
-    }
-    console.log(data)
+    console.log(data);
+    console.log(data.startDate);
+
     if (data.project === undefined || data.project.length === 0) {
-      handleErrorOpen((globalVariable === "zh-tw" ? ("尚未選取專案") : globalVariable === "zh-cn" ? ("尚未选取专案") : ("No project selected")))
-      setLoading(false)
+      handleErrorOpen(
+        globalVariable === "zh-tw"
+          ? "尚未選取專案"
+          : globalVariable === "zh-cn"
+            ? "尚未选取专案"
+            : "No project selected"
+      );
+      setLoading(false);
     } else {
-      handleOpen((globalVariable === "zh-tw" ? "正在進行專案前處理" : globalVariable === "zh-cn" ? "正在进行专案前处理" : "Project pre-processing in progress"));
+      handleOpen(
+        globalVariable === "zh-tw"
+          ? "正在進行專案前處理"
+          : globalVariable === "zh-cn"
+            ? "正在进行专案前处理"
+            : "Project pre-processing in progress"
+      );
       apiPostProjectDevices(data)
-        .then(res => {
-          handleOpen((globalVariable === "zh-tw" ? "新增專案成功" : globalVariable === "zh-cn" ? "新增专案成功" : "New project successful"));
-          setLoading(false)
-        }).catch(err => {
-          console.log(err);
-          handleErrorOpen((globalVariable === "zh-tw" ? ("新增專案失敗" + err) : globalVariable === "zh-cn" ? ("新增专案失败" + err) : ("Failed to add new project" + err)))
-          setLoading(false)
+        .then((res) => {
+          handleOpen(
+            globalVariable === "zh-tw"
+              ? "新增專案成功"
+              : globalVariable === "zh-cn"
+                ? "新增专案成功"
+                : "New project successful"
+          );
+          setLoading(false);
         })
+        .catch((err) => {
+          console.log(err);
+          handleErrorOpen(
+            globalVariable === "zh-tw"
+              ? "新增專案失敗" + err
+              : globalVariable === "zh-cn"
+                ? "新增专案失败" + err
+                : "Failed to add new project" + err
+          );
+          setLoading(false);
+        });
     }
-  };
+  }
   const [projectTableListPost, setProjectTableListPost] = useState([]);
   //////////////////////////////////////////////////////////
   function handleOnClickAdminProjectPost() {
@@ -949,6 +984,7 @@ export default function Project({ token, setAlert, ...rest }) {
                             ))}
                           </Select>
                         </Box> */}
+
                       <Box ml={2}>
                         <LoadingButton variant="contained" color="info" onClick={handleOnClickProjectAdd}>
                           {globalVariable === "zh-tw" ? "查詢" : globalVariable === "zh-cn" ? "查询" : "Search"}
@@ -1055,6 +1091,25 @@ export default function Project({ token, setAlert, ...rest }) {
                       </div>
                     )}
                   </Box>
+                  <Grid item xs={3}>
+                    <Box component="form" role="form">
+                      <Box display="flex" alignItems="center" pt={3} >
+                        <Typography variant="h6" fontWeight="medium" mr={2}>
+                          {globalVariable == "zh-tw" ? "開始:" : globalVariable == "zh-cn" ? "开始:" : "Start date:"}
+                        </Typography>
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <DatePicker
+                            label={globalVariable == "zh-tw" ? "選擇日期" : globalVariable == "zh-cn" ? "选择日期" : "Select date"}
+                            value={startDate}
+                            onChange={(newValue) => {
+                              setStartDate(newValue);
+                            }}
+                            renderInput={(params) => <TextField size="medium" {...params} />}
+                          />
+                        </LocalizationProvider>
+                      </Box>
+                    </Box>
+                  </Grid>
                   <Box display="flex" pt={3} px={2}>
                     <Box>
                       <LoadingButton loading={loading} variant="contained" color="info" onClick={() => { handleOnClickProjectPost(); }}>

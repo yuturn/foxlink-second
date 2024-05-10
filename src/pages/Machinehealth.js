@@ -56,7 +56,8 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
   const [projectName, setProjectName] = useState();
   const [deviceName, setDeviceName] = useState();
   const [deviceNameList, setDeviceNameList] = useState([]);
-
+  const [lineName, setLineName] = useState();
+  const [projectLineNameList, setProjectLineNameList] = useState([]);
   const [orderWeek, setOrderWeek] = useState('asc');
   const [weekOrderBy, setWeekOrderBy] = useState('label');
 
@@ -99,6 +100,13 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
       setProjectName(null);
     } else {
       setProjectName(event.target.value);
+    }
+  };
+  const projectLineNameChange = (event) => {
+    if (event.target.value === 'null') {
+      setLineName(null);
+    } else {
+      setLineName(event.target.value);
     }
   };
   const deviceNameChange = (event) => {
@@ -233,65 +241,44 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
     return () => clearInterval(refreshInterval); // 清除定時器
   }, [globalVariable]); // 在 globalVariable 更新時執行
 
-
-  ////////////////////////////////////////////////////////////
-
-  // 使用另一个useEffect监听statisticDevices的变化
-  // useEffect(() => {
-  // getProjectName(token)
-  // }, [globalVariable]);
-
-  // const getProjectName = (token) => {
-  //   if (!token) {
-  //     // 没有token，不执行操作
-  //     return;
-  //   }
-
-  //   apiGetStatistics(token)
-  //     .then((res) => {
-  //       console.log(res);
-  //       const devicesList = res.data.map((project) => {
-  //         // 对每个项目的设备名称进行排序
-  //         project.devices.sort((a, b) => {
-  //           const lastDigitA = parseInt(a.match(/\d+$/)[0]);
-  //           const lastDigitB = parseInt(b.match(/\d+$/)[0]);
-  //           return lastDigitA - lastDigitB;
-  //         });
-  //         return project;
-  //       });
-  //       setDeviceNameList(devicesList);
-  //     });
-
-  //   getProjectDetails(token);
-  // };
   const getProjectName = (token) => {
     if (!token) {
-      // 没有token，不执行操作
       return;
     }
 
     apiGetStatistics(token)
       .then((res) => {
-        console.log(res);
+        // 获取项目名称列表
         const list = res.data.map((project) => project.project_name);
         setProjectNameList(list);
 
-        // 对设备列表进行排序
-        const devicesList = res.data.map((project) => {
-          const devices = project;
-          const sortedDevices = {};
-
-          // 对设备名称进行排序
-          Object.keys(devices).sort((a, b) => {
-            // 从设备名称中提取数字并按升序排序
-            const numA = parseInt(a.match(/\d+/) || 0);
-            const numB = parseInt(b.match(/\d+/) || 0);
-            return numA - numB;
-          }).forEach((key) => {
-            sortedDevices[key] = devices[key];
+        // 获取线名称列表
+        const lineNameList = [...new Set(res.data.flatMap((project) => {
+          return project.line.map((line) => {
+            const match = String(line).match(/\d+/);
+            return match ? match[0] : null;
           });
+        }))]
+          .filter(Boolean)
+          .sort((a, b) => a - b);
 
-          return sortedDevices;
+        setProjectLineNameList(lineNameList);
+
+        // 获取设备名称列表
+        const devicesList = res.data.map((project) => {
+          const sortedDevices = [...new Set(project.devices
+            .map(device => {
+              const match = device.match(/Device_(\d+)/);
+              return match ? parseInt(match[1], 10) : null;
+            })
+            .filter(Boolean)
+            .sort((a, b) => a - b))]
+            .map(num => `Device_${num}`);
+
+          return {
+            project_name: project.project_name,
+            devices: sortedDevices,
+          };
         });
 
         setDeviceNameList(devicesList);
@@ -299,6 +286,8 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
 
     getProjectDetails(token);
   }
+
+
 
   const getProjectDetails = () => {
     const data = {
@@ -315,12 +304,15 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
     const data = {
       token: token,
       projectName: projectName,
+      // lineName:lineName,
       deviceName: deviceName
     }
     console.log(projectName)
     console.log(typeof (projectName))
+    // console.log(lineName)
+    // console.log(typeof (lineName))
     console.log(deviceName)
-    console.log(typeof (projectName))
+    console.log(typeof (deviceName))
     apiGetStatisticsDetailsFilter(data)
       .then((res) => {
         console.log(res)
@@ -432,17 +424,6 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
       <div>
         {Object.keys(data).map((project) => (
           <div key={project}>
-            {/* <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}> */}
-            {/* <div style={{ display: 'flex', alignItems: 'center', mr: '100px' }}>
-                <LoadingButton variant="contained" color="info" onClick={togglePause}>
-                  {isPaused ? '恢復輪播' : '暫停輪播'}
-                </LoadingButton>
-                <Marquee msg={timeStampData} />
-                <LoadingButton variant="contained" color="info" onClick={handleRefresh} style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}>
-                  刷新
-                </LoadingButton>
-              </div> */}
-            {/* </Box> */}
             <Carousel
               showArrows={false}
               renderIndicator={customRenderIndicator}
@@ -693,15 +674,6 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
         {Object.keys(data).map((project) => (
           <div key={project}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-              {/* <div style={{ display: 'flex', alignItems: 'center', mr: '100px' }}>
-                <LoadingButton variant="contained" color="info" onClick={togglePause}>
-                  {isPaused ? '恢复轮播' : '暂停轮播'}
-                </LoadingButton>
-                <Marquee msg={timeStampData} />
-                <LoadingButton variant="contained" color="info" onClick={handleRefresh} style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}>
-                  刷新
-                </LoadingButton>
-              </div> */}
             </Box>
             <Carousel
               showArrows={false}
@@ -932,7 +904,6 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                               </TableBody>
                             </Table>
                           </TableContainer>
-                          {/* <ColorBox msg="已发生过之异常事件"></ColorBox> */}
                         </Grid>
                       </Grid>
                     </Card>
@@ -951,17 +922,6 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
       <div>
         {Object.keys(data).map((project) => (
           <div key={project}>
-            {/* <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-              <div style={{ display: 'flex', alignItems: 'center', mr: '100px' }}>
-                <LoadingButton variant="contained" color="info" onClick={togglePause}>
-                  {isPaused ? 'Resume carousel' : 'Pause carousel'}
-                </LoadingButton>
-                <Marquee msg={timeStampData} />
-                <LoadingButton variant="contained" color="info" onClick={handleRefresh} style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}>
-                  refresh
-                </LoadingButton>
-              </div>
-            </Box> */}
             <Carousel
               showArrows={false}
               renderIndicator={customRenderIndicator}
@@ -1194,7 +1154,6 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                               </TableBody>
                             </Table>
                           </TableContainer>
-                          {/* <ColorBox msg="Abnormal events that have occurred"></ColorBox> */}
                         </Grid>
                       </Grid>
                     </Card>
@@ -1254,7 +1213,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                   <Box>
                     <Box sx={{ mt: 1, ml: 4 }} display="flex" component="form" role="form">
                       <Box align="center" display="flex">
-                        <Typography variant="h5" fontWeight="medium" mr={2}>
+                        <Typography variant="h5" fontWeight="medium" mr={2} mt={2}>
                           專案名稱:
                         </Typography>
                       </Box>
@@ -1279,6 +1238,31 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                         </FormControl>
                       </Box>
                     </Box>
+                    {/* ///////////////////////////////// */}
+                    <Grid container spacing={2} sx={{ mt: 1, ml: 6 }} component="form">
+                      <Grid item>
+                        <Typography variant="h5" fontWeight="medium" mr={2} mt={1} mb={1}>
+                          線別:
+                        </Typography>
+                      </Grid>
+                      <Grid item>
+                        <FormControl>
+                          <InputLabel>線別</InputLabel>
+                          <Select
+                            value={lineName}
+                            label="線別"
+                            onChange={projectLineNameChange}
+                            style={{ minWidth: "271px", height: "56px" }}
+                          >
+                            <MenuItem value="">清空欄位</MenuItem>
+                            {projectLineNameList.map((projectItem) => (
+                              <MenuItem value={projectItem}>{projectItem}</MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
+                      </Grid>
+                    </Grid>
+                    {/* ///////////////////////////////// */}
                     <Box sx={{ mt: 1, ml: 4 }} display="flex" component="form" role="form">
                       <Box align="center" display="flex">
                         <Typography align="center" variant="h5" mr={2}>
@@ -1361,7 +1345,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                   <Box>
                     <Box sx={{ mt: 1, ml: 4 }} display="flex" component="form" role="form">
                       <Box align="center" display="flex">
-                        <Typography variant="h5" fontWeight="medium" mr={2}>
+                        <Typography variant="h5" fontWeight="medium" mr={2} mt={2}>
                           专案名称:
                         </Typography>
                       </Box>
@@ -1386,6 +1370,35 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                         </FormControl>
                       </Box>
                     </Box>
+                    {/* ///////////////////////////////// */}
+                    <Grid container spacing={2} sx={{ mt: 1, ml: 6 }} component="form">
+                      <Grid item>
+                        <Typography variant="h5" fontWeight="medium" mr={2} mt={1} mb={1}>
+                          线别:
+                        </Typography>
+                      </Grid>
+                      <Grid item>
+                        <FormControl>
+                          <InputLabel id="operation-type-select-label">线别</InputLabel>
+                          <Select
+                            labelId="permission-select-label"
+                            id="permission-select"
+                            value={lineName}
+                            label="线别"
+                            onChange={projectLineNameChange}
+                            style={{ minWidth: "271px", height: "56px" }}
+                          >
+                            <MenuItem value="">清空栏位</MenuItem>
+                            {projectLineNameList.map((projectItem) => (
+                              <MenuItem value={projectItem}>
+                                {projectItem}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
+                      </Grid>
+                    </Grid>
+                    {/* ///////////////////////////////// */}
                     <Box sx={{ mt: 1, ml: 4 }} display="flex" component="form" role="form">
                       <Box align="center" display="flex">
                         <Typography align="center" variant="h5" mr={2}>
@@ -1466,7 +1479,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                   <Box>
                     <Box sx={{ mt: 1, ml: 4 }} display="flex" component="form" role="form">
                       <Box align="center" display="flex">
-                        <Typography variant="h5" fontWeight="medium" mr={2}>
+                        <Typography variant="h5" fontWeight="medium" mr={2} mt={2}>
                           Project name:
                         </Typography>
                       </Box>
@@ -1491,6 +1504,36 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                         </FormControl>
                       </Box>
                     </Box>
+                    {/* ///////////////////////////////// */}
+                    <Grid container spacing={2} sx={{ mt: 1, ml: 6 }} component="form">
+                      <Grid item>
+                        <Typography variant="h5" fontWeight="medium" mr={2} mt={1} mb={1}>
+                          Line:
+                        </Typography>
+                      </Grid>
+                      <Grid item>
+
+                        <FormControl>
+                          <InputLabel id="operation-type-select-label">Line</InputLabel>
+                          <Select
+                            labelId="permission-select-label"
+                            id="permission-select"
+                            value={lineName}
+                            label="Line"
+                            onChange={projectLineNameChange}
+                            style={{ minWidth: "271px", height: "56px" }}
+                          >
+                            <MenuItem value="">Clear field</MenuItem>
+                            {projectLineNameList.map((projectItem) => (
+                              <MenuItem value={projectItem}>
+                                {projectItem}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
+                      </Grid>
+                    </Grid>
+                    {/* ///////////////////////////////// */}
                     <Box sx={{ mt: 1, ml: 4 }} display="flex" component="form" role="form">
                       <Box align="center" display="flex">
                         <Typography align="center" variant="h5" mr={2}>
@@ -1556,7 +1599,8 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
 
           {createDeviceCardEN(dateData, dateData)}
         </>
-      )}
-    </ThemeProvider>
+      )
+      }
+    </ThemeProvider >
   );
 }

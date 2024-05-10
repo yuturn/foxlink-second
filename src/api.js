@@ -49,6 +49,19 @@ export const apiGetProjectName = (token) => auth_except(baseRequest.get(`/projec
     'Authorization': `Bearer ${token}`
   }
 }));
+// 修正后的 apiPostAutoTrain 函数
+export const apiPostAutoTrain = (data) => {
+  return auth_except(baseRequest.post(
+    `/scheduler/auto_train?preprocessing_months=${data['preprocessing_months']}&months_before_retrain=${data['months_before_retrain']}&description=${encodeURIComponent(data['description'])}`,
+    null, // 保持请求体为空，因为查询参数在 URL 中
+    {
+      headers: {
+        'accept': 'application/json',
+        'Authorization': `Bearer ${data['token']}`
+      }
+    }
+  ));
+}
 
 ////////////////////////////////////
 export const apiMarquee = (token) => auth_except(baseRequest.get(`/system/search-timestamp`, {
@@ -85,7 +98,7 @@ export const apiGetProjectDevices = (data) => auth_except(baseRequest.get(`/proj
   }
 }));
 
-export const apiPostProjectDevices = (data) => auth_except(baseRequest.post(`/project/add-project-events`, data['project'], {
+export const apiPostProjectDevices = (data) => auth_except(baseRequest.post(`/project/add-project-events?start_date=${data['startDate']}`, data['project'], {
   headers:
   {
     'accept': 'application/json',

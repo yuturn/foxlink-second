@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { apiGetProjectDevices, apiGetProjectUserBelong, apiDeleteProjectUserBelong, apiGetStatistics, apiPostProjectDevices, apiGetProjectprogress, apiGetProjectName, apiPostAdminProjectDevices, apiDeleteProject, apiDeleteAdminProjectDevices, apiGetProjectUsers, apiPostProjectUser, apiDeleteProjectUser, apiGetUserName, apiGetProjectTable } from '../api'
+import { apiPostAutoTrain, apiGetProjectDevices, apiGetProjectUserBelong, apiDeleteProjectUserBelong, apiGetStatistics, apiPostProjectDevices, apiGetProjectprogress, apiGetProjectName, apiPostAdminProjectDevices, apiDeleteProject, apiDeleteAdminProjectDevices, apiGetProjectUsers, apiPostProjectUser, apiDeleteProjectUser, apiGetUserName, apiGetProjectTable } from '../api'
 import {
   Box,
   Card,
@@ -33,6 +33,10 @@ import Switch from '@mui/material/Switch';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import FolderCopyIcon from '@mui/icons-material/FolderCopy';
 import { Construction } from "@mui/icons-material";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+
 
 const darkTheme = createTheme({
   palette: {
@@ -43,11 +47,11 @@ const darkTheme = createTheme({
   },
 });
 
-const Android12Switch = styled(Switch)({
+const Android12Switch = styled(Switch)(({ theme }) => ({
   padding: 8,
   '& .MuiSwitch-track': {
     borderRadius: 22 / 2,
-    backgroundColor: '#fff',
+    backgroundColor: '#808080', // Default (off) color
     '&::before, &::after': {
       content: '""',
       position: 'absolute',
@@ -58,21 +62,27 @@ const Android12Switch = styled(Switch)({
     },
     '&::before': {
       left: 12,
+      backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24"><path fill="${encodeURIComponent(theme.palette.getContrastText('#007BFF'))}" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"/></svg>')`,
     },
     '&::after': {
       right: 12,
+      backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24"><path fill="${encodeURIComponent(theme.palette.getContrastText('#007BFF'))}" d="M19,13H5V11H19V13Z" /></svg>')`,
     },
   },
   '& .MuiSwitch-thumb': {
-    backgroundColor: '#fff',
-    '&.Mui-checked': {
-      backgroundColor: '#007BFF',
-    },
+    boxShadow: 'none',
+    width: 16,
+    height: 16,
+    margin: 2,
+    backgroundColor: '#808080',
+  },
+  '& .Mui-checked .MuiSwitch-thumb': {
+    backgroundColor: '#007BFF', // Blue when checked
   },
   '& .Mui-checked + .MuiSwitch-track': {
-    backgroundColor: '#007BFF',
+    backgroundColor: '#00bbff', // Green when checked
   },
-});
+}));
 
 function Adminpage({ token }) {
   const { globalVariable } = useContext(GlobalContext);
@@ -80,6 +90,11 @@ function Adminpage({ token }) {
   const [loading, setLoading] = useState(false);
   const [projectDeleteOpen, setProjectDeleteOpen] = useState(false);
   const [deleteProjectName, setDeleteProjectName] = useState("");
+  const [preprocessingMonths, setPreprocessingMonths] = useState('');
+  const [monthsBeforeRetrain, setMonthsBeforeRetrain] = useState('');
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success');
 
   const fetchProjectList = () => {
     if (!token) {
@@ -134,24 +149,6 @@ function Adminpage({ token }) {
       });
   };
 
-  // const deleteProject = (projectName) => {
-  //   if (!token) return;
-  //   apiDeleteAdminProjectDevices({ token, project: projectName })
-  //     .then(() => {
-  //       console.log("Project deleted:", projectName);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Failed to delete project:", error);
-  //     });
-  // };
-
-  const handleCloseDialog = () => {
-    setProjectDeleteOpen(false);
-    if (!deleteProjectName) {
-      fetchProjectList();
-    }
-  };
-
   const confirmDeleteProject = () => {
     if (!token || !deleteProjectName) return;
     apiDeleteAdminProjectDevices({ token, project: deleteProjectName })
@@ -166,6 +163,35 @@ function Adminpage({ token }) {
       });
   };
 
+  const handleCloseDialog = () => {
+    setProjectDeleteOpen(false);
+    if (!deleteProjectName) {
+      fetchProjectList();
+    }
+  };
+
+  const apiPostTrainTimeStart = () => {
+    const data = {
+      token,
+      preprocessing_months: parseInt(preprocessingMonths, 10),
+      months_before_retrain: parseInt(monthsBeforeRetrain, 10),
+      description: globalVariable === "zh-tw" ? "固定時間自動訓練" : globalVariable === "zh-cn" ? "固定时间自动训练" : "Scheduled Auto Training"
+    };
+
+    apiPostAutoTrain(data)
+      .then((response) => {
+        setSnackbarMessage(globalVariable === "zh-tw" ? "重新訓練間隔時間（天）&輸入回推時間（天）已設定成功" : globalVariable === "zh-cn" ? "重新训练间隔时间（天）&输入回推时间（天）已设置成功" : "Retrain Interval Days & Enter Retrospective Days have been successfully set");
+        setSnackbarSeverity('success');
+        setSnackbarOpen(true);
+      })
+      .catch((error) => {
+        setSnackbarMessage(globalVariable === "zh-tw" ? "設定失敗" : globalVariable === "zh-cn" ? "设置失败" : "Setting failed");
+        setSnackbarSeverity('error');
+        setSnackbarOpen(true);
+        console.error('Error:', error);
+      });
+  };
+
   const columns = [
     { field: 'name', headerName: globalVariable === "zh-tw" ? "專案名稱" : globalVariable === "zh-cn" ? "专案名称" : "Project name", width: 200 },
     {
@@ -177,6 +203,7 @@ function Adminpage({ token }) {
             <Android12Switch
               checked={params.value}
               onChange={(event) => handleSwitchChange(params.id, event)}
+              color="default"
             />
           }
           label=""
@@ -185,9 +212,11 @@ function Adminpage({ token }) {
     },
   ];
 
+  const handleSnackbarClose = () => setSnackbarOpen(false);
+
   return (
     <ThemeProvider theme={darkTheme}>
-      <Box >
+      <Box>
         <CardHeader title={globalVariable === "zh-tw" ? "專案表單" : globalVariable === "zh-cn" ? "专案表单" : "Project list"} color="#696969" />
         <Divider sx={{ my: 1 }} />
         <LoadingButton loading={loading} onClick={fetchProjectList} variant="contained" color="primary">
@@ -201,7 +230,7 @@ function Adminpage({ token }) {
             disableSelectionOnClick
             initialState={{
               sorting: {
-                sortModel: [{ field: 'select', sort: 'desc' }],
+                sortModel: [{ field: 'name', sort: 'asc' }],
               },
             }}
           />
@@ -241,6 +270,64 @@ function Adminpage({ token }) {
           </DialogActions>
         </Dialog>
       </Box>
+      <Grid container spacing={2} mt={1}>
+        <Grid item xs={12} md={6}>
+          <Card>
+            <Box sx={{ bgcolor: '#696969' }}>
+              <CardHeader title={globalVariable === "zh-tw" ? "訓練資料週期之設定" : globalVariable === "zh-cn" ? "训练数据周期之设定" : "Training Data Cycle Setting"} color="#62aaf4" />
+            </Box>
+            <Box component="form" sx={{ p: 3 }} role="form">
+              <Grid container spacing={2} alignItems="center">
+                <Grid item xs={4}>
+                  <Typography variant="h6" fontWeight="medium">
+                    {globalVariable === "zh-tw" ? "資料回推時間（天）:" : globalVariable === "zh-cn" ? "数据回推时间（天）:" : "Data Retrospective Days:"}
+                  </Typography>
+                </Grid>
+                <Grid item xs={8}>
+                  <TextField
+                    type="number"
+                    size="medium"
+                    fullWidth
+                    label={globalVariable === "zh-tw" ? "輸入回推時間（天）" : globalVariable === "zh-cn" ? "输入回推时间（天）" : "Enter Retrospective Days"}
+                    value={preprocessingMonths}
+                    onChange={(e) => setPreprocessingMonths(e.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={4}>
+                  <Typography variant="h6" fontWeight="medium">
+                    {globalVariable === "zh-tw" ? "重新訓練間隔時間（天）:" : globalVariable === "zh-cn" ? "重新训练间隔时间（天）:" : "Retrain Interval Days:"}
+                  </Typography>
+                </Grid>
+                <Grid item xs={8}>
+                  <TextField
+                    type="number"
+                    size="medium"
+                    fullWidth
+                    label={globalVariable === "zh-tw" ? "輸入重新訓練間隔時間（天）" : globalVariable === "zh-cn" ? "输入重新训练间隔时间（天）" : "Enter Retrain Interval Days"}
+                    value={monthsBeforeRetrain}
+                    onChange={(e) => setMonthsBeforeRetrain(e.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={12} display="flex" justifyContent="center">
+                  <LoadingButton variant="contained" color="info" onClick={apiPostTrainTimeStart}>
+                    {globalVariable === "zh-tw" ? "確定" : globalVariable === "zh-cn" ? "确定" : "Confirm"}
+                  </LoadingButton>
+                </Grid>
+              </Grid>
+            </Box>
+          </Card>
+        </Grid>
+      </Grid>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }} // 中间上方位置
+      >
+        <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </ThemeProvider>
   );
 }
