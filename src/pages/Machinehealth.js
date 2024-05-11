@@ -241,6 +241,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
     return () => clearInterval(refreshInterval); // 清除定時器
   }, [globalVariable]); // 在 globalVariable 更新時執行
 
+  // 创建线号与设备的映射并按设备编号排序
   const getProjectName = (token) => {
     if (!token) {
       return;
@@ -248,44 +249,39 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
 
     apiGetStatistics(token)
       .then((res) => {
-        // 获取项目名称列表
         const list = res.data.map((project) => project.project_name);
         setProjectNameList(list);
 
-        // 获取线名称列表
-        const lineNameList = [...new Set(res.data.flatMap((project) => {
-          return project.line.map((line) => {
-            const match = String(line).match(/\d+/);
-            return match ? match[0] : null;
+        const lineToDeviceMap = res.data.reduce((acc, project) => {
+          project.line.forEach((line, index) => {
+            const device = project.devices[index];
+            if (device) { // 确保设备存在
+              if (!acc[line]) {
+                acc[line] = new Set(); // 使用 Set 避免重复
+              }
+              acc[line].add(device);
+            }
           });
-        }))]
-          .filter(Boolean)
-          .sort((a, b) => a - b);
+          return acc;
+        }, {});
+
+        const lineNameList = Object.keys(lineToDeviceMap).sort((a, b) => a - b);
+        const devicesList = lineNameList.map(line => ({
+          line,
+          devices: Array.from(lineToDeviceMap[line])
+            .sort((a, b) => {
+              // 从设备名称中提取数字并按数字排序
+              const numA = parseInt(a.match(/Device_(\d+)/)[1], 10);
+              const numB = parseInt(b.match(/Device_(\d+)/)[1], 10);
+              return numA - numB;
+            })
+        }));
 
         setProjectLineNameList(lineNameList);
-
-        // 获取设备名称列表
-        const devicesList = res.data.map((project) => {
-          const sortedDevices = [...new Set(project.devices
-            .map(device => {
-              const match = device.match(/Device_(\d+)/);
-              return match ? parseInt(match[1], 10) : null;
-            })
-            .filter(Boolean)
-            .sort((a, b) => a - b))]
-            .map(num => `Device_${num}`);
-
-          return {
-            project_name: project.project_name,
-            devices: sortedDevices,
-          };
-        });
-
         setDeviceNameList(devicesList);
       });
-
-    getProjectDetails(token);
   }
+
 
 
 
@@ -1281,20 +1277,9 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                             style={{ minWidth: "271px", height: "56px" }}
                           >
                             <MenuItem value="">清空欄位</MenuItem>
-                            {deviceNameList.map((object) => {
-                              if (object.project_name === projectName) {
-                                return object.devices.sort((a, b) => {
-                                  const lastNumberA = parseInt(a.match(/\d+$/)[0]);
-                                  const lastNumberB = parseInt(b.match(/\d+$/)[0]);
-                                  return lastNumberA - lastNumberB;
-                                }).map((device) => (
-                                  <MenuItem key={device} value={device}>
-                                    {device}
-                                  </MenuItem>
-                                ));
-                              }
-                            })}
-
+                            {deviceNameList.filter(obj => obj.line === lineName).flatMap(obj => obj.devices).map(device => (
+                              <MenuItem key={device} value={device}>{device}</MenuItem>
+                            ))}
                           </Select>
                         </FormControl>
                       </Box>
@@ -1417,19 +1402,9 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                             style={{ minWidth: "271px", height: "56px" }}
                           >
                             <MenuItem value="">清空栏位</MenuItem>
-                            {deviceNameList.map((object) => {
-                              if (object.project_name === projectName) {
-                                return object.devices.sort((a, b) => {
-                                  const lastNumberA = parseInt(a.match(/\d+$/)[0]);
-                                  const lastNumberB = parseInt(b.match(/\d+$/)[0]);
-                                  return lastNumberA - lastNumberB;
-                                }).map((device) => (
-                                  <MenuItem key={device} value={device}>
-                                    {device}
-                                  </MenuItem>
-                                ));
-                              }
-                            })}
+                            {deviceNameList.filter(obj => obj.line === lineName).flatMap(obj => obj.devices).map(device => (
+                              <MenuItem key={device} value={device}>{device}</MenuItem>
+                            ))}
                           </Select>
                         </FormControl>
                       </Box>
@@ -1552,19 +1527,9 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                             style={{ minWidth: "271px", height: "56px" }}
                           >
                             <MenuItem value="">Clear field</MenuItem>
-                            {deviceNameList.map((object) => {
-                              if (object.project_name === projectName) {
-                                return object.devices.sort((a, b) => {
-                                  const lastNumberA = parseInt(a.match(/\d+$/)[0]);
-                                  const lastNumberB = parseInt(b.match(/\d+$/)[0]);
-                                  return lastNumberA - lastNumberB;
-                                }).map((device) => (
-                                  <MenuItem key={device} value={device}>
-                                    {device}
-                                  </MenuItem>
-                                ));
-                              }
-                            })}
+                            {deviceNameList.filter(obj => obj.line === lineName).flatMap(obj => obj.devices).map(device => (
+                              <MenuItem key={device} value={device}>{device}</MenuItem>
+                            ))}
                           </Select>
                         </FormControl>
                       </Box>
