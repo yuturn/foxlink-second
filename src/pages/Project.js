@@ -577,7 +577,7 @@ export default function Project({ token, setAlert, ...rest }) {
   }
   //////////////////////////////////////////////////////////////
   const [startDate, setStartDate] = useState(new Date());
-  const formattedStartDate = dayjs(startDate).format('YYYYMMDD');
+  const formattedStartDate = dayjs(startDate).format('YYYY-MM-DD');
   //依照所選擇的device去post資料
   function handleOnClickProjectPost() {
     if (!token) {
