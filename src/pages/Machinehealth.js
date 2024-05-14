@@ -60,11 +60,10 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
   const [projectLineNameList, setProjectLineNameList] = useState([]);
   const [orderWeek, setOrderWeek] = useState('asc');
   const [weekOrderBy, setWeekOrderBy] = useState('label');
-
   const [orderDate, setOrder] = useState('asc');
   const [dateOrderBy, setDateOrderBy] = useState('label');
-
   const [dateData, setDateData] = useState({});
+  const [projectToLineDeviceMap, setProjectToLineDeviceMap] = useState({});
 
   function ColorBox(props) {
     return (
@@ -96,19 +95,39 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
   }
 
   const projectNameChange = (event) => {
-    if (event.target.value === 'null') {
-      setProjectName(null);
+    const selectedProject = event.target.value;
+    setProjectName(selectedProject);
+    if (selectedProject && projectToLineDeviceMap[selectedProject]) {
+      const lineNames = Object.keys(projectToLineDeviceMap[selectedProject]);
+      setProjectLineNameList(lineNames);
+      setLineName('');
+      setDeviceNameList([]);
+      setDeviceName('');
     } else {
-      setProjectName(event.target.value);
+      setProjectLineNameList([]);
+      setLineName('');
+      setDeviceNameList([]);
+      setDeviceName('');
     }
   };
+
   const projectLineNameChange = (event) => {
-    if (event.target.value === 'null') {
-      setLineName(null);
+    const selectedLine = event.target.value;
+    setLineName(selectedLine);
+    if (projectName && projectToLineDeviceMap[projectName] && projectToLineDeviceMap[projectName][selectedLine]) {
+      const devices = Array.from(projectToLineDeviceMap[projectName][selectedLine]).sort((a, b) => {
+        const numA = parseInt(a.match(/Device_(\d+)/)[1], 10);
+        const numB = parseInt(b.match(/Device_(\d+)/)[1], 10);
+        return numA - numB;
+      });
+      setDeviceNameList(devices);
+      setDeviceName('');
     } else {
-      setLineName(event.target.value);
+      setDeviceNameList([]);
+      setDeviceName('');
     }
   };
+
   const deviceNameChange = (event) => {
     if (event.target.value === 'null') {
       setDeviceName(null);
@@ -116,9 +135,11 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
       setDeviceName(event.target.value);
     }
   };
+
   const togglePause = () => {
     setIsPaused(!isPaused);
   };
+
   const settings = {
     dots: true,
     infinite: true,
@@ -126,35 +147,32 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
     slidesToShow: 1,
     slidesToScroll: 1,
   };
-  ///////////////////////
+
   const [refreshKey, setRefreshKey] = useState(0);
 
-
-
-  // 使用useEffect在组件加载和refreshKey变化时获取数据
   useEffect(() => {
-    getProjectName();
+    getProjectName(token);
     getProjectDetails();
-    getProjectDetailsFilter();//
+    getProjectDetailsFilter();
     apiMarquee(token)
       .then((res) => {
         console.log(res.data); // 确保你能够看到这个时间戳在控制台中输出
-        // 在这里对返回的时间戳进行处理
         setTimestampData(res.data); // 将时间戳保存到状态中，以便在组件中使用
       })
       .catch((error) => {
         console.error(error);
-      })
+      });
+  }, [token, refreshKey]);
 
-  }, [token, refreshKey]); // 依赖于token和refreshKey，任何一个变化都会触发重新获取数据
 
-  // handleRefresh用于更新refreshKey，触发重新渲染
+
+
   const handleRefresh = () => {
-    setRefreshKey(prevKey => prevKey + 1); // 更新状态以触发重新渲染
+    setRefreshKey(prevKey => prevKey + 1);
     if (projectName && deviceName) {
-      getProjectDetailsFilter(); // 这个函数根据选择的项目和设备获取过滤详情。
+      getProjectDetailsFilter();
     } else {
-      console.log("Project Name or Device Name not set."); // 处理未设置任一字段的情况。
+      console.log("Project Name or Device Name not set.");
       if (globalVariable === "zh-tw") {
         handleErrorOpen("請選擇完整查詢條件");
       } else if (globalVariable === "zh-cn") {
@@ -164,34 +182,27 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
       }
     }
   };
-  //////////////////////////////////////////////////////////
-
 
   function getColor(lightColor) {
-    // 1 是異常
     if (lightColor === 1) {
       return "#ff2600";
-      // 0 是穩定
     } else if (lightColor === 0) {
       return "#008f00";
     } else {
       return null; // 或者返回一个默认的图标
     }
   }
-  // /system/timestamp資料大概長這樣{"event_id": 194, "recently": null, "happened": 0}], "timestamp": "2024-03-06 20:16:25.698261"}
-  //////////////////////////////////////////////////////////////////不確定這樣做對不對??????
+
   const [timeStampData, setTimestampData] = useState("");
 
   const fetchTimestampData = (token) => {
     if (!token) {
-      // 没有token，不执行操作
       return;
     }
 
     apiMarquee(token)
       .then((res) => {
-        console.log(res.data); // 确保你能够看到这个时间戳在控制台中输出
-        // 在这里对返回的时间戳进行处理
+        console.log(res.data);
         setTimestampData(res.data);
       })
       .catch((error) => {
@@ -199,28 +210,12 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
       });
   };
 
-
-
-
-  // useEffect(() => {
-  //   fetchTimestampData();
-
-  //   const interval = setInterval(() => {
-  //     fetchTimestampData();
-  //   }, 60000);
-
-  //   return () => clearInterval(interval);
-  // }, []);
-
-
   useEffect(() => {
     getProjectName(token);
-    // fetchTimestampData()
     apiMarquee(token)
       .then((res) => {
-        console.log(res.data); // 确保你能够看到这个时间戳在控制台中输出
-        // 在这里对返回的时间戳进行处理
-        setTimestampData(res.data); // 将时间戳保存到状态中，以便在组件中使用
+        console.log(res.data);
+        setTimestampData(res.data);
       })
       .catch((error) => {
         console.error(error);
@@ -228,20 +223,17 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
     const refreshInterval = setInterval(() => {
       apiMarquee(token)
         .then((res) => {
-          console.log(res.data); // 确保你能够看到这个时间戳在控制台中输出
-          // 在这里对返回的时间戳进行处理
-          setTimestampData(res.data); // 将时间戳保存到状态中，以便在组件中使用
+          console.log(res.data);
+          setTimestampData(res.data);
         })
         .catch((error) => {
           console.error(error);
         });
-      // window.location.reload(); // 每 60 秒重新加載頁面
-    }, 60000); // 60000 毫秒為 60 秒
+    }, 60000);
 
-    return () => clearInterval(refreshInterval); // 清除定時器
-  }, [globalVariable]); // 在 globalVariable 更新時執行
+    return () => clearInterval(refreshInterval);
+  }, [globalVariable]);
 
-  // 创建线号与设备的映射并按设备编号排序
   const getProjectName = (token) => {
     if (!token) {
       return;
@@ -249,41 +241,41 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
 
     apiGetStatistics(token)
       .then((res) => {
-        const list = res.data.map((project) => project.project_name);
-        setProjectNameList(list);
-
-        const lineToDeviceMap = res.data.reduce((acc, project) => {
-          project.line.forEach((line, index) => {
-            const device = project.devices[index];
-            if (device) { // 确保设备存在
-              if (!acc[line]) {
-                acc[line] = new Set(); // 使用 Set 避免重复
-              }
-              acc[line].add(device);
+        const projectToLineDeviceMap = res.data.reduce((acc, project) => {
+          const { project_name, line, devices } = project;
+          acc[project_name] = acc[project_name] || {};
+          line.forEach((lineNumber, index) => {
+            const device = devices[index];
+            if (device) {
+              acc[project_name][lineNumber] = acc[project_name][lineNumber] || new Set();
+              acc[project_name][lineNumber].add(device);
             }
           });
           return acc;
         }, {});
 
-        const lineNameList = Object.keys(lineToDeviceMap).sort((a, b) => a - b);
-        const devicesList = lineNameList.map(line => ({
-          line,
-          devices: Array.from(lineToDeviceMap[line])
-            .sort((a, b) => {
-              // 从设备名称中提取数字并按数字排序
+        const projectNameList = Object.keys(projectToLineDeviceMap);
+        setProjectNameList(projectNameList);
+
+        const firstProject = projectNameList[0];
+        if (firstProject && projectToLineDeviceMap[firstProject]) {
+          const lineNameList = Object.keys(projectToLineDeviceMap[firstProject]);
+          setProjectLineNameList(lineNameList);
+
+          const firstLine = lineNameList[0];
+          if (firstLine && projectToLineDeviceMap[firstProject][firstLine]) {
+            const devices = Array.from(projectToLineDeviceMap[firstProject][firstLine]).sort((a, b) => {
               const numA = parseInt(a.match(/Device_(\d+)/)[1], 10);
               const numB = parseInt(b.match(/Device_(\d+)/)[1], 10);
               return numA - numB;
-            })
-        }));
+            });
+            setDeviceNameList(devices);
+          }
+        }
 
-        setProjectLineNameList(lineNameList);
-        setDeviceNameList(devicesList);
+        setProjectToLineDeviceMap(projectToLineDeviceMap);
       });
-  }
-
-
-
+  };
 
   const getProjectDetails = () => {
     const data = {
@@ -300,13 +292,10 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
     const data = {
       token: token,
       projectName: projectName,
-      // lineName:lineName,
       deviceName: deviceName
     }
     console.log(projectName)
     console.log(typeof (projectName))
-    // console.log(lineName)
-    // console.log(typeof (lineName))
     console.log(deviceName)
     console.log(typeof (deviceName))
     apiGetStatisticsDetailsFilter(data)
@@ -317,22 +306,20 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
       }).catch(err => { console.log(err); handleErrorOpen((globalVariable === "zh-tw" ? "查詢失敗:API請求失敗" : globalVariable === "zh-cn" ? "查询失败:API请求失败" : "Query failed: API request failed")); })
   }
 
-  //success alert
   const [alertOpen, setAlertOpen] = React.useState(false);
-  const [message, setMessage] = useState(''); // 状态来存储消息内容
+  const [message, setMessage] = useState('');
   const handleOpen = (message) => {
-    setMessage(message); // 设置消息内容
+    setMessage(message);
     setAlertOpen(true);
   };
   const handleClose = (event, reason) => {
     setAlertOpen(false);
   };
 
-  //error alert
   const [errorAlertOpen, setErrorAlertOpen] = React.useState(false);
-  const [errorMessage, setErrorMessage] = useState(''); // 状态来存储消息内容
+  const [errorMessage, setErrorMessage] = useState('');
   const handleErrorOpen = (message) => {
-    setErrorMessage(message); // 设置消息内容
+    setErrorMessage(message);
     setErrorAlertOpen(true);
   };
   const handleErrorClose = (event, reason) => {
@@ -343,10 +330,9 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
     if (happened_times != 0) {
       return "#ffc107";
     } else {
-      return null; // 或者返回一个默认的图标
+      return null;
     }
   }
-
 
   const [selectedSlide, setSelectedSlide] = useState(0);
 
@@ -378,16 +364,13 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
 
   const tableContainerStyle = {
     tableContainer: {
-      maxHeight: '380px', // 設置表格容器的最大高度
-      overflowY: 'auto',  // 啟用垂直滾輪
+      maxHeight: '380px',
+      overflowY: 'auto',
     },
   };
 
   const tableCellStyle = {
     extendedCell: {
-      // borderBottom: 'none', // 移除底部分隔線
-      // paddingLeft: '20px',  // 調整內邊距以增加內容區域
-      // paddingRight: '20px', // 調整內邊距以增加內容區域
     },
   };
 
@@ -429,11 +412,8 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
               interval={3000}
             >
               {Object.keys(data[project]).map((device) => {
-                // Initialize counters for '異常' and '穩定'
                 let abnormalCount = 0;
                 let nonAbnormalCount = 0;
-
-                // Loop through the data for the current device to count '異常' and '穩定'
                 data[project][device].forEach((item) => {
                   if (item.steady === 1) {
                     abnormalCount++;
@@ -505,7 +485,6 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                   </TableCell>
                                 </TableRow>
                                 <TableRow>
-                                  {/* ////////////////// */}
                                   <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
                                     <TableSortLabel
                                       active={weekOrderBy === 'category'}
@@ -515,8 +494,6 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                       <Typography fontSize={20}>Category</Typography>
                                     </TableSortLabel>
                                   </TableCell>
-                                  {/* ///////////////////// */}
-
                                   <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
                                     <TableSortLabel
                                       active={weekOrderBy === 'label'}
@@ -538,21 +515,17 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                       <Typography fontSize={20}>前次發生時間</Typography>
                                     </TableSortLabel>
                                   </TableCell>
-                                  {/* ////////////////////// */}
                                   <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
                                     <Typography fontSize={20}>發生次數</Typography>
                                   </TableCell>
-                                  {/* ////////////////////// */}
                                 </TableRow>
                               </TableHead>
                               <TableBody>
                                 {data[project][device].filter(columns => columns.frequency === "週預測").sort(getComparator(orderWeek)).map((columns) => (
                                   <TableRow key={columns.name}>
-                                    {/* ///////////////////////////////// */}
                                     <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                       <Typography fontSize={20}>{columns.category}</Typography>
                                     </TableCell>
-                                    {/* /////////////////////////////////// */}
                                     <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.steady) }}>
                                       <Typography fontSize={20}>{columns.steady === 0 ? "穩定" : "異常"}</Typography>
                                     </TableCell>
@@ -562,11 +535,9 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                     <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                       <Typography fontSize={20}>{columns.happenLastTime}</Typography>
                                     </TableCell>
-                                    {/* ///////////////// */}
                                     <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                       <Typography fontSize={20}>{columns.happened_times}</Typography>
                                     </TableCell>
-                                    {/* ///////////////// */}
                                   </TableRow>
                                 ))}
                               </TableBody>
@@ -586,7 +557,6 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                   </TableCell>
                                 </TableRow>
                                 <TableRow>
-                                  {/* /////////////////////////////////////////// */}
                                   <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
                                     <TableSortLabel
                                       active={dateOrderBy === 'category'}
@@ -596,7 +566,6 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                       <Typography fontSize={20} >Category</Typography>
                                     </TableSortLabel>
                                   </TableCell>
-                                  {/* //////////////////////////////////////////// */}
                                   <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
                                     <TableSortLabel
                                       active={dateOrderBy === 'label'}
@@ -618,11 +587,9 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                       <Typography fontSize={20} >前次發生時間</Typography>
                                     </TableSortLabel>
                                   </TableCell>
-                                  {/* ////////////////////////////////////////////// */}
                                   <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
                                     <Typography fontSize={20} >發生次數</Typography>
                                   </TableCell>
-                                  {/* ////////////////////////////////////////////// */}
                                 </TableRow>
                               </TableHead>
                               <TableBody>
@@ -640,17 +607,14 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                     <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                       <Typography fontSize={20}>{columns.happenLastTime}</Typography>
                                     </TableCell>
-                                    {/* ////////////////////////////////////////////////// */}
                                     <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                       <Typography fontSize={20}>{columns.happened_times}</Typography>
                                     </TableCell>
-                                    {/* ////////////////////////////////////////////////// */}
                                   </TableRow>
                                 ))}
                               </TableBody>
                             </Table>
                           </TableContainer>
-                          {/* <ColorBox msg="已發生過之異常事件"></ColorBox> */}
                         </Grid>
                       </Grid>
                     </Card>
@@ -680,11 +644,8 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
               interval={3000}
             >
               {Object.keys(data[project]).map((device) => {
-                // Initialize counters for '異常' and '穩定'
                 let abnormalCount = 0;
                 let nonAbnormalCount = 0;
-
-                // Loop through the data for the current device to count '異常' and '穩定'
                 data[project][device].forEach((item) => {
                   if (item.steady === 1) {
                     abnormalCount++;
@@ -756,7 +717,6 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                   </TableCell>
                                 </TableRow>
                                 <TableRow>
-                                  {/* ////////////////// */}
                                   <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
                                     <TableSortLabel
                                       active={weekOrderBy === 'category'}
@@ -766,7 +726,6 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                       <Typography fontSize={20}>category</Typography>
                                     </TableSortLabel>
                                   </TableCell>
-                                  {/* ///////////////////// */}
                                   <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
                                     <TableSortLabel
                                       active={weekOrderBy === 'label'}
@@ -788,11 +747,9 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                       <Typography fontSize={20}>前次发生时间</Typography>
                                     </TableSortLabel>
                                   </TableCell>
-                                  {/* ///////////////////// */}
                                   <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
                                     <Typography fontSize={20}>发生次数</Typography>
                                   </TableCell>
-                                  {/*  //////////////////////*/}
                                 </TableRow>
                               </TableHead>
                               <TableBody>
@@ -810,11 +767,9 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                     <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                       <Typography fontSize={20}>{columns.happenLastTime}</Typography>
                                     </TableCell>
-                                    {/* //////////////////// */}
                                     <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                       <Typography fontSize={20}>{columns.happened_times}</Typography>
                                     </TableCell>
-                                    {/* //////////////////// */}
                                   </TableRow>
                                 ))}
                               </TableBody>
@@ -829,12 +784,11 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                       日预测
                                       {data[project][device]
                                         .filter((columns) => columns.frequency === "日預測")
-                                        .map((item) => `${item.ori_date}-${item.pred_date}`)[0]}
+                                        .map((item) => `${item.pred_date}`)[0]}
                                     </Typography>
                                   </TableCell>
                                 </TableRow>
                                 <TableRow>
-                                  {/* /////////////////////////////////////////// */}
                                   <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
                                     <TableSortLabel
                                       active={dateOrderBy === 'category'}
@@ -844,7 +798,6 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                       <Typography fontSize={20} >Category</Typography>
                                     </TableSortLabel>
                                   </TableCell>
-                                  {/* //////////////////////////////////////////// */}
                                   <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
                                     <TableSortLabel
                                       active={dateOrderBy === 'label'}
@@ -866,21 +819,17 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                       <Typography fontSize={20} >前次发生时间</Typography>
                                     </TableSortLabel>
                                   </TableCell>
-                                  {/* ///////////////////////// */}
                                   <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
                                     <Typography fontSize={20} >发生次数</Typography>
                                   </TableCell>
-                                  {/* ///////////////////////// */}
                                 </TableRow>
                               </TableHead>
                               <TableBody>
                                 {data2[project][device].filter(columns => columns.frequency === "日預測").sort(getComparatorDate(orderDate)).map((columns) => (
                                   <TableRow key={columns.name}>
-                                    {/* /////////////////////// */}
                                     <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                       <Typography fontSize={20}>{columns.category}</Typography>
                                     </TableCell>
-                                    {/* /////////////////////// */}
                                     <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.steady) }}>
                                       <Typography fontSize={20}>{columns.steady === 0 ? "稳定" : "异常"}</Typography>
                                     </TableCell>
@@ -890,11 +839,9 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                     <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                       <Typography fontSize={20}>{columns.happenLastTime}</Typography>
                                     </TableCell>
-                                    {/* ///////////////////////// */}
                                     <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                       <Typography fontSize={20}>{columns.happened_times}</Typography>
                                     </TableCell>
-                                    {/* ////////////////////////// */}
                                   </TableRow>
                                 ))}
                               </TableBody>
@@ -927,11 +874,8 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
               interval={3000}
             >
               {Object.keys(data[project]).map((device) => {
-                // Initialize counters for '異常' and '穩定'
                 let abnormalCount = 0;
                 let nonAbnormalCount = 0;
-
-                // Loop through the data for the current device to count '異常' and '穩定'
                 data[project][device].forEach((item) => {
                   if (item.steady === 1) {
                     abnormalCount++;
@@ -1003,7 +947,6 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                   </TableCell>
                                 </TableRow>
                                 <TableRow>
-                                  {/* ////////////////// */}
                                   <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
                                     <TableSortLabel
                                       active={weekOrderBy === 'category'}
@@ -1013,7 +956,6 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                       <Typography fontSize={20}>category</Typography>
                                     </TableSortLabel>
                                   </TableCell>
-                                  {/* ///////////////////// */}
                                   <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
                                     <TableSortLabel
                                       active={weekOrderBy === 'label'}
@@ -1035,21 +977,17 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                       <Typography fontSize={20}>Last occurrence time</Typography>
                                     </TableSortLabel>
                                   </TableCell>
-                                  {/* ////////////////////////////// */}
                                   <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
                                     <Typography fontSize={20}>Number of occurrences</Typography>
                                   </TableCell>
-                                  {/* ////////////////////////////// */}
                                 </TableRow>
                               </TableHead>
                               <TableBody>
                                 {data[project][device].filter(columns => columns.frequency === "週預測").sort(getComparator(orderWeek)).map((columns) => (
                                   <TableRow key={columns.name}>
-                                    {/* //////////////////////// */}
                                     <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                       <Typography fontSize={20}>{columns.category}</Typography>
                                     </TableCell>
-                                    {/* ////////////////////////// */}
                                     <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.steady) }}>
                                       <Typography fontSize={20}>{columns.steady === 0 ? "Stabilize" : "Abnormal"}</Typography>
                                     </TableCell>
@@ -1058,13 +996,10 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                     </TableCell>
                                     <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                       <Typography fontSize={20}>{columns.happenLastTime}</Typography>
-
                                     </TableCell>
-                                    {/* ///////////////////////////// */}
                                     <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                       <Typography fontSize={20}>{columns.happened_times}</Typography>
                                     </TableCell>
-                                    {/* ////////////////////////// */}
                                   </TableRow>
                                 ))}
                               </TableBody>
@@ -1084,7 +1019,6 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                   </TableCell>
                                 </TableRow>
                                 <TableRow>
-                                  {/* /////////////////////// */}
                                   <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
                                     <TableSortLabel
                                       active={dateOrderBy === 'category'}
@@ -1094,7 +1028,6 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                       <Typography fontSize={20} >Category</Typography>
                                     </TableSortLabel>
                                   </TableCell>
-                                  {/* ////////////////////////// */}
                                   <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
                                     <TableSortLabel
                                       active={dateOrderBy === 'label'}
@@ -1116,21 +1049,17 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                       <Typography fontSize={20} >Last occurrence time</Typography>
                                     </TableSortLabel>
                                   </TableCell>
-                                  {/* ////////////////////////////// */}
                                   <TableCell align="center" sx={{ height: 'auto', border: "1px solid black" }}>
                                     <Typography fontSize={20}>Number of occurrences</Typography>
                                   </TableCell>
-                                  {/* ////////////////////////////// */}
                                 </TableRow>
                               </TableHead>
                               <TableBody>
                                 {data2[project][device].filter(columns => columns.frequency === "日預測").sort(getComparatorDate(orderDate)).map((columns) => (
                                   <TableRow key={columns.name}>
-                                    {/* /////////////////////////////////////////// */}
                                     <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                       <Typography fontSize={20}>{columns.category}</Typography>
                                     </TableCell>
-                                    {/* //////////////////////////////////////////// */}
                                     <TableCell style={tableCellStyle.extendedCell} key={columns.id} align="center" sx={{ bgcolor: getColor(columns.steady) }}>
                                       <Typography fontSize={20}>{columns.steady === 0 ? "Stabilize" : "Abnormal"}</Typography>
                                     </TableCell>
@@ -1140,11 +1069,9 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                                     <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                       <Typography fontSize={20}>{columns.happenLastTime}</Typography>
                                     </TableCell>
-                                    {/* /////////////////////////////////////////// */}
                                     <TableCell align="center" sx={{ height: 'auto', bgcolor: infoColor(columns.happened_times) }}>
                                       <Typography fontSize={20}>{columns.happened_times}</Typography>
                                     </TableCell>
-                                    {/* //////////////////////////////////////////// */}
                                   </TableRow>
                                 ))}
                               </TableBody>
@@ -1234,7 +1161,6 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                         </FormControl>
                       </Box>
                     </Box>
-                    {/* ///////////////////////////////// */}
                     <Grid container spacing={2} sx={{ mt: 1, ml: 6 }} component="form">
                       <Grid item>
                         <Typography variant="h5" fontWeight="medium" mr={2} mt={1} mb={1}>
@@ -1258,7 +1184,6 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                         </FormControl>
                       </Grid>
                     </Grid>
-                    {/* ///////////////////////////////// */}
                     <Box sx={{ mt: 1, ml: 4 }} display="flex" component="form" role="form">
                       <Box align="center" display="flex">
                         <Typography align="center" variant="h5" mr={2}>
@@ -1277,7 +1202,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                             style={{ minWidth: "271px", height: "56px" }}
                           >
                             <MenuItem value="">清空欄位</MenuItem>
-                            {deviceNameList.filter(obj => obj.line === lineName).flatMap(obj => obj.devices).map(device => (
+                            {deviceNameList.map((device) => (
                               <MenuItem key={device} value={device}>{device}</MenuItem>
                             ))}
                           </Select>
@@ -1311,7 +1236,6 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
               <ColorBox msg="已發生過之異常事件"></ColorBox>
             </div>
           </Box>
-
           {createDeviceCardTW(dateData, dateData)}
         </>
       ) : globalVariable === "zh-cn" ? (
@@ -1355,7 +1279,6 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                         </FormControl>
                       </Box>
                     </Box>
-                    {/* ///////////////////////////////// */}
                     <Grid container spacing={2} sx={{ mt: 1, ml: 6 }} component="form">
                       <Grid item>
                         <Typography variant="h5" fontWeight="medium" mr={2} mt={1} mb={1}>
@@ -1383,7 +1306,6 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                         </FormControl>
                       </Grid>
                     </Grid>
-                    {/* ///////////////////////////////// */}
                     <Box sx={{ mt: 1, ml: 4 }} display="flex" component="form" role="form">
                       <Box align="center" display="flex">
                         <Typography align="center" variant="h5" mr={2}>
@@ -1402,7 +1324,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                             style={{ minWidth: "271px", height: "56px" }}
                           >
                             <MenuItem value="">清空栏位</MenuItem>
-                            {deviceNameList.filter(obj => obj.line === lineName).flatMap(obj => obj.devices).map(device => (
+                            {deviceNameList.map((device) => (
                               <MenuItem key={device} value={device}>{device}</MenuItem>
                             ))}
                           </Select>
@@ -1479,7 +1401,6 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                         </FormControl>
                       </Box>
                     </Box>
-                    {/* ///////////////////////////////// */}
                     <Grid container spacing={2} sx={{ mt: 1, ml: 6 }} component="form">
                       <Grid item>
                         <Typography variant="h5" fontWeight="medium" mr={2} mt={1} mb={1}>
@@ -1487,7 +1408,6 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                         </Typography>
                       </Grid>
                       <Grid item>
-
                         <FormControl>
                           <InputLabel id="operation-type-select-label">Line</InputLabel>
                           <Select
@@ -1508,7 +1428,6 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                         </FormControl>
                       </Grid>
                     </Grid>
-                    {/* ///////////////////////////////// */}
                     <Box sx={{ mt: 1, ml: 4 }} display="flex" component="form" role="form">
                       <Box align="center" display="flex">
                         <Typography align="center" variant="h5" mr={2}>
@@ -1527,7 +1446,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
                             style={{ minWidth: "271px", height: "56px" }}
                           >
                             <MenuItem value="">Clear field</MenuItem>
-                            {deviceNameList.filter(obj => obj.line === lineName).flatMap(obj => obj.devices).map(device => (
+                            {deviceNameList.map((device) => (
                               <MenuItem key={device} value={device}>{device}</MenuItem>
                             ))}
                           </Select>
@@ -1561,7 +1480,6 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
               <ColorBox msg="Abnormal events that have occurred"></ColorBox>
             </div>
           </Box>
-
           {createDeviceCardEN(dateData, dateData)}
         </>
       )
