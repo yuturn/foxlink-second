@@ -34,7 +34,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-
+import {GlobalPermissionProvider,GlobalPermissionContext} from '../components/GlobalPermission'
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import FolderCopyIcon from '@mui/icons-material/FolderCopy';
 import { Construction } from "@mui/icons-material";
@@ -186,7 +186,8 @@ export default function Project({ token, setAlert, ...rest }) {
     console.log(projectIDSelect)
     handleUpdateProjectUser()
   };
-
+  const { globalPermission, updateGlobalPermission} = useContext(GlobalPermissionContext);
+  console.log(globalPermission)
   const projectNameChange = (event) => {
     console.log("有更改projectID")
     setProjectID(event.target.value);
@@ -1091,32 +1092,38 @@ export default function Project({ token, setAlert, ...rest }) {
                       </div>
                     )}
                   </Box>
-                  <Grid item xs={3}>
-                    <Box component="form" role="form">
-                      <Box display="flex" alignItems="center" pt={3} >
-                        <Typography variant="h6" fontWeight="medium" mr={2}>
-                          {globalVariable == "zh-tw" ? "開始:" : globalVariable == "zh-cn" ? "开始:" : "Start date:"}
-                        </Typography>
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                          <DatePicker
-                            label={globalVariable == "zh-tw" ? "選擇日期" : globalVariable == "zh-cn" ? "选择日期" : "Select date"}
-                            value={startDate}
-                            onChange={(newValue) => {
-                              setStartDate(newValue);
-                            }}
-                            renderInput={(params) => <TextField size="medium" {...params} />}
-                          />
-                        </LocalizationProvider>
+                  {globalPermission >= 3 ? (
+                    <>
+                    <Grid item xs={3}>
+                      <Box component="form" role="form">
+                        <Box display="flex" alignItems="center" pt={3}>
+                          <Typography variant="h6" fontWeight="medium" mr={2}>
+                            {globalVariable === "zh-tw" ? "開始:" : globalVariable === "zh-cn" ? "开始:" : "Start date:"}
+                          </Typography>
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePicker
+                              label={globalVariable === "zh-tw" ? "選擇日期" : globalVariable === "zh-cn" ? "选择日期" : "Select date"}
+                              value={startDate}
+                              onChange={(newValue) => {
+                                setStartDate(newValue);
+                              }}
+                              renderInput={(params) => <TextField size="medium" {...params} />}
+                            />
+                          </LocalizationProvider>
+                        </Box>
+                      </Box>
+                    </Grid>
+
+                    <Box display="flex" pt={3} px={2}>
+                      <Box>
+                        <LoadingButton loading={loading} variant="contained" color="info" onClick={() => { handleOnClickProjectPost(); }}>
+                          {globalVariable === "zh-tw" ? "新增專案" : globalVariable === "zh-cn" ? "新增专案" : "Add new project"}
+                        </LoadingButton>
                       </Box>
                     </Box>
-                  </Grid>
-                  <Box display="flex" pt={3} px={2}>
-                    <Box>
-                      <LoadingButton loading={loading} variant="contained" color="info" onClick={() => { handleOnClickProjectPost(); }}>
-                        {globalVariable === "zh-tw" ? "新增專案" : globalVariable === "zh-cn" ? "新增专案" : "Add new project"}
-                      </LoadingButton>
-                    </Box>
-                  </Box>
+                  </>
+                ) : null}
+
 
                   <Divider sx={{ borderBottomWidth: 3, mt: 2 }} />
 
@@ -1132,7 +1139,8 @@ export default function Project({ token, setAlert, ...rest }) {
                     >
                       {globalVariable === "zh-tw" ? "更新專案" : globalVariable === "zh-cn" ? "更新专案" : "Update project"}
                     </LoadingButton>
-
+                    {globalPermission >= 3 ? (
+                    <>
                     <LoadingButton
                       variant="contained"
                       color="error"
@@ -1180,6 +1188,8 @@ export default function Project({ token, setAlert, ...rest }) {
                         </Button>
                       </DialogActions>
                     </Dialog>
+                    </>
+                ) : null}
                     {/* ///////////////////////////////////// */}
                     <Box display="flex" alignItems="center" pt={3} px={2}>
                       {globalVariable === "zh-tw" ? (
@@ -1492,6 +1502,8 @@ export default function Project({ token, setAlert, ...rest }) {
                       </FormControl>
                     )}
                   </Box>
+                  {globalPermission >= 2 ? (
+                  <>
                   <Box display="flex" alignItems="center" pt={3} px={2}>
                     <Box>
                       <LoadingButton variant="contained" color="info" onClick={handleOnClickAddUserToProject}>
@@ -1499,7 +1511,10 @@ export default function Project({ token, setAlert, ...rest }) {
                       </LoadingButton>
                     </Box>
                   </Box>
+                  </>
+                  ) : null}
                 </Box>
+                
                 <Divider sx={{ borderBottomWidth: 3 }} />
                 <Box component="form" role="form" mb={3}>
                   <Typography variant="h4" fontWeight="medium" mt={3}>
@@ -1590,6 +1605,8 @@ export default function Project({ token, setAlert, ...rest }) {
                     </div>
                   )}
                 </Box>
+                {globalPermission >= 2 ? (
+                  <>
                 <Box display="flex" pt={3} px={2}>
                   <Box>
                     <LoadingButton
@@ -1630,6 +1647,9 @@ export default function Project({ token, setAlert, ...rest }) {
                     </Dialog>
                   </Box>
                 </Box>
+                </>
+                ) : null}
+
                 {/* //////////////////////////////////// */}
                 <Divider sx={{ borderBottomWidth: 3 }} />
                 <Box component="form" role="form" mb={3}>
@@ -1728,6 +1748,8 @@ export default function Project({ token, setAlert, ...rest }) {
                     </div>
                   )}
                 </Box>
+                {globalPermission >= 2 ? (
+                  <>
                 <Box display="flex" pt={3} px={2}>
                   <Box>
                     <LoadingButton
@@ -1768,6 +1790,9 @@ export default function Project({ token, setAlert, ...rest }) {
                     </Dialog>
                   </Box>
                 </Box>
+                  </>
+                ) : null}
+
                 {/* //////////////////////////////////// */}
               </Grid>
             </Grid>

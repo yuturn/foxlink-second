@@ -20,7 +20,7 @@ import Project from "./Project";
 import Comparison from "./Comparison"
 // import { NotFound } from "./404";
 import { GlobalProvider } from '../components/GlobalContext';
-
+import {GlobalPermissionProvider,GlobalPermissionContext} from '../components/GlobalPermission'
 export default function App() {
 
     const [alert, setAlert] = useState({
@@ -39,6 +39,7 @@ export default function App() {
 
     return (
         <>
+            <GlobalPermissionProvider>
             <GlobalProvider>
                 <SnackbarAlert open={alert.open} message={alert.msg} type={alert.type} setAlert={setAlert} duration={alert.duration} />
                 <Router>
@@ -63,6 +64,7 @@ export default function App() {
                     </Routes>
                 </Router>
             </GlobalProvider>
+            </GlobalPermissionProvider>
         </>
 
     )

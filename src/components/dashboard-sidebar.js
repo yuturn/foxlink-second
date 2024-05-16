@@ -15,61 +15,73 @@ import { Logo } from './logo';
 import { DashboardNavbar } from './dashboard-navbar';
 import { NavItem } from './nav-item';
 import { Link } from "react-router-dom";
-
+import { GlobalPermissionContext } from '../components/GlobalPermission';
 export const DashboardSidebar = ({ idx, setIdx, initialOpen, toggleSidebar }) => {
   const [open, setOpen] = useState(initialOpen);
   const { globalVariable, updateGlobalVariable } = useContext(GlobalContext);
-
+///////////////////權限導入///////////
+  const { globalPermission, updateGlobalPermission } = useContext(GlobalPermissionContext);
+  console.log(globalPermission)
+  useEffect(() => {
+    console.log(globalPermission);
+  }, [globalPermission]);
   const handleGlobalVariableChange = (event) => {
     const newValue = event.target.value;
     // 调用 updateGlobalVariable 更新全局状态
-    updateGlobalVariable(newValue);
+    updateGlobalPermission(newValue);
   };
-
+  ////////////////////////////////////////////////////
   const items = [
     {
       url: '/machinehealth',
       icon: (<Search fontSize="small" />),
       title: (globalVariable == "zh-tw" ? "機況查詢" : globalVariable == "zh-cn" ? "机況查詢" : "Machine status"),
-      active: false
+      active: false,
+      minLevel: 1
     },
     {
       url: '/comparison',
       icon: (<Search fontSize="small" />),
       title: (globalVariable == "zh-tw" ? "預測與實際結果比對查詢" : globalVariable == "zh-cn" ? "预测与实际结果比对查询" : "Comparison"),
-      active: false
+      active: false,
+      minLevel: 1
     },
     {
       url: '/Adminpage',
       icon: (<StatusIcon fontSize="small" />),
       title: (globalVariable == "zh-tw" ? "管理者專案頁面" : globalVariable == "zh-cn" ? "管理者专案页面" : "Manager project page"),
-      active: false
+      active: false,
+      minLevel: 4
     },
     {
       url: '/Project',
       icon: (<StatusIcon fontSize="small" />),
       title: (globalVariable == "zh-tw" ? "專案頁面" : globalVariable == "zh-cn" ? "专案页面" : "Project"),
-      active: false
+      active: false,
+      minLevel: 1
     },
     {
       url: '/backup',
       icon: (<MapIcon fontSize="small" />),
       title: (globalVariable == "zh-tw" ? "備份頁面" : globalVariable == "zh-cn" ? "备份页面" : "Backup"),
-      active: false
+      active: false,
+      minLevel: 4
     },
     {
       url: '/consumables',
       icon: (<SummarizeIcon fontSize="small" />),
       title: (globalVariable == "zh-tw" ? "耗材預測頁面" : globalVariable == "zh-cn" ? "耗材预测页面" : "Consumables"),
-      active: false
+      active: false,
+      minLevel: 1
     },
     {
       url: '/LOG',
       icon: (<Info fontSize="small" />),
       title: (globalVariable == "zh-tw" ? "LOG頁面" : globalVariable == "zh-cn" ? "LOG页面" : "LOG"),
-      active: false
+      active: false,
+      minLevel: 1
     },
-  ];
+  ].filter(item => item.minLevel <= globalPermission); // Filter out items based on globalPermission;
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -153,6 +165,26 @@ export const DashboardSidebar = ({ idx, setIdx, initialOpen, toggleSidebar }) =>
           height: 1.5
         }}
       />
+    <Box sx={{ flexGrow: 1 }}>
+      <Box display="flex" alignItems="center" justifyContent="center" sx={{ mb: 2 }}>
+        <Typography variant="h6" fontWeight="medium">
+          {"權限切換"}
+        </Typography>
+      </Box>
+      {/* Mui的Select元件 */}
+      <Select
+        value={globalPermission}
+        onChange={handleGlobalVariableChange}
+        sx={{ width: '100%' }}
+      >
+        <MenuItem value={4}>4</MenuItem>
+        <MenuItem value={3}>3</MenuItem>
+        <MenuItem value={2}>2</MenuItem>
+        <MenuItem value={1}>1</MenuItem>
+        {/* ... 其他選項 */}
+      </Select>
+  </Box>
+
       <Box sx={{ flexGrow: 1 }}>
         <Box display="flex" alignItems="center" justifyContent="center" sx={{ mb: 2 }}>
           <Typography variant="h6" fontWeight="medium">
