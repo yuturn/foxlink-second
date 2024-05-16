@@ -169,7 +169,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
 
   const handleRefresh = () => {
     setRefreshKey(prevKey => prevKey + 1);
-    if (projectName && deviceName) {
+    if (projectName && deviceName && lineName) {
       getProjectDetailsFilter();
     } else {
       console.log("Project Name or Device Name not set.");
