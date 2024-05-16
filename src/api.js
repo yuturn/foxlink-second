@@ -211,13 +211,16 @@ export const apiGetStatisticsDetails = (data) => auth_except(baseRequest.get(`st
   }
 }));
 
-export const apiGetStatisticsDetailsFilter = (data) => auth_except(baseRequest.get(`statistics/predict_result${data.projectName ? "?project_name=" + data.projectName : ""}${data.lineName ? "&line_name=" + data.lineName : ""}${data.deviceName ? "&device_name=" + data.deviceName : ""}`, {
-  headers:
-  {
-    'accept': 'application/json',
-    'Authorization': `Bearer ${data['token']}`,
-  }
-}));
+export const apiGetStatisticsDetailsFilter = (data) => {
+  const url = `statistics/predict_result${data.projectName ? "?project_name=" + data.projectName : ""}${data.lineName ? "&line=" + data.lineName : ""}${data.deviceName ? "&device_name=" + data.deviceName : ""}`;
+  return auth_except(baseRequest.get(url, {
+    headers: {
+      'accept': 'application/json',
+      'Authorization': `Bearer ${data['token']}`,
+    }
+  }));
+}
+
 
 export const apiGetCompareList = (token) => auth_except(baseRequest.get(`/statistics/predict-compare-list`, {
   headers:

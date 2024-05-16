@@ -292,7 +292,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
     const data = {
       token: token,
       projectName: projectName,
-      lineName:lineName,
+      lineName: lineName,
       deviceName: deviceName
     }
     console.log(projectName)
