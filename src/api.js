@@ -211,7 +211,7 @@ export const apiGetStatisticsDetails = (data) => auth_except(baseRequest.get(`st
   }
 }));
 
-export const apiGetStatisticsDetailsFilter = (data) => auth_except(baseRequest.get(`statistics/predict_result${data.projectName ? "?project_name=" + data.projectName : ""}${data.deviceName ? "&device_name=" + data.deviceName : ""}`, {
+export const apiGetStatisticsDetailsFilter = (data) => auth_except(baseRequest.get(`statistics/predict_result${data.projectName ? "?project_name=" + data.projectName : ""}${data.lineName ? "&line_name=" + data.lineName : ""}${data.deviceName ? "&device_name=" + data.deviceName : ""}`, {
   headers:
   {
     'accept': 'application/json',
