@@ -90,8 +90,8 @@ function Adminpage({ token }) {
   const [loading, setLoading] = useState(false);
   const [projectDeleteOpen, setProjectDeleteOpen] = useState(false);
   const [deleteProjectName, setDeleteProjectName] = useState("");
-  const [preprocessingMonths, setPreprocessingMonths] = useState('');
-  const [monthsBeforeRetrain, setMonthsBeforeRetrain] = useState('');
+  const [preprocessingMonths, setPreprocessingMonths] = useState('365');
+  const [monthsBeforeRetrain, setMonthsBeforeRetrain] = useState('180');
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');

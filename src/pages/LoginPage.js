@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useContext } from "react";
 
 import { Box, Button, Container, TextField, Typography, Grid, Card, CardHeader, Link } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -9,7 +9,7 @@ import { apiUserLogin, apiSystemSpace } from "../api.js";
 import { useNavigate } from 'react-router-dom';
 
 import { encrypt, verify } from "../tools/crypt";
-
+import { GlobalPermissionContext } from '../components/GlobalPermission';
 const darkTheme = createTheme({
     palette: {
         mode: 'dark',
@@ -32,6 +32,7 @@ const darkTheme = createTheme({
 
 export default function Login({ setUser, setAlert }) {
     const navigate = useNavigate();
+    const { globalPermission, updateGlobalPermission } = useContext(GlobalPermissionContext);
     const _isMounted = useRef(true);
     useEffect(() => {
         return () => {
@@ -53,8 +54,10 @@ export default function Login({ setUser, setAlert }) {
                             'token': res.data['access_token'],
                             'token_type': res.data['token_type'],
                             'username': '',
-                            'level': '',
+                            'permission': res.data['permission'],
                         })
+                        console.log(setUser)
+                        updateGlobalPermission(res.data['permission'])
                         apiSystemSpace(res.data['access_token'])
                             .then(res => {
                                 setAlert({
@@ -89,6 +92,7 @@ export default function Login({ setUser, setAlert }) {
         }
         document.getElementById('account').value = "";
         document.getElementById('password').value = "";
+
     }
 
     return (

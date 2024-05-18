@@ -212,6 +212,8 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
 
   useEffect(() => {
     getProjectName(token);
+    getProjectDetails();
+    // getProjectDetailsFilter();
     apiMarquee(token)
       .then((res) => {
         console.log(res.data);

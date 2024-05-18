@@ -24,7 +24,7 @@ import React, { createContext, useState } from 'react';
 const GlobalPermissionContext = createContext();
 
 const GlobalPermissionProvider = ({ children }) => {
-  const [globalPermission, setGlobalPermission] = useState(4); // Default permission level
+  const [globalPermission, setGlobalPermission] = useState(); // Default permission level
 
   const updateGlobalPermission = (newValue) => {
     setGlobalPermission(newValue);
