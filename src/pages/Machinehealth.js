@@ -210,31 +210,31 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
       });
   };
 
-  useEffect(() => {
-    getProjectName(token);
-    getProjectDetails();
-    // getProjectDetailsFilter();
-    apiMarquee(token)
-      .then((res) => {
-        console.log(res.data);
-        setTimestampData(res.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-    const refreshInterval = setInterval(() => {
-      apiMarquee(token)
-        .then((res) => {
-          console.log(res.data);
-          setTimestampData(res.data);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }, 60000);
+  // useEffect(() => {
+  //   getProjectName(token);
+  //   getProjectDetails();
+  //   // getProjectDetailsFilter();
+  //   apiMarquee(token)
+  //     .then((res) => {
+  //       console.log(res.data);
+  //       setTimestampData(res.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+  //   const refreshInterval = setInterval(() => {
+  //     apiMarquee(token)
+  //       .then((res) => {
+  //         console.log(res.data);
+  //         setTimestampData(res.data);
+  //       })
+  //       .catch((error) => {
+  //         console.error(error);
+  //       });
+  //   }, 60000);
 
-    return () => clearInterval(refreshInterval);
-  }, [globalVariable]);
+  //   return () => clearInterval(refreshInterval);
+  // }, [globalVariable]);
 
   const getProjectName = (token) => {
     if (!token) {
