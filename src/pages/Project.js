@@ -546,21 +546,6 @@ export default function Project({ token, setAlert, ...rest }) {
 
   return (
     <ThemeProvider theme={darkTheme}>
-      <Box display="flex">
-        <Box>
-          <LoadingButton variant="contained" color="info" onClick={handleShowFirstCard} sx={{ mr: 1 }}>
-            <FolderCopyIcon sx={{ mr: 2 }} />
-            {globalVariable === "zh-tw" ? "專案管理" : globalVariable === "zh-cn" ? "专案管理" : "Project management"}
-          </LoadingButton>
-        </Box>
-        <Box>
-          <LoadingButton variant="contained" color="info" onClick={handleShowSecondCard} sx={{ mr: 1 }}>
-            <AccountBoxIcon sx={{ mr: 2 }} />
-            {globalVariable === "zh-tw" ? "人員管理" : globalVariable === "zh-cn" ? "人员管理" : "Employee management"}
-          </LoadingButton>
-        </Box>
-      </Box>
-
       <Snackbar
         open={alertOpen}
         autoHideDuration={5000}
@@ -589,6 +574,21 @@ export default function Project({ token, setAlert, ...rest }) {
           {errorMessage}
         </Alert>
       </Snackbar>
+
+      <Box display="flex">
+        <Box>
+          <LoadingButton variant="contained" color="info" onClick={handleShowFirstCard} sx={{ mr: 1 }}>
+            <FolderCopyIcon sx={{ mr: 2 }} />
+            {globalVariable === "zh-tw" ? "專案管理" : globalVariable === "zh-cn" ? "专案管理" : "Project management"}
+          </LoadingButton>
+        </Box>
+        <Box>
+          <LoadingButton variant="contained" color="info" onClick={handleShowSecondCard} sx={{ mr: 1 }}>
+            <AccountBoxIcon sx={{ mr: 2 }} />
+            {globalVariable === "zh-tw" ? "人員管理" : globalVariable === "zh-cn" ? "人员管理" : "Employee management"}
+          </LoadingButton>
+        </Box>
+      </Box>
 
       {showFirstCard ? (
         <Card>
@@ -959,7 +959,7 @@ export default function Project({ token, setAlert, ...rest }) {
                         onChange={projectNameChange}
                         style={{ minWidth: "200px", height: "45px" }}
                       >
-                        {project.map((projectItem) => (
+                        {project && project.map((projectItem) => (
                           <MenuItem value={projectItem.id}>
                             {projectItem.name}
                           </MenuItem>
@@ -1056,7 +1056,7 @@ export default function Project({ token, setAlert, ...rest }) {
                           onChange={projectNameChange}
                           style={{ minWidth: "200px", height: "45px" }}
                         >
-                          {project.map((projectItem) => (
+                          {project && project.map((projectItem) => (
                             <MenuItem value={projectItem.id}>
                               {projectItem.name}
                             </MenuItem>
