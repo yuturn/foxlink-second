@@ -144,28 +144,52 @@ export default function Project({ token, setAlert, ...rest }) {
     setUserDeleteBelongOpen(false);
   };
 
-  const [alertOpen, setAlertOpen] = useState(false);
-  const [message, setMessage] = useState('');
+  const [alertOpenProject, setAlertOpenProject] = useState(false);
+  const [messageProject, setMessageProject] = useState('');
 
-  const handleOpen = (message) => {
-    setMessage(message);
-    setAlertOpen(true);
+  const handleOpenProject = (message) => {
+    setMessageProject(message);
+    setAlertOpenProject(true);
   };
 
-  const handleClose = (event, reason) => {
-    setAlertOpen(false);
+  const handleCloseProject = (event, reason) => {
+    setAlertOpenProject(false);
   };
 
-  const [errorAlertOpen, setErrorAlertOpen] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorAlertOpenProject, setErrorAlertOpenProject] = useState(false);
+  const [errorMessageProject, setErrorMessageProject] = useState('');
 
-  const handleErrorOpen = (message) => {
-    setErrorMessage(message);
-    setErrorAlertOpen(true);
+  const handleErrorOpenProject = (message) => {
+    setErrorMessageProject(message);
+    setErrorAlertOpenProject(true);
   };
 
-  const handleErrorClose = (event, reason) => {
-    setErrorAlertOpen(false);
+  const handleErrorCloseProject = (event, reason) => {
+    setErrorAlertOpenProject(false);
+  };
+
+  const [alertOpenUser, setAlertOpenUser] = useState(false);
+  const [messageUser, setMessageUser] = useState('');
+
+  const handleOpenUser = (message) => {
+    setMessageUser(message);
+    setAlertOpenUser(true);
+  };
+
+  const handleCloseUser = (event, reason) => {
+    setAlertOpenUser(false);
+  };
+
+  const [errorAlertOpenUser, setErrorAlertOpenUser] = useState(false);
+  const [errorMessageUser, setErrorMessageUser] = useState('');
+
+  const handleErrorOpenUser = (message) => {
+    setErrorMessageUser(message);
+    setErrorAlertOpenUser(true);
+  };
+
+  const handleErrorCloseUser = (event, reason) => {
+    setErrorAlertOpenUser(false);
   };
 
   const projectDelete = () => {
@@ -175,11 +199,11 @@ export default function Project({ token, setAlert, ...rest }) {
     };
     apiDeleteProject(data)
       .then((res) => {
-        handleOpen(globalVariable === "zh-tw" ? "刪除專案成功" : globalVariable === "zh-cn" ? "删除专案成功" : "Delete project successful");
+        handleOpenProject(globalVariable === "zh-tw" ? "刪除專案成功" : globalVariable === "zh-cn" ? "删除专案成功" : "Delete project successful");
         projectDeleteHandleClose();
       }).catch((error) => {
         console.error(error);
-        handleErrorOpen(globalVariable === "zh-tw" ? ("刪除專案失敗" + error) : globalVariable === "zh-cn" ? ("删除专案失败:" + error) : ("Delete project failed:" + error));
+        handleErrorOpenProject(globalVariable === "zh-tw" ? ("刪除專案失敗" + error) : globalVariable === "zh-cn" ? ("删除专案失败:" + error) : ("Delete project failed:" + error));
       });
   };
 
@@ -190,7 +214,7 @@ export default function Project({ token, setAlert, ...rest }) {
     };
     apiDeleteAdminProjectDevices(data)
       .then((res) => {
-        handleOpen(globalVariable === "zh-tw" ? "刪除專案成功" : globalVariable === "zh-cn" ? "删除专案成功" : "Delete project successful");
+        handleOpenProject(globalVariable === "zh-tw" ? "刪除專案成功" : globalVariable === "zh-cn" ? "删除专案成功" : "Delete project successful");
         setLoading(false);
         setProjectTableListPost(currentProjects =>
           currentProjects.filter(project =>
@@ -199,10 +223,11 @@ export default function Project({ token, setAlert, ...rest }) {
         );
       }).catch((error) => {
         console.error(error);
-        handleErrorOpen(globalVariable === "zh-tw" ? ("刪除專案失敗" + error) : globalVariable === "zh-cn" ? ("删除专案失败:" + error) : ("Delete project failed:" + error));
+        handleErrorOpenProject(globalVariable === "zh-tw" ? ("刪除專案失敗" + error) : globalVariable === "zh-cn" ? ("删除专案失败:" + error) : ("Delete project failed:" + error));
         setLoading(false);
       });
   };
+  const [employeeResponse, setEmployeeResponse] = useState('');
 
   function handleOnclickGetUserName() {
     let userid = document.getElementById("userID").value;
@@ -212,14 +237,25 @@ export default function Project({ token, setAlert, ...rest }) {
     };
     apiGetUserName(data)
       .then((res) => {
-        setEmployeeName(res.data.data[0].user_name);
-        handleOpen(globalVariable === "zh-tw" ? "查詢成功" : globalVariable === "zh-cn" ? "查询成功" : "Search successful");
+        console.log('Response received:', res);
+        if (res.data && res.data.data && Array.isArray(res.data.data) && res.data.data.length > 0) {
+          const userName = res.data.data[0].user_name;
+          setEmployeeName(userName);
+          handleOpenUser(globalVariable === "zh-tw" ? "查詢成功" : globalVariable === "zh-cn" ? "查询成功" : "Search successful");
+          setEmployeeResponse(userName);
+        } else {
+          setEmployeeResponse(globalVariable === "zh-tw" ? "查詢成功" : globalVariable === "zh-cn" ? "查询成功" : "Search successful");
+        }
       })
       .catch((error) => {
-        console.error('Error fetching project data:', error);
+        console.error('Error in API call:', error);
+        if (error.response && error.response.data && error.response.data.detail) {
+          setEmployeeResponse(`Error: ${error.response.data.detail}`);
+        } else {
+          setEmployeeResponse(`Error: ${error.message}`);
+        }
       });
   }
-
   const [projectNameList, setProjectNameList] = useState([]);
   const getProjectName = (token) => {
     if (!token) {
@@ -287,10 +323,10 @@ export default function Project({ token, setAlert, ...rest }) {
         const unselectedItems = newData.filter((item) => item);
         setProjectList(unselectedItems);
         setSelectionModel(selectedIds);
-        handleOpen(globalVariable === "zh-tw" ? "查詢成功" : globalVariable === "zh-cn" ? "查询成功" : "Search successful");
+        handleOpenProject(globalVariable === "zh-tw" ? "查詢成功" : globalVariable === "zh-cn" ? "查询成功" : "Search successful");
       })
       .catch(err => {
-        handleErrorOpen(globalVariable === "zh-tw" ? ("查詢專案失敗: " + err) : globalVariable === "zh-cn" ? ("查询专案失败:" + err) : ("Query project failed:" + err));
+        handleErrorOpenProject(globalVariable === "zh-tw" ? ("查詢專案失敗: " + err) : globalVariable === "zh-cn" ? ("查询专案失败:" + err) : ("Query project failed:" + err));
       });
   }
 
@@ -312,10 +348,10 @@ export default function Project({ token, setAlert, ...rest }) {
         const unselectedItems = newData.filter((item) => item.select === 1);
         setProjectDeleteList(unselectedItems);
         setSelectionModel(selectedIds);
-        handleOpen(globalVariable === "zh-tw" ? "查詢成功" : globalVariable === "zh-cn" ? "查询成功" : "Search successful");
+        handleOpenProject(globalVariable === "zh-tw" ? "查詢成功" : globalVariable === "zh-cn" ? "查询成功" : "Search successful");
       })
       .catch(err => {
-        handleErrorOpen(globalVariable === "zh-tw" ? ("查詢專案失敗: " + err) : globalVariable === "zh-cn" ? ("查询专案失败:" + err) : ("Query project failed:" + err));
+        handleErrorOpenProject(globalVariable === "zh-tw" ? ("查詢專案失敗: " + err) : globalVariable === "zh-cn" ? ("查询专案失败:" + err) : ("Query project failed:" + err));
       });
   }
 
@@ -331,10 +367,10 @@ export default function Project({ token, setAlert, ...rest }) {
           status: item.status
         }));
         setProjectProcessList(newData);
-        handleOpen(globalVariable === "zh-tw" ? "查詢專案進度成功" : globalVariable === "zh-cn" ? "查询专案进度成功" : "Search Project progress successful");
+        handleOpenProject(globalVariable === "zh-tw" ? "查詢專案進度成功" : globalVariable === "zh-cn" ? "查询专案进度成功" : "Search Project progress successful");
       })
       .catch(err => {
-        handleErrorOpen(globalVariable === "zh-tw" ? ("查詢專案進度失敗: " + err) : globalVariable === "zh-cn" ? ("查询专案进度失败:" + err) : ("Query Project progress failed:" + err));
+        handleErrorOpenProject(globalVariable === "zh-tw" ? ("查詢專案進度失敗: " + err) : globalVariable === "zh-cn" ? ("查询专案进度失败:" + err) : ("Query Project progress failed:" + err));
       });
   }
 
@@ -403,17 +439,17 @@ export default function Project({ token, setAlert, ...rest }) {
     };
 
     if (data.project === undefined || data.project.length === 0) {
-      handleErrorOpen(globalVariable === "zh-tw" ? "尚未選取專案" : globalVariable === "zh-cn" ? "尚未选取专案" : "No project selected");
+      handleErrorOpenProject(globalVariable === "zh-tw" ? "尚未選取專案" : globalVariable === "zh-cn" ? "尚未选取专案" : "No project selected");
       setLoading(false);
     } else {
-      handleOpen(globalVariable === "zh-tw" ? "正在進行專案前處理" : globalVariable === "zh-cn" ? "正在进行专案前处理" : "Project pre-processing in progress");
+      handleOpenProject(globalVariable === "zh-tw" ? "正在進行專案前處理" : globalVariable === "zh-cn" ? "正在进行专案前处理" : "Project pre-processing in progress");
       apiPostProjectDevices(data)
         .then((res) => {
-          handleOpen(globalVariable === "zh-tw" ? "新增專案成功" : globalVariable === "zh-cn" ? "新增专案成功" : "New project successful");
+          handleOpenProject(globalVariable === "zh-tw" ? "新增專案成功" : globalVariable === "zh-cn" ? "新增专案成功" : "New project successful");
           setLoading(false);
         })
         .catch((err) => {
-          handleErrorOpen(globalVariable === "zh-tw" ? "新增專案失敗" + err : globalVariable === "zh-cn" ? "新增专案失败" + err : "Failed to add new project" + err);
+          handleErrorOpenProject(globalVariable === "zh-tw" ? "新增專案失敗" + err : globalVariable === "zh-cn" ? "新增专案失败" + err : "Failed to add new project" + err);
           setLoading(false);
         });
     }
@@ -432,17 +468,17 @@ export default function Project({ token, setAlert, ...rest }) {
     };
 
     if (data === undefined || data.length === 0) {
-      handleErrorOpen(globalVariable === "zh-tw" ? "尚未選取專案" : globalVariable === "zh-cn" ? "尚未选取专案" : "No project selected");
+      handleErrorOpenProject(globalVariable === "zh-tw" ? "尚未選取專案" : globalVariable === "zh-cn" ? "尚未选取专案" : "No project selected");
       setLoading(false);
     } else {
-      handleOpen(globalVariable === "zh-tw" ? "正在進行專案前處理" : globalVariable === "zh-cn" ? "正在进行专案前处理" : "Project pre-processing in progress");
+      handleOpenProject(globalVariable === "zh-tw" ? "正在進行專案前處理" : globalVariable === "zh-cn" ? "正在进行专案前处理" : "Project pre-processing in progress");
       apiPostAdminProjectDevices(data)
         .then(res => {
-          handleOpen(globalVariable === "zh-tw" ? "新增專案成功" : globalVariable === "zh-cn" ? "新增专案成功" : "New project successful");
+          handleOpenProject(globalVariable === "zh-tw" ? "新增專案成功" : globalVariable === "zh-cn" ? "新增专案成功" : "New project successful");
           setLoading(false);
           setProjectTableListPost(data.project);
         }).catch(err => {
-          handleErrorOpen(globalVariable === "zh-tw" ? "新增專案失敗" + err : globalVariable === "zh-cn" ? "新增专案失败" + err : "Failed to add new project" + err);
+          handleErrorOpenProject(globalVariable === "zh-tw" ? "新增專案失敗" + err : globalVariable === "zh-cn" ? "新增专案失败" + err : "Failed to add new project" + err);
           setLoading(false);
         });
     }
@@ -457,9 +493,9 @@ export default function Project({ token, setAlert, ...rest }) {
     };
     apiPostProjectUser(data)
       .then(res => {
-        handleOpen(globalVariable === "zh-tw" ? "新增成功" : globalVariable === "zh-cn" ? "新增成功" : "Added successfully");
+        handleOpenUser(globalVariable === "zh-tw" ? "新增成功" : globalVariable === "zh-cn" ? "新增成功" : "Added successfully");
       }).catch(err => {
-        handleErrorOpen(globalVariable === "zh-tw" ? "新增user失敗" : globalVariable === "zh-cn" ? "新增user失败" : "Failed to add user");
+        handleErrorOpenUser(globalVariable === "zh-tw" ? "新增user失敗" : globalVariable === "zh-cn" ? "新增user失败" : "Failed to add user");
       });
   }
 
@@ -490,10 +526,10 @@ export default function Project({ token, setAlert, ...rest }) {
     };
     apiDeleteProjectUserBelong(data)
       .then(res => {
-        handleOpen(globalVariable === "zh-tw" ? ('成功刪除User: ' + data.user_id) : globalVariable === "zh-cn" ? ('成功删除User: ' + data.user_id) : ('User deleted successfully: ' + data.user_id));
+        handleOpenUser(globalVariable === "zh-tw" ? ('成功刪除User: ' + data.user_id) : globalVariable === "zh-cn" ? ('成功删除User: ' + data.user_id) : ('User deleted successfully: ' + data.user_id));
         userDeleteHandleBelongClose();
       }).catch(err => {
-        handleErrorOpen(globalVariable === "zh-tw" ? "刪除User失敗" : globalVariable === "zh-cn" ? "删除User失败" : "Failed to delete User");
+        handleErrorOpenUser(globalVariable === "zh-tw" ? "刪除User失敗" : globalVariable === "zh-cn" ? "删除User失败" : "Failed to delete User");
       });
   }
 
@@ -505,10 +541,10 @@ export default function Project({ token, setAlert, ...rest }) {
     };
     apiDeleteProjectUser(data)
       .then(res => {
-        handleOpen(globalVariable === "zh-tw" ? ('成功刪除User: ' + data.userID) : globalVariable === "zh-cn" ? ('成功删除User: ' + data.userID) : ('User deleted successfully: ' + data.userID));
+        handleOpenUser(globalVariable === "zh-tw" ? ('成功刪除User: ' + data.userID) : globalVariable === "zh-cn" ? ('成功删除User: ' + data.userID) : ('User deleted successfully: ' + data.userID));
         userDeleteHandleClose();
       }).catch(err => {
-        handleErrorOpen(globalVariable === "zh-tw" ? "刪除User失敗" : globalVariable === "zh-cn" ? "删除User失败" : "Failed to delete User");
+        handleErrorOpenUser(globalVariable === "zh-tw" ? "刪除User失敗" : globalVariable === "zh-cn" ? "删除User失败" : "Failed to delete User");
       });
   }
 
@@ -538,43 +574,14 @@ export default function Project({ token, setAlert, ...rest }) {
         const selectedIds = newData.filter((item) => item.selected).map((item) => item.id);
         setProjectTableList(newData);
         setSelectionModel(selectedIds);
-        handleOpen(globalVariable === "zh-tw" ? "查詢成功" : globalVariable === "zh-cn" ? "查询成功" : "Search successful");
+        handleOpenProject(globalVariable === "zh-tw" ? "查詢成功" : globalVariable === "zh-cn" ? "查询成功" : "Search successful");
       }).catch(err => {
-        handleErrorOpen(globalVariable === "zh-tw" ? ("查询專案失敗: " + err) : globalVariable === "zh-cn" ? ("新增专案失败:" + err) : ("Query project failed:" + err));
+        handleErrorOpenProject(globalVariable === "zh-tw" ? ("查询專案失敗: " + err) : globalVariable === "zh-cn" ? ("新增专案失败:" + err) : ("Query project failed:" + err));
       });
   }
 
   return (
     <ThemeProvider theme={darkTheme}>
-      <Snackbar
-        open={alertOpen}
-        autoHideDuration={5000}
-        onClose={handleClose}
-        variant="filled"
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'center'
-        }}
-      >
-        <Alert onClose={handleClose} severity='success' sx={{ width: '100%' }}>
-          {message}
-        </Alert>
-      </Snackbar>
-      <Snackbar
-        open={errorAlertOpen}
-        autoHideDuration={5000}
-        onClose={handleErrorClose}
-        variant="filled"
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'center'
-        }}
-      >
-        <Alert onClose={handleErrorClose} severity='error' sx={{ width: '100%' }}>
-          {errorMessage}
-        </Alert>
-      </Snackbar>
-
       <Box display="flex">
         <Box>
           <LoadingButton variant="contained" color="info" onClick={handleShowFirstCard} sx={{ mr: 1 }}>
@@ -582,16 +589,45 @@ export default function Project({ token, setAlert, ...rest }) {
             {globalVariable === "zh-tw" ? "專案管理" : globalVariable === "zh-cn" ? "专案管理" : "Project management"}
           </LoadingButton>
         </Box>
-        <Box>
-          <LoadingButton variant="contained" color="info" onClick={handleShowSecondCard} sx={{ mr: 1 }}>
-            <AccountBoxIcon sx={{ mr: 2 }} />
-            {globalVariable === "zh-tw" ? "人員管理" : globalVariable === "zh-cn" ? "人员管理" : "Employee management"}
-          </LoadingButton>
-        </Box>
+        {globalPermission >= 2 ? (
+          <Box>
+            <LoadingButton variant="contained" color="info" onClick={handleShowSecondCard} sx={{ mr: 1 }}>
+              <AccountBoxIcon sx={{ mr: 2 }} />
+              {globalVariable === "zh-tw" ? "人員管理" : globalVariable === "zh-cn" ? "人员管理" : "Employee management"}
+            </LoadingButton>
+          </Box>) : null}
       </Box>
 
       {showFirstCard ? (
         <Card>
+          <Snackbar
+            open={alertOpenProject}
+            autoHideDuration={5000}
+            onClose={handleCloseProject}
+            variant="filled"
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'center'
+            }}
+          >
+            <Alert onClose={handleCloseProject} severity='success' sx={{ width: '100%' }}>
+              {messageProject}
+            </Alert>
+          </Snackbar>
+          <Snackbar
+            open={errorAlertOpenProject}
+            autoHideDuration={5000}
+            onClose={handleErrorCloseProject}
+            variant="filled"
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'center'
+            }}
+          >
+            <Alert onClose={handleErrorCloseProject} severity='error' sx={{ width: '100%' }}>
+              {errorMessageProject}
+            </Alert>
+          </Snackbar>
           <Box sx={{ bgcolor: '#696969' }}>
             {globalVariable === "zh-tw" ? (
               <CardHeader title="專案" color="#696969" />
@@ -605,104 +641,106 @@ export default function Project({ token, setAlert, ...rest }) {
           <CardContent>
             <Grid container spacing={1}>
               <Grid item xs={12} md={12}>
+
                 <Box>
-                  <Box component="form" role="form" mb={3}>
-                    <Typography variant="h4" fontWeight="medium" mt={3}>
-                      {globalVariable === "zh-tw" ? "新增專案" : globalVariable === "zh-cn" ? "新增专案" : "Add new project"}
-                    </Typography>
-                    <Box display="flex" alignItems="center" pt={3} px={2}>
-                      <Typography variant="h5" fontWeight="medium" mr={2}>
-                        {globalVariable === "zh-tw" ? "專案名稱:" : globalVariable === "zh-cn" ? "专案名称:" : "Project name:"}
-                      </Typography>
-                      <Box>
-                        <FormControl>
-                          <InputLabel id="operation-type-select-label">專案名稱</InputLabel>
-                          <Select
-                            labelId="permission-select-label"
-                            id="permission-select"
-                            value={projectIDSelect}
-                            label="專案名稱"
-                            onChange={projectSelectNameChange}
-                            style={{ minWidth: "271px", height: "56px" }}
-                          >
-                            <MenuItem value="">清空欄位</MenuItem>
-                            {projectNameList.map((projectItem) => (
-                              <MenuItem value={projectItem}>
-                                {projectItem}
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        </FormControl>
-                      </Box>
-                      <Box ml={2}>
-                        <LoadingButton variant="contained" color="info" onClick={handleOnClickProjectAdd}>
-                          {globalVariable === "zh-tw" ? "查詢" : globalVariable === "zh-cn" ? "查询" : "Search"}
-                        </LoadingButton>
-                      </Box>
-                    </Box>
-                  </Box>
-                  <Box display="flex" alignItems="center" pt={3} px={2}>
-                    {globalVariable === "zh-tw" ? (
-                      <div style={{ height: 600, width: '100%' }}>
-                        <DataGrid
-                          isRowSelectable={(params) => params.row.select === 0}
-                          rows={projectList}
-                          columns={columnsTW}
-                          initialState={{
-                            pagination: {
-                              paginationModel: { pageSize: 5 },
-                            },
-                          }}
-                          pageSizeOptions={[5]}
-                          checkboxSelection
-                          onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
-                          getRowCheckboxProps={(params) => ({
-                            disabled: params.rows.select === 1
-                          })}
-                        />
-                      </div>
-                    ) : globalVariable === "zh-cn" ? (
-                      <div style={{ height: 600, width: '100%' }}>
-                        <DataGrid
-                          isRowSelectable={(params) => params.row.select === 0}
-                          rows={projectList}
-                          columns={columnsTW}
-                          initialState={{
-                            pagination: {
-                              paginationModel: { pageSize: 5 },
-                            },
-                          }}
-                          pageSizeOptions={[5]}
-                          checkboxSelection
-                          onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
-                          getRowCheckboxProps={(params) => ({
-                            disabled: params.rows.select === 1
-                          })}
-                        />
-                      </div>
-                    ) : (
-                      <div style={{ height: 600, width: '100%' }}>
-                        <DataGrid
-                          isRowSelectable={(params) => params.row.select === 0}
-                          rows={projectList}
-                          columns={columnsTW}
-                          initialState={{
-                            pagination: {
-                              paginationModel: { pageSize: 5 },
-                            },
-                          }}
-                          pageSizeOptions={[5]}
-                          checkboxSelection
-                          onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
-                          getRowCheckboxProps={(params) => ({
-                            disabled: params.rows.select === 1
-                          })}
-                        />
-                      </div>
-                    )}
-                  </Box>
                   {globalPermission >= 3 ? (
                     <>
+                      <Box component="form" role="form" mb={3}>
+                        <Typography variant="h4" fontWeight="medium" mt={3}>
+                          {globalVariable === "zh-tw" ? "新增專案" : globalVariable === "zh-cn" ? "新增专案" : "Add new project"}
+                        </Typography>
+                        <Box display="flex" alignItems="center" pt={3} px={2}>
+                          <Typography variant="h5" fontWeight="medium" mr={2}>
+                            {globalVariable === "zh-tw" ? "專案名稱:" : globalVariable === "zh-cn" ? "专案名称:" : "Project name:"}
+                          </Typography>
+                          <Box>
+                            <FormControl>
+                              <InputLabel id="operation-type-select-label">專案名稱</InputLabel>
+                              <Select
+                                labelId="permission-select-label"
+                                id="permission-select"
+                                value={projectIDSelect}
+                                label="專案名稱"
+                                onChange={projectSelectNameChange}
+                                style={{ minWidth: "271px", height: "56px" }}
+                              >
+                                <MenuItem value="">清空欄位</MenuItem>
+                                {projectNameList.map((projectItem) => (
+                                  <MenuItem value={projectItem}>
+                                    {projectItem}
+                                  </MenuItem>
+                                ))}
+                              </Select>
+                            </FormControl>
+                          </Box>
+                          <Box ml={2}>
+                            <LoadingButton variant="contained" color="info" onClick={handleOnClickProjectAdd}>
+                              {globalVariable === "zh-tw" ? "查詢" : globalVariable === "zh-cn" ? "查询" : "Search"}
+                            </LoadingButton>
+                          </Box>
+                        </Box>
+                      </Box>
+                      <Box display="flex" alignItems="center" pt={3} px={2}>
+                        {globalVariable === "zh-tw" ? (
+                          <div style={{ height: 600, width: '100%' }}>
+                            <DataGrid
+                              isRowSelectable={(params) => params.row.select === 0}
+                              rows={projectList}
+                              columns={columnsTW}
+                              initialState={{
+                                pagination: {
+                                  paginationModel: { pageSize: 5 },
+                                },
+                              }}
+                              pageSizeOptions={[5]}
+                              checkboxSelection
+                              onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
+                              getRowCheckboxProps={(params) => ({
+                                disabled: params.rows.select === 1
+                              })}
+                            />
+                          </div>
+                        ) : globalVariable === "zh-cn" ? (
+                          <div style={{ height: 600, width: '100%' }}>
+                            <DataGrid
+                              isRowSelectable={(params) => params.row.select === 0}
+                              rows={projectList}
+                              columns={columnsTW}
+                              initialState={{
+                                pagination: {
+                                  paginationModel: { pageSize: 5 },
+                                },
+                              }}
+                              pageSizeOptions={[5]}
+                              checkboxSelection
+                              onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
+                              getRowCheckboxProps={(params) => ({
+                                disabled: params.rows.select === 1
+                              })}
+                            />
+                          </div>
+                        ) : (
+                          <div style={{ height: 600, width: '100%' }}>
+                            <DataGrid
+                              isRowSelectable={(params) => params.row.select === 0}
+                              rows={projectList}
+                              columns={columnsTW}
+                              initialState={{
+                                pagination: {
+                                  paginationModel: { pageSize: 5 },
+                                },
+                              }}
+                              pageSizeOptions={[5]}
+                              checkboxSelection
+                              onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
+                              getRowCheckboxProps={(params) => ({
+                                disabled: params.rows.select === 1
+                              })}
+                            />
+                          </div>
+                        )}
+                      </Box>
+
                       <Grid item xs={3}>
                         <Box component="form" role="form">
                           <Box display="flex" alignItems="center" pt={3}>
@@ -729,112 +767,120 @@ export default function Project({ token, setAlert, ...rest }) {
                           </LoadingButton>
                         </Box>
                       </Box>
+                      <Divider sx={{ borderBottomWidth: 3, mt: 2 }} />
                     </>
                   ) : null}
-                  <Divider sx={{ borderBottomWidth: 3, mt: 2 }} />
+
+
                   <Box component="form" role="form" mb={3}>
-                    <Typography variant="h4" fontWeight="medium" mt={3}>
-                      {globalVariable === "zh-tw" ? "刪除專案" : globalVariable === "zh-cn" ? "删除专案" : "Delete project"}
-                    </Typography>
-                    <LoadingButton
-                      variant="contained"
-                      color="info"
-                      onClick={handleOnClickProjectDelete}
-                    >
-                      {globalVariable === "zh-tw" ? "更新專案" : globalVariable === "zh-cn" ? "更新专案" : "Update project"}
-                    </LoadingButton>
                     {globalPermission >= 3 ? (
                       <>
+                        <Typography variant="h4" fontWeight="medium" mt={3}>
+                          {globalVariable === "zh-tw" ? "刪除專案" : globalVariable === "zh-cn" ? "删除专案" : "Delete project"}
+                        </Typography>
                         <LoadingButton
                           variant="contained"
-                          color="error"
-                          sx={{ ml: 3 }}
-                          onClick={projectDeleteHandleClickOpen}
+                          color="info"
+                          onClick={handleOnClickProjectDelete}
                         >
-                          {globalVariable === "zh-tw" ? "刪除機台" : globalVariable === "zh-cn" ? "删除机台" : "Delete Machine"}
+                          {globalVariable === "zh-tw" ? "更新專案" : globalVariable === "zh-cn" ? "更新专案" : "Update project"}
                         </LoadingButton>
-                        <Dialog
-                          open={projectDeleteOpen}
-                          onClose={projectDeleteHandleClose}
-                          aria-labelledby="alert-dialog-project"
-                          aria-describedby="alert-dialog-project"
-                        >
-                          <DialogTitle id="alert-dialog-title">
-                            {globalVariable === "zh-tw" ? "是否刪除機台?" : globalVariable === "zh-cn" ? "是否删除机台?" : "Delete Machine?"}
-                          </DialogTitle>
-                          <DialogContent>
-                            <DialogContentText id="alert-dialog-permission">
-                              {globalVariable === "zh-tw" ? "按下刪除按鈕後將會刪除機台" : globalVariable === "zh-cn" ? "按下删除按钮后将会删除机台" : "Clicking the delete button will delete the Machine"}
-                            </DialogContentText>
-                          </DialogContent>
-                          <DialogActions>
-                            <Button
-                              onClick={projectDelete}
+                        {globalPermission >= 3 ? (
+                          <>
+                            <LoadingButton
+                              variant="contained"
                               color="error"
-                              variant="contained"
+                              sx={{ ml: 3 }}
+                              onClick={projectDeleteHandleClickOpen}
                             >
-                              {globalVariable === "zh-tw" ? "刪除" : globalVariable === "zh-cn" ? "删除" : "Delete"}
-                            </Button>
-                            <Button
-                              onClick={projectDeleteHandleClose}
-                              color="info"
-                              variant="contained"
+                              {globalVariable === "zh-tw" ? "刪除機台" : globalVariable === "zh-cn" ? "删除机台" : "Delete Machine"}
+                            </LoadingButton>
+                            <Dialog
+                              open={projectDeleteOpen}
+                              onClose={projectDeleteHandleClose}
+                              aria-labelledby="alert-dialog-project"
+                              aria-describedby="alert-dialog-project"
                             >
-                              {globalVariable === "zh-tw" ? "關閉" : globalVariable === "zh-cn" ? "关闭" : "Close"}
-                            </Button>
-                          </DialogActions>
-                        </Dialog>
+                              <DialogTitle id="alert-dialog-title">
+                                {globalVariable === "zh-tw" ? "是否刪除機台?" : globalVariable === "zh-cn" ? "是否删除机台?" : "Delete Machine?"}
+                              </DialogTitle>
+                              <DialogContent>
+                                <DialogContentText id="alert-dialog-permission">
+                                  {globalVariable === "zh-tw" ? "按下刪除按鈕後將會刪除機台" : globalVariable === "zh-cn" ? "按下删除按钮后将会删除机台" : "Clicking the delete button will delete the Machine"}
+                                </DialogContentText>
+                              </DialogContent>
+                              <DialogActions>
+                                <Button
+                                  onClick={projectDelete}
+                                  color="error"
+                                  variant="contained"
+                                >
+                                  {globalVariable === "zh-tw" ? "刪除" : globalVariable === "zh-cn" ? "删除" : "Delete"}
+                                </Button>
+                                <Button
+                                  onClick={projectDeleteHandleClose}
+                                  color="info"
+                                  variant="contained"
+                                >
+                                  {globalVariable === "zh-tw" ? "關閉" : globalVariable === "zh-cn" ? "关闭" : "Close"}
+                                </Button>
+                              </DialogActions>
+                            </Dialog>
+                          </>
+                        ) : null}
+                        <Box display="flex" alignItems="center" pt={3} px={2}>
+                          {globalVariable === "zh-tw" ? (
+                            <div style={{ height: 600, width: '100%' }}>
+                              <DataGrid
+                                rows={projectDeleteList}
+                                columns={columnsTW}
+                                initialState={{
+                                  pagination: {
+                                    paginationModel: { pageSize: 5 },
+                                  },
+                                }}
+                                pageSizeOptions={[5]}
+                                checkboxSelection
+                                onSelectionModelChange={(ids) => onRowsSelectionHandlerDelete(ids)}
+                              />
+                            </div>
+                          ) : globalVariable === "zh-cn" ? (
+                            <div style={{ height: 600, width: '100%' }}>
+                              <DataGrid
+                                rows={projectDeleteList}
+                                columns={columnsTW}
+                                initialState={{
+                                  pagination: {
+                                    paginationModel: { pageSize: 5 },
+                                  },
+                                }}
+                                pageSizeOptions={[5]}
+                                checkboxSelection
+                                onSelectionModelChange={(ids) => onRowsSelectionHandlerDelete(ids)}
+                              />
+                            </div>
+                          ) : (
+                            <div style={{ height: 600, width: '100%' }}>
+                              <DataGrid
+                                rows={projectDeleteList}
+                                columns={columnsTW}
+                                initialState={{
+                                  pagination: {
+                                    paginationModel: { pageSize: 5 },
+                                  },
+                                }}
+                                pageSizeOptions={[5]}
+                                checkboxSelection
+                                onSelectionModelChange={(ids) => onRowsSelectionHandlerDelete(ids)}
+                              />
+                            </div>
+                          )}
+                        </Box>
+
+
+                        <Divider sx={{ borderBottomWidth: 3, mt: 2, mb: 2 }} />
                       </>
                     ) : null}
-                    <Box display="flex" alignItems="center" pt={3} px={2}>
-                      {globalVariable === "zh-tw" ? (
-                        <div style={{ height: 600, width: '100%' }}>
-                          <DataGrid
-                            rows={projectDeleteList}
-                            columns={columnsTW}
-                            initialState={{
-                              pagination: {
-                                paginationModel: { pageSize: 5 },
-                              },
-                            }}
-                            pageSizeOptions={[5]}
-                            checkboxSelection
-                            onSelectionModelChange={(ids) => onRowsSelectionHandlerDelete(ids)}
-                          />
-                        </div>
-                      ) : globalVariable === "zh-cn" ? (
-                        <div style={{ height: 600, width: '100%' }}>
-                          <DataGrid
-                            rows={projectDeleteList}
-                            columns={columnsTW}
-                            initialState={{
-                              pagination: {
-                                paginationModel: { pageSize: 5 },
-                              },
-                            }}
-                            pageSizeOptions={[5]}
-                            checkboxSelection
-                            onSelectionModelChange={(ids) => onRowsSelectionHandlerDelete(ids)}
-                          />
-                        </div>
-                      ) : (
-                        <div style={{ height: 600, width: '100%' }}>
-                          <DataGrid
-                            rows={projectDeleteList}
-                            columns={columnsTW}
-                            initialState={{
-                              pagination: {
-                                paginationModel: { pageSize: 5 },
-                              },
-                            }}
-                            pageSizeOptions={[5]}
-                            checkboxSelection
-                            onSelectionModelChange={(ids) => onRowsSelectionHandlerDelete(ids)}
-                          />
-                        </div>
-                      )}
-                    </Box>
-                    <Divider sx={{ borderBottomWidth: 3, mt: 2, mb: 2 }} />
                     <Box component="form" role="form" mb={3}>
                       <Typography variant="h4" fontWeight="medium" mt={3}>
                         {globalVariable === "zh-tw" ? "專案進度顯示" : globalVariable === "zh-cn" ? "专案进度显示" : "Project progress display project"}
@@ -903,6 +949,34 @@ export default function Project({ token, setAlert, ...rest }) {
         </Card>
       ) : (
         <Card>
+          <Snackbar
+            open={alertOpenUser}
+            autoHideDuration={5000}
+            onClose={handleCloseUser}
+            variant="filled"
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'center'
+            }}
+          >
+            <Alert onClose={handleCloseUser} severity='success' sx={{ width: '100%' }}>
+              {messageUser}
+            </Alert>
+          </Snackbar>
+          <Snackbar
+            open={errorAlertOpenUser}
+            autoHideDuration={5000}
+            onClose={handleErrorCloseUser}
+            variant="filled"
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'center'
+            }}
+          >
+            <Alert onClose={handleErrorCloseUser} severity='error' sx={{ width: '100%' }}>
+              {errorMessageUser}
+            </Alert>
+          </Snackbar>
           <Box sx={{ bgcolor: '#696969' }}>
             {globalVariable === "zh-tw" ? (
               <CardHeader title="專案人員" color="#696969" />
@@ -936,6 +1010,9 @@ export default function Project({ token, setAlert, ...rest }) {
                     <LoadingButton variant="contained" color="info" onClick={handleOnclickGetUserName}>
                       {globalVariable === "zh-tw" ? "查詢" : globalVariable === "zh-cn" ? "查询" : "Search"}
                     </LoadingButton>
+                    <Typography variant="h5" fontWeight="medium" ml={2}>
+                      {employeeResponse}
+                    </Typography>
                   </Box>
                   <Box display="flex" alignItems="center" pt={3} px={2}>
                     <Typography variant="h5" fontWeight="medium" mr={2}>
