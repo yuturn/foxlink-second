@@ -242,9 +242,9 @@ export default function Project({ token, setAlert, ...rest }) {
           const userName = res.data.data[0].user_name;
           setEmployeeName(userName);
           handleOpenUser(globalVariable === "zh-tw" ? "查詢成功" : globalVariable === "zh-cn" ? "查询成功" : "Search successful");
-          setEmployeeResponse(userName);
+          setEmployeeResponse(userid);
         } else {
-          setEmployeeResponse(globalVariable === "zh-tw" ? "查詢成功" : globalVariable === "zh-cn" ? "查询成功" : "Search successful");
+          setEmployeeResponse(userid);
         }
       })
       .catch((error) => {
@@ -1010,16 +1010,16 @@ export default function Project({ token, setAlert, ...rest }) {
                     <LoadingButton variant="contained" color="info" onClick={handleOnclickGetUserName}>
                       {globalVariable === "zh-tw" ? "查詢" : globalVariable === "zh-cn" ? "查询" : "Search"}
                     </LoadingButton>
-                    <Typography variant="h5" fontWeight="medium" ml={2}>
+                    {/* <Typography variant="h5" fontWeight="medium" ml={2}>
                       {employeeResponse}
-                    </Typography>
+                    </Typography> */}
                   </Box>
                   <Box display="flex" alignItems="center" pt={3} px={2}>
                     <Typography variant="h5" fontWeight="medium" mr={2}>
                       {globalVariable === "zh-tw" ? "人員名稱" : globalVariable === "zh-cn" ? "人员名称" : "Employee name"}
                     </Typography>
                     <Typography variant="h5" fontWeight="medium" mr={2}>
-                      {employeeName}
+                      {employeeResponse}
                     </Typography>
                   </Box>
                   <Box display="flex" alignItems="center" pt={3} px={2}>
