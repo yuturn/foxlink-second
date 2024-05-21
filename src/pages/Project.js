@@ -242,9 +242,9 @@ export default function Project({ token, setAlert, ...rest }) {
           const userName = res.data.data[0].user_name;
           setEmployeeName(userName);
           handleOpenUser(globalVariable === "zh-tw" ? "查詢成功" : globalVariable === "zh-cn" ? "查询成功" : "Search successful");
-          setEmployeeResponse(userid);
+          setEmployeeResponse(JSON.stringify(res.data));
         } else {
-          setEmployeeResponse(userid);
+          setEmployeeResponse(JSON.stringify(res.data));
         }
       })
       .catch((error) => {
@@ -256,6 +256,7 @@ export default function Project({ token, setAlert, ...rest }) {
         }
       });
   }
+
   const [projectNameList, setProjectNameList] = useState([]);
   const getProjectName = (token) => {
     if (!token) {
