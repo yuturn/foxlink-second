@@ -19,7 +19,7 @@ import { GlobalPermissionContext } from '../components/GlobalPermission';
 export const DashboardSidebar = ({ idx, setIdx, initialOpen, toggleSidebar }) => {
   const [open, setOpen] = useState(initialOpen);
   const { globalVariable, updateGlobalVariable } = useContext(GlobalContext);
-///////////////////權限導入///////////
+  ///////////////////權限導入///////////
   const { globalPermission, updateGlobalPermission } = useContext(GlobalPermissionContext);
   console.log(globalPermission)
   useEffect(() => {
@@ -165,14 +165,14 @@ export const DashboardSidebar = ({ idx, setIdx, initialOpen, toggleSidebar }) =>
           height: 1.5
         }}
       />
-    <Box sx={{ flexGrow: 1 }}>
-      <Box display="flex" alignItems="center" justifyContent="center" sx={{ mb: 2 }}>
+      {/* <Box sx={{ flexGrow: 1 }}> */}
+      {/* <Box display="flex" alignItems="center" justifyContent="center" sx={{ mb: 2 }}>
         <Typography variant="h6" fontWeight="medium">
           {"權限切換"}
         </Typography>
-      </Box>
+      </Box> */}
       {/* Mui的Select元件 */}
-      <Select
+      {/* <Select
         value={globalPermission}
         onChange={handleGlobalVariableChange}
         sx={{ width: '100%' }}
@@ -182,8 +182,8 @@ export const DashboardSidebar = ({ idx, setIdx, initialOpen, toggleSidebar }) =>
         <MenuItem value={2}>2</MenuItem>
         <MenuItem value={1}>1</MenuItem>
         {/* ... 其他選項 */}
-      </Select>
-  </Box>
+      {/* </Select>  */}
+      {/* </Box> */}
 
       <Box sx={{ flexGrow: 1 }}>
         <Box display="flex" alignItems="center" justifyContent="center" sx={{ mb: 2 }}>
