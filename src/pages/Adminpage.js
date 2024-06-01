@@ -335,10 +335,10 @@ function Adminpage({ token }) {
         <Grid item xs={12} md={6}>
           <Card>
             <Box sx={{ bgcolor: '#696969' }}>
-              <CardHeader title={globalVariable === "zh-tw" ? "設備圖片" : globalVariable === "zh-cn" ? "设备图片" : "Device Image"} color="#62aaf4" />
+              <CardHeader title={globalVariable === "zh-tw" ? "訓練資料週期使用示意圖" : globalVariable === "zh-cn" ? "訓練資料週期使用示意圖" : "Diagram of training data cycle usage"} color="#62aaf4" />
             </Box>
             <Box sx={{ p: 3 }}>
-              <div style={{ width: '800px', height: '800px', overflow: 'hidden', marginTop: '20px' }}>
+              <div style={{ width: '800px', height: '200px', overflow: 'hidden', marginTop: '20px' }}>
                 <img
                   src={imageSrc}
                   alt="Device"
