@@ -95,6 +95,25 @@ function Adminpage({ token }) {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+  const [imageSrc, setImageSrc] = useState('');
+
+  useEffect(() => {
+    fetchProjectList();
+  }, [token]);
+
+  useEffect(() => {
+    switch (globalVariable) {
+      case "zh-tw":
+        setImageSrc(require('./timelinetw.jpg'));
+        break;
+      case "zh-cn":
+        setImageSrc(require('./timelinecn.jpg'));
+        break;
+      default:
+        setImageSrc(require('./timelineen.jpg'));
+        break;
+    }
+  }, [globalVariable]);
 
   const fetchProjectList = () => {
     if (!token) {
@@ -117,10 +136,6 @@ function Adminpage({ token }) {
         setLoading(false);
       });
   };
-
-  useEffect(() => {
-    fetchProjectList();
-  }, [token]);
 
   const handleSwitchChange = (id, event) => {
     const newState = event.target.checked;
@@ -317,12 +332,28 @@ function Adminpage({ token }) {
             </Box>
           </Card>
         </Grid>
+        <Grid item xs={12} md={6}>
+          <Card>
+            <Box sx={{ bgcolor: '#696969' }}>
+              <CardHeader title={globalVariable === "zh-tw" ? "設備圖片" : globalVariable === "zh-cn" ? "设备图片" : "Device Image"} color="#62aaf4" />
+            </Box>
+            <Box sx={{ p: 3 }}>
+              <div style={{ width: '800px', height: '800px', overflow: 'hidden', marginTop: '20px' }}>
+                <img
+                  src={imageSrc}
+                  alt="Device"
+                  style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
+                />
+              </div>
+            </Box>
+          </Card>
+        </Grid>
       </Grid>
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={6000}
         onClose={handleSnackbarClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }} // 中间上方位置
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
         <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
           {snackbarMessage}
