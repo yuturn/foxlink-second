@@ -1,23 +1,4 @@
-// import React, { createContext, useState } from 'react';
-
-// export const GlobalPermissionContext = createContext();
-
-// export const GlobalPermissionProvider = ({ children }) => {
-//     const [defaultPermission, setDefaultPermission] = useState(4); // Default permission level
-
-//     const [globalPermission, setGlobalPermission] = useState(defaultPermission);
-
-//     const updateGlobalPermission = (newValue) => {
-//         setGlobalPermission(newValue);
-//     };
-
-//     return (
-//         <GlobalPermissionContext.Provider value={{ globalPermission, updateGlobalPermission, defaultPermission, setDefaultPermission }}>
-//             {children}
-//         </GlobalPermissionContext.Provider>
-//     );
-// };
-// GlobalPermissionContext.js
+// 這邊是一個權限全域變數的檔案，我接收權限等級會是在loginpage.js裡面，我login以後我會得到一個permmision我把它存在這個全域變數裡面以便使用
 
 import React, { createContext, useState } from 'react';
 

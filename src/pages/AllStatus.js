@@ -233,7 +233,7 @@ export default function Statistics({ token, ...rest }) {
     const tableCellStyle = {
         extendedCell: {},
     };
-
+// 接下來會有TW、CN、EN版的CREATE DEVICE他會依照 Call api進來的json檔來創造Carousel，基本上看懂一個就行。
     const createDeviceCardTW = (data, data2) => {
         return (
             <div>
@@ -945,7 +945,7 @@ export default function Statistics({ token, ...rest }) {
                         <LoadingButton variant="contained" color="info" onClick={togglePause}>
                             {isPaused ? '恢復輪播' : '暫停輪播'}
                         </LoadingButton>
-                        <Marquee msg={timeStampData} />
+                        <Marquee msg={timeStampData} /> {/* 這是跑馬燈的function如果要改，他自己有獨立的檔案可以進去裡面改 */}
                         <LoadingButton variant="contained" color="info" onClick={handleRefresh} style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}>
                             刷新
                         </LoadingButton>

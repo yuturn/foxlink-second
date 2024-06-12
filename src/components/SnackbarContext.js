@@ -1,4 +1,4 @@
-// SnackbarContext.js
+// SnackbarContext.js這個就是snackbar全域變數版，這邊可以忽略，可以沿用原本的snackbar就好
 import React, { createContext, useState } from 'react';
 import { Snackbar, Alert } from '@mui/material';
 

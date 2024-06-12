@@ -91,7 +91,7 @@ export default function Project({ token, ...rest }) {
   const [loading, setLoading] = useState(false);
 
   const { globalVariable, updateGlobalVariable } = useContext(GlobalContext);
-
+// colorbox是一個小方塊，旁邊可以標註顏色相關訊息
   function ColorBox(props) {
     return (
       <ThemeProvider
@@ -125,7 +125,7 @@ export default function Project({ token, ...rest }) {
   function LineChartExample() {
     const CustomTooltip = ({ active, payload, label }) => {
       if (active && payload && payload.length) {
-        // 将小数值转换为百分比形式
+        // 將小數轉成百分比形式
         const formattedLabel = label.substring(0, 10);
         const value = (payload[0].value * 100).toFixed(2) + '%';
         return (
@@ -172,7 +172,7 @@ export default function Project({ token, ...rest }) {
     );
   }
   
-  // 使用另一个useEffect监听statisticDevices的变化
+  // 使用另一个useEffect監聽statisticDevices的變化
   useEffect(() => {
     getProjectName(token)
   }, []);
@@ -277,12 +277,12 @@ export default function Project({ token, ...rest }) {
     const selectedProject = compareListData.find(item => item.project_name === selectedProjectName);
     console.log(selectedProject)
     if (selectedProject) {
-      // 将设备名称转换为数组
+      // 將設備名稱轉array
       const lines = selectedProject.lines;
-      setLineList(lines); // 将设备数组作为选项 
-      // 不更改线号选项
+      setLineList(lines); // 將設備array作為選項
+      // 不更改線號選項
     }
-    // 清空Line选项
+    // 清空Line選項
     setLine('');
   };
   //這邊是當lineName改變後做事情
@@ -386,13 +386,7 @@ export default function Project({ token, ...rest }) {
           }, {});
           return sortedDetailData;
         });
-        // const sortedDetailData = Object.keys(detailData).reduce((acc, deviceKey) => {
-        //   const device = detailData[deviceKey];
-        //   const sortedEvents = device.events.sort((eventA, eventB) => eventA.category - eventB.category);
-        //   acc[deviceKey] = { ...device, events: sortedEvents };
-        //   return acc;
-        // }, {});
-        // setDetailData(sortedDetailData)
+
       });
   };
   const detailHandleClickClose = () => {
@@ -412,14 +406,14 @@ export default function Project({ token, ...rest }) {
   const handleShowThirdCard = () => {
     setCurrentPage(3);
     setSearchDateData([]);
-    // 可以根据需要添加其他逻辑
+    
   };
 
   //success alert
   const [alertOpen, setAlertOpen] = React.useState(false);
   const [message, setMessage] = useState(''); // 状态来存储消息内容
   const handleOpen = (message) => {
-    setMessage(message); // 设置消息内容
+    setMessage(message); // 設置消息内容
     setAlertOpen(true);
   };
   const handleClose = (event, reason) => {
@@ -427,9 +421,9 @@ export default function Project({ token, ...rest }) {
   };
   //error alert
   const [errorAlertOpen, setErrorAlertOpen] = React.useState(false);
-  const [errorMessage, setErrorMessage] = useState(''); // 状态来存储消息内容
+  const [errorMessage, setErrorMessage] = useState(''); // 儲存消息内容
   const handleErrorOpen = (message) => {
-    setErrorMessage(message); // 设置消息内容
+    setErrorMessage(message); // 設置消息内容
     setErrorAlertOpen(true);
   };
   const handleErrorClose = (event, reason) => {
@@ -674,7 +668,7 @@ export default function Project({ token, ...rest }) {
                                   "& .MuiDialog-container": {
                                     "& .MuiPaper-root": {
                                       width: "100%",
-                                      minWidth: "1500px", // Set your width here
+                                      minWidth: "1500px", 
                                       minHeight: "800px",
                                     },
                                   },

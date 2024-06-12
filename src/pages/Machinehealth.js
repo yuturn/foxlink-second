@@ -156,8 +156,8 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
     getProjectDetailsFilter();
     apiMarquee(token)
       .then((res) => {
-        console.log(res.data); // 确保你能够看到这个时间戳在控制台中输出
-        setTimestampData(res.data); // 将时间戳保存到状态中，以便在组件中使用
+        console.log(res.data); 
+        setTimestampData(res.data); 
       })
       .catch((error) => {
         console.error(error);
@@ -165,7 +165,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
   }, [token, refreshKey]);
 
 
-
+// 這邊創一個handleRefresh功能是有關refresh按鈕，主要是按一下+1，那這邊就是為了產生變化讓上面的useEffect去監聽他，以便做到刷新功能
 
   const handleRefresh = () => {
     setRefreshKey(prevKey => prevKey + 1);
@@ -210,31 +210,6 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
       });
   };
 
-  // useEffect(() => {
-  //   getProjectName(token);
-  //   getProjectDetails();
-  //   // getProjectDetailsFilter();
-  //   apiMarquee(token)
-  //     .then((res) => {
-  //       console.log(res.data);
-  //       setTimestampData(res.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
-  //   const refreshInterval = setInterval(() => {
-  //     apiMarquee(token)
-  //       .then((res) => {
-  //         console.log(res.data);
-  //         setTimestampData(res.data);
-  //       })
-  //       .catch((error) => {
-  //         console.error(error);
-  //       });
-  //   }, 60000);
-
-  //   return () => clearInterval(refreshInterval);
-  // }, [globalVariable]);
 
   const getProjectName = (token) => {
     if (!token) {

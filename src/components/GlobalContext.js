@@ -1,4 +1,4 @@
-// GlobalContext.js
+// GlobalContext是語言切換功能全域變數的檔案
 import React, { createContext, useState } from 'react';
 
 const GlobalContext = createContext();

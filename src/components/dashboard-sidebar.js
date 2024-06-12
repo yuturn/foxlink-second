@@ -1,3 +1,4 @@
+// 這一檔案只有包含旁邊sidebar的部分，裡面有導入權限，以便控制那些要顯示那些不用
 import React, { useState, useEffect, useContext } from "react";
 import { GlobalContext } from '../components/GlobalContext';
 import { Menu as MenuIcon } from '@mui/icons-material';
@@ -19,7 +20,7 @@ import { GlobalPermissionContext } from '../components/GlobalPermission';
 export const DashboardSidebar = ({ idx, setIdx, initialOpen, toggleSidebar }) => {
   const [open, setOpen] = useState(initialOpen);
   const { globalVariable, updateGlobalVariable } = useContext(GlobalContext);
-  ///////////////////權限導入///////////
+  ///////////////////權限導入//////////////////////////
   const { globalPermission, updateGlobalPermission } = useContext(GlobalPermissionContext);
   console.log(globalPermission);
   useEffect(() => {
@@ -90,7 +91,24 @@ export const DashboardSidebar = ({ idx, setIdx, initialOpen, toggleSidebar }) =>
   };
 
   const upload_items = [
-    // You can uncomment and add items here if needed
+    // {
+    //   url: '/devices-upload',
+    //   icon: (<LayoutIcon fontSize="small" />),
+    //   title: 'Layout 座标表 上传',
+    //   active: false
+    // },
+    // {
+    //   url: '/worker-info-upload',
+    //   icon: (<InfoIcon fontSize="small" />),
+    //   title: '员工专职表 上传',
+    //   active: false
+    // },
+    // {
+    //   url: '/map-upload',
+    //   icon: (<MapIcon fontSize="small" />),
+    //   title: '车间地图 上传',
+    //   active: false
+    // }
   ];
 
   const content = (

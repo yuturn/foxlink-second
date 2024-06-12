@@ -49,54 +49,7 @@ export default function Statistics({ token, setAlert, ...rest }) {
   const togglePause = () => {
     setIsPaused(!isPaused);
   };
-  // function getCircleIcon(color) {
-  //   if (color === "red") {
-  //     return <RCircle />;
-  //   } else if (color === "yellow") {
-  //     return <YCircle />;
-  //   } else if (color === "green") {
-  //     return <GCircle />;
-  //   } else if (color === "blue") {
-  //     return <BCircle />;
-  //   } else {
-  //     return null; // 或者返回一个默认的图标
-  //   }
-  // }
 
-  // const RCircle = () => {
-  //   return (
-  //     <BsFillCircleFill style={{ color: 'red', fontSize: '30px' }} />
-  //   );
-  // }
-  // const YCircle = () => {
-  //   return (
-  //     <BsFillCircleFill style={{ color: 'yellow', fontSize: '30px' }} />
-  //   );
-  // }
-  // const GCircle = () => {
-  //   return (
-  //     <BsFillCircleFill style={{ color: 'green', fontSize: '30px' }} />
-  //   );
-  // }
-  // const BCircle = () => {
-  //   return (
-  //     <BsFillCircleFill style={{ color: '#4169e1', fontSize: '30px' }} />
-  //   );
-  // }
-
-  // function getCircleIcon(lightColor) {
-  //   if (lightColor === 1) {
-  //     return <RCircle />;
-  //   } else if (lightColor === 2) {
-  //     return <YCircle />;
-  //   } else if (lightColor === 3) {
-  //     return <GCircle />;
-  //   } else if (lightColor === 4) {
-  //     return <BCircle />;
-  //   } else {
-  //     return null; // 或者返回一个默认的图标
-  //   }
-  // }
   const settings = {
     dots: true,
     infinite: true,
