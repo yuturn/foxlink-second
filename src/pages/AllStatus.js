@@ -272,7 +272,7 @@ export default function Statistics({ token, ...rest }) {
 
         return (
             <div>
-                {Object.keys(groupedData).map((project) => (
+                {Object.keys(groupedData).sort().map((project) => (
                     <div key={project}>
                         <Carousel
                             showArrows={false}
@@ -282,8 +282,8 @@ export default function Statistics({ token, ...rest }) {
                             stopOnHover={true}
                             interval={3000}
                         >
-                            {Object.keys(groupedData[project]).map((device) =>
-                                Object.keys(groupedData[project][device]).map((line) => {
+                            {Object.keys(groupedData[project]).sort().map((device) =>
+                                Object.keys(groupedData[project][device]).sort().map((line) => {
                                     const deviceData = groupedData[project][device][line];
                                     const deviceData2 = groupedData2[project][device][line] || [];
 
@@ -849,7 +849,7 @@ export default function Statistics({ token, ...rest }) {
 
         return (
             <div>
-                {Object.keys(groupedData).map((project) => (
+                {Object.keys(groupedData).sort().map((project) => (
                     <div key={project}>
                         <Carousel
                             showArrows={false}
@@ -859,8 +859,8 @@ export default function Statistics({ token, ...rest }) {
                             stopOnHover={true}
                             interval={3000}
                         >
-                            {Object.keys(groupedData[project]).map((device) =>
-                                Object.keys(groupedData[project][device]).map((line) => {
+                            {Object.keys(groupedData[project]).sort().map((device) =>
+                                Object.keys(groupedData[project][device]).sort().map((line) => {
                                     const deviceData = groupedData[project][device][line];
                                     const deviceData2 = groupedData2[project][device][line] || [];
 
@@ -1427,7 +1427,7 @@ export default function Statistics({ token, ...rest }) {
 
         return (
             <div>
-                {Object.keys(groupedData).map((project) => (
+                {Object.keys(groupedData).sort().map((project) => (
                     <div key={project}>
                         <Carousel
                             showArrows={false}
@@ -1437,8 +1437,8 @@ export default function Statistics({ token, ...rest }) {
                             stopOnHover={true}
                             interval={3000}
                         >
-                            {Object.keys(groupedData[project]).map((device) =>
-                                Object.keys(groupedData[project][device]).map((line) => {
+                            {Object.keys(groupedData[project]).sort().map((device) =>
+                                Object.keys(groupedData[project][device]).sort().map((line) => {
                                     const deviceData = groupedData[project][device][line];
                                     const deviceData2 = groupedData2[project][device][line] || [];
 
