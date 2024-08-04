@@ -254,7 +254,7 @@ export const apiGetCompareAnalysis = (data) => auth_except(baseRequest.get(`stat
   }
 }));
 
-export const apiGetLOG = (data) => auth_except(baseRequest.get(`logs/?${data['action'] ? "action=" + data['action'] + "&" : ""}${data['limit'] ? "limit=" + data['limit'] + "&" : ""}${data['page'] ? "page=" + data['page'] + "&" : ""}${data['page'] ? "page=" + data['page'] + "&" : ""}${data['startDate'] ? "start_date=" + data['startDate'] + "&" : ""}${data['badge'] ? "badge=" + data['badge'] + "&" : ""}${data['endDate'] ? "end_date=" + data['endDate'] : ""}`, {
+export const apiGetLOG = (data) => auth_except(baseRequest.get(`logs/?${data['action'] ? "action=" + data['action'] + "&" : ""}${data['projectName'] ? "projectName=" + data['projectName'] + "&" : ""}${data['userName'] ? "username=" + data['userName'] + "&" : ""}${data['limit'] ? "limit=" + data['limit'] + "&" : ""}${data['page'] ? "page=" + data['page'] + "&" : ""}${data['startDate'] ? "start_date=" + data['startDate'] + "&" : ""}${data['badge'] ? "badge=" + data['badge'] + "&" : ""}${data['endDate'] ? "end_date=" + data['endDate'] : ""}`, {
   headers:
   {
     'accept': 'application/json',

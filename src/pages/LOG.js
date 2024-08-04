@@ -75,12 +75,16 @@ export default function LOG({ token, ...rest }) {
 
     //這邊是查詢LOG的按鈕
     const handleClickChartSearch = () => {
+        let projectName=document.getElementById('projectName').value;
+        let userName=document.getElementById('employeeName').value;
         let badge = document.getElementById('employeeID').value;
         let pageDataCount = document.getElementById('pageDataCount').value;
         const data = {
             startDate: new Date(startDate).toISOString().split('T')[0] + ' 00%3A00%3A00',
             endDate: new Date(endDate).toISOString().split('T')[0] + ' 00%3A00%3A00',
             action: operationType,
+            projectName:projectName,
+            userName:userName,
             badge: badge,
             page: 1,
             limit: pageDataCount,
@@ -118,6 +122,8 @@ export default function LOG({ token, ...rest }) {
     };
     //這邊是上一頁的按鈕
     const handleClickLastPage = () => {
+        let projectName=document.getElementById('projectName').value;
+        let userName=document.getElementById('employeeName').value;
         let badge = document.getElementById('employeeID').value;
         let pageDataCount = document.getElementById('pageDataCount').value;
         if (currentPage > 1) {
@@ -125,6 +131,8 @@ export default function LOG({ token, ...rest }) {
                 startDate: new Date(startDate).toISOString().split('T')[0] + ' 00%3A00%3A00',
                 endDate: new Date(endDate).toISOString().split('T')[0] + ' 00%3A00%3A00',
                 action: operationType,
+                projectName:projectName,
+                userName:userName,
                 badge: badge,
                 page: currentPage - 1,
                 limit: pageDataCount,
@@ -166,6 +174,8 @@ export default function LOG({ token, ...rest }) {
 
     //這邊是下一頁的按鈕
     const handleClickNextPage = () => {
+        let projectName=document.getElementById('projectName').value;
+        let userName=document.getElementById('employeeName').value;
         let badge = document.getElementById('employeeID').value;
         let pageDataCount = document.getElementById('pageDataCount').value;
         if (currentPage < totalPage) {
@@ -173,6 +183,8 @@ export default function LOG({ token, ...rest }) {
                 startDate: new Date(startDate).toISOString().split('T')[0] + ' 00%3A00%3A00',
                 endDate: new Date(endDate).toISOString().split('T')[0] + ' 00%3A00%3A00',
                 action: operationType,
+                userName:userName,
+                projectName:projectName,
                 badge: badge,
                 page: currentPage + 1,
                 limit: pageDataCount,
