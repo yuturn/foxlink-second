@@ -1,24 +1,17 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { apiGetStatisticsDetails, apiMarquee, apiGetStatisticsDetailsFilter } from '../api';
+import { apiGetHomePage } from '../api';
 import { GlobalContext } from '../components/GlobalContext';
 import Marquee from './Marquee';
-import { Box, Card, Grid, CardHeader, Typography, Snackbar } from '@mui/material';
+import { Box, Card, Typography, Snackbar, CardContent, CardHeader } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import LoadingButton from '@mui/lab/LoadingButton';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import TableSortLabel from '@mui/material/TableSortLabel';
-import Paper from '@mui/material/Paper';
-import { PieChart, pieArcLabelClasses } from '@mui/x-charts';
-import 'react-responsive-carousel/lib/styles/carousel.min.css';
-import { Carousel } from 'react-responsive-carousel';
-import DialogContent from '@mui/material/DialogContent';
 import Alert from '@mui/material/Alert';
-
+import DialogContent from '@mui/material/DialogContent';
 const darkTheme = createTheme({
     palette: {
         mode: 'light',
@@ -34,42 +27,51 @@ const darkTheme = createTheme({
         },
     },
 });
-
+function ColorBox(props) {
+    return (
+        <ThemeProvider
+            theme={{
+                ...darkTheme,
+                components: {
+                    MuiBox: {
+                        styleOverrides: { root: { width: '30px', height: '30px' } },
+                    },
+                },
+            }}
+        >
+            <DialogContent>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <Box
+                        sx={{
+                            width: '30px',
+                            height: '30px',
+                            backgroundColor: '#ffc107',
+                            marginRight: '10px',
+                        }}
+                    />
+                    <Typography sx={{ fontSize: 30 }}>{props.msg}</Typography>
+                </div>
+            </DialogContent>
+        </ThemeProvider>
+    );
+}
 export default function Statistics({ token, ...rest }) {
     const { globalVariable } = useContext(GlobalContext);
-    const [orderWeek, setOrderWeek] = useState('asc');
-    const [weekOrderBy, setWeekOrderBy] = useState('label');
-
-    const [orderDate, setOrder] = useState('asc');
-    const [dateOrderBy, setDateOrderBy] = useState('label');
-
     const [isPaused, setIsPaused] = useState(false);
-    const [projectName, setProjectName] = useState();
-    const [deviceName, setDeviceName] = useState();
-    const [lineName, setLineName] = useState();
-    const [projectNameList, setProjectNameList] = useState([]);
-    const [deviceNameList, setDeviceNameList] = useState([]);
-    const [projectLineNameList, setProjectLineNameList] = useState([]);
-    const [projectToLineDeviceMap, setProjectToLineDeviceMap] = useState({});
     const [alertOpen, setAlertOpen] = useState(false);
     const [message, setMessage] = useState('');
     const [errorAlertOpen, setErrorAlertOpen] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [refreshKey, setRefreshKey] = useState(0);
     const [selectedSlide, setSelectedSlide] = useState(0);
-    const [dateData, setDateData] = useState({});
-    const [timeStampData, setTimestampData] = useState('');
-
-    const togglePause = () => {
-        setIsPaused(!isPaused);
-    };
+    const [dateData, setDateData] = useState({ data: {}, timestamp: '' });
 
     const handleOpen = (message) => {
         setMessage(message);
         setAlertOpen(true);
     };
 
-    const handleClose = (event, reason) => {
+    const handleClose = () => {
         setAlertOpen(false);
     };
 
@@ -78,7 +80,7 @@ export default function Statistics({ token, ...rest }) {
         setErrorAlertOpen(true);
     };
 
-    const handleErrorClose = (event, reason) => {
+    const handleErrorClose = () => {
         setErrorAlertOpen(false);
     };
 
@@ -86,51 +88,21 @@ export default function Statistics({ token, ...rest }) {
         setRefreshKey((prevKey) => prevKey + 1);
     };
 
-    const handleSelectSlide = (index) => {
-        setSelectedSlide(index);
-    };
+    function sortDeviceKeys(deviceKeys) {
+        return deviceKeys.sort((a, b) => {
+            const numA = parseInt(a.split('@')[0].replace('Device_', ''), 10);
+            const numB = parseInt(b.split('@')[0].replace('Device_', ''), 10);
+            return numA - numB;
+        });
+    }
 
-    const customRenderIndicator = (clickHandler, isSelected, index) => {
-        const indicatorStyles = {
-            background: isSelected ? 'lightblue' : 'lightgray',
-            width: 15,
-            height: 15,
-            borderRadius: '50%',
-            display: 'inline-block',
-            margin: '0 8px',
-            cursor: 'pointer',
-        };
-
-        return (
-            <div
-                style={indicatorStyles}
-                onClick={() => {
-                    clickHandler();
-                    handleSelectSlide(index);
-                }}
-            />
-        );
-    };
-
-    useEffect(() => {
-        if (token) {
-            getProjectDetails();
-            // getProjectDetailsFilter();
-            fetchTimestampData();
+    const apiGetHomePageData = (token) => {
+        if (!token) {
+            return;
         }
-    }, [token, refreshKey]);
-
-    const getProjectDetails = () => {
-        apiGetStatisticsDetails({ token })
+        apiGetHomePage(token)
             .then((res) => {
-                setDateData(res.data);
-            })
-            .catch((err) => console.error(err));
-    };
-
-    const getProjectDetailsFilter = () => {
-        apiGetStatisticsDetailsFilter({ token, projectName, lineName, deviceName })
-            .then((res) => {
+                console.log(res.data)
                 setDateData(res.data);
                 handleOpen(
                     globalVariable === 'zh-tw'
@@ -151,1805 +123,185 @@ export default function Statistics({ token, ...rest }) {
             );
     };
 
-    const fetchTimestampData = () => {
-        apiMarquee(token)
-            .then((res) => {
-                setTimestampData(res.data);
-            })
-            .catch((err) => console.error(err));
-    };
-
-    const handleSortRequest = (property) => {
-        const isAsc = weekOrderBy === property && orderWeek === 'asc';
-        setOrderWeek(isAsc ? 'desc' : 'asc');
-        setWeekOrderBy(property);
-    };
-
-    const getComparator = (orderWeek) => {
-        return orderWeek === 'desc'
-            ? (a, b) => (a[weekOrderBy] > b[weekOrderBy] ? -1 : 1)
-            : (a, b) => (a[weekOrderBy] > b[weekOrderBy] ? 1 : -1);
-    };
-
-    const handleSortRequestDate = (property) => {
-        const isAsc = dateOrderBy === property && orderDate === 'asc';
-        setOrder(isAsc ? 'desc' : 'asc');
-        setDateOrderBy(property);
-    };
-
-    const getComparatorDate = (orderDate) => {
-        return orderDate === 'desc'
-            ? (a, b) => (a[dateOrderBy] > b[dateOrderBy] ? -1 : 1)
-            : (a, b) => (a[dateOrderBy] > b[dateOrderBy] ? 1 : -1);
-    };
-
-    function getColor(lightColor) {
-        if (lightColor === 1) {
-            return '#ff2600';
-        } else if (lightColor === 0) {
-            return '#008f00';
-        } else {
-            return null;
+    useEffect(() => {
+        if (token) {
+            apiGetHomePageData(token)
         }
-    }
+    }, [token, refreshKey]);
 
-    function infoColor(happened_times) {
-        if (happened_times !== 0) {
-            return '#ffc107';
-        } else {
-            return null;
-        }
-    }
+    const DataDisplay = ({ data, timestamp, devicesPerCard = 3, language }) => {
 
-    function ColorBox(props) {
-        return (
-            <ThemeProvider
-                theme={{
-                    ...darkTheme,
-                    components: {
-                        MuiBox: {
-                            styleOverrides: { root: { width: '30px', height: '30px' } },
-                        },
-                    },
-                }}
-            >
-                <DialogContent>
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <Box
-                            sx={{
-                                width: '30px',
-                                height: '30px',
-                                backgroundColor: '#ffc107',
-                                marginRight: '10px',
-                            }}
-                        />
-                        <Typography sx={{ fontSize: 30 }}>{props.msg}</Typography>
-                    </div>
-                </DialogContent>
-            </ThemeProvider>
-        );
-    }
-
-    const tableContainerStyle = {
-        tableContainer: {
-            maxHeight: '300px',
-            overflowY: 'auto',
-        },
-    };
-
-    const tableCellStyle = {
-        extendedCell: {},
-    };
-    // 接下來會有TW、CN、EN版的CREATE DEVICE他會依照 Call api進來的json檔來創造Carousel，基本上看懂一個就行。
-    const createDeviceCardTW = (data, data2) => {
-        const groupByProjectAndLine = (data) => {
-            const groupedData = {};
-
-            Object.keys(data).forEach((project) => {
-                Object.keys(data[project]).forEach((device) => {
-                    data[project][device].forEach((item) => {
-                        const line = item.line;
-                        if (!groupedData[project]) {
-                            groupedData[project] = {};
-                        }
-                        if (!groupedData[project][line]) {
-                            groupedData[project][line] = {};
-                        }
-                        if (!groupedData[project][line][device]) {
-                            groupedData[project][line][device] = [];
-                        }
-                        groupedData[project][line][device].push(item);
-                    });
-                });
-            });
-
-            return groupedData;
+        const headers = {
+            "zh-tw": ["機台", "名稱", "時間", "穩定", "異常", "總穩定", "總異常"],
+            "zh-cn": ["设备", "名称", "时间", "稳定", "异常", "总稳定", "总异常"],
+            "en": ["Device", "Name", "Time", "Stable", "Unstable", "Total Stable", "Total Unstable"],
         };
 
-        const groupedData = groupByProjectAndLine(data);
-        const groupedData2 = groupByProjectAndLine(data2);
+        // 日期和週標題
+        const timeHeaders = {
+            "zh-tw": ["日", "週"],
+            "zh-cn": ["日", "周"],
+            "en": ["Day", "Week"]
+        };
+
+        const rowColors = ['#ADD8E6', '#ADD8E6', '#FFFFFF', '#68BE8D', '#FFFFCC', '#68BE8D', '#FFFFCC', '#FFFFFF'];
 
         return (
             <div>
-                {Object.keys(groupedData).sort().map((project) => (
-                    Object.keys(groupedData[project]).sort().map((line) => (
-                        <div key={`${project}-${line}`}>
-                            <Carousel
-                                showArrows={false}
-                                renderIndicator={customRenderIndicator}
-                                infiniteLoop={true}
-                                autoPlay={!isPaused}
-                                stopOnHover={true}
-                                interval={3000}
-                            >
-                                {Object.keys(groupedData[project][line])
-                                    .sort((a, b) => {
-                                        const numA = parseInt(a.match(/Device_(\d+)/)[1], 10);
-                                        const numB = parseInt(b.match(/Device_(\d+)/)[1], 10);
-                                        return numA - numB;
-                                    })
-                                    .map((device) => {
-                                        const deviceData = groupedData[project][line][device];
-                                        const deviceData2 = groupedData2[project][line][device] || [];
+                {Object.keys(data).map((project) =>
+                    Object.keys(data[project]).map((line) => {
+                        const deviceKeys = sortDeviceKeys(Object.keys(data[project][line]));
+                        const deviceCount = deviceKeys.length;
 
-                                        let abnormalCount = 0;
-                                        let nonAbnormalCount = 0;
-                                        deviceData.forEach((item) => {
-                                            if (item.steady === 1) {
-                                                abnormalCount++;
-                                            } else if (item.steady === 0) {
-                                                nonAbnormalCount++;
-                                            }
-                                        });
-
-                                        let pieData = [
-                                            { value: nonAbnormalCount, label: '穩定' },
-                                            { value: abnormalCount, label: '異常' },
-                                        ];
-
-                                        return (
-                                            <div key={`${device}-${line}`}>
-                                                <Card>
-                                                    <Box sx={{ bgcolor: '#696969' }}>
-                                                        <CardHeader
-                                                            title={`${project}@ 線號 ${line}@ ${device}`}
-                                                            color="#696969"
-                                                            align="center"
-                                                        />
-                                                    </Box>
-                                                    <Grid container spacing={1}>
-                                                        <Grid xs={3} sx={{ mt: 4 }}>
-                                                            <Box
-                                                                border={1}
-                                                                sx={{ mt: 4, ml: 6, width: 120, height: 'auto' }}
-                                                            >
-                                                                <Typography align="center" fontSize={25}>
-                                                                    異常
-                                                                </Typography>
-                                                                <Box
+                        return (
+                            <Card key={`${project}-${line}`} sx={{ backgroundColor: 'transparent', boxShadow: 'none', color: 'black', marginBottom: 4, width: '100%' }}>
+                                <Box>
+                                    <CardHeader
+                                        title={
+                                            <Typography variant="h4" component="div" sx={{ fontWeight: 'bold' }}>
+                                                {`${project} @ Line: ${line}`}
+                                            </Typography>
+                                        }
+                                        align="left"
+                                    />
+                                </Box>
+                                <CardContent sx={{ padding: 0 }}>
+                                    <TableContainer
+                                        sx={{
+                                            maxHeight: 800,
+                                            width: '100%',
+                                            overflowX: 'auto',
+                                            overflowY: 'hidden',
+                                            marginTop: 2,
+                                            backgroundColor: 'transparent',
+                                        }}
+                                    >
+                                        <Table sx={{
+                                            tableLayout: 'fixed',
+                                            width: deviceCount < devicesPerCard ? '100%' : `${(deviceCount / devicesPerCard) * 100}%` // 動態設置表格寬度
+                                        }}>
+                                            <TableBody>
+                                                {headers[language].map((header, index) => ( // 使用指定語言的表頭
+                                                    <TableRow key={index} sx={{ backgroundColor: rowColors[index % rowColors.length] }}>
+                                                        <TableCell
+                                                            sx={{
+                                                                whiteSpace: 'nowrap',
+                                                                position: 'sticky',
+                                                                left: 0,
+                                                                zIndex: 2,
+                                                                textAlign: 'center',
+                                                                padding: '5px',
+                                                                width: '85px',
+                                                                color: 'white',
+                                                                background: '#696969',
+                                                                height: '60px',
+                                                                verticalAlign: 'middle',
+                                                            }}
+                                                        >
+                                                            <Typography fontSize={25} color="white">
+                                                                {header}
+                                                            </Typography>
+                                                        </TableCell>
+                                                        {deviceKeys.map((deviceKey) => {
+                                                            const [deviceName, deviceDescription] = deviceKey.split('@');
+                                                            const totals = data[project][line][deviceKey];
+                                                            return (
+                                                                <TableCell
+                                                                    key={deviceKey}
+                                                                    align="center"
                                                                     sx={{
-                                                                        bgcolor: '#ff2600',
-                                                                        width: 'auto',
-                                                                        height: 'auto',
+                                                                        fontSize: '25px',
+                                                                        color: 'black',
+                                                                        padding: '16px',
+                                                                        whiteSpace: 'nowrap',
+                                                                        width: deviceCount < devicesPerCard ? `${100 / deviceCount}%` : `${100 / devicesPerCard}%`  // 根據設備數量設置寬度
                                                                     }}
                                                                 >
-                                                                    <Typography align="center" fontSize={20}>
-                                                                        {abnormalCount}
-                                                                    </Typography>
-                                                                </Box>
-                                                            </Box>
-                                                            <Box sx={{ mt: 6, ml: 2 }}>
-                                                                <PieChart
-                                                                    colors={['#008f00', '#ff2600']}
-                                                                    series={[
-                                                                        {
-                                                                            arcLabel: (item) =>
-                                                                                `${item.label} (${item.value})`,
-                                                                            arcLabelMinAngle: 50,
-                                                                            data: pieData,
-                                                                        },
-                                                                    ]}
-                                                                    sx={{
-                                                                        [`& .${pieArcLabelClasses.root}`]: {
-                                                                            fill: 'default',
-                                                                            fontWeight: 'bold',
-                                                                        },
-                                                                    }}
-                                                                    width={600}
-                                                                    height={300}
-                                                                />
-                                                            </Box>
-                                                        </Grid>
-                                                        <Grid xs={3} sx={{ mt: 4 }}>
-                                                            <Box
-                                                                border={1}
-                                                                sx={{ mt: 4, ml: 6, width: 118, height: 'auto' }}
-                                                            >
-                                                                <Typography align="center" fontSize={25}>
-                                                                    穩定
-                                                                </Typography>
-                                                                <Box
-                                                                    sx={{
-                                                                        bgcolor: '#008f00',
-                                                                        width: 'auto',
-                                                                        height: 'auto',
-                                                                    }}
-                                                                >
-                                                                    <Typography align="center" fontSize={20}>
-                                                                        {nonAbnormalCount}
-                                                                    </Typography>
-                                                                </Box>
-                                                            </Box>
-                                                        </Grid>
-                                                        <Grid item xs={6} md={6} lg={6}>
-                                                            <TableContainer
-                                                                component={Paper}
-                                                                style={tableContainerStyle.tableContainer}
-                                                            >
-                                                                <Table>
-                                                                    <TableHead
-                                                                        style={{
-                                                                            position: 'sticky',
-                                                                            top: 0,
-                                                                            zIndex: 2,
-                                                                            backgroundColor: '#bfbfbf',
-                                                                        }}
-                                                                    >
-                                                                        <TableRow>
-                                                                            <TableCell
-                                                                                align="center"
-                                                                                sx={{
-                                                                                    height: 'auto',
-                                                                                    border: '1px solid black',
-                                                                                }}
-                                                                                colSpan={5}
-                                                                            >
-                                                                                <Typography fontSize={20}>
-                                                                                    週預測
-                                                                                    {
-                                                                                        deviceData
-                                                                                            .filter(
-                                                                                                (columns) =>
-                                                                                                    columns.frequency ===
-                                                                                                    '週預測'
-                                                                                            )
-                                                                                            .map(
-                                                                                                (item) =>
-                                                                                                    `${item.ori_date}-${item.pred_date}`
-                                                                                            )[0]
-                                                                                    }
-                                                                                </Typography>
-                                                                            </TableCell>
-                                                                        </TableRow>
-                                                                        <TableRow>
-                                                                            <TableCell
-                                                                                align="center"
-                                                                                sx={{
-                                                                                    height: 'auto',
-                                                                                    border: '1px solid black',
-                                                                                }}
-                                                                            >
-                                                                                <TableSortLabel
-                                                                                    active={weekOrderBy === 'category'}
-                                                                                    direction={
-                                                                                        weekOrderBy === 'category'
-                                                                                            ? orderWeek
-                                                                                            : 'asc'
-                                                                                    }
-                                                                                    onClick={() =>
-                                                                                        handleSortRequest('category')
-                                                                                    }
-                                                                                >
-                                                                                    <Typography fontSize={20}>
-                                                                                        Category
-                                                                                    </Typography>
-                                                                                </TableSortLabel>
-                                                                            </TableCell>
-                                                                            <TableCell
-                                                                                align="center"
-                                                                                sx={{
-                                                                                    height: 'auto',
-                                                                                    border: '1px solid black',
-                                                                                }}
-                                                                            >
-                                                                                <TableSortLabel
-                                                                                    active={weekOrderBy === 'label'}
-                                                                                    direction={
-                                                                                        weekOrderBy === 'label'
-                                                                                            ? orderWeek
-                                                                                            : 'asc'
-                                                                                    }
-                                                                                    onClick={() =>
-                                                                                        handleSortRequest('label')
-                                                                                    }
-                                                                                >
-                                                                                    <Typography fontSize={20}>
-                                                                                        類型
-                                                                                    </Typography>
-                                                                                </TableSortLabel>
-                                                                            </TableCell>
-                                                                            <TableCell
-                                                                                align="center"
-                                                                                sx={{
-                                                                                    height: 'auto',
-                                                                                    border: '1px solid black',
-                                                                                }}
-                                                                            >
-                                                                                <Typography fontSize={20}>
-                                                                                    異常事件
-                                                                                </Typography>
-                                                                            </TableCell>
-                                                                            <TableCell
-                                                                                align="center"
-                                                                                sx={{
-                                                                                    height: 'auto',
-                                                                                    border: '1px solid black',
-                                                                                }}
-                                                                            >
-                                                                                <TableSortLabel
-                                                                                    active={weekOrderBy === 'date'}
-                                                                                    direction={
-                                                                                        weekOrderBy === 'date'
-                                                                                            ? orderWeek
-                                                                                            : 'asc'
-                                                                                    }
-                                                                                    onClick={() =>
-                                                                                        handleSortRequest('date')
-                                                                                    }
-                                                                                >
-                                                                                    <Typography fontSize={20}>
-                                                                                        前次發生時間
-                                                                                    </Typography>
-                                                                                </TableSortLabel>
-                                                                            </TableCell>
-                                                                            <TableCell
-                                                                                align="center"
-                                                                                sx={{
-                                                                                    height: 'auto',
-                                                                                    border: '1px solid black',
-                                                                                }}
-                                                                            >
-                                                                                <Typography fontSize={20}>
-                                                                                    發生次數
-                                                                                </Typography>
-                                                                            </TableCell>
-                                                                        </TableRow>
-                                                                    </TableHead>
-                                                                    <TableBody>
-                                                                        {deviceData
-                                                                            .filter(
-                                                                                (columns) => columns.frequency === '週預測'
-                                                                            )
-                                                                            .sort(getComparator(orderWeek))
-                                                                            .map((columns) => (
-                                                                                <TableRow key={columns.name}>
-                                                                                    <TableCell
-                                                                                        align="center"
-                                                                                        sx={{
-                                                                                            height: 'auto',
-                                                                                            bgcolor: infoColor(
-                                                                                                columns.happened_times
-                                                                                            ),
-                                                                                        }}
-                                                                                    >
-                                                                                        <Typography fontSize={20}>
-                                                                                            {columns.category}
-                                                                                        </Typography>
-                                                                                    </TableCell>
-                                                                                    <TableCell
-                                                                                        style={tableCellStyle.extendedCell}
-                                                                                        key={columns.id}
-                                                                                        align="center"
-                                                                                        sx={{
-                                                                                            bgcolor: getColor(columns.steady),
-                                                                                        }}
-                                                                                    >
-                                                                                        <Typography fontSize={20}>
-                                                                                            {columns.steady === 0 ? '穩定' : '異常'}
-                                                                                        </Typography>
-                                                                                    </TableCell>
-                                                                                    <TableCell
-                                                                                        align="center"
-                                                                                        sx={{
-                                                                                            height: 'auto',
-                                                                                            bgcolor: infoColor(
-                                                                                                columns.happened_times
-                                                                                            ),
-                                                                                        }}
-                                                                                    >
-                                                                                        <Typography fontSize={20}>
-                                                                                            {columns.name}
-                                                                                        </Typography>
-                                                                                    </TableCell>
-                                                                                    <TableCell
-                                                                                        align="center"
-                                                                                        sx={{
-                                                                                            height: 'auto',
-                                                                                            bgcolor: infoColor(
-                                                                                                columns.happened_times
-                                                                                            ),
-                                                                                        }}
-                                                                                    >
-                                                                                        <Typography fontSize={20}>
-                                                                                            {columns.happenLastTime}
-                                                                                        </Typography>
-                                                                                    </TableCell>
-                                                                                    <TableCell
-                                                                                        align="center"
-                                                                                        sx={{
-                                                                                            height: 'auto',
-                                                                                            bgcolor: infoColor(
-                                                                                                columns.happened_times
-                                                                                            ),
-                                                                                        }}
-                                                                                    >
-                                                                                        <Typography fontSize={20}>
-                                                                                            {columns.happened_times}
-                                                                                        </Typography>
-                                                                                    </TableCell>
-                                                                                </TableRow>
-                                                                            ))}
-                                                                    </TableBody>
-                                                                </Table>
-                                                            </TableContainer>
-                                                            <TableContainer
-                                                                component={Paper}
-                                                                style={tableContainerStyle.tableContainer}
-                                                            >
-                                                                <Table>
-                                                                    <TableHead
-                                                                        style={{
-                                                                            position: 'sticky',
-                                                                            top: 0,
-                                                                            zIndex: 2,
-                                                                            backgroundColor: '#bfbfbf',
-                                                                        }}
-                                                                    >
-                                                                        <TableRow>
-                                                                            <TableCell
-                                                                                align="center"
-                                                                                sx={{
-                                                                                    height: 'auto',
-                                                                                    border: '1px solid black',
-                                                                                }}
-                                                                                colSpan={5}
-                                                                            >
-                                                                                <Typography fontSize={20}>
-                                                                                    日預測
-                                                                                    {
-                                                                                        deviceData2
-                                                                                            .filter(
-                                                                                                (columns) =>
-                                                                                                    columns.frequency === '日預測'
-                                                                                            )
-                                                                                            .map((item) => `${item.pred_date}`)[0]
-                                                                                    }
-                                                                                </Typography>
-                                                                            </TableCell>
-                                                                        </TableRow>
-                                                                        <TableRow>
-                                                                            <TableCell
-                                                                                align="center"
-                                                                                sx={{
-                                                                                    height: 'auto',
-                                                                                    border: '1px solid black',
-                                                                                }}
-                                                                            >
-                                                                                <TableSortLabel
-                                                                                    active={dateOrderBy === 'category'}
-                                                                                    direction={
-                                                                                        dateOrderBy === 'category'
-                                                                                            ? orderDate
-                                                                                            : 'asc'
-                                                                                    }
-                                                                                    onClick={() =>
-                                                                                        handleSortRequestDate('category')
-                                                                                    }
-                                                                                >
-                                                                                    <Typography fontSize={20}>
-                                                                                        Category
-                                                                                    </Typography>
-                                                                                </TableSortLabel>
-                                                                            </TableCell>
-                                                                            <TableCell
-                                                                                align="center"
-                                                                                sx={{
-                                                                                    height: 'auto',
-                                                                                    border: '1px solid黑',
-                                                                                }}
-                                                                            >
-                                                                                <TableSortLabel
-                                                                                    active={dateOrderBy === 'label'}
-                                                                                    direction={
-                                                                                        dateOrderBy === 'label'
-                                                                                            ? orderDate
-                                                                                            : 'asc'
-                                                                                    }
-                                                                                    onClick={() =>
-                                                                                        handleSortRequestDate('label')
-                                                                                    }
-                                                                                >
-                                                                                    <Typography fontSize={20}>
-                                                                                        類型
-                                                                                    </Typography>
-                                                                                </TableSortLabel>
-                                                                            </TableCell>
-                                                                            <TableCell
-                                                                                align="center"
-                                                                                sx={{
-                                                                                    height: 'auto',
-                                                                                    border: '1px solid黑',
-                                                                                }}
-                                                                            >
-                                                                                <Typography fontSize={20}>
-                                                                                    異常事件
-                                                                                </Typography>
-                                                                            </TableCell>
-                                                                            <TableCell
-                                                                                align="center"
-                                                                                sx={{
-                                                                                    height: 'auto',
-                                                                                    border: '1px solid黑',
-                                                                                }}
-                                                                            >
-                                                                                <TableSortLabel
-                                                                                    active={dateOrderBy === 'date'}
-                                                                                    direction={
-                                                                                        dateOrderBy === 'date' ? orderDate : 'asc'
-                                                                                    }
-                                                                                    onClick={() =>
-                                                                                        handleSortRequestDate('date')
-                                                                                    }
-                                                                                >
-                                                                                    <Typography fontSize={20}>
-                                                                                        前次發生時間
-                                                                                    </Typography>
-                                                                                </TableSortLabel>
-                                                                            </TableCell>
-                                                                            <TableCell
-                                                                                align="center"
-                                                                                sx={{
-                                                                                    height: 'auto',
-                                                                                    border: '1px solid黑',
-                                                                                }}
-                                                                            >
-                                                                                <Typography fontSize={20}>
-                                                                                    發生次數
-                                                                                </Typography>
-                                                                            </TableCell>
-                                                                        </TableRow>
-                                                                    </TableHead>
-                                                                    <TableBody>
-                                                                        {deviceData2
-                                                                            .filter((columns) => columns.frequency === '日預測')
-                                                                            .sort(getComparatorDate(orderDate))
-                                                                            .map((columns) => (
-                                                                                <TableRow key={columns.name}>
-                                                                                    <TableCell
-                                                                                        align="center"
-                                                                                        sx={{
-                                                                                            height: 'auto',
-                                                                                            bgcolor: infoColor(
-                                                                                                columns.happened_times
-                                                                                            ),
-                                                                                        }}
-                                                                                    >
-                                                                                        <Typography fontSize={20}>
-                                                                                            {columns.category}
-                                                                                        </Typography>
-                                                                                    </TableCell>
-                                                                                    <TableCell
-                                                                                        style={tableCellStyle.extendedCell}
-                                                                                        key={columns.id}
-                                                                                        align="center"
-                                                                                        sx={{
-                                                                                            bgcolor: getColor(columns.steady),
-                                                                                        }}
-                                                                                    >
-                                                                                        <Typography fontSize={20}>
-                                                                                            {columns.steady === 0 ? '穩定' : '異常'}
-                                                                                        </Typography>
-                                                                                    </TableCell>
-                                                                                    <TableCell
-                                                                                        align="center"
-                                                                                        sx={{
-                                                                                            height: 'auto',
-                                                                                            bgcolor: infoColor(
-                                                                                                columns.happened_times
-                                                                                            ),
-                                                                                        }}
-                                                                                    >
-                                                                                        <Typography fontSize={20}>
-                                                                                            {columns.name}
-                                                                                        </Typography>
-                                                                                    </TableCell>
-                                                                                    <TableCell
-                                                                                        align="center"
-                                                                                        sx={{
-                                                                                            height: 'auto',
-                                                                                            bgcolor: infoColor(
-                                                                                                columns.happened_times
-                                                                                            ),
-                                                                                        }}
-                                                                                    >
-                                                                                        <Typography fontSize={20}>
-                                                                                            {columns.happenLastTime}
-                                                                                        </Typography>
-                                                                                    </TableCell>
-                                                                                    <TableCell
-                                                                                        align="center"
-                                                                                        sx={{
-                                                                                            height: 'auto',
-                                                                                            bgcolor: infoColor(
-                                                                                                columns.happened_times
-                                                                                            ),
-                                                                                        }}
-                                                                                    >
-                                                                                        <Typography fontSize={20}>
-                                                                                            {columns.happened_times}
-                                                                                        </Typography>
-                                                                                    </TableCell>
-                                                                                </TableRow>
-                                                                            ))}
-                                                                    </TableBody>
-                                                                </Table>
-                                                            </TableContainer>
-                                                        </Grid>
-                                                    </Grid>
-                                                </Card>
-                                            </div>
-                                        );
-                                    })}
-                            </Carousel>
-                        </div>
-                    ))
-                ))}
+                                                                    {header === headers[language][0] && deviceName}
+                                                                    {header === headers[language][1] && deviceDescription}
+                                                                    {header === headers[language][2] && (
+                                                                        <Box sx={{ display: 'flex', justifyContent: 'center', margin: '8px 0' }}>
+                                                                            <Typography sx={{ flex: 1, textAlign: 'center', borderRight: '1px solid #ccc', padding: '8px', fontSize: '25px' }}>
+                                                                                {timeHeaders[language][0]}
+                                                                            </Typography>
+                                                                            <Typography sx={{ flex: 1, textAlign: 'center', padding: '8px', fontSize: '25px' }}>
+                                                                                {timeHeaders[language][1]}
+                                                                            </Typography>
+                                                                        </Box>
+                                                                    )}
+                                                                    {header === headers[language][3] && (
+                                                                        <Box sx={{ display: 'flex', justifyContent: 'center', margin: '8px 0' }}>
+                                                                            <Typography sx={{ flex: 1, textAlign: 'center', borderRight: '1px solid #ccc', padding: '8px', fontSize: '25px' }}>
+                                                                                {totals.day_stable} (
+                                                                                <Typography component="span" sx={{ color: '#ffc107', fontSize: 'inherit' }}>
+                                                                                    {totals.day_stable_happened}
+                                                                                </Typography>)
+                                                                            </Typography>
+                                                                            <Typography sx={{ flex: 1, textAlign: 'center', padding: '8px', fontSize: '25px' }}>
+                                                                                {totals.week_stable} (
+                                                                                <Typography component="span" sx={{ color: '#ffc107', fontSize: 'inherit' }}>
+                                                                                    {totals.week_stable_happened}
+                                                                                </Typography>)
+                                                                            </Typography>
+                                                                        </Box>
+                                                                    )}
+                                                                    {header === headers[language][4] && (
+                                                                        <Box sx={{ display: 'flex', justifyContent: 'center', margin: '8px 0' }}>
+                                                                            <Typography sx={{ flex: 1, textAlign: 'center', borderRight: '1px solid #ccc', padding: '8px', fontSize: '25px' }}>
+                                                                                {totals.day_unstable} (
+                                                                                <Typography component="span" sx={{ color: '#ffc107', fontSize: 'inherit' }}>
+                                                                                    {totals.day_unstable_happened}
+                                                                                </Typography>)
+                                                                            </Typography>
+                                                                            <Typography sx={{ flex: 1, textAlign: 'center', padding: '8px', fontSize: '25px' }}>
+                                                                                {totals.week_unstable} (
+                                                                                <Typography component="span" sx={{ color: '#ffc107', fontSize: 'inherit' }}>
+                                                                                    {totals.week_unstable_happened}
+                                                                                </Typography>)
+                                                                            </Typography>
+                                                                        </Box>
+                                                                    )}
+                                                                    {header === headers[language][5] && (
+                                                                        <Box sx={{ display: 'flex', justifyContent: 'center', margin: '8px 0' }}>
+                                                                            <Typography sx={{ flex: 1, textAlign: 'center', padding: '8px', fontSize: '25px' }}>
+                                                                                {totals.day_stable + totals.week_stable} (
+                                                                                <Typography component="span" sx={{ color: '#ffc107', fontSize: 'inherit' }}>
+                                                                                    {totals.day_stable_happened + totals.week_stable_happened}
+                                                                                </Typography>)
+                                                                            </Typography>
+                                                                        </Box>
+                                                                    )}
+                                                                    {header === headers[language][6] && (
+                                                                        <Box sx={{ display: 'flex', justifyContent: 'center', margin: '8px 0' }}>
+                                                                            <Typography sx={{ flex: 1, textAlign: 'center', padding: '8px', fontSize: '25px' }}>
+                                                                                {totals.day_unstable + totals.week_unstable} (
+                                                                                <Typography component="span" sx={{ color: '#ffc107', fontSize: 'inherit' }}>
+                                                                                    {totals.day_unstable_happened + totals.week_unstable_happened}
+                                                                                </Typography>)
+                                                                            </Typography>
+                                                                        </Box>
+                                                                    )}
+                                                                </TableCell>
+                                                            );
+                                                        })}
+                                                    </TableRow>
+                                                ))}
+                                            </TableBody>
+                                        </Table>
+                                    </TableContainer>
+                                </CardContent>
+                            </Card>
+                        );
+                    })
+                )}
             </div>
         );
     };
-
-    const createDeviceCardCN = (data, data2) => {
-        const groupByProjectAndLine = (data) => {
-            const groupedData = {};
-
-            Object.keys(data).forEach((project) => {
-                Object.keys(data[project]).forEach((device) => {
-                    data[project][device].forEach((item) => {
-                        const line = item.line;
-                        if (!groupedData[project]) {
-                            groupedData[project] = {};
-                        }
-                        if (!groupedData[project][line]) {
-                            groupedData[project][line] = {};
-                        }
-                        if (!groupedData[project][line][device]) {
-                            groupedData[project][line][device] = [];
-                        }
-                        groupedData[project][line][device].push(item);
-                    });
-                });
-            });
-
-            return groupedData;
-        };
-
-        const groupedData = groupByProjectAndLine(data);
-        const groupedData2 = groupByProjectAndLine(data2);
-
-        return (
-            <div>
-                {Object.keys(groupedData).sort().map((project) => (
-                    Object.keys(groupedData[project]).sort().map((line) => (
-                        <div key={`${project}-${line}`}>
-                            <Carousel
-                                showArrows={false}
-                                renderIndicator={customRenderIndicator}
-                                infiniteLoop={true}
-                                autoPlay={!isPaused}
-                                stopOnHover={true}
-                                interval={3000}
-                            >
-                                {Object.keys(groupedData[project][line])
-                                    .sort((a, b) => {
-                                        const numA = parseInt(a.match(/Device_(\d+)/)[1], 10);
-                                        const numB = parseInt(b.match(/Device_(\d+)/)[1], 10);
-                                        return numA - numB;
-                                    })
-                                    .map((device) => {
-                                        const deviceData = groupedData[project][line][device];
-                                        const deviceData2 = groupedData2[project][line][device] || [];
-
-                                        let abnormalCount = 0;
-                                        let nonAbnormalCount = 0;
-                                        deviceData.forEach((item) => {
-                                            if (item.steady === 1) {
-                                                abnormalCount++;
-                                            } else if (item.steady === 0) {
-                                                nonAbnormalCount++;
-                                            }
-                                        });
-
-                                        let pieData = [
-                                            { value: nonAbnormalCount, label: '稳定' },
-                                            { value: abnormalCount, label: '异常' },
-                                        ];
-
-                                        return (
-                                            <div key={`${device}-${line}`}>
-                                                <Card>
-                                                    <Box sx={{ bgcolor: '#696969' }}>
-                                                        <CardHeader
-                                                            title={`${project}@ 线号 ${line}@ ${device}`}
-                                                            color="#696969"
-                                                            align="center"
-                                                        />
-                                                    </Box>
-                                                    <Grid container spacing={1}>
-                                                        <Grid xs={3} sx={{ mt: 4 }}>
-                                                            <Box
-                                                                border={1}
-                                                                sx={{ mt: 4, ml: 6, width: 120, height: 'auto' }}
-                                                            >
-                                                                <Typography align="center" fontSize={25}>
-                                                                    异常
-                                                                </Typography>
-                                                                <Box
-                                                                    sx={{
-                                                                        bgcolor: '#ff2600',
-                                                                        width: 'auto',
-                                                                        height: 'auto',
-                                                                    }}
-                                                                >
-                                                                    <Typography align="center" fontSize={20}>
-                                                                        {abnormalCount}
-                                                                    </Typography>
-                                                                </Box>
-                                                            </Box>
-                                                            <Box sx={{ mt: 6, ml: 2 }}>
-                                                                <PieChart
-                                                                    colors={['#008f00', '#ff2600']}
-                                                                    series={[
-                                                                        {
-                                                                            arcLabel: (item) =>
-                                                                                `${item.label} (${item.value})`,
-                                                                            arcLabelMinAngle: 50,
-                                                                            data: pieData,
-                                                                        },
-                                                                    ]}
-                                                                    sx={{
-                                                                        [`& .${pieArcLabelClasses.root}`]: {
-                                                                            fill: 'default',
-                                                                            fontWeight: 'bold',
-                                                                        },
-                                                                    }}
-                                                                    width={600}
-                                                                    height={300}
-                                                                />
-                                                            </Box>
-                                                        </Grid>
-                                                        <Grid xs={3} sx={{ mt: 4 }}>
-                                                            <Box
-                                                                border={1}
-                                                                sx={{ mt: 4, ml: 6, width: 118, height: 'auto' }}
-                                                            >
-                                                                <Typography align="center" fontSize={25}>
-                                                                    稳定
-                                                                </Typography>
-                                                                <Box
-                                                                    sx={{
-                                                                        bgcolor: '#008f00',
-                                                                        width: 'auto',
-                                                                        height: 'auto',
-                                                                    }}
-                                                                >
-                                                                    <Typography align="center" fontSize={20}>
-                                                                        {nonAbnormalCount}
-                                                                    </Typography>
-                                                                </Box>
-                                                            </Box>
-                                                        </Grid>
-                                                        <Grid item xs={6} md={6} lg={6}>
-                                                            <TableContainer
-                                                                component={Paper}
-                                                                style={tableContainerStyle.tableContainer}
-                                                            >
-                                                                <Table>
-                                                                    <TableHead
-                                                                        style={{
-                                                                            position: 'sticky',
-                                                                            top: 0,
-                                                                            zIndex: 2,
-                                                                            backgroundColor: '#bfbfbf',
-                                                                        }}
-                                                                    >
-                                                                        <TableRow>
-                                                                            <TableCell
-                                                                                align="center"
-                                                                                sx={{
-                                                                                    height: 'auto',
-                                                                                    border: '1px solid black',
-                                                                                }}
-                                                                                colSpan={5}
-                                                                            >
-                                                                                <Typography fontSize={20}>
-                                                                                    周预测
-                                                                                    {
-                                                                                        deviceData
-                                                                                            .filter(
-                                                                                                (columns) =>
-                                                                                                    columns.frequency ===
-                                                                                                    '週預測'
-                                                                                            )
-                                                                                            .map(
-                                                                                                (item) =>
-                                                                                                    `${item.ori_date}-${item.pred_date}`
-                                                                                            )[0]
-                                                                                    }
-                                                                                </Typography>
-                                                                            </TableCell>
-                                                                        </TableRow>
-                                                                        <TableRow>
-                                                                            <TableCell
-                                                                                align="center"
-                                                                                sx={{
-                                                                                    height: 'auto',
-                                                                                    border: '1px solid black',
-                                                                                }}
-                                                                            >
-                                                                                <TableSortLabel
-                                                                                    active={weekOrderBy === 'category'}
-                                                                                    direction={
-                                                                                        weekOrderBy === 'category'
-                                                                                            ? orderWeek
-                                                                                            : 'asc'
-                                                                                    }
-                                                                                    onClick={() =>
-                                                                                        handleSortRequest('category')
-                                                                                    }
-                                                                                >
-                                                                                    <Typography fontSize={20}>
-                                                                                        Category
-                                                                                    </Typography>
-                                                                                </TableSortLabel>
-                                                                            </TableCell>
-                                                                            <TableCell
-                                                                                align="center"
-                                                                                sx={{
-                                                                                    height: 'auto',
-                                                                                    border: '1px solid black',
-                                                                                }}
-                                                                            >
-                                                                                <TableSortLabel
-                                                                                    active={weekOrderBy === 'label'}
-                                                                                    direction={
-                                                                                        weekOrderBy === 'label'
-                                                                                            ? orderWeek
-                                                                                            : 'asc'
-                                                                                    }
-                                                                                    onClick={() =>
-                                                                                        handleSortRequest('label')
-                                                                                    }
-                                                                                >
-                                                                                    <Typography fontSize={20}>
-                                                                                        类型
-                                                                                    </Typography>
-                                                                                </TableSortLabel>
-                                                                            </TableCell>
-                                                                            <TableCell
-                                                                                align="center"
-                                                                                sx={{
-                                                                                    height: 'auto',
-                                                                                    border: '1px solid black',
-                                                                                }}
-                                                                            >
-                                                                                <Typography fontSize={20}>
-                                                                                    异常事件
-                                                                                </Typography>
-                                                                            </TableCell>
-                                                                            <TableCell
-                                                                                align="center"
-                                                                                sx={{
-                                                                                    height: 'auto',
-                                                                                    border: '1px solid black',
-                                                                                }}
-                                                                            >
-                                                                                <TableSortLabel
-                                                                                    active={weekOrderBy === 'date'}
-                                                                                    direction={
-                                                                                        weekOrderBy === 'date'
-                                                                                            ? orderWeek
-                                                                                            : 'asc'
-                                                                                    }
-                                                                                    onClick={() =>
-                                                                                        handleSortRequest('date')
-                                                                                    }
-                                                                                >
-                                                                                    <Typography fontSize={20}>
-                                                                                        前次发生时间
-                                                                                    </Typography>
-                                                                                </TableSortLabel>
-                                                                            </TableCell>
-                                                                            <TableCell
-                                                                                align="center"
-                                                                                sx={{
-                                                                                    height: 'auto',
-                                                                                    border: '1px solid black',
-                                                                                }}
-                                                                            >
-                                                                                <Typography fontSize={20}>
-                                                                                    发生次数
-                                                                                </Typography>
-                                                                            </TableCell>
-                                                                        </TableRow>
-                                                                    </TableHead>
-                                                                    <TableBody>
-                                                                        {deviceData
-                                                                            .filter(
-                                                                                (columns) => columns.frequency === '週預測'
-                                                                            )
-                                                                            .sort(getComparator(orderWeek))
-                                                                            .map((columns) => (
-                                                                                <TableRow key={columns.name}>
-                                                                                    <TableCell
-                                                                                        align="center"
-                                                                                        sx={{
-                                                                                            height: 'auto',
-                                                                                            bgcolor: infoColor(
-                                                                                                columns.happened_times
-                                                                                            ),
-                                                                                        }}
-                                                                                    >
-                                                                                        <Typography fontSize={20}>
-                                                                                            {columns.category}
-                                                                                        </Typography>
-                                                                                    </TableCell>
-                                                                                    <TableCell
-                                                                                        style={tableCellStyle.extendedCell}
-                                                                                        key={columns.id}
-                                                                                        align="center"
-                                                                                        sx={{
-                                                                                            bgcolor: getColor(columns.steady),
-                                                                                        }}
-                                                                                    >
-                                                                                        <Typography fontSize={20}>
-                                                                                            {columns.steady === 0 ? '稳定' : '异常'}
-                                                                                        </Typography>
-                                                                                    </TableCell>
-                                                                                    <TableCell
-                                                                                        align="center"
-                                                                                        sx={{
-                                                                                            height: 'auto',
-                                                                                            bgcolor: infoColor(
-                                                                                                columns.happened_times
-                                                                                            ),
-                                                                                        }}
-                                                                                    >
-                                                                                        <Typography fontSize={20}>
-                                                                                            {columns.name}
-                                                                                        </Typography>
-                                                                                    </TableCell>
-                                                                                    <TableCell
-                                                                                        align="center"
-                                                                                        sx={{
-                                                                                            height: 'auto',
-                                                                                            bgcolor: infoColor(
-                                                                                                columns.happened_times
-                                                                                            ),
-                                                                                        }}
-                                                                                    >
-                                                                                        <Typography fontSize={20}>
-                                                                                            {columns.happenLastTime}
-                                                                                        </Typography>
-                                                                                    </TableCell>
-                                                                                    <TableCell
-                                                                                        align="center"
-                                                                                        sx={{
-                                                                                            height: 'auto',
-                                                                                            bgcolor: infoColor(
-                                                                                                columns.happened_times
-                                                                                            ),
-                                                                                        }}
-                                                                                    >
-                                                                                        <Typography fontSize={20}>
-                                                                                            {columns.happened_times}
-                                                                                        </Typography>
-                                                                                    </TableCell>
-                                                                                </TableRow>
-                                                                            ))}
-                                                                    </TableBody>
-                                                                </Table>
-                                                            </TableContainer>
-                                                            <TableContainer
-                                                                component={Paper}
-                                                                style={tableContainerStyle.tableContainer}
-                                                            >
-                                                                <Table>
-                                                                    <TableHead
-                                                                        style={{
-                                                                            position: 'sticky',
-                                                                            top: 0,
-                                                                            zIndex: 2,
-                                                                            backgroundColor: '#bfbfbf',
-                                                                        }}
-                                                                    >
-                                                                        <TableRow>
-                                                                            <TableCell
-                                                                                align="center"
-                                                                                sx={{
-                                                                                    height: 'auto',
-                                                                                    border: '1px solid black',
-                                                                                }}
-                                                                                colSpan={5}
-                                                                            >
-                                                                                <Typography fontSize={20}>
-                                                                                    日预测
-                                                                                    {
-                                                                                        deviceData2
-                                                                                            .filter(
-                                                                                                (columns) =>
-                                                                                                    columns.frequency === '日預測'
-                                                                                            )
-                                                                                            .map((item) => `${item.pred_date}`)[0]
-                                                                                    }
-                                                                                </Typography>
-                                                                            </TableCell>
-                                                                        </TableRow>
-                                                                        <TableRow>
-                                                                            <TableCell
-                                                                                align="center"
-                                                                                sx={{
-                                                                                    height: 'auto',
-                                                                                    border: '1px solid black',
-                                                                                }}
-                                                                            >
-                                                                                <TableSortLabel
-                                                                                    active={dateOrderBy === 'category'}
-                                                                                    direction={
-                                                                                        dateOrderBy === 'category'
-                                                                                            ? orderDate
-                                                                                            : 'asc'
-                                                                                    }
-                                                                                    onClick={() =>
-                                                                                        handleSortRequestDate('category')
-                                                                                    }
-                                                                                >
-                                                                                    <Typography fontSize={20}>
-                                                                                        Category
-                                                                                    </Typography>
-                                                                                </TableSortLabel>
-                                                                            </TableCell>
-                                                                            <TableCell
-                                                                                align="center"
-                                                                                sx={{
-                                                                                    height: 'auto',
-                                                                                    border: '1px solid黑',
-                                                                                }}
-                                                                            >
-                                                                                <TableSortLabel
-                                                                                    active={dateOrderBy === 'label'}
-                                                                                    direction={
-                                                                                        dateOrderBy === 'label'
-                                                                                            ? orderDate
-                                                                                            : 'asc'
-                                                                                    }
-                                                                                    onClick={() =>
-                                                                                        handleSortRequestDate('label')
-                                                                                    }
-                                                                                >
-                                                                                    <Typography fontSize={20}>
-                                                                                        类型
-                                                                                    </Typography>
-                                                                                </TableSortLabel>
-                                                                            </TableCell>
-                                                                            <TableCell
-                                                                                align="center"
-                                                                                sx={{
-                                                                                    height: 'auto',
-                                                                                    border: '1px solid黑',
-                                                                                }}
-                                                                            >
-                                                                                <Typography fontSize={20}>
-                                                                                    异常事件
-                                                                                </Typography>
-                                                                            </TableCell>
-                                                                            <TableCell
-                                                                                align="center"
-                                                                                sx={{
-                                                                                    height: 'auto',
-                                                                                    border: '1px solid黑',
-                                                                                }}
-                                                                            >
-                                                                                <TableSortLabel
-                                                                                    active={dateOrderBy === 'date'}
-                                                                                    direction={
-                                                                                        dateOrderBy === 'date' ? orderDate : 'asc'
-                                                                                    }
-                                                                                    onClick={() =>
-                                                                                        handleSortRequestDate('date')
-                                                                                    }
-                                                                                >
-                                                                                    <Typography fontSize={20}>
-                                                                                        前次发生时间
-                                                                                    </Typography>
-                                                                                </TableSortLabel>
-                                                                            </TableCell>
-                                                                            <TableCell
-                                                                                align="center"
-                                                                                sx={{
-                                                                                    height: 'auto',
-                                                                                    border: '1px solid黑',
-                                                                                }}
-                                                                            >
-                                                                                <Typography fontSize={20}>
-                                                                                    发生次数
-                                                                                </Typography>
-                                                                            </TableCell>
-                                                                        </TableRow>
-                                                                    </TableHead>
-                                                                    <TableBody>
-                                                                        {deviceData2
-                                                                            .filter((columns) => columns.frequency === '日預測')
-                                                                            .sort(getComparatorDate(orderDate))
-                                                                            .map((columns) => (
-                                                                                <TableRow key={columns.name}>
-                                                                                    <TableCell
-                                                                                        align="center"
-                                                                                        sx={{
-                                                                                            height: 'auto',
-                                                                                            bgcolor: infoColor(
-                                                                                                columns.happened_times
-                                                                                            ),
-                                                                                        }}
-                                                                                    >
-                                                                                        <Typography fontSize={20}>
-                                                                                            {columns.category}
-                                                                                        </Typography>
-                                                                                    </TableCell>
-                                                                                    <TableCell
-                                                                                        style={tableCellStyle.extendedCell}
-                                                                                        key={columns.id}
-                                                                                        align="center"
-                                                                                        sx={{
-                                                                                            bgcolor: getColor(columns.steady),
-                                                                                        }}
-                                                                                    >
-                                                                                        <Typography fontSize={20}>
-                                                                                            {columns.steady === 0 ? '稳定' : '异常'}
-                                                                                        </Typography>
-                                                                                    </TableCell>
-                                                                                    <TableCell
-                                                                                        align="center"
-                                                                                        sx={{
-                                                                                            height: 'auto',
-                                                                                            bgcolor: infoColor(
-                                                                                                columns.happened_times
-                                                                                            ),
-                                                                                        }}
-                                                                                    >
-                                                                                        <Typography fontSize={20}>
-                                                                                            {columns.name}
-                                                                                        </Typography>
-                                                                                    </TableCell>
-                                                                                    <TableCell
-                                                                                        align="center"
-                                                                                        sx={{
-                                                                                            height: 'auto',
-                                                                                            bgcolor: infoColor(
-                                                                                                columns.happened_times
-                                                                                            ),
-                                                                                        }}
-                                                                                    >
-                                                                                        <Typography fontSize={20}>
-                                                                                            {columns.happenLastTime}
-                                                                                        </Typography>
-                                                                                    </TableCell>
-                                                                                    <TableCell
-                                                                                        align="center"
-                                                                                        sx={{
-                                                                                            height: 'auto',
-                                                                                            bgcolor: infoColor(
-                                                                                                columns.happened_times
-                                                                                            ),
-                                                                                        }}
-                                                                                    >
-                                                                                        <Typography fontSize={20}>
-                                                                                            {columns.happened_times}
-                                                                                        </Typography>
-                                                                                    </TableCell>
-                                                                                </TableRow>
-                                                                            ))}
-                                                                    </TableBody>
-                                                                </Table>
-                                                            </TableContainer>
-                                                        </Grid>
-                                                    </Grid>
-                                                </Card>
-                                            </div>
-                                        );
-                                    })}
-                            </Carousel>
-                        </div>
-                    ))
-                ))}
-            </div>
-        );
-    };
-
-
-    const createDeviceCardEN = (data, data2) => {
-        const groupByProjectAndLine = (data) => {
-            const groupedData = {};
-
-            Object.keys(data).forEach((project) => {
-                Object.keys(data[project]).forEach((device) => {
-                    data[project][device].forEach((item) => {
-                        const line = item.line;
-                        if (!groupedData[project]) {
-                            groupedData[project] = {};
-                        }
-                        if (!groupedData[project][line]) {
-                            groupedData[project][line] = {};
-                        }
-                        if (!groupedData[project][line][device]) {
-                            groupedData[project][line][device] = [];
-                        }
-                        groupedData[project][line][device].push(item);
-                    });
-                });
-            });
-
-            return groupedData;
-        };
-
-        const groupedData = groupByProjectAndLine(data);
-        const groupedData2 = groupByProjectAndLine(data2);
-
-        return (
-            <div>
-                {Object.keys(groupedData).sort().map((project) => (
-                    Object.keys(groupedData[project]).sort().map((line) => (
-                        <div key={`${project}-${line}`}>
-                            <Carousel
-                                showArrows={false}
-                                renderIndicator={customRenderIndicator}
-                                infiniteLoop={true}
-                                autoPlay={!isPaused}
-                                stopOnHover={true}
-                                interval={3000}
-                            >
-                                {Object.keys(groupedData[project][line])
-                                    .sort((a, b) => {
-                                        const numA = parseInt(a.match(/Device_(\d+)/)[1], 10);
-                                        const numB = parseInt(b.match(/Device_(\d+)/)[1], 10);
-                                        return numA - numB;
-                                    })
-                                    .map((device) => {
-                                        const deviceData = groupedData[project][line][device];
-                                        const deviceData2 = groupedData2[project][line][device] || [];
-
-                                        let abnormalCount = 0;
-                                        let nonAbnormalCount = 0;
-                                        deviceData.forEach((item) => {
-                                            if (item.steady === 1) {
-                                                abnormalCount++;
-                                            } else if (item.steady === 0) {
-                                                nonAbnormalCount++;
-                                            }
-                                        });
-
-                                        let pieData = [
-                                            { value: nonAbnormalCount, label: 'Stabilize' },
-                                            { value: abnormalCount, label: 'Abnormal' },
-                                        ];
-
-                                        return (
-                                            <div key={`${device}-${line}`}>
-                                                <Card>
-                                                    <Box sx={{ bgcolor: '#696969' }}>
-                                                        <CardHeader
-                                                            title={`${project}@ line ${line}@ ${device}`}
-                                                            color="#696969"
-                                                            align="center"
-                                                        />
-                                                    </Box>
-                                                    <Grid container spacing={1}>
-                                                        <Grid xs={3} sx={{ mt: 4 }}>
-                                                            <Box
-                                                                border={1}
-                                                                sx={{ mt: 4, ml: 6, width: 120, height: 'auto' }}
-                                                            >
-                                                                <Typography align="center" fontSize={25}>
-                                                                    Abnormal
-                                                                </Typography>
-                                                                <Box
-                                                                    sx={{
-                                                                        bgcolor: '#ff2600',
-                                                                        width: 'auto',
-                                                                        height: 'auto',
-                                                                    }}
-                                                                >
-                                                                    <Typography align="center" fontSize={20}>
-                                                                        {abnormalCount}
-                                                                    </Typography>
-                                                                </Box>
-                                                            </Box>
-                                                            <Box sx={{ mt: 6, ml: 2 }}>
-                                                                <PieChart
-                                                                    colors={['#008f00', '#ff2600']}
-                                                                    series={[
-                                                                        {
-                                                                            arcLabel: (item) =>
-                                                                                `${item.label} (${item.value})`,
-                                                                            arcLabelMinAngle: 50,
-                                                                            data: pieData,
-                                                                        },
-                                                                    ]}
-                                                                    sx={{
-                                                                        [`& .${pieArcLabelClasses.root}`]: {
-                                                                            fill: 'default',
-                                                                            fontWeight: 'bold',
-                                                                        },
-                                                                    }}
-                                                                    width={600}
-                                                                    height={300}
-                                                                />
-                                                            </Box>
-                                                        </Grid>
-                                                        <Grid xs={3} sx={{ mt: 4 }}>
-                                                            <Box
-                                                                border={1}
-                                                                sx={{ mt: 4, ml: 6, width: 118, height: 'auto' }}
-                                                            >
-                                                                <Typography align="center" fontSize={25}>
-                                                                    Stabilize
-                                                                </Typography>
-                                                                <Box
-                                                                    sx={{
-                                                                        bgcolor: '#008f00',
-                                                                        width: 'auto',
-                                                                        height: 'auto',
-                                                                    }}
-                                                                >
-                                                                    <Typography align="center" fontSize={20}>
-                                                                        {nonAbnormalCount}
-                                                                    </Typography>
-                                                                </Box>
-                                                            </Box>
-                                                        </Grid>
-                                                        <Grid item xs={6} md={6} lg={6}>
-                                                            <TableContainer
-                                                                component={Paper}
-                                                                style={tableContainerStyle.tableContainer}
-                                                            >
-                                                                <Table>
-                                                                    <TableHead
-                                                                        style={{
-                                                                            position: 'sticky',
-                                                                            top: 0,
-                                                                            zIndex: 2,
-                                                                            backgroundColor: '#bfbfbf',
-                                                                        }}
-                                                                    >
-                                                                        <TableRow>
-                                                                            <TableCell
-                                                                                align="center"
-                                                                                sx={{
-                                                                                    height: 'auto',
-                                                                                    border: '1px solid black',
-                                                                                }}
-                                                                                colSpan={5}
-                                                                            >
-                                                                                <Typography fontSize={20}>
-                                                                                    Weekly predictions
-                                                                                    {
-                                                                                        deviceData
-                                                                                            .filter(
-                                                                                                (columns) =>
-                                                                                                    columns.frequency ===
-                                                                                                    '週預測'
-                                                                                            )
-                                                                                            .map(
-                                                                                                (item) =>
-                                                                                                    `${item.ori_date}-${item.pred_date}`
-                                                                                            )[0]
-                                                                                    }
-                                                                                </Typography>
-                                                                            </TableCell>
-                                                                        </TableRow>
-                                                                        <TableRow>
-                                                                            <TableCell
-                                                                                align="center"
-                                                                                sx={{
-                                                                                    height: 'auto',
-                                                                                    border: '1px solid black',
-                                                                                }}
-                                                                            >
-                                                                                <TableSortLabel
-                                                                                    active={weekOrderBy === 'category'}
-                                                                                    direction={
-                                                                                        weekOrderBy === 'category'
-                                                                                            ? orderWeek
-                                                                                            : 'asc'
-                                                                                    }
-                                                                                    onClick={() =>
-                                                                                        handleSortRequest('category')
-                                                                                    }
-                                                                                >
-                                                                                    <Typography fontSize={20}>
-                                                                                        Category
-                                                                                    </Typography>
-                                                                                </TableSortLabel>
-                                                                            </TableCell>
-                                                                            <TableCell
-                                                                                align="center"
-                                                                                sx={{
-                                                                                    height: 'auto',
-                                                                                    border: '1px solid black',
-                                                                                }}
-                                                                            >
-                                                                                <TableSortLabel
-                                                                                    active={weekOrderBy === 'label'}
-                                                                                    direction={
-                                                                                        weekOrderBy === 'label'
-                                                                                            ? orderWeek
-                                                                                            : 'asc'
-                                                                                    }
-                                                                                    onClick={() =>
-                                                                                        handleSortRequest('label')
-                                                                                    }
-                                                                                >
-                                                                                    <Typography fontSize={20}>
-                                                                                        Type
-                                                                                    </Typography>
-                                                                                </TableSortLabel>
-                                                                            </TableCell>
-                                                                            <TableCell
-                                                                                align="center"
-                                                                                sx={{
-                                                                                    height: 'auto',
-                                                                                    border: '1px solid black',
-                                                                                }}
-                                                                            >
-                                                                                <Typography fontSize={20}>
-                                                                                    Unusual events
-                                                                                </Typography>
-                                                                            </TableCell>
-                                                                            <TableCell
-                                                                                align="center"
-                                                                                sx={{
-                                                                                    height: 'auto',
-                                                                                    border: '1px solid black',
-                                                                                }}
-                                                                            >
-                                                                                <TableSortLabel
-                                                                                    active={weekOrderBy === 'date'}
-                                                                                    direction={
-                                                                                        weekOrderBy === 'date'
-                                                                                            ? orderWeek
-                                                                                            : 'asc'
-                                                                                    }
-                                                                                    onClick={() =>
-                                                                                        handleSortRequest('date')
-                                                                                    }
-                                                                                >
-                                                                                    <Typography fontSize={20}>
-                                                                                        Last occurrence time
-                                                                                    </Typography>
-                                                                                </TableSortLabel>
-                                                                            </TableCell>
-                                                                            <TableCell
-                                                                                align="center"
-                                                                                sx={{
-                                                                                    height: 'auto',
-                                                                                    border: '1px solid black',
-                                                                                }}
-                                                                            >
-                                                                                <Typography fontSize={20}>
-                                                                                    Number of occurrences
-                                                                                </Typography>
-                                                                            </TableCell>
-                                                                        </TableRow>
-                                                                    </TableHead>
-                                                                    <TableBody>
-                                                                        {deviceData
-                                                                            .filter(
-                                                                                (columns) => columns.frequency === '週預測'
-                                                                            )
-                                                                            .sort(getComparator(orderWeek))
-                                                                            .map((columns) => (
-                                                                                <TableRow key={columns.name}>
-                                                                                    <TableCell
-                                                                                        align="center"
-                                                                                        sx={{
-                                                                                            height: 'auto',
-                                                                                            bgcolor: infoColor(
-                                                                                                columns.happened_times
-                                                                                            ),
-                                                                                        }}
-                                                                                    >
-                                                                                        <Typography fontSize={20}>
-                                                                                            {columns.category}
-                                                                                        </Typography>
-                                                                                    </TableCell>
-                                                                                    <TableCell
-                                                                                        style={tableCellStyle.extendedCell}
-                                                                                        key={columns.id}
-                                                                                        align="center"
-                                                                                        sx={{
-                                                                                            bgcolor: getColor(columns.steady),
-                                                                                        }}
-                                                                                    >
-                                                                                        <Typography fontSize={20}>
-                                                                                            {columns.steady === 0
-                                                                                                ? 'Stabilize'
-                                                                                                : 'Abnormal'}
-                                                                                        </Typography>
-                                                                                    </TableCell>
-                                                                                    <TableCell
-                                                                                        align="center"
-                                                                                        sx={{
-                                                                                            height: 'auto',
-                                                                                            bgcolor: infoColor(
-                                                                                                columns.happened_times
-                                                                                            ),
-                                                                                        }}
-                                                                                    >
-                                                                                        <Typography fontSize={20}>
-                                                                                            {columns.name}
-                                                                                        </Typography>
-                                                                                    </TableCell>
-                                                                                    <TableCell
-                                                                                        align="center"
-                                                                                        sx={{
-                                                                                            height: 'auto',
-                                                                                            bgcolor: infoColor(
-                                                                                                columns.happened_times
-                                                                                            ),
-                                                                                        }}
-                                                                                    >
-                                                                                        <Typography fontSize={20}>
-                                                                                            {columns.happenLastTime}
-                                                                                        </Typography>
-                                                                                    </TableCell>
-                                                                                    <TableCell
-                                                                                        align="center"
-                                                                                        sx={{
-                                                                                            height: 'auto',
-                                                                                            bgcolor: infoColor(
-                                                                                                columns.happened_times
-                                                                                            ),
-                                                                                        }}
-                                                                                    >
-                                                                                        <Typography fontSize={20}>
-                                                                                            {columns.happened_times}
-                                                                                        </Typography>
-                                                                                    </TableCell>
-                                                                                </TableRow>
-                                                                            ))}
-                                                                    </TableBody>
-                                                                </Table>
-                                                            </TableContainer>
-                                                            <TableContainer
-                                                                component={Paper}
-                                                                style={tableContainerStyle.tableContainer}
-                                                            >
-                                                                <Table>
-                                                                    <TableHead
-                                                                        style={{
-                                                                            position: 'sticky',
-                                                                            top: 0,
-                                                                            zIndex: 2,
-                                                                            backgroundColor: '#bfbfbf',
-                                                                        }}
-                                                                    >
-                                                                        <TableRow>
-                                                                            <TableCell
-                                                                                align="center"
-                                                                                sx={{
-                                                                                    height: 'auto',
-                                                                                    border: '1px solid black',
-                                                                                }}
-                                                                                colSpan={5}
-                                                                            >
-                                                                                <Typography fontSize={20}>
-                                                                                    Daily predictions
-                                                                                    {
-                                                                                        deviceData2
-                                                                                            .filter(
-                                                                                                (columns) =>
-                                                                                                    columns.frequency === '日預測'
-                                                                                            )
-                                                                                            .map((item) => `${item.pred_date}`)[0]
-                                                                                    }
-                                                                                </Typography>
-                                                                            </TableCell>
-                                                                        </TableRow>
-                                                                        <TableRow>
-                                                                            <TableCell
-                                                                                align="center"
-                                                                                sx={{
-                                                                                    height: 'auto',
-                                                                                    border: '1px solid black',
-                                                                                }}
-                                                                            >
-                                                                                <TableSortLabel
-                                                                                    active={dateOrderBy === 'category'}
-                                                                                    direction={
-                                                                                        dateOrderBy === 'category'
-                                                                                            ? orderDate
-                                                                                            : 'asc'
-                                                                                    }
-                                                                                    onClick={() =>
-                                                                                        handleSortRequestDate('category')
-                                                                                    }
-                                                                                >
-                                                                                    <Typography fontSize={20}>
-                                                                                        Category
-                                                                                    </Typography>
-                                                                                </TableSortLabel>
-                                                                            </TableCell>
-                                                                            <TableCell
-                                                                                align="center"
-                                                                                sx={{
-                                                                                    height: 'auto',
-                                                                                    border: '1px solid black',
-                                                                                }}
-                                                                            >
-                                                                                <TableSortLabel
-                                                                                    active={dateOrderBy === 'label'}
-                                                                                    direction={
-                                                                                        dateOrderBy === 'label'
-                                                                                            ? orderDate
-                                                                                            : 'asc'
-                                                                                    }
-                                                                                    onClick={() =>
-                                                                                        handleSortRequestDate('label')
-                                                                                    }
-                                                                                >
-                                                                                    <Typography fontSize={20}>
-                                                                                        Type
-                                                                                    </Typography>
-                                                                                </TableSortLabel>
-                                                                            </TableCell>
-                                                                            <TableCell
-                                                                                align="center"
-                                                                                sx={{
-                                                                                    height: 'auto',
-                                                                                    border: '1px solid black',
-                                                                                }}
-                                                                            >
-                                                                                <Typography fontSize={20}>
-                                                                                    Unusual events
-                                                                                </Typography>
-                                                                            </TableCell>
-                                                                            <TableCell
-                                                                                align="center"
-                                                                                sx={{
-                                                                                    height: 'auto',
-                                                                                    border: '1px solid black',
-                                                                                }}
-                                                                            >
-                                                                                <TableSortLabel
-                                                                                    active={dateOrderBy === 'date'}
-                                                                                    direction={
-                                                                                        dateOrderBy === 'date' ? orderDate : 'asc'
-                                                                                    }
-                                                                                    onClick={() =>
-                                                                                        handleSortRequestDate('date')
-                                                                                    }
-                                                                                >
-                                                                                    <Typography fontSize={20}>
-                                                                                        Last occurrence time
-                                                                                    </Typography>
-                                                                                </TableSortLabel>
-                                                                            </TableCell>
-                                                                            <TableCell
-                                                                                align="center"
-                                                                                sx={{
-                                                                                    height: 'auto',
-                                                                                    border: '1px solid black',
-                                                                                }}
-                                                                            >
-                                                                                <Typography fontSize={20}>
-                                                                                    Number of occurrences
-                                                                                </Typography>
-                                                                            </TableCell>
-                                                                        </TableRow>
-                                                                    </TableHead>
-                                                                    <TableBody>
-                                                                        {deviceData2
-                                                                            .filter((columns) => columns.frequency === '日預測')
-                                                                            .sort(getComparatorDate(orderDate))
-                                                                            .map((columns) => (
-                                                                                <TableRow key={columns.name}>
-                                                                                    <TableCell
-                                                                                        align="center"
-                                                                                        sx={{
-                                                                                            height: 'auto',
-                                                                                            bgcolor: infoColor(
-                                                                                                columns.happened_times
-                                                                                            ),
-                                                                                        }}
-                                                                                    >
-                                                                                        <Typography fontSize={20}>
-                                                                                            {columns.category}
-                                                                                        </Typography>
-                                                                                    </TableCell>
-                                                                                    <TableCell
-                                                                                        style={tableCellStyle.extendedCell}
-                                                                                        key={columns.id}
-                                                                                        align="center"
-                                                                                        sx={{
-                                                                                            bgcolor: getColor(columns.steady),
-                                                                                        }}
-                                                                                    >
-                                                                                        <Typography fontSize={20}>
-                                                                                            {columns.steady === 0
-                                                                                                ? 'Stabilize'
-                                                                                                : 'Abnormal'}
-                                                                                        </Typography>
-                                                                                    </TableCell>
-                                                                                    <TableCell
-                                                                                        align="center"
-                                                                                        sx={{
-                                                                                            height: 'auto',
-                                                                                            bgcolor: infoColor(
-                                                                                                columns.happened_times
-                                                                                            ),
-                                                                                        }}
-                                                                                    >
-                                                                                        <Typography fontSize={20}>
-                                                                                            {columns.name}
-                                                                                        </Typography>
-                                                                                    </TableCell>
-                                                                                    <TableCell
-                                                                                        align="center"
-                                                                                        sx={{
-                                                                                            height: 'auto',
-                                                                                            bgcolor: infoColor(
-                                                                                                columns.happened_times
-                                                                                            ),
-                                                                                        }}
-                                                                                    >
-                                                                                        <Typography fontSize={20}>
-                                                                                            {columns.happenLastTime}
-                                                                                        </Typography>
-                                                                                    </TableCell>
-                                                                                    <TableCell
-                                                                                        align="center"
-                                                                                        sx={{
-                                                                                            height: 'auto',
-                                                                                            bgcolor: infoColor(
-                                                                                                columns.happened_times
-                                                                                            ),
-                                                                                        }}
-                                                                                    >
-                                                                                        <Typography fontSize={20}>
-                                                                                            {columns.happened_times}
-                                                                                        </Typography>
-                                                                                    </TableCell>
-                                                                                </TableRow>
-                                                                            ))}
-                                                                    </TableBody>
-                                                                </Table>
-                                                            </TableContainer>
-                                                        </Grid>
-                                                    </Grid>
-                                                </Card>
-                                            </div>
-                                        );
-                                    })}
-                            </Carousel>
-                        </div>
-                    ))
-                ))}
-            </div>
-        );
-    };
+    // const { data, timestamp } = splitDataAndTimestamp(dateData);
 
 
     return (
-        <ThemeProvider theme={darkTheme}>
+        <>
             <Snackbar open={alertOpen} autoHideDuration={6000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
                     {message}
@@ -1960,69 +312,31 @@ export default function Statistics({ token, ...rest }) {
                     {errorMessage}
                 </Alert>
             </Snackbar>
-            {globalVariable === 'zh-tw' ? (
-                <div>
-                    <div style={{ display: 'flex', alignItems: 'center', mr: '100px' }}>
-                        <LoadingButton variant="contained" color="info" onClick={togglePause}>
-                            {isPaused ? '恢復輪播' : '暫停輪播'}
-                        </LoadingButton>
-                        <Marquee msg={timeStampData} />{' '}
-                        {/* 這是跑馬燈的function如果要改，他自己有獨立的檔案可以進去裡面改 */}
-                        <LoadingButton
-                            variant="contained"
-                            color="info"
-                            onClick={handleRefresh}
-                            style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}
-                        >
-                            刷新
-                        </LoadingButton>
-                        <ColorBox msg="已發生過之異常事件"></ColorBox>
-                    </div>
-                    {createDeviceCardTW(dateData, dateData)}
+            <div>
+                <div style={{ display: 'flex', alignItems: 'center', marginRight: '100px' }}>
+
+                    {/* <Typography variant="h4">
+                        {globalVariable === 'zh-tw'
+                            ? '前次查詢時間: '
+                            : globalVariable === 'zh-cn'
+                                ? '上次查询时间: '
+                                : 'Last query time: '}
+                    </Typography> */}
+                    {globalVariable === 'zh-tw' ? <Marquee header={'前次查詢時間: '} msg={dateData.timestamp.slice(0, 19)} /> : globalVariable === 'zh-cn' ? <Marquee header={'上次查询时间: '} msg={dateData.timestamp.slice(0, 19)} /> : <Marquee header={'Last query time: '} msg={dateData.timestamp.slice(0, 19)} />}
+
+
+                    <LoadingButton
+                        variant="contained"
+                        color="info"
+                        onClick={handleRefresh}
+                        style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}
+                    >
+                        {globalVariable === 'zh-tw' ? '刷新' : globalVariable === 'zh-cn' ? '刷新' : 'Refresh'}
+                    </LoadingButton>
+                    <ColorBox msg={globalVariable === 'zh-tw' ? "已發生過之異常事件" : globalVariable === 'zh-cn' ? "已发生过之异常事件" : "Abnormal events that have occurred"}></ColorBox>
                 </div>
-            ) : globalVariable === 'zh-cn' ? (
-                <div>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                        <div style={{ display: 'flex', alignItems: 'center', mr: '100px' }}>
-                            <LoadingButton variant="contained" color="info" onClick={togglePause}>
-                                {isPaused ? '恢复轮播' : '暂停轮播'}
-                            </LoadingButton>
-                            <Marquee msg={timeStampData} />
-                            <LoadingButton
-                                variant="contained"
-                                color="info"
-                                onClick={handleRefresh}
-                                style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}
-                            >
-                                刷新
-                            </LoadingButton>
-                            <ColorBox msg="已发生过之异常事件"></ColorBox>
-                        </div>
-                    </Box>
-                    {createDeviceCardCN(dateData, dateData)}
-                </div>
-            ) : (
-                <div>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                        <div style={{ display: 'flex', alignItems: 'center', mr: '100px' }}>
-                            <LoadingButton variant="contained" color="info" onClick={togglePause}>
-                                {isPaused ? 'Resume carousel' : 'Pause carousel'}
-                            </LoadingButton>
-                            <Marquee msg={timeStampData} />
-                            <LoadingButton
-                                variant="contained"
-                                color="info"
-                                onClick={handleRefresh}
-                                style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}
-                            >
-                                refresh
-                            </LoadingButton>
-                            <ColorBox msg="Abnormal events that have occurred"></ColorBox>
-                        </div>
-                    </Box>
-                    {createDeviceCardEN(dateData, dateData)}
-                </div>
-            )}
-        </ThemeProvider>
+                <DataDisplay data={dateData.data} language={globalVariable} />
+            </div>
+        </>
     );
 }

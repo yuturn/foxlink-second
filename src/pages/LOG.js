@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 
 import { GlobalContext } from '../components/GlobalContext';
-import { apiGetLOG } from '../api'
+import { apiGetLOG, apiGetStatistics } from '../api'
 
 import { Box, Card, CardContent, CardHeader, Divider, Typography, createTheme, ThemeProvider, TextField, Grid, Select, FormControl, InputLabel, MenuItem, } from '@mui/material';
 
@@ -45,13 +45,13 @@ function createData(date, behavior, project, id, name) {
     return { date, behavior, project, id, name };
 }
 
-const rows = [
-    createData(20220711, "差異備份時間更改", 'D7X', 'c001', '林小家'),
-    createData(20220713, "還原", 'D7X', 'c002', '林小遠'),
-    createData(20220715, "模型預測", 'D7X', 'c003', '羅小敏'),
-    createData(20220722, "差異備份路徑更改", 'D7X', 'c004', '羅小聖'),
-    createData(20220802, "完整備份執行", 'D7X', 'c005', '李小騰'),
-];
+// const rows = [
+//     createData(20220711, "差異備份時間更改", 'D7X', 'c001', '林小家'),
+//     createData(20220713, "還原", 'D7X', 'c002', '林小遠'),
+//     createData(20220715, "模型預測", 'D7X', 'c003', '羅小敏'),
+//     createData(20220722, "差異備份路徑更改", 'D7X', 'c004', '羅小聖'),
+//     createData(20220802, "完整備份執行", 'D7X', 'c005', '李小騰'),
+// ];
 
 
 export default function LOG({ token, ...rest }) {
@@ -65,26 +65,43 @@ export default function LOG({ token, ...rest }) {
     const [currentPage, setCurrentPage] = useState();
     const [totalPage, setTotalPage] = useState();
     const [totalData, setTotalData] = useState();
+    const [projectIDSelect, setProjectIDSelect] = useState("");
     const { globalVariable, updateGlobalVariable } = useContext(GlobalContext);
 
     //操作類型改變時
     const operationTypeChange = (event) => {
         setOperationType(event.target.value);
     };
+    const projectSelectNameChange = (event) => {
+        setProjectIDSelect(event.target.value);
+    };
+    const [projectNameList, setProjectNameList] = useState([]);
+    const getProjectName = (token) => {
+        if (!token) {
+            return;
+        }
 
-
+        apiGetStatistics(token)
+            .then((res) => {
+                const list = res.data.map((project) => project.project_name);
+                setProjectNameList(list);
+            });
+    };
+    useEffect(() => {
+        getProjectName(token);
+    }, [token]);
     //這邊是查詢LOG的按鈕
     const handleClickChartSearch = () => {
-        let projectName=document.getElementById('projectName').value;
-        let userName=document.getElementById('employeeName').value;
+        // let projectName=document.getElementById('projectName').value;
+        let userName = document.getElementById('employeeName').value;
         let badge = document.getElementById('employeeID').value;
         let pageDataCount = document.getElementById('pageDataCount').value;
         const data = {
             startDate: new Date(startDate).toISOString().split('T')[0] + ' 00%3A00%3A00',
             endDate: new Date(endDate).toISOString().split('T')[0] + ' 00%3A00%3A00',
             action: operationType,
-            projectName:projectName,
-            userName:userName,
+            projectName: projectIDSelect,
+            userName: userName,
             badge: badge,
             page: 1,
             limit: pageDataCount,
@@ -122,8 +139,8 @@ export default function LOG({ token, ...rest }) {
     };
     //這邊是上一頁的按鈕
     const handleClickLastPage = () => {
-        let projectName=document.getElementById('projectName').value;
-        let userName=document.getElementById('employeeName').value;
+        // let projectName=document.getElementById('projectName').value;
+        let userName = document.getElementById('employeeName').value;
         let badge = document.getElementById('employeeID').value;
         let pageDataCount = document.getElementById('pageDataCount').value;
         if (currentPage > 1) {
@@ -131,8 +148,8 @@ export default function LOG({ token, ...rest }) {
                 startDate: new Date(startDate).toISOString().split('T')[0] + ' 00%3A00%3A00',
                 endDate: new Date(endDate).toISOString().split('T')[0] + ' 00%3A00%3A00',
                 action: operationType,
-                projectName:projectName,
-                userName:userName,
+                projectName: projectIDSelect,
+                userName: userName,
                 badge: badge,
                 page: currentPage - 1,
                 limit: pageDataCount,
@@ -168,14 +185,14 @@ export default function LOG({ token, ...rest }) {
                     handleErrorOpen((globalVariable === "zh-tw" ? "查詢失敗:API請求失敗" : globalVariable === "zh-cn" ? "查询失败:API请求失败" : "Query failed: API request failed"));
                 });
         } else {
-            handleErrorOpen("沒有上一頁")
+            handleErrorOpen((globalVariable === "zh-tw" ? "沒有上一頁" : globalVariable === "zh-cn" ? "没有上一页" : "No previous page"))
         }
     };
 
     //這邊是下一頁的按鈕
     const handleClickNextPage = () => {
-        let projectName=document.getElementById('projectName').value;
-        let userName=document.getElementById('employeeName').value;
+        // let projectName=document.getElementById('projectName').value;
+        let userName = document.getElementById('employeeName').value;
         let badge = document.getElementById('employeeID').value;
         let pageDataCount = document.getElementById('pageDataCount').value;
         if (currentPage < totalPage) {
@@ -183,8 +200,8 @@ export default function LOG({ token, ...rest }) {
                 startDate: new Date(startDate).toISOString().split('T')[0] + ' 00%3A00%3A00',
                 endDate: new Date(endDate).toISOString().split('T')[0] + ' 00%3A00%3A00',
                 action: operationType,
-                userName:userName,
-                projectName:projectName,
+                userName: userName,
+                projectName: projectIDSelect,
                 badge: badge,
                 page: currentPage + 1,
                 limit: pageDataCount,
@@ -220,7 +237,7 @@ export default function LOG({ token, ...rest }) {
                     handleErrorOpen((globalVariable === "zh-tw" ? "查詢失敗:API請求失敗" : globalVariable === "zh-cn" ? "查询失败:API请求失败" : "Query failed: API request failed"));
                 });
         } else {
-            handleErrorOpen("沒有下一頁")
+            handleErrorOpen((globalVariable === "zh-tw" ? "沒有下一頁" : globalVariable === "zh-cn" ? "没有下一页" : "No next page"))
         }
     };
 
@@ -402,7 +419,7 @@ export default function LOG({ token, ...rest }) {
                                 <Typography variant="h6" fontWeight="medium" alignItems="center" justifyContent="center" mr={2}>
                                     專案名稱:
                                 </Typography>
-                                <Box component="form" role="form" >
+                                {/* <Box component="form" role="form" >
                                     <TextField
                                         fullWidth
                                         label="專案名稱"
@@ -411,6 +428,26 @@ export default function LOG({ token, ...rest }) {
                                         id="projectName"
                                         variant="outlined"
                                     />
+                                </Box> */}
+                                <Box component="form" role="form">
+                                    <FormControl>
+                                        <InputLabel id="operation-type-select-label">操作類型</InputLabel>
+                                        <Select
+                                            labelId="permission-select-label"
+                                            id="permission-select"
+                                            value={projectIDSelect}
+                                            label="操作類型"
+                                            onChange={projectSelectNameChange}
+                                            style={{ minWidth: "271px", height: "56px" }}
+                                        >
+                                            <MenuItem value="">清空欄位</MenuItem>
+                                            {projectNameList.map((projectItem) => (
+                                                <MenuItem value={projectItem}>
+                                                    {projectItem}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
                                 </Box>
                             </Grid>
                             <Grid container alignItems="center" justifyContent="left" item xs={3}>
@@ -460,6 +497,7 @@ export default function LOG({ token, ...rest }) {
                                         <TableRow>
                                             <TableCell align="center" sx={{ backgroundColor: "#bfbfbf" }}>操作時間</TableCell>
                                             <TableCell align="center" sx={{ backgroundColor: "#bfbfbf" }}>操作類型</TableCell>
+                                            <TableCell align="center" sx={{ backgroundColor: "#bfbfbf" }}>專案名稱</TableCell>
                                             <TableCell align="center" sx={{ backgroundColor: "#bfbfbf" }}>員工ID</TableCell>
                                             <TableCell align="center" sx={{ backgroundColor: "#bfbfbf" }}>員工姓名</TableCell>
                                             <TableCell align="center" sx={{ backgroundColor: "#bfbfbf" }}>說明</TableCell>
@@ -473,6 +511,7 @@ export default function LOG({ token, ...rest }) {
                                             >
                                                 <TableCell align="center">{row.created_date}</TableCell>
                                                 <TableCell align="center">{row.action}</TableCell>
+                                                <TableCell align="center">{row.project}</TableCell>
                                                 <TableCell component="th" scope="row" align="center">{row.badge}</TableCell>
                                                 <TableCell align="center">{row.username}</TableCell>
                                                 <TableCell align="center">{row.description}</TableCell>
@@ -628,7 +667,7 @@ export default function LOG({ token, ...rest }) {
                                 <Typography variant="h6" fontWeight="medium" alignItems="center" justifyContent="center" mr={2}>
                                     专案名称:
                                 </Typography>
-                                <Box component="form" role="form" >
+                                {/* <Box component="form" role="form" >
                                     <TextField
                                         fullWidth
                                         label="专案名称"
@@ -637,6 +676,26 @@ export default function LOG({ token, ...rest }) {
                                         id="projectName"
                                         variant="outlined"
                                     />
+                                </Box> */}
+                                <Box component="form" role="form">
+                                    <FormControl>
+                                        <InputLabel id="operation-type-select-label">操作類型</InputLabel>
+                                        <Select
+                                            labelId="permission-select-label"
+                                            id="permission-select"
+                                            value={projectIDSelect}
+                                            label="操作類型"
+                                            onChange={projectSelectNameChange}
+                                            style={{ minWidth: "271px", height: "56px" }}
+                                        >
+                                            <MenuItem value="">清空栏位</MenuItem>
+                                            {projectNameList.map((projectItem) => (
+                                                <MenuItem value={projectItem}>
+                                                    {projectItem}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
                                 </Box>
                             </Grid>
                             <Grid container alignItems="center" justifyContent="left" item xs={3}>
@@ -686,6 +745,7 @@ export default function LOG({ token, ...rest }) {
                                         <TableRow>
                                             <TableCell align="center" sx={{ backgroundColor: "#bfbfbf" }}>操作时间</TableCell>
                                             <TableCell align="center" sx={{ backgroundColor: "#bfbfbf" }}>操作类型</TableCell>
+                                            <TableCell align="center" sx={{ backgroundColor: "#bfbfbf" }}>专案名称</TableCell>
                                             <TableCell align="center" sx={{ backgroundColor: "#bfbfbf" }}>员工ID</TableCell>
                                             <TableCell align="center" sx={{ backgroundColor: "#bfbfbf" }}>员工姓名</TableCell>
                                             <TableCell align="center" sx={{ backgroundColor: "#bfbfbf" }}>说明</TableCell>
@@ -699,6 +759,7 @@ export default function LOG({ token, ...rest }) {
                                             >
                                                 <TableCell align="center">{row.created_date}</TableCell>
                                                 <TableCell align="center">{row.action}</TableCell>
+                                                <TableCell align="center">{row.project}</TableCell>
                                                 <TableCell component="th" scope="row" align="center">{row.badge}</TableCell>
                                                 <TableCell align="center">{row.username}</TableCell>
                                                 <TableCell align="center">{row.description}</TableCell>
@@ -854,7 +915,7 @@ export default function LOG({ token, ...rest }) {
                                 <Typography variant="h6" fontWeight="medium" alignItems="center" justifyContent="center" mr={2}>
                                     Project name:
                                 </Typography>
-                                <Box component="form" role="form" >
+                                {/* <Box component="form" role="form" >
                                     <TextField
                                         fullWidth
                                         label="Project name"
@@ -863,6 +924,26 @@ export default function LOG({ token, ...rest }) {
                                         id="projectName"
                                         variant="outlined"
                                     />
+                                </Box> */}
+                                <Box component="form" role="form">
+                                    <FormControl>
+                                        <InputLabel id="operation-type-select-label">操作類型</InputLabel>
+                                        <Select
+                                            labelId="permission-select-label"
+                                            id="permission-select"
+                                            value={projectIDSelect}
+                                            label="操作類型"
+                                            onChange={projectSelectNameChange}
+                                            style={{ minWidth: "271px", height: "56px" }}
+                                        >
+                                            <MenuItem value="">clear field</MenuItem>
+                                            {projectNameList.map((projectItem) => (
+                                                <MenuItem value={projectItem}>
+                                                    {projectItem}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
                                 </Box>
                             </Grid>
                             <Grid container alignItems="center" justifyContent="left" item xs={3}>
@@ -912,6 +993,7 @@ export default function LOG({ token, ...rest }) {
                                         <TableRow>
                                             <TableCell align="center" sx={{ backgroundColor: "#bfbfbf" }}>Operating time</TableCell>
                                             <TableCell align="center" sx={{ backgroundColor: "#bfbfbf" }}>Operating type</TableCell>
+                                            <TableCell align="center" sx={{ backgroundColor: "#bfbfbf" }}>Project name</TableCell>
                                             <TableCell align="center" sx={{ backgroundColor: "#bfbfbf" }}>Employee ID</TableCell>
                                             <TableCell align="center" sx={{ backgroundColor: "#bfbfbf" }}>Employee name</TableCell>
                                             <TableCell align="center" sx={{ backgroundColor: "#bfbfbf" }}>Description</TableCell>
@@ -925,6 +1007,7 @@ export default function LOG({ token, ...rest }) {
                                             >
                                                 <TableCell align="center">{row.created_date}</TableCell>
                                                 <TableCell align="center">{row.action}</TableCell>
+                                                <TableCell align="center">{row.project}</TableCell>
                                                 <TableCell component="th" scope="row" align="center">{row.badge}</TableCell>
                                                 <TableCell align="center">{row.username}</TableCell>
                                                 <TableCell align="center">{row.description}</TableCell>

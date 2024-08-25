@@ -1,46 +1,28 @@
-import React, { useState, useEffect } from "react";
-import styled, { keyframes } from "styled-components";
+import React, { useState, useEffect, useRef } from "react";
+import styled from "styled-components";
 
-const marqueeAnimation = (width) => keyframes`
-  0% {
-    transform: translate(0, 0);
-  }
-  100% {
-    transform: translate(-${width - 200}px, 0); /* 調整框的大小 */
-  }
-`;
-
+// 樣式化容器
 const MarqueeContainer = styled.div`
   .title {
     position: relative;
     white-space: nowrap;
     border: solid 1px rgb(189, 189, 189);
     overflow: hidden;
-    width: 400px; /* 調整框的大小 */
+    width: 450px; /* 調整框的大小 */
     height: 35px;
-    
-    /* 調整字體大小 */
-    font-size: 25px;
+    font-size: 25px; /* 調整字體大小 */
   }
 `;
 
-const Marquee = ({ msg }) => {
-  const [width, setWidth] = useState(0);
-
-  useEffect(() => {
-    const marqueeElement = document.querySelector(".title__content");
-    const rect = marqueeElement && marqueeElement.getBoundingClientRect();
-    if (rect) {
-      setWidth(rect.width);
-    }
-  }, [msg]);
+const Marquee = ({ header, msg }) => {
+  const marqueeRef = useRef(null); // 使用useRef來獲取元素引用
 
   return (
-    <div style={{ marginLeft: "50px" }}> {/* 將間距設置為20px */}
-      <MarqueeContainer width={width}>
-        <div className="title" >
-          <span className={width >= 200 ? "title__content marquee" : "title__content"}>
-            前次查詢時間:{msg}
+    <div style={{ marginLeft: "50px" }}> {/* 將間距設置為50px */}
+      <MarqueeContainer>
+        <div className="title">
+          <span ref={marqueeRef} className="title__content">
+            {header}{msg}
           </span>
         </div>
       </MarqueeContainer>

@@ -327,6 +327,13 @@ export const apiSystemSpace = (token) => auth_except(baseRequest.get('/system/sp
   }
 }));
 
+export const apiGetHomePage = (token) => auth_except(baseRequest.get(`/statistics/homepage`, {
+  headers:
+  {
+    'accept': 'application/json',
+    'Authorization': `Bearer ${token}`,
+  }
+}));
 export const apiUserLogin = (data) => auth_except(baseRequest.post('/auth/token', data, {
   headers:
   {

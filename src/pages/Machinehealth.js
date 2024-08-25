@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { apiGetStatistics, apiGetStatisticsDetails, apiGetStatisticsDetailsFilter, apiMarquee } from '../api'
 import {
   Box,
@@ -66,7 +66,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
   const [projectToLineDeviceMap, setProjectToLineDeviceMap] = useState({});
   const [filteredData, setFilteredData] = useState({});
   const [isFiltered, setIsFiltered] = useState(false);
-
+  const isFirstRender = useRef(true); // 用 useRef 追蹤是否是初次渲染
   function ColorBox(props) {
     return (
       <ThemeProvider
@@ -154,8 +154,8 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
 
   useEffect(() => {
     getProjectName(token);
-    getProjectDetails();
-    getProjectDetailsFilter();
+    // getProjectDetails();
+    // getProjectDetailsFilter();
     apiMarquee(token)
       .then((res) => {
         console.log(res.data);
@@ -164,12 +164,17 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
       .catch((error) => {
         console.error(error);
       });
-  }, [token, refreshKey]);
+    // 在 useEffect 中重置 isFirstRender 為 false，確保後續渲染時不再視為初次渲染
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+    }
+  }, [refreshKey]);
 
   // 這邊創一個handleRefresh功能是有關refresh按鈕，主要是按一下+1，那這邊就是為了產生變化讓上面的useEffect去監聽他，以便做到刷新功能
   const handleRefresh = () => {
     setRefreshKey(prevKey => prevKey + 1);
-    if (projectName && deviceName && lineName) {
+    //多一個!isFirstRender假如(!isFirstRender)和其他條件是true，call predict result
+    if (!isFirstRender.current && projectName && deviceName && lineName) {
       getProjectDetailsFilter();
     } else {
       console.log("Project Name or Device Name not set.");
@@ -195,20 +200,20 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
 
   const [timeStampData, setTimestampData] = useState("");
 
-  const fetchTimestampData = (token) => {
-    if (!token) {
-      return;
-    }
+  // const fetchTimestampData = (token) => {
+  //   if (!token) {
+  //     return;
+  //   }
 
-    apiMarquee(token)
-      .then((res) => {
-        console.log(res.data);
-        setTimestampData(res.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
+  //   apiMarquee(token)
+  //     .then((res) => {
+  //       console.log(res.data);
+  //       setTimestampData(res.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+  // };
 
   const getProjectName = (token) => {
     if (!token) {
@@ -2220,7 +2225,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
               <LoadingButton variant="contained" color="info" onClick={togglePause}>
                 {isPaused ? '恢復輪播' : '暫停輪播'}
               </LoadingButton>
-              <Marquee msg={timeStampData} />
+              <Marquee header={'前次查詢時間: '} msg={timeStampData} />
               <LoadingButton variant="contained" color="info" onClick={handleRefresh} style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}>
                 刷新
               </LoadingButton>
@@ -2342,7 +2347,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
               <LoadingButton variant="contained" color="info" onClick={togglePause}>
                 {isPaused ? '恢复轮播' : '暂停轮播'}
               </LoadingButton>
-              <Marquee msg={timeStampData} />
+              <Marquee header={'上次查询时间: '} msg={timeStampData} />
               <LoadingButton variant="contained" color="info" onClick={handleRefresh} style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}>
                 刷新
               </LoadingButton>
@@ -2464,7 +2469,7 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
               <LoadingButton variant="contained" color="info" onClick={togglePause}>
                 {isPaused ? 'Resume carousel' : 'Pause carousel'}
               </LoadingButton>
-              <Marquee msg={timeStampData} />
+              <Marquee header={'Last query time: '} msg={timeStampData} />
               <LoadingButton variant="contained" color="info" onClick={handleRefresh} style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}>
                 refresh
               </LoadingButton>
