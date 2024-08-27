@@ -11,7 +11,8 @@ import {
   CardContent,
   Divider,
   Select,
-  MenuItem
+  MenuItem,
+  IconButton
 } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -31,7 +32,8 @@ import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import Marquee from "./Marquee";
 import { GlobalContext } from '../components/GlobalContext';
-
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 const darkTheme = createTheme({
   palette: {
     mode: 'light',
@@ -2085,9 +2087,15 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
       </div>
     );
   };
-
+  const [expanded, setExpanded] = useState(true);
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
+  };
   return (
     <ThemeProvider theme={darkTheme}>
+      <IconButton onClick={handleExpandClick} sx={{ ml: '0' }}>
+        {expanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+      </IconButton>
       <Snackbar
         open={alertOpen}
         autoHideDuration={5000}
@@ -2118,108 +2126,109 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
       </Snackbar>
       {globalVariable === "zh-tw" ? (
         <>
-          <Card sx={{ mb: 3 }}>
-            <Box sx={{ bgcolor: '#696969' }}>
-              <CardHeader title="機況查詢頁面:" color="#62aaf4" />
-            </Box>
-            <Divider sx={{ borderBottomWidth: 3 }} />
-            <CardContent>
-              <Grid container spacing={1}>
-                <Grid item xs={12} md={12}>
-                  <Typography variant="h4" fontWeight="medium" mr={2}>
-                    條件篩選:
-                  </Typography>
-                  <Box>
-                    <Box sx={{ mt: 1, ml: 4 }} display="flex" component="form" role="form">
-                      <Box align="center" display="flex">
-                        <Typography variant="h5" fontWeight="medium" mr={2} mt={2}>
-                          專案名稱:
-                        </Typography>
+          {expanded && (
+            <Card sx={{ mb: 3 }}>
+              <Box sx={{ bgcolor: '#696969' }}>
+                <CardHeader title="機況查詢頁面:" color="#62aaf4" />
+              </Box>
+              <Divider sx={{ borderBottomWidth: 3 }} />
+              <CardContent>
+                <Grid container spacing={1}>
+                  <Grid item xs={12} md={12}>
+                    <Typography variant="h4" fontWeight="medium" mr={2}>
+                      條件篩選:
+                    </Typography>
+                    <Box>
+                      <Box sx={{ mt: 1, ml: 4 }} display="flex" component="form" role="form">
+                        <Box align="center" display="flex">
+                          <Typography variant="h5" fontWeight="medium" mr={2} mt={2}>
+                            專案名稱:
+                          </Typography>
+                        </Box>
+                        <Box>
+                          <FormControl>
+                            <InputLabel id="operation-type-select-label">專案名稱</InputLabel>
+                            <Select
+                              labelId="permission-select-label"
+                              id="permission-select"
+                              value={projectName}
+                              label="專案名稱"
+                              onChange={projectNameChange}
+                              style={{ minWidth: "271px", height: "56px" }}
+                            >
+                              <MenuItem value="">清空欄位</MenuItem>
+                              {projectNameList.map((projectItem) => (
+                                <MenuItem value={projectItem}>
+                                  {projectItem}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </FormControl>
+                        </Box>
                       </Box>
-                      <Box>
-                        <FormControl>
-                          <InputLabel id="operation-type-select-label">專案名稱</InputLabel>
-                          <Select
-                            labelId="permission-select-label"
-                            id="permission-select"
-                            value={projectName}
-                            label="專案名稱"
-                            onChange={projectNameChange}
-                            style={{ minWidth: "271px", height: "56px" }}
-                          >
-                            <MenuItem value="">清空欄位</MenuItem>
-                            {projectNameList.map((projectItem) => (
-                              <MenuItem value={projectItem}>
-                                {projectItem}
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        </FormControl>
-                      </Box>
-                    </Box>
-                    <Grid container spacing={2} sx={{ mt: 1, ml: 6 }} component="form">
-                      <Grid item>
-                        <Typography variant="h5" fontWeight="medium" mr={2} mt={1} mb={1}>
-                          線別:
-                        </Typography>
+                      <Grid container spacing={2} sx={{ mt: 1, ml: 6 }} component="form">
+                        <Grid item>
+                          <Typography variant="h5" fontWeight="medium" mr={2} mt={1} mb={1}>
+                            線別:
+                          </Typography>
+                        </Grid>
+                        <Grid item>
+                          <FormControl>
+                            <InputLabel>線別</InputLabel>
+                            <Select
+                              value={lineName}
+                              label="線別"
+                              onChange={projectLineNameChange}
+                              style={{ minWidth: "271px", height: "56px" }}
+                            >
+                              <MenuItem value="">清空欄位</MenuItem>
+                              {projectLineNameList.map((projectItem) => (
+                                <MenuItem value={projectItem}>{projectItem}</MenuItem>
+                              ))}
+                            </Select>
+                          </FormControl>
+                        </Grid>
                       </Grid>
-                      <Grid item>
-                        <FormControl>
-                          <InputLabel>線別</InputLabel>
-                          <Select
-                            value={lineName}
-                            label="線別"
-                            onChange={projectLineNameChange}
-                            style={{ minWidth: "271px", height: "56px" }}
-                          >
-                            <MenuItem value="">清空欄位</MenuItem>
-                            {projectLineNameList.map((projectItem) => (
-                              <MenuItem value={projectItem}>{projectItem}</MenuItem>
-                            ))}
-                          </Select>
-                        </FormControl>
-                      </Grid>
-                    </Grid>
-                    <Box sx={{ mt: 1, ml: 4 }} display="flex" component="form" role="form">
-                      <Box align="center" display="flex">
-                        <Typography align="center" variant="h5" mr={2}>
-                          機台名稱:
-                        </Typography>
+                      <Box sx={{ mt: 1, ml: 4 }} display="flex" component="form" role="form">
+                        <Box align="center" display="flex">
+                          <Typography align="center" variant="h5" mr={2}>
+                            機台名稱:
+                          </Typography>
+                        </Box>
+                        <Box>
+                          <FormControl>
+                            <InputLabel id="operation-type-select-label">機台名稱</InputLabel>
+                            <Select
+                              labelId="permission-select-label"
+                              id="permission-select"
+                              value={deviceName}
+                              label="機台名稱"
+                              onChange={deviceNameChange}
+                              style={{ minWidth: "271px", height: "56px" }}
+                            >
+                              <MenuItem value="">清空欄位</MenuItem>
+                              {deviceNameList.map((device) => (
+                                <MenuItem key={device} value={device}>{device}</MenuItem>
+                              ))}
+                            </Select>
+                          </FormControl>
+                        </Box>
                       </Box>
-                      <Box>
-                        <FormControl>
-                          <InputLabel id="operation-type-select-label">機台名稱</InputLabel>
-                          <Select
-                            labelId="permission-select-label"
-                            id="permission-select"
-                            value={deviceName}
-                            label="機台名稱"
-                            onChange={deviceNameChange}
-                            style={{ minWidth: "271px", height: "56px" }}
-                          >
-                            <MenuItem value="">清空欄位</MenuItem>
-                            {deviceNameList.map((device) => (
-                              <MenuItem key={device} value={device}>{device}</MenuItem>
-                            ))}
-                          </Select>
-                        </FormControl>
+                      <Box sx={{ ml: 4 }} display="flex">
+                        <LoadingButton variant="contained"
+                          size="large"
+                          component="span"
+                          color="info"
+                          onClick={getProjectDetailsFilter}
+                        >
+                          查詢
+                        </LoadingButton>
                       </Box>
                     </Box>
-                    <Box sx={{ ml: 4 }} display="flex">
-                      <LoadingButton variant="contained"
-                        size="large"
-                        component="span"
-                        color="info"
-                        onClick={getProjectDetailsFilter}
-                      >
-                        查詢
-                      </LoadingButton>
-                    </Box>
-                  </Box>
+                  </Grid>
                 </Grid>
-              </Grid>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>)}
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
             <div style={{ display: 'flex', alignItems: 'center', mr: '100px' }}>
               <LoadingButton variant="contained" color="info" onClick={togglePause}>
@@ -2236,112 +2245,113 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
         </>
       ) : globalVariable === "zh-cn" ? (
         <>
-          <Card sx={{ mb: 3 }}>
-            <Box sx={{ bgcolor: '#696969' }}>
-              <CardHeader title="机况查询页面:" color="#62aaf4" />
-            </Box>
-            <Divider sx={{ borderBottomWidth: 3 }} />
-            <CardContent>
-              <Grid container spacing={1}>
-                <Grid item xs={12} md={12}>
-                  <Typography variant="h4" fontWeight="medium" mr={2}>
-                    条件筛选:
-                  </Typography>
-                  <Box>
-                    <Box sx={{ mt: 1, ml: 4 }} display="flex" component="form" role="form">
-                      <Box align="center" display="flex">
-                        <Typography variant="h5" fontWeight="medium" mr={2} mt={2}>
-                          专案名称:
-                        </Typography>
+          {expanded && (
+            <Card sx={{ mb: 3 }}>
+              <Box sx={{ bgcolor: '#696969' }}>
+                <CardHeader title="机况查询页面:" color="#62aaf4" />
+              </Box>
+              <Divider sx={{ borderBottomWidth: 3 }} />
+              <CardContent>
+                <Grid container spacing={1}>
+                  <Grid item xs={12} md={12}>
+                    <Typography variant="h4" fontWeight="medium" mr={2}>
+                      条件筛选:
+                    </Typography>
+                    <Box>
+                      <Box sx={{ mt: 1, ml: 4 }} display="flex" component="form" role="form">
+                        <Box align="center" display="flex">
+                          <Typography variant="h5" fontWeight="medium" mr={2} mt={2}>
+                            专案名称:
+                          </Typography>
+                        </Box>
+                        <Box>
+                          <FormControl>
+                            <InputLabel id="operation-type-select-label">专案名称</InputLabel>
+                            <Select
+                              labelId="permission-select-label"
+                              id="permission-select"
+                              value={projectName}
+                              label="专案名称"
+                              onChange={projectNameChange}
+                              style={{ minWidth: "271px", height: "56px" }}
+                            >
+                              <MenuItem value="">清空栏位</MenuItem>
+                              {projectNameList.map((projectItem) => (
+                                <MenuItem value={projectItem}>
+                                  {projectItem}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </FormControl>
+                        </Box>
                       </Box>
-                      <Box>
-                        <FormControl>
-                          <InputLabel id="operation-type-select-label">专案名称</InputLabel>
-                          <Select
-                            labelId="permission-select-label"
-                            id="permission-select"
-                            value={projectName}
-                            label="专案名称"
-                            onChange={projectNameChange}
-                            style={{ minWidth: "271px", height: "56px" }}
-                          >
-                            <MenuItem value="">清空栏位</MenuItem>
-                            {projectNameList.map((projectItem) => (
-                              <MenuItem value={projectItem}>
-                                {projectItem}
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        </FormControl>
-                      </Box>
-                    </Box>
-                    <Grid container spacing={2} sx={{ mt: 1, ml: 6 }} component="form">
-                      <Grid item>
-                        <Typography variant="h5" fontWeight="medium" mr={2} mt={1} mb={1}>
-                          线别:
-                        </Typography>
+                      <Grid container spacing={2} sx={{ mt: 1, ml: 6 }} component="form">
+                        <Grid item>
+                          <Typography variant="h5" fontWeight="medium" mr={2} mt={1} mb={1}>
+                            线别:
+                          </Typography>
+                        </Grid>
+                        <Grid item>
+                          <FormControl>
+                            <InputLabel id="operation-type-select-label">线别</InputLabel>
+                            <Select
+                              labelId="permission-select-label"
+                              id="permission-select"
+                              value={lineName}
+                              label="线别"
+                              onChange={projectLineNameChange}
+                              style={{ minWidth: "271px", height: "56px" }}
+                            >
+                              <MenuItem value="">清空栏位</MenuItem>
+                              {projectLineNameList.map((projectItem) => (
+                                <MenuItem value={projectItem}>
+                                  {projectItem}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </FormControl>
+                        </Grid>
                       </Grid>
-                      <Grid item>
-                        <FormControl>
-                          <InputLabel id="operation-type-select-label">线别</InputLabel>
-                          <Select
-                            labelId="permission-select-label"
-                            id="permission-select"
-                            value={lineName}
-                            label="线别"
-                            onChange={projectLineNameChange}
-                            style={{ minWidth: "271px", height: "56px" }}
-                          >
-                            <MenuItem value="">清空栏位</MenuItem>
-                            {projectLineNameList.map((projectItem) => (
-                              <MenuItem value={projectItem}>
-                                {projectItem}
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        </FormControl>
-                      </Grid>
-                    </Grid>
-                    <Box sx={{ mt: 1, ml: 4 }} display="flex" component="form" role="form">
-                      <Box align="center" display="flex">
-                        <Typography align="center" variant="h5" mr={2}>
-                          机台名称:
-                        </Typography>
+                      <Box sx={{ mt: 1, ml: 4 }} display="flex" component="form" role="form">
+                        <Box align="center" display="flex">
+                          <Typography align="center" variant="h5" mr={2}>
+                            机台名称:
+                          </Typography>
+                        </Box>
+                        <Box>
+                          <FormControl>
+                            <InputLabel id="operation-type-select-label">机台名称</InputLabel>
+                            <Select
+                              labelId="permission-select-label"
+                              id="permission-select"
+                              value={deviceName}
+                              label="机台名称"
+                              onChange={deviceNameChange}
+                              style={{ minWidth: "271px", height: "56px" }}
+                            >
+                              <MenuItem value="">清空栏位</MenuItem>
+                              {deviceNameList.map((device) => (
+                                <MenuItem key={device} value={device}>{device}</MenuItem>
+                              ))}
+                            </Select>
+                          </FormControl>
+                        </Box>
                       </Box>
-                      <Box>
-                        <FormControl>
-                          <InputLabel id="operation-type-select-label">机台名称</InputLabel>
-                          <Select
-                            labelId="permission-select-label"
-                            id="permission-select"
-                            value={deviceName}
-                            label="机台名称"
-                            onChange={deviceNameChange}
-                            style={{ minWidth: "271px", height: "56px" }}
-                          >
-                            <MenuItem value="">清空栏位</MenuItem>
-                            {deviceNameList.map((device) => (
-                              <MenuItem key={device} value={device}>{device}</MenuItem>
-                            ))}
-                          </Select>
-                        </FormControl>
+                      <Box sx={{ ml: 4 }} display="flex">
+                        <LoadingButton variant="contained"
+                          size="large"
+                          component="span"
+                          color="info"
+                          onClick={getProjectDetailsFilter}
+                        >
+                          查询
+                        </LoadingButton>
                       </Box>
                     </Box>
-                    <Box sx={{ ml: 4 }} display="flex">
-                      <LoadingButton variant="contained"
-                        size="large"
-                        component="span"
-                        color="info"
-                        onClick={getProjectDetailsFilter}
-                      >
-                        查询
-                      </LoadingButton>
-                    </Box>
-                  </Box>
+                  </Grid>
                 </Grid>
-              </Grid>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>)}
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
             <div style={{ display: 'flex', alignItems: 'center', mr: '100px' }}>
               <LoadingButton variant="contained" color="info" onClick={togglePause}>
@@ -2358,112 +2368,113 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
         </>
       ) : (
         <>
-          <Card sx={{ mb: 3 }}>
-            <Box sx={{ bgcolor: '#696969' }}>
-              <CardHeader title="Machine status page:" color="#62aaf4" />
-            </Box>
-            <Divider sx={{ borderBottomWidth: 3 }} />
-            <CardContent>
-              <Grid container spacing={1}>
-                <Grid item xs={12} md={12}>
-                  <Typography variant="h4" fontWeight="medium" mr={2}>
-                    Conditional filtering:
-                  </Typography>
-                  <Box>
-                    <Box sx={{ mt: 1, ml: 4 }} display="flex" component="form" role="form">
-                      <Box align="center" display="flex">
-                        <Typography variant="h5" fontWeight="medium" mr={2} mt={2}>
-                          Project name:
-                        </Typography>
+          {expanded && (
+            <Card sx={{ mb: 3 }}>
+              <Box sx={{ bgcolor: '#696969' }}>
+                <CardHeader title="Machine status page:" color="#62aaf4" />
+              </Box>
+              <Divider sx={{ borderBottomWidth: 3 }} />
+              <CardContent>
+                <Grid container spacing={1}>
+                  <Grid item xs={12} md={12}>
+                    <Typography variant="h4" fontWeight="medium" mr={2}>
+                      Conditional filtering:
+                    </Typography>
+                    <Box>
+                      <Box sx={{ mt: 1, ml: 4 }} display="flex" component="form" role="form">
+                        <Box align="center" display="flex">
+                          <Typography variant="h5" fontWeight="medium" mr={2} mt={2}>
+                            Project name:
+                          </Typography>
+                        </Box>
+                        <Box>
+                          <FormControl>
+                            <InputLabel id="operation-type-select-label">Project name</InputLabel>
+                            <Select
+                              labelId="permission-select-label"
+                              id="permission-select"
+                              value={projectName}
+                              label="Project name"
+                              onChange={projectNameChange}
+                              style={{ minWidth: "271px", height: "56px" }}
+                            >
+                              <MenuItem value="">Clear field</MenuItem>
+                              {projectNameList.map((projectItem) => (
+                                <MenuItem value={projectItem}>
+                                  {projectItem}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </FormControl>
+                        </Box>
                       </Box>
-                      <Box>
-                        <FormControl>
-                          <InputLabel id="operation-type-select-label">Project name</InputLabel>
-                          <Select
-                            labelId="permission-select-label"
-                            id="permission-select"
-                            value={projectName}
-                            label="Project name"
-                            onChange={projectNameChange}
-                            style={{ minWidth: "271px", height: "56px" }}
-                          >
-                            <MenuItem value="">Clear field</MenuItem>
-                            {projectNameList.map((projectItem) => (
-                              <MenuItem value={projectItem}>
-                                {projectItem}
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        </FormControl>
-                      </Box>
-                    </Box>
-                    <Grid container spacing={2} sx={{ mt: 1, ml: 6 }} component="form">
-                      <Grid item>
-                        <Typography variant="h5" fontWeight="medium" mr={2} mt={1} mb={1}>
-                          Line:
-                        </Typography>
+                      <Grid container spacing={2} sx={{ mt: 1, ml: 6 }} component="form">
+                        <Grid item>
+                          <Typography variant="h5" fontWeight="medium" mr={2} mt={1} mb={1}>
+                            Line:
+                          </Typography>
+                        </Grid>
+                        <Grid item>
+                          <FormControl>
+                            <InputLabel id="operation-type-select-label">Line</InputLabel>
+                            <Select
+                              labelId="permission-select-label"
+                              id="permission-select"
+                              value={lineName}
+                              label="Line"
+                              onChange={projectLineNameChange}
+                              style={{ minWidth: "271px", height: "56px" }}
+                            >
+                              <MenuItem value="">Clear field</MenuItem>
+                              {projectLineNameList.map((projectItem) => (
+                                <MenuItem value={projectItem}>
+                                  {projectItem}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </FormControl>
+                        </Grid>
                       </Grid>
-                      <Grid item>
-                        <FormControl>
-                          <InputLabel id="operation-type-select-label">Line</InputLabel>
-                          <Select
-                            labelId="permission-select-label"
-                            id="permission-select"
-                            value={lineName}
-                            label="Line"
-                            onChange={projectLineNameChange}
-                            style={{ minWidth: "271px", height: "56px" }}
-                          >
-                            <MenuItem value="">Clear field</MenuItem>
-                            {projectLineNameList.map((projectItem) => (
-                              <MenuItem value={projectItem}>
-                                {projectItem}
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        </FormControl>
-                      </Grid>
-                    </Grid>
-                    <Box sx={{ mt: 1, ml: 4 }} display="flex" component="form" role="form">
-                      <Box align="center" display="flex">
-                        <Typography align="center" variant="h5" mr={2}>
-                          Machine name:
-                        </Typography>
+                      <Box sx={{ mt: 1, ml: 4 }} display="flex" component="form" role="form">
+                        <Box align="center" display="flex">
+                          <Typography align="center" variant="h5" mr={2}>
+                            Machine name:
+                          </Typography>
+                        </Box>
+                        <Box>
+                          <FormControl>
+                            <InputLabel id="operation-type-select-label">Machine name</InputLabel>
+                            <Select
+                              labelId="permission-select-label"
+                              id="permission-select"
+                              value={deviceName}
+                              label="Machine name"
+                              onChange={deviceNameChange}
+                              style={{ minWidth: "271px", height: "56px" }}
+                            >
+                              <MenuItem value="">Clear field</MenuItem>
+                              {deviceNameList.map((device) => (
+                                <MenuItem key={device} value={device}>{device}</MenuItem>
+                              ))}
+                            </Select>
+                          </FormControl>
+                        </Box>
                       </Box>
-                      <Box>
-                        <FormControl>
-                          <InputLabel id="operation-type-select-label">Machine name</InputLabel>
-                          <Select
-                            labelId="permission-select-label"
-                            id="permission-select"
-                            value={deviceName}
-                            label="Machine name"
-                            onChange={deviceNameChange}
-                            style={{ minWidth: "271px", height: "56px" }}
-                          >
-                            <MenuItem value="">Clear field</MenuItem>
-                            {deviceNameList.map((device) => (
-                              <MenuItem key={device} value={device}>{device}</MenuItem>
-                            ))}
-                          </Select>
-                        </FormControl>
+                      <Box sx={{ ml: 4 }} display="flex">
+                        <LoadingButton variant="contained"
+                          size="large"
+                          component="span"
+                          color="info"
+                          onClick={getProjectDetailsFilter}
+                        >
+                          search
+                        </LoadingButton>
                       </Box>
                     </Box>
-                    <Box sx={{ ml: 4 }} display="flex">
-                      <LoadingButton variant="contained"
-                        size="large"
-                        component="span"
-                        color="info"
-                        onClick={getProjectDetailsFilter}
-                      >
-                        search
-                      </LoadingButton>
-                    </Box>
-                  </Box>
+                  </Grid>
                 </Grid>
-              </Grid>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>)}
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
             <div style={{ display: 'flex', alignItems: 'center', mr: '100px' }}>
               <LoadingButton variant="contained" color="info" onClick={togglePause}>

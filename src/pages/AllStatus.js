@@ -144,7 +144,7 @@ export default function Statistics({ token, ...rest }) {
             "en": ["Day", "Week"]
         };
 
-        const rowColors = ['#ADD8E6', '#ADD8E6', '#FFFFFF', '#68BE8D', '#FFFFCC', '#68BE8D', '#FFFFCC', '#FFFFFF'];
+        const rowColors = ['#DEEBF7', '#DEEBF7', '#FFFFFF', '#E2F0D9', '#FFFCEB', '#E2F0D9', '#FFFCEB'];
 
         return (
             <div>
@@ -233,13 +233,13 @@ export default function Statistics({ token, ...rest }) {
                                                                         <Box sx={{ display: 'flex', justifyContent: 'center', margin: '8px 0' }}>
                                                                             <Typography sx={{ flex: 1, textAlign: 'center', borderRight: '1px solid #ccc', padding: '8px', fontSize: '25px' }}>
                                                                                 {totals.day_stable} (
-                                                                                <Typography component="span" sx={{ color: '#ffc107', fontSize: 'inherit' }}>
+                                                                                <Typography component="span" sx={{ color: '#FB5607', fontSize: 'inherit' }}>
                                                                                     {totals.day_stable_happened}
                                                                                 </Typography>)
                                                                             </Typography>
                                                                             <Typography sx={{ flex: 1, textAlign: 'center', padding: '8px', fontSize: '25px' }}>
                                                                                 {totals.week_stable} (
-                                                                                <Typography component="span" sx={{ color: '#ffc107', fontSize: 'inherit' }}>
+                                                                                <Typography component="span" sx={{ color: '#FB5607', fontSize: 'inherit' }}>
                                                                                     {totals.week_stable_happened}
                                                                                 </Typography>)
                                                                             </Typography>
@@ -249,13 +249,13 @@ export default function Statistics({ token, ...rest }) {
                                                                         <Box sx={{ display: 'flex', justifyContent: 'center', margin: '8px 0' }}>
                                                                             <Typography sx={{ flex: 1, textAlign: 'center', borderRight: '1px solid #ccc', padding: '8px', fontSize: '25px' }}>
                                                                                 {totals.day_unstable} (
-                                                                                <Typography component="span" sx={{ color: '#ffc107', fontSize: 'inherit' }}>
+                                                                                <Typography component="span" sx={{ color: '#FB5607', fontSize: 'inherit' }}>
                                                                                     {totals.day_unstable_happened}
                                                                                 </Typography>)
                                                                             </Typography>
                                                                             <Typography sx={{ flex: 1, textAlign: 'center', padding: '8px', fontSize: '25px' }}>
                                                                                 {totals.week_unstable} (
-                                                                                <Typography component="span" sx={{ color: '#ffc107', fontSize: 'inherit' }}>
+                                                                                <Typography component="span" sx={{ color: '#FB5607', fontSize: 'inherit' }}>
                                                                                     {totals.week_unstable_happened}
                                                                                 </Typography>)
                                                                             </Typography>
@@ -265,7 +265,7 @@ export default function Statistics({ token, ...rest }) {
                                                                         <Box sx={{ display: 'flex', justifyContent: 'center', margin: '8px 0' }}>
                                                                             <Typography sx={{ flex: 1, textAlign: 'center', padding: '8px', fontSize: '25px' }}>
                                                                                 {totals.day_stable + totals.week_stable} (
-                                                                                <Typography component="span" sx={{ color: '#ffc107', fontSize: 'inherit' }}>
+                                                                                <Typography component="span" sx={{ color: '#FB5607', fontSize: 'inherit' }}>
                                                                                     {totals.day_stable_happened + totals.week_stable_happened}
                                                                                 </Typography>)
                                                                             </Typography>
@@ -275,7 +275,7 @@ export default function Statistics({ token, ...rest }) {
                                                                         <Box sx={{ display: 'flex', justifyContent: 'center', margin: '8px 0' }}>
                                                                             <Typography sx={{ flex: 1, textAlign: 'center', padding: '8px', fontSize: '25px' }}>
                                                                                 {totals.day_unstable + totals.week_unstable} (
-                                                                                <Typography component="span" sx={{ color: '#ffc107', fontSize: 'inherit' }}>
+                                                                                <Typography component="span" sx={{ color: '#FB5607', fontSize: 'inherit' }}>
                                                                                     {totals.day_unstable_happened + totals.week_unstable_happened}
                                                                                 </Typography>)
                                                                             </Typography>
