@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { timeout } from 'd3';
 import { useNavigate } from "react-router-dom";
 
 
@@ -208,7 +209,9 @@ export const apiGetStatisticsDetails = (data) => auth_except(baseRequest.get(`st
   {
     'accept': 'application/json',
     'Authorization': `Bearer ${data['token']}`,
-  }
+  },
+  timeout: 3600000
+
 }));
 
 export const apiGetStatisticsDetailsFilter = (data) => {
@@ -217,7 +220,9 @@ export const apiGetStatisticsDetailsFilter = (data) => {
     headers: {
       'accept': 'application/json',
       'Authorization': `Bearer ${data['token']}`,
-    }
+    },
+    timeout: 3600000
+
   }));
 }
 
