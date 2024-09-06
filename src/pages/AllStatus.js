@@ -27,7 +27,7 @@ const darkTheme = createTheme({
         },
     },
 });
-function ColorBox(props) {
+function ColorBox({ msg, color = '#FB5607' }) {
     return (
         <ThemeProvider
             theme={{
@@ -45,16 +45,17 @@ function ColorBox(props) {
                         sx={{
                             width: '30px',
                             height: '30px',
-                            backgroundColor: '#ffc107',
-                            marginRight: '10px',
+                            backgroundColor: color,
+                            // marginRight: '10px',
                         }}
                     />
-                    <Typography sx={{ fontSize: 30 }}>{props.msg}</Typography>
+                    <Typography sx={{ fontSize: 30 }}>{msg}</Typography>
                 </div>
             </DialogContent>
         </ThemeProvider>
     );
 }
+
 export default function Statistics({ token, ...rest }) {
     const { globalVariable } = useContext(GlobalContext);
     const [isPaused, setIsPaused] = useState(false);
@@ -314,29 +315,46 @@ export default function Statistics({ token, ...rest }) {
             </Snackbar>
             <div>
                 <div style={{ display: 'flex', alignItems: 'center', marginRight: '100px' }}>
-
-                    {/* <Typography variant="h4">
-                        {globalVariable === 'zh-tw'
-                            ? '前次查詢時間: '
-                            : globalVariable === 'zh-cn'
-                                ? '上次查询时间: '
-                                : 'Last query time: '}
-                    </Typography> */}
-                    {globalVariable === 'zh-tw' ? <Marquee header={'前次查詢時間: '} msg={dateData.timestamp.slice(0, 19)} /> : globalVariable === 'zh-cn' ? <Marquee header={'上次查询时间: '} msg={dateData.timestamp.slice(0, 19)} /> : <Marquee header={'Last query time: '} msg={dateData.timestamp.slice(0, 19)} />}
-
+                    {globalVariable === 'zh-tw' ? (
+                        <Marquee header={'前次查詢時間: '} msg={dateData.timestamp.slice(0, 19)} />
+                    ) : globalVariable === 'zh-cn' ? (
+                        <Marquee header={'上次查询时间: '} msg={dateData.timestamp.slice(0, 19)} />
+                    ) : (
+                        <Marquee header={'Last query time: '} msg={dateData.timestamp.slice(0, 19)} />
+                    )}
 
                     <LoadingButton
                         variant="contained"
                         color="info"
                         onClick={handleRefresh}
-                        style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}
+                        style={{ marginLeft: '10px' }}
                     >
                         {globalVariable === 'zh-tw' ? '刷新' : globalVariable === 'zh-cn' ? '刷新' : 'Refresh'}
                     </LoadingButton>
-                    <ColorBox msg={globalVariable === 'zh-tw' ? "已發生過之異常事件" : globalVariable === 'zh-cn' ? "已发生过之异常事件" : "Abnormal events that have occurred"}></ColorBox>
+
+
+                    {/* <div style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}>
+                        <ColorBox
+                            msg={globalVariable === 'zh-tw' ? "異常事件數量" : globalVariable === 'zh-cn' ? "异常事件数量" : "The number of abnormal events "}
+                            color="#000000"
+                            style={{ marginRight: '10px' }}
+                        />
+                        <ColorBox
+                            msg={globalVariable === 'zh-tw' ? "已發生過之異常事件數量" : globalVariable === 'zh-cn' ? "已发生过之异常事件数量" : "The number of abnormal events that have occurred"}
+                            style={{ marginLeft: '10px' }}
+                        />
+                    </div> */}
+                    <Typography sx={{ marginLeft: '20px', fontSize: '25px ' }}>
+                        {globalVariable === 'zh-tw' ? "「異常事件數量」，括弧內" : globalVariable === 'zh-cn' ? "「异常事件数量」，括弧内" : "Number of abnormal events, in brackets"}
+                        <Typography component="span" sx={{ color: '#FB5607', fontSize: 'inherit' }}>
+                            {globalVariable === 'zh-tw' ? "橘色數字" : globalVariable === 'zh-cn' ? "橘色数字" : "orange numbers"}
+                        </Typography>
+                        {globalVariable === 'zh-tw' ? "為「已發生過異常事件數量」已發生過異常事件數量" : globalVariable === 'zh-cn' ? "为「已发生过异常事件数量」已发生过异常事件数量" : "The number of abnormal events that have occurred is the number of abnormal events that have occurred"}
+                    </Typography>
                 </div>
                 <DataDisplay data={dateData.data} language={globalVariable} />
             </div>
+
         </>
     );
 }
