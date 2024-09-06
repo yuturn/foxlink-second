@@ -349,7 +349,7 @@ export default function Statistics({ token, ...rest }) {
                         <Typography component="span" sx={{ color: '#FB5607', fontSize: 'inherit' }}>
                             {globalVariable === 'zh-tw' ? "橘色數字" : globalVariable === 'zh-cn' ? "橘色数字" : "orange numbers"}
                         </Typography>
-                        {globalVariable === 'zh-tw' ? "為「已發生過異常事件數量」已發生過異常事件數量" : globalVariable === 'zh-cn' ? "为「已发生过异常事件数量」已发生过异常事件数量" : "The number of abnormal events that have occurred is the number of abnormal events that have occurred"}
+                        {globalVariable === 'zh-tw' ? "為「已發生過異常事件數量」" : globalVariable === 'zh-cn' ? "为「已发生过异常事件数量」" : "The number of abnormal events that have occurred "}
                     </Typography>
                 </div>
                 <DataDisplay data={dateData.data} language={globalVariable} />
