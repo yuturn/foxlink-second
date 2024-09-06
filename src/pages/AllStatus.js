@@ -345,7 +345,7 @@ export default function Statistics({ token, ...rest }) {
                         />
                     </div> */}
                     <Typography sx={{ marginLeft: '20px', fontSize: '25px ' }}>
-                        {globalVariable === 'zh-tw' ? "「異常事件數量」，括弧內" : globalVariable === 'zh-cn' ? "「异常事件数量」，括弧内" : "Number of abnormal events, in brackets"}
+                        {globalVariable === 'zh-tw' ? "黑色數字為「異常事件數量」，括弧內" : globalVariable === 'zh-cn' ? "黑色数字为「异常事件数量」，括弧内" : "The black numbers are Number of abnormal events, in brackets"}
                         <Typography component="span" sx={{ color: '#FB5607', fontSize: 'inherit' }}>
                             {globalVariable === 'zh-tw' ? "橘色數字" : globalVariable === 'zh-cn' ? "橘色数字" : "orange numbers"}
                         </Typography>
