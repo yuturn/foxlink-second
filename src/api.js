@@ -240,7 +240,8 @@ export const apiGetCompareSearch = (data) => auth_except(baseRequest.get(`/stati
   {
     'accept': 'application/json',
     'Authorization': `Bearer ${data['token']}`,
-  }
+  },
+  timeout: 3600000
 }));
 
 export const apiGetCompareDetail = (data) => auth_except(baseRequest.get(`statistics/predict-compare-detail?project_name=${data['project_name']}&device_name=${data['device_name']}&line=${data['line']}&date=${data['date']}&select_type=${data['type']}`, {
