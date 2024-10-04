@@ -91,7 +91,7 @@ export default function Project({ token, ...rest }) {
   const [loading, setLoading] = useState(false);
 
   const { globalVariable, updateGlobalVariable } = useContext(GlobalContext);
-// colorbox是一個小方塊，旁邊可以標註顏色相關訊息
+  // colorbox是一個小方塊，旁邊可以標註顏色相關訊息
   function ColorBox(props) {
     return (
       <ThemeProvider
@@ -134,10 +134,10 @@ export default function Project({ token, ...rest }) {
           </div>
         );
       }
-  
+
       return null;
     };
-  
+
     const formatYAxisTick = (tick) => {
       return (tick * 100).toFixed(0) + '%';
     };
@@ -159,7 +159,7 @@ export default function Project({ token, ...rest }) {
           }}
         >
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="date" tickFormatter={formatDateTick}/>
+          <XAxis dataKey="date" tickFormatter={formatDateTick} />
           <YAxis
             label={{ value: 'Percentage', angle: -90, position: 'insideLeft' }}
             tickFormatter={formatYAxisTick}
@@ -171,7 +171,7 @@ export default function Project({ token, ...rest }) {
       </ResponsiveContainer>
     );
   }
-  
+
   // 使用另一个useEffect監聽statisticDevices的變化
   useEffect(() => {
     getProjectName(token)
@@ -219,7 +219,7 @@ export default function Project({ token, ...rest }) {
       ? (a, b) => (a[orderBy] > b[orderBy] ? -1 : 1)
       : (a, b) => (a[orderBy] > b[orderBy] ? 1 : -1);
   };
-    ////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////
   //預設開始與結束時間為昨天
   useEffect(() => {
     const today = new Date();
@@ -316,11 +316,37 @@ export default function Project({ token, ...rest }) {
           handleErrorOpen((globalVariable == "zh-tw" ? "查詢失敗:沒有資料" : globalVariable == "zh-cn" ? "查询失败:没有资料" : "Query failed: No data"))
           setLoading(false)
         }
-      }).catch((error) => {
-        console.error((globalVariable == "zh-tw" ? ("API 请求失败", error) : globalVariable == "zh-cn" ? ("API 请求失败", error) : ("API request failed", error)));
-        setSearchDateData([]);
-        handleErrorOpen((globalVariable == "zh-tw" ? "查詢失敗:API請求失敗" : globalVariable == "zh-cn" ? "查询失败:API请求失败" : "Query failed: API request failed"));
-        setLoading(false)
+      }).catch((err) => {
+        if (err.name === 'AbortError') {
+          console.log('Request was aborted by the browser.');
+          setSearchDateData([]);
+          handleErrorOpen(
+            globalVariable === "zh-tw"
+              ? "請求被中止"
+              : globalVariable === "zh-cn"
+                ? "请求被中止"
+                : "Request was aborted"
+          );
+          setLoading(false)
+        } else if (err instanceof TypeError) {
+          // Handle network errors or other fetch-related errors
+          console.log('Network error or request timed out:', err.message);
+          setSearchDateData([]);
+          handleErrorOpen(
+            globalVariable === "zh-tw"
+              ? "網絡錯誤或請求超時"
+              : globalVariable === "zh-cn"
+                ? "网络错误或请求超时"
+                : "Network error or request timed out"
+          );
+          setLoading(false)
+        } else {
+          // Handle other types of errors
+          console.error((globalVariable == "zh-tw" ? ("API 请求失败", err) : globalVariable == "zh-cn" ? ("API 请求失败", err) : ("API request failed", err)));
+          setSearchDateData([]);
+          handleErrorOpen((globalVariable == "zh-tw" ? "查詢失敗:API請求失敗" : globalVariable == "zh-cn" ? "查询失败:API请求失败" : "Query failed: API request failed"));
+          setLoading(false)
+        }
       });
   };
   //這邊是查詢折線圖的按鈕
@@ -406,7 +432,7 @@ export default function Project({ token, ...rest }) {
   const handleShowThirdCard = () => {
     setCurrentPage(3);
     setSearchDateData([]);
-    
+
   };
 
   //success alert
@@ -602,7 +628,7 @@ export default function Project({ token, ...rest }) {
               <Grid xs={12}>
                 <TableContainer component={Paper} style={tableContainerStyle.tableContainer}>
                   <Table>
-                    <TableHead style={{ position: "sticky",top: 0,zIndex: 2,backgroundColor: '#bfbfbf' }}>
+                    <TableHead style={{ position: "sticky", top: 0, zIndex: 2, backgroundColor: '#bfbfbf' }}>
                       <TableRow>
                         <TableCell align="center" sx={{ borderBottom: 0 }}>
                           <TableSortLabel
@@ -668,7 +694,7 @@ export default function Project({ token, ...rest }) {
                                   "& .MuiDialog-container": {
                                     "& .MuiPaper-root": {
                                       width: "100%",
-                                      minWidth: "1500px", 
+                                      minWidth: "1500px",
                                       minHeight: "800px",
                                     },
                                   },
@@ -723,7 +749,7 @@ export default function Project({ token, ...rest }) {
                                       <Grid item xs={6} key={deviceKey}>
                                         <TableContainer style={tableContainerDialogStyle.tableContainer}>
                                           <Table>
-                                            <TableHead style={{ position: "sticky",top: 0,zIndex: 2,backgroundColor: '#696969' }}>
+                                            <TableHead style={{ position: "sticky", top: 0, zIndex: 2, backgroundColor: '#696969' }}>
                                               <TableRow>
                                                 <TableCell align="center" sx={{ height: 'auto', border: "1px solid black", backgroundColor: "#bfbfbf" }} colSpan={4}>
                                                   <Typography fontSize={20}>{`${deviceKey} ${device.cname}`}</Typography>
@@ -923,7 +949,7 @@ export default function Project({ token, ...rest }) {
               <Grid xs={12}>
                 <TableContainer component={Paper} style={tableContainerStyle.tableContainer}>
                   <Table>
-                    <TableHead style={{ position: "sticky",top: 0,zIndex: 2,backgroundColor: '#bfbfbf' }}>
+                    <TableHead style={{ position: "sticky", top: 0, zIndex: 2, backgroundColor: '#bfbfbf' }}>
                       <TableRow>
                         <TableCell align="center" sx={{ borderBottom: 0 }}>
                           <TableSortLabel
@@ -999,7 +1025,7 @@ export default function Project({ token, ...rest }) {
                                 <DialogContent sx={{ marginTop: '1px', marginBottom: '1px' }} >
                                   <TableContainer style={tableContainerStyle.tableContainer} sx={{ mt: 3 }}>
                                     <Table>
-                                      <TableHead style={{ position: "sticky",top: 0,zIndex: 2,backgroundColor: '#bfbfbf' }}>
+                                      <TableHead style={{ position: "sticky", top: 0, zIndex: 2, backgroundColor: '#bfbfbf' }}>
                                         <TableRow>
                                           <TableCell align="center" sx={{ border: "1px solid black" }}>
                                             <Typography fontSize={20}>{globalVariable == "zh-tw" ? "設備編號" : globalVariable == "zh-cn" ? "设备编号" : "Device ID"}</Typography>
@@ -1044,7 +1070,7 @@ export default function Project({ token, ...rest }) {
                                       <Grid item xs={6} key={deviceKey}>
                                         <TableContainer style={tableContainerDialogStyle.tableContainer}>
                                           <Table>
-                                            <TableHead style={{ position: "sticky",top: 0,zIndex: 2,backgroundColor: "#696969" }}>
+                                            <TableHead style={{ position: "sticky", top: 0, zIndex: 2, backgroundColor: "#696969" }}>
                                               <TableRow>
                                                 <TableCell align="center" sx={{ height: 'auto', border: "1px solid black", backgroundColor: "#e0ffff" }} colSpan={4}>
                                                   <Typography fontSize={20}>{`${deviceKey} ${device.cname}`}</Typography>
