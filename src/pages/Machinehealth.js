@@ -272,61 +272,68 @@ export default function Machinehealth({ token, setAlert, ...rest }) {
   }
 
   const getProjectDetailsFilter = () => {
-    const data = {
-      token: token,
-      projectName: projectName,
-      lineName: lineName,
-      deviceName: deviceName,
-    };
-  
-    apiGetStatisticsDetailsFilter(data)
-      .then((res) => {
-        console.log(res);
-        setFilteredData(res.data);
-        setIsFiltered(true);
-        handleOpen(
-          globalVariable === "zh-tw"
-            ? "查詢成功"
-            : globalVariable === "zh-cn"
-            ? "查询成功"
-            : "Search successful"
-        );
-      })
-      .catch((err) => {
-        // Check if the error is due to the request being aborted or if it's a network error
-        if (err.name === 'AbortError') {
-          console.log('Request was aborted by the browser.');
-          handleErrorOpen(
-            globalVariable === "zh-tw" 
-              ? "請求被中止" 
-              : globalVariable === "zh-cn" 
-              ? "请求被中止" 
-              : "Request was aborted"
-          );
-        } else if (err instanceof TypeError) {
-          // Handle network errors or other fetch-related errors
-          console.log('Network error or request timed out:', err.message);
-          handleErrorOpen(
-            globalVariable === "zh-tw" 
-              ? "網絡錯誤或請求超時" 
-              : globalVariable === "zh-cn" 
-              ? "网络错误或请求超时" 
-              : "Network error or request timed out"
-          );
-        } else {
-          // Handle other types of errors
-          console.log(err);
-          handleErrorOpen(
-            globalVariable === "zh-tw" 
-              ? "查詢失敗:API請求失敗" 
-              : globalVariable === "zh-cn" 
-              ? "查询失败:API请求失败" 
-              : "Query failed: API request failed"
-          );
-        }
-      });
+  const data = {
+    token: token,
+    projectName: projectName,
+    lineName: lineName,
+    deviceName: deviceName,
   };
-  
+
+  Promise.all([
+    apiGetStatisticsDetailsFilter(data),
+    apiMarquee(token),
+  ])
+    .then(([res1, res2]) => {
+      console.log(res1);
+      setFilteredData(res1.data);
+      setIsFiltered(true);
+      handleOpen(
+        globalVariable === "zh-tw"
+          ? "查詢成功"
+          : globalVariable === "zh-cn"
+          ? "查询成功"
+          : "Search successful"
+      );
+
+      console.log(res2.data);
+      setTimestampData(res2.data);
+    })
+    .catch((err) => {
+      handleError(err);
+    });
+};
+
+const handleError = (err) => {
+  if (err.name === 'AbortError') {
+    console.log('Request was aborted by the browser.');
+    handleErrorOpen(
+      globalVariable === "zh-tw"
+        ? "請求被中止"
+        : globalVariable === "zh-cn"
+        ? "请求被中止"
+        : "Request was aborted"
+    );
+  } else if (err instanceof TypeError) {
+    console.log('Network error or request timed out:', err.message);
+    handleErrorOpen(
+      globalVariable === "zh-tw"
+        ? "網絡錯誤或請求超時"
+        : globalVariable === "zh-cn"
+        ? "网络错误或请求超时"
+        : "Network error or request timed out"
+    );
+  } else {
+    console.log(err);
+    handleErrorOpen(
+      globalVariable === "zh-tw"
+        ? "查詢失敗:API請求失敗"
+        : globalVariable === "zh-cn"
+        ? "查询失败:API请求失败"
+        : "Query failed: API request failed"
+    );
+  }
+};
+
   
 
   const [alertOpen, setAlertOpen] = React.useState(false);

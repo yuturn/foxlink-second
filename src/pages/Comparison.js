@@ -707,38 +707,38 @@ export default function Project({ token, ...rest }) {
                                       <TableHead>
                                         <TableRow>
                                           <TableCell align="center" sx={{ border: "1px solid black" }}>
-                                            <Typography fontSize={20}>{globalVariable == "zh-tw" ? "設備編號" : globalVariable == "zh-cn" ? "设备编号" : "Device ID"}</Typography>
+                                            <Typography fontSize={20} noWrap>{globalVariable == "zh-tw" ? "設備編號" : globalVariable == "zh-cn" ? "设备编号" : "Device ID"}</Typography>
                                           </TableCell>
                                           {Object.keys(detailData).map((detailTitle) => (
                                             <TableCell align="center" sx={{ border: "1px solid black" }}>
-                                              <Typography fontSize={20}>{detailTitle}</Typography>
+                                              <Typography fontSize={20} noWrap>{detailTitle}</Typography>
                                             </TableCell>
                                           ))}
                                         </TableRow>
                                         <TableRow>
                                           <TableCell align="center" sx={{ border: "1px solid black" }}>
-                                            <Typography fontSize={20}>{globalVariable == "zh-tw" ? "設備名稱" : globalVariable == "zh-cn" ? "设备名称" : "Device name"}</Typography>
+                                            <Typography fontSize={20} noWrap>{globalVariable == "zh-tw" ? "設備名稱" : globalVariable == "zh-cn" ? "设备名称" : "Device name"}</Typography>
                                           </TableCell>
                                           {Object.values(detailData).map((detailInfo) => (
                                             <TableCell align="center" sx={{ border: "1px solid black" }}>
-                                              <Typography fontSize={20}>{detailInfo.cname}</Typography>
+                                              <Typography fontSize={20} noWrap>{detailInfo.cname}</Typography>
                                             </TableCell>
                                           ))}
                                           <TableCell align="center" sx={{ border: "1px solid black" }}>
-                                            <Typography fontSize={20}>{globalVariable == "zh-tw" ? "總計" : globalVariable == "zh-cn" ? "总计" : "Total"}</Typography>
+                                            <Typography fontSize={20} noWrap>{globalVariable == "zh-tw" ? "總計" : globalVariable == "zh-cn" ? "总计" : "Total"}</Typography>
                                           </TableCell>
                                         </TableRow>
                                         <TableRow>
                                           <TableCell align="center" sx={{ border: "1px solid black" }}>
-                                            <Typography fontSize={20}>{globalVariable == "zh-tw" ? "預測準確率" : globalVariable == "zh-cn" ? "预测准确率" : "Prediction accuracy"}</Typography>
+                                            <Typography fontSize={20} noWrap>{globalVariable == "zh-tw" ? "預測準確率" : globalVariable == "zh-cn" ? "预测准确率" : "Prediction accuracy"}</Typography>
                                           </TableCell>
                                           {Object.values(detailData).map((detailInfo) => (
                                             <TableCell align="center" sx={{ border: "1px solid black" }}>
-                                              <Typography fontSize={20}>{(detailInfo.device_accuracy * 100).toFixed(2)}%</Typography>
+                                              <Typography fontSize={20} noWrap>{(detailInfo.device_accuracy * 100).toFixed(2)}%</Typography>
                                             </TableCell>
                                           ))}
                                           <TableCell align="center" sx={{ border: "1px solid black" }}>
-                                            <Typography fontSize={20}>{(currentAccuracyInfo * 100).toFixed(2)}%</Typography>
+                                            <Typography fontSize={20} noWrap>{(currentAccuracyInfo * 100).toFixed(2)}%</Typography>
                                           </TableCell>
                                         </TableRow>
                                       </TableHead>
@@ -1028,38 +1028,38 @@ export default function Project({ token, ...rest }) {
                                       <TableHead style={{ position: "sticky", top: 0, zIndex: 2, backgroundColor: '#bfbfbf' }}>
                                         <TableRow>
                                           <TableCell align="center" sx={{ border: "1px solid black" }}>
-                                            <Typography fontSize={20}>{globalVariable == "zh-tw" ? "設備編號" : globalVariable == "zh-cn" ? "设备编号" : "Device ID"}</Typography>
+                                            <Typography fontSize={20} noWrap>{globalVariable == "zh-tw" ? "設備編號" : globalVariable == "zh-cn" ? "设备编号" : "Device ID"}</Typography>
                                           </TableCell>
                                           {Object.keys(detailData).map((detailTitle) => (
                                             <TableCell align="center" sx={{ border: "1px solid black" }}>
-                                              <Typography fontSize={20}>{detailTitle}</Typography>
+                                              <Typography fontSize={20} noWrap>{detailTitle}</Typography>
                                             </TableCell>
                                           ))}
                                         </TableRow>
                                         <TableRow>
                                           <TableCell align="center" sx={{ border: "1px solid black" }}>
-                                            <Typography fontSize={20}>{globalVariable == "zh-tw" ? "設備名稱" : globalVariable == "zh-cn" ? "设备名称" : "Device name"}</Typography>
+                                            <Typography fontSize={20} noWrap>{globalVariable == "zh-tw" ? "設備名稱" : globalVariable == "zh-cn" ? "设备名称" : "Device name"}</Typography>
                                           </TableCell>
                                           {Object.values(detailData).map((detailInfo) => (
                                             <TableCell align="center" sx={{ border: "1px solid black" }}>
-                                              <Typography fontSize={20}>{detailInfo.cname}</Typography>
+                                              <Typography fontSize={20} noWrap>{detailInfo.cname}</Typography>
                                             </TableCell>
                                           ))}
                                           <TableCell align="center" sx={{ border: "1px solid black" }}>
-                                            <Typography fontSize={20}>{globalVariable == "zh-tw" ? "總計" : globalVariable == "zh-cn" ? "总计" : "Total"}</Typography>
+                                            <Typography fontSize={20} noWrap>{globalVariable == "zh-tw" ? "總計" : globalVariable == "zh-cn" ? "总计" : "Total"}</Typography>
                                           </TableCell>
                                         </TableRow>
                                         <TableRow>
                                           <TableCell align="center" sx={{ border: "1px solid black" }}>
-                                            <Typography fontSize={20}>{globalVariable == "zh-tw" ? "預測準確率" : globalVariable == "zh-cn" ? "预测准确率" : "Prediction accuracy"}</Typography>
+                                            <Typography fontSize={20} noWrap>{globalVariable == "zh-tw" ? "預測準確率" : globalVariable == "zh-cn" ? "预测准确率" : "Prediction accuracy"}</Typography>
                                           </TableCell>
                                           {Object.values(detailData).map((detailInfo) => (
                                             <TableCell align="center" sx={{ border: "1px solid black" }}>
-                                              <Typography fontSize={20}>{(detailInfo.device_accuracy * 100).toFixed(2)}%</Typography>
+                                              <Typography fontSize={20} noWrap>{(detailInfo.device_accuracy * 100).toFixed(2)}%</Typography>
                                             </TableCell>
                                           ))}
                                           <TableCell align="center" sx={{ border: "1px solid black" }}>
-                                            <Typography fontSize={20}>{(currentAccuracyInfo * 100).toFixed(2)}%</Typography>
+                                            <Typography fontSize={20} noWrap>{(currentAccuracyInfo * 100).toFixed(2)}%</Typography>
                                           </TableCell>
                                         </TableRow>
                                       </TableHead>
